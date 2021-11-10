@@ -754,12 +754,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36d14534b058c4da8b6225a6f659845a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  whatIsGrappleable:
-    serializedVersion: 2
-    m_Bits: 128
+  lr: {fileID: 1550525811}
   player: {fileID: 1100077882}
   playerRb: {fileID: 1100077878}
-  grappleLength: 15
+  grappleableLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  grappleForce: 100
+  maxGrappleLength: 15
+  isGrappling: 0
+  grappleHitVector: {x: 0, y: 0}
 --- !u!120 &1550525811
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -767,7 +771,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1550525808}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -779,7 +783,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -810,8 +814,8 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 1
+        time: 0.005554199
+        value: 0.25714302
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -823,7 +827,7 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
+      key0: {r: 0.19447756, g: 1, b: 0, a: 1}
       key1: {r: 1, g: 1, b: 1, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
