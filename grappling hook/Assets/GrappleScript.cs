@@ -15,56 +15,58 @@ public class GrappleScript : MonoBehaviour
     //private SpringJoint joint;
     RaycastHit2D hit;
     public float grappleLength = 15f;
-    private Vector3 currentGrapplePosition;
-    private Vector2 playerHitVector;
+    public Vector3 currentGrapplePosition;
+    public Vector3 hitPosition;
+    public Vector2 playerHitVector;
+    public bool isGrappling;
 
+    //called on open
     void Awake()
     {
         lr = GetComponent<LineRenderer>();
     }
 
+    //called each frame
     void Update()
-    {
-       
-            
-        
+    { 
         HoldableGrapple();
     }
 
     //Called after Update
     void LateUpdate()
     {
-        //don't think that we need any of this anymore
-        if( hit )
-        {
-            
-        }
-        else
-        {
-            lr.enabled = false;
-        }
+
     }
 
-    void StartGrapple()
+    void StartGrapple(Vector2 playerRbPosition)
     {
-        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        hit = Physics2D.Raycast(player.position, worldPosition - player.position, grappleLength, whatIsGrappleable);
-        playerHitVector = hit.point - new Vector2(player.position.x, player.position.y);
 
-        //checks if the distance between the player and the surface is too big
-        if ( hit && playerHitVector.magnitude < grappleLength)
+        //applies a force with the vector of the distance between the player and the hit
+        playerRb.AddForce(playerHitVector * 5, ForceMode2D.Force);
+
+        //new method trying vector2.movetowards - currently working on
+
+        //playerRbPosition.MoveTowards(player.position, hitPosition, 5f);
+
+        //another method trying rigidbody2d.moveposition - its janky af, turn on for good fun
+        //playerRb.MovePosition(hitPosition);
+        DrawRope();
+
+    }
+
+    bool HitCheck(RaycastHit2D hit, Vector2 playerHitVector)
+    {
+        //if distance is to too big + is grapplable
+        if (hit && playerHitVector.magnitude < grappleLength)
         {
-            //applies a force with the vector of the distance between the player and the hit
-            playerRb.AddForce(playerHitVector * 5, ForceMode2D.Force);
-            DrawRope();
-            
+            isGrappling = true;
+            return true;
         }
         else
         {
-            lr.enabled = false;
+            return false;
         }
     }
-
     
 
     void DrawRope()
@@ -81,29 +83,30 @@ public class GrappleScript : MonoBehaviour
 
     //grapple which can be cancelled by letting go of the mouse
     void HoldableGrapple()
-    {
+    {   
         if (Input.GetMouseButton(0))
         {
-            StartGrapple();
+            if (Input.GetMouseButtonDown(0))
+            {
+                //gets the current mouse position
+                hitPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                hit = Physics2D.Raycast(player.position, hitPosition - player.position, grappleLength, whatIsGrappleable);
+                playerHitVector = hit.point - new Vector2(player.position.x, player.position.y);
+                
+            }
+            //checks if a valid grapple
+            if (HitCheck(hit,playerHitVector))
+            {
+                
+               StartGrapple(playerRb.position);
+                
+            }
         }
         else
         {
+            
              lr.enabled = false;
         }
     }
 
-    //grapple which is just the point and gooooo 
-    void GoGrapple()
-    {
-
-    }
-    //public bool IsGrappling()
-   // {
-    //    return joint != null;
-    //}
-
-    //public Vector3 GetGrapplePoint()
-    //{
-    //    return grapplePoint;
-    //}
 }
