@@ -105,6 +105,7 @@ public class GrappleScript : MonoBehaviour
     {
         // Stop grappling
         maybeGrappleRaycastHit = new RaycastHit2D();
+        isGrappling = false;
         lr.enabled = false;
     }
 

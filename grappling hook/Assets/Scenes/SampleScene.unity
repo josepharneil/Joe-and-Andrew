@@ -487,6 +487,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  grappleScript: {fileID: 1550525810}
 --- !u!70 &1100077880
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -763,7 +764,7 @@ MonoBehaviour:
   grappleForce: 100
   maxGrappleLength: 15
   isGrappling: 0
-  grappleHitVector: {x: 0, y: 0}
+  grappleHitVectorNormalised: {x: 0, y: 0}
 --- !u!120 &1550525811
 LineRenderer:
   m_ObjectHideFlags: 0

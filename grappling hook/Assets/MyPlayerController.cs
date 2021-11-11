@@ -17,6 +17,7 @@ public class MyPlayerController : MonoBehaviour
     public Transform isGroundedChecker;
     public float checkGroundRadius;
     public LayerMask groundLayer;
+    public GrappleScript grappleScript;
 
 
     // Update is called once per frame
@@ -30,10 +31,12 @@ public class MyPlayerController : MonoBehaviour
 
     private void Move()
     {
-        velocity.x = Input.GetAxis("Horizontal");
-        rb.velocity = new Vector2(velocity.x * moveScale, rb.velocity.y);
+        if (!grappleScript.isGrappling)
+        {
+            velocity.x = Input.GetAxis("Horizontal");
+            rb.velocity = new Vector2(velocity.x * moveScale, rb.velocity.y);
+        }
     }
-
     void Jump()
     {
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
