@@ -12,14 +12,21 @@ public class EffectorManager : MonoBehaviour
     {
         ConstantVelocity,
         Reflect,
+        HorizontalVelocity,
     }
 
     [SerializeField] private MyPlayerController playerController;
     [SerializeField] private Rigidbody2D playerRB;
+
     [HideInInspector] public bool ConstantVelocityEffect = false;
     private Vector2 entryVelocity;
 
     [HideInInspector] public bool ReflectEffect = false;
+
+    [HideInInspector] public bool HorizontalVelocityEffect = false;
+    private Vector2 entryVelocityX;
+
+     
 
     private void Awake()
     {
@@ -42,6 +49,9 @@ public class EffectorManager : MonoBehaviour
                 break;
             case EffectorType.Reflect:
                 ApplyEffectReflect();
+                break
+            case EffectorType.HorizontalVelocity:
+                ApplyEffectHorizontalVelocity();
                 break;
         }
     }
@@ -56,6 +66,9 @@ public class EffectorManager : MonoBehaviour
             case EffectorType.Reflect:
                 RemoveEffectReflect();
                 break;
+            case EffectorType.HorizontalVelocity:
+                RemoveEffectHorizontalVelocity();
+                break;
         }
     }
 
@@ -65,11 +78,19 @@ public class EffectorManager : MonoBehaviour
         {
             playerRB.velocity = entryVelocity;
         }
+        else if (HorizontalVelocityEffect)
+        {
+            //sets the velocity of the player to the x component of the entry velocity
+            //locks the Y position because gravity was still applying while it was moving along
+            //there's some weirdo stuff happening with rotation at the end that I don't get tho
+            playerRB.velocity = entryVelocityX;
+            playerRB.constraints = RigidbodyConstraints2D.FreezePositionY| RigidbodyConstraints2D.FreezeRotation;
+        }
     }
 
     public bool CurrentEffectsDisablePlayerInput()
     {
-        return ReflectEffect || ConstantVelocityEffect;
+        return ReflectEffect || ConstantVelocityEffect || HorizontalVelocityEffect;
     }
 
     private void ApplyEffectConstantVelocity()
@@ -100,7 +121,19 @@ public class EffectorManager : MonoBehaviour
         ReflectEffect = false;
     }
 
-
+    private void ApplyEffectHorizontalVelocity()
+    {
+        HorizontalVelocityEffect = true;
+        entryVelocity = playerRB.velocity;
+        entryVelocityX = new Vector2(playerRB.velocity.x,0f);
+        
+    }
+    private void RemoveEffectHorizontalVelocity()
+    {
+        HorizontalVelocityEffect = false;
+        playerRB.velocity = entryVelocity;
+        playerRB.constraints = RigidbodyConstraints2D.None;
+    }
 
 
 }
