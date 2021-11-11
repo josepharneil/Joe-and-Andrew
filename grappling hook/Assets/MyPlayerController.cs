@@ -6,14 +6,16 @@ public class MyPlayerController : MonoBehaviour
 {
     // https://craftgames.co/unity-2d-platformer-movement/
 
+    [Header("Config")]
+    [SerializeField] private Rigidbody2D rb;
     [SerializeField] private float moveScale = 5f;
     [SerializeField] private float jumpForce = 5f;
-    [SerializeField] private Rigidbody2D rb;
-    private Vector2 velocity;
     [SerializeField] private float fallMultiplier = 2.5f;
     [SerializeField] private float lowJumpMultiplier = 2f;
 
-    bool isGrounded = false;
+    private Vector2 velocity;
+    private bool isGrounded = false;
+
     public Transform isGroundedChecker;
     public float checkGroundRadius;
     public LayerMask groundLayer;
@@ -23,18 +25,25 @@ public class MyPlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Move();
-        Jump();
-        BetterJump();
-        CheckIfGrounded();
+        if(!EffectorManager.Instance.CurrentEffectsDisablePlayerInput())
+        {
+            Move();
+            Jump();
+            BetterJump();
+            CheckIfGrounded();
+        }
     }
 
     private void Move()
     {
         if (!grappleScript.isGrappling)
         {
-            velocity.x = Input.GetAxis("Horizontal");
-            rb.velocity = new Vector2(velocity.x * moveScale, rb.velocity.y);
+            float horizontalAxis = Input.GetAxis("Horizontal");
+            if (horizontalAxis != 0 )
+            {
+                velocity.x = horizontalAxis;
+                rb.velocity = new Vector2(velocity.x * moveScale, rb.velocity.y);
+            }
         }
     }
     void Jump()
