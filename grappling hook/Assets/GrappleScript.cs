@@ -110,7 +110,7 @@ public class GrappleScript : MonoBehaviour
         // Start grappling
         Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3 grappleCheckDirection = mouseWorldPosition - player.position;
-        //check if wall/floor in the way
+        //check if wall in the way
         if(Physics2D.Raycast(player.position, grappleCheckDirection, maxGrappleLength, floor))
         {
             return;

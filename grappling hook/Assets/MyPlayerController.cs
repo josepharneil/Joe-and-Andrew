@@ -12,6 +12,8 @@ public class MyPlayerController : MonoBehaviour
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float fallMultiplier = 2.5f;
     [SerializeField] private float lowJumpMultiplier = 2f;
+    [SerializeField] private bool isSliding;
+    [SerializeField] private float slideTime = 10;
 
     private Vector2 velocity;
     private bool isGrounded = false;
@@ -31,6 +33,7 @@ public class MyPlayerController : MonoBehaviour
             Jump();
             BetterJump();
             CheckIfGrounded();
+            Slide();
         }
     }
 
@@ -77,6 +80,26 @@ public class MyPlayerController : MonoBehaviour
         else
         {
             isGrounded = false;
+        }
+    }
+    
+    void StartSlide()
+    {
+        if (Input.GetKeyDown(KeyCode.S) && isGrounded == true && rb.velocity.x != 0)
+        {
+            isSliding = true;
+            rb.constraints = RigidbodyConstraints2D.None;
+            rb.AddTorque(20f);
+            //StartCoroutine("Slide");
+        }
+    }
+
+    IEnumerator Slide()
+    {
+        for(float i = 10;i < slideTime; i++)
+        {
+            rb.MoveRotation(rb.rotation + 90 / i);
+            yield return new WaitForSeconds(.5f);
         }
     }
 }
