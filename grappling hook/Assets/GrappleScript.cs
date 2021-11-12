@@ -11,6 +11,7 @@ public class GrappleScript : MonoBehaviour
     public Transform player;
     public Rigidbody2D playerRb;
     public LayerMask grappleableLayer;
+    public LayerMask floor;
 
     [Header("Config")]
     public float grappleForce = 7f;
@@ -109,6 +110,11 @@ public class GrappleScript : MonoBehaviour
         // Start grappling
         Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3 grappleCheckDirection = mouseWorldPosition - player.position;
+        //check if wall/floor in the way
+        if(Physics2D.Raycast(player.position, grappleCheckDirection, maxGrappleLength, floor))
+        {
+            return;
+        }
         maybeGrappleRaycastHit = Physics2D.Raycast(player.position, grappleCheckDirection, maxGrappleLength, grappleableLayer);
     }
 
