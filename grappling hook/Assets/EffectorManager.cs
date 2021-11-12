@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class EffectorManager : MonoBehaviour
 {
     private static EffectorManager _instance;
@@ -49,7 +50,7 @@ public class EffectorManager : MonoBehaviour
                 break;
             case EffectorType.Reflect:
                 ApplyEffectReflect();
-                break
+                break;
             case EffectorType.HorizontalVelocity:
                 ApplyEffectHorizontalVelocity();
                 break;
@@ -113,7 +114,7 @@ public class EffectorManager : MonoBehaviour
     {
         ReflectEffect = true;
         playerRB.velocity = -playerRB.velocity;
-        playerRB.AddForce(playerRB.velocity * 5, ForceMode2D.Impulse);
+        playerRB.AddForce(playerRB.velocity * 1.2f, ForceMode2D.Impulse);
     }
 
     private void RemoveEffectReflect()
@@ -125,14 +126,14 @@ public class EffectorManager : MonoBehaviour
     {
         HorizontalVelocityEffect = true;
         entryVelocity = playerRB.velocity;
-        entryVelocityX = new Vector2(playerRB.velocity.x,0f);
+        entryVelocityX = new Vector2(10f*Mathf.Sign(entryVelocity.x),0f);
         
     }
     private void RemoveEffectHorizontalVelocity()
     {
         HorizontalVelocityEffect = false;
-        playerRB.velocity = entryVelocity;
-        playerRB.constraints = RigidbodyConstraints2D.None;
+        playerRB.velocity = new Vector2(entryVelocity.x,entryVelocity.y);
+        playerRB.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
 

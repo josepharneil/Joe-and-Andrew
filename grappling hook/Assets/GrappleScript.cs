@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GrappleScript : MonoBehaviour
 {
+    
 
     [Header("Setup")]
     public LineRenderer lr;
@@ -18,8 +19,15 @@ public class GrappleScript : MonoBehaviour
     [Header("Debug Information")]
     public bool isGrappling;
     public Vector2 grappleHitVectorNormalised;
+    public float angularVelocity;
 
     RaycastHit2D maybeGrappleRaycastHit;
+
+    public enum grappleType
+    {
+        pull,
+        fixedLength
+    }
 
     //called each frame
     void Update()
@@ -76,6 +84,9 @@ public class GrappleScript : MonoBehaviour
         // Method 3??
         //another method trying rigidbody2d.moveposition - its janky af, turn on for good fun
         //playerRb.MovePosition(hitPosition);
+
+        //Method 4 for a fixed grapple;
+        //fixedGrapple();
     }
 
     bool IsGrappleHitting( in RaycastHit2D hit )
@@ -129,6 +140,14 @@ public class GrappleScript : MonoBehaviour
         {
             StopGrapple();
         }
+    }
+
+    void fixedGrapple()
+    {
+        GameObject rod = new GameObject();
+        rod.name = "rod";
+        rod.AddComponent<Rigidbody2D>();
+
     }
 
 }
