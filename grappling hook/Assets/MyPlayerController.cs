@@ -14,14 +14,16 @@ public class MyPlayerController : MonoBehaviour
     [SerializeField] private float fallMultiplier = 2.5f;
     [SerializeField] private float lowJumpMultiplier = 2f;
     [SerializeField] private bool isSliding;
-    [SerializeField] private float rotationSpeed = 20f;
+    [SerializeField] private float slideScaler = 250f;
     [SerializeField] private float slideDuration = 10f;
 
+    //slide scaler is used to tweak how fast the slide rotates
 
 
     private Vector2 velocity;
     private bool isGrounded = false;
     private Vector2 slideStartSpeed;
+    private float slideSign;
 
     public Transform isGroundedChecker;
     public float checkGroundRadius;
@@ -98,17 +100,18 @@ public class MyPlayerController : MonoBehaviour
         {
             isSliding = true;
             slideStartSpeed = rb.velocity;
+            slideSign = Mathf.Sign(slideStartSpeed.x);
             StartCoroutine("StartSlide");
         }
     }
 
     IEnumerator StartSlide()
     {
-        for (float i = slideDuration;i >0; i--)
+        for (float i = 1;i <=slideDuration; i++)
         {
             //rotates
-            collider.transform.Rotate(0f,0f,90f/rotationSpeed *Mathf.Sign(rb.velocity.x));
-            yield return new WaitForSeconds(slideDuration/200f);
+            collider.transform.Rotate(0f,0f,90f/slideDuration *slideSign);
+            yield return new WaitForSeconds(slideDuration/slideScaler);
         }
         yield return new WaitForSeconds(slideDuration/20f);
         StartCoroutine("EndSlide");
@@ -119,8 +122,8 @@ public class MyPlayerController : MonoBehaviour
         for (float i = slideDuration; i > 0; i--)
         {
             //rotates the collider back up 90 degrees based on the slide time
-            collider.transform.Rotate(0f, 0f, -90f / rotationSpeed * Mathf.Sign(rb.velocity.x));
-            yield return new WaitForSeconds(slideDuration/200f);
+            collider.transform.Rotate(0f, 0f, -90f / slideDuration * slideSign);
+            yield return new WaitForSeconds(slideDuration/slideScaler);
         }
         isSliding = false;
     }
