@@ -8,15 +8,20 @@ public class MyPlayerController : MonoBehaviour
 
     [Header("Config")]
     [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private CapsuleCollider2D collider;
     [SerializeField] private float moveScale = 5f;
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float fallMultiplier = 2.5f;
     [SerializeField] private float lowJumpMultiplier = 2f;
     [SerializeField] private bool isSliding;
-    [SerializeField] private float slideTime = 10;
+    [SerializeField] private float rotationSpeed = 20f;
+    [SerializeField] private float slideDuration = 10f;
+
+
 
     private Vector2 velocity;
     private bool isGrounded = false;
+    private Vector2 slideStartSpeed;
 
     public Transform isGroundedChecker;
     public float checkGroundRadius;
@@ -27,7 +32,7 @@ public class MyPlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!EffectorManager.Instance.CurrentEffectsDisablePlayerInput())
+        if(!EffectorManager.Instance.CurrentEffectsDisablePlayerInput()||!isSliding)
         {
             Move();
             Jump();
@@ -35,11 +40,15 @@ public class MyPlayerController : MonoBehaviour
             CheckIfGrounded();
             Slide();
         }
+        if (isSliding)
+        {
+            rb.velocity =new Vector2( slideStartSpeed.x,rb.velocity.y);
+        }
     }
 
     private void Move()
     {
-        if (!grappleScript.isGrappling)
+        if (!grappleScript.isGrappling || !isSliding)
         {
             float horizontalAxis = Input.GetAxis("Horizontal");
             if (horizontalAxis != 0 )
@@ -83,23 +92,38 @@ public class MyPlayerController : MonoBehaviour
         }
     }
     
-    void StartSlide()
+    void Slide()
     {
         if (Input.GetKeyDown(KeyCode.S) && isGrounded == true && rb.velocity.x != 0)
         {
             isSliding = true;
-            rb.constraints = RigidbodyConstraints2D.None;
-            rb.AddTorque(20f);
-            //StartCoroutine("Slide");
+            slideStartSpeed = rb.velocity;
+            StartCoroutine("StartSlide");
         }
     }
 
-    IEnumerator Slide()
+    IEnumerator StartSlide()
     {
-        for(float i = 10;i < slideTime; i++)
+        for (float i = slideDuration;i >0; i--)
         {
-            rb.MoveRotation(rb.rotation + 90 / i);
-            yield return new WaitForSeconds(.5f);
+            //rotates
+            collider.transform.Rotate(0f,0f,90f/rotationSpeed *Mathf.Sign(rb.velocity.x));
+            yield return new WaitForSeconds(slideDuration/200f);
         }
+        yield return new WaitForSeconds(slideDuration/20f);
+        StartCoroutine("EndSlide");
     }
+
+    IEnumerator EndSlide()
+    {
+        for (float i = slideDuration; i > 0; i--)
+        {
+            //rotates the collider back up 90 degrees based on the slide time
+            collider.transform.Rotate(0f, 0f, -90f / rotationSpeed * Mathf.Sign(rb.velocity.x));
+            yield return new WaitForSeconds(slideDuration/200f);
+        }
+        isSliding = false;
+    }
+
+    
 }
