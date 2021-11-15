@@ -16,6 +16,7 @@ public class MyPlayerController : MonoBehaviour
     [SerializeField] private bool isSliding;
     [SerializeField] private float slideScaler = 250f;
     [SerializeField] private float slideDuration = 10f;
+    [SerializeField] private LayerMask floor;
 
     //slide scaler is used to tweak how fast the slide rotates
 
@@ -114,7 +115,15 @@ public class MyPlayerController : MonoBehaviour
             yield return new WaitForSeconds(slideDuration/slideScaler);
         }
         yield return new WaitForSeconds(slideDuration/20f);
-        StartCoroutine("EndSlide");
+        //checker for if the slide rotation would end up clipping 
+        ContactPoint2D[] contacts = new ContactPoint2D[3];
+        while (collider.GetContacts(contacts)>1)
+        {
+            yield return new WaitForSeconds(slideDuration / 20f);
+        }
+
+            StartCoroutine("EndSlide");
+       
     }
 
     IEnumerator EndSlide()
@@ -127,6 +136,8 @@ public class MyPlayerController : MonoBehaviour
         }
         isSliding = false;
     }
+
+    
 
     
 }
