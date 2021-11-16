@@ -588,7 +588,7 @@ MonoBehaviour:
   slideDuration: 10
   floor:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   isGroundedChecker: {fileID: 136947693}
   checkGroundRadius: 0.05
   groundLayer:
@@ -3871,7 +3871,7 @@ GameObject:
   - component: {fileID: 1561286133}
   - component: {fileID: 1561286135}
   - component: {fileID: 1561286134}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Floor (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

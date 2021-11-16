@@ -16,7 +16,6 @@ public class MyPlayerController : MonoBehaviour
     [SerializeField] private bool isSliding;
     [SerializeField] private float slideScaler = 250f;
     [SerializeField] private float slideDuration = 10f;
-    [SerializeField] private LayerMask floor;
 
     //slide scaler is used to tweak how fast the slide rotates
 
@@ -25,6 +24,7 @@ public class MyPlayerController : MonoBehaviour
     private bool isGrounded = false;
     private Vector2 slideStartSpeed;
     private float slideSign;
+    private Collider2D overlapCapsule;
 
     public Transform isGroundedChecker;
     public float checkGroundRadius;
@@ -115,12 +115,18 @@ public class MyPlayerController : MonoBehaviour
             yield return new WaitForSeconds(slideDuration/slideScaler);
         }
         yield return new WaitForSeconds(slideDuration/20f);
-        //checker for if the slide rotation would end up clipping 
-        ContactPoint2D[] contacts = new ContactPoint2D[3];
-        while (collider.GetContacts(contacts)>1)
+
+
+
+
+        //checker for if the slide rotation would end up clipping
+        // if the capsule above would run into a thing, then keep sliding
+        // while - rotation plus
+        // then keep going
+        /*while (collider.OverlapPoint(collider.Transform.Position.x+1)
         {
             yield return new WaitForSeconds(slideDuration / 20f);
-        }
+        }*/
 
             StartCoroutine("EndSlide");
        
