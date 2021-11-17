@@ -21,9 +21,10 @@ public class RLPlayerController : MonoBehaviour
     private Vector2 velocity;
     private bool isMoveInput = false;
     private bool isJumpInput = false;
-    private bool isDashStart = false;
-    private bool isDashing = false;
-    private bool isDashEnd = false;
+    [SerializeField] private bool isDashStart = false;
+    [SerializeField] private bool isDashing = false;
+    [SerializeField]  private bool isDashEnd = false;
+    [SerializeField] private bool isDashingThisUpdate;
     private bool hasGroundedSinceLastDash = true;
 
     private FacingDirection facingDirection = FacingDirection.Right;
@@ -56,14 +57,15 @@ public class RLPlayerController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        HandleDashInput();
         HandleMoveInput();
         HandleJumpInput();
-        HandleDashInput();
         CheckIfGrounded();
     }
 
     private void FixedUpdate()
     {
+
         ApplyDash();
         ApplyMove();
         ApplyJump();
@@ -107,7 +109,7 @@ public class RLPlayerController : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.LeftShift) && !isDashing && hasGroundedSinceLastDash)
         {
-            isDashStart = true;
+            isDashStart = true; 
             hasGroundedSinceLastDash = false;
         }
     }
@@ -115,12 +117,12 @@ public class RLPlayerController : MonoBehaviour
     private void ApplyDash()
     {
         UpdateDashState();
-
         if (isDashStart)
         {
             ApplyStartDash();
+            
         }
-
+        UpdateDashState();
         if (isDashing)
         {
             ApplyUpdateDash();
@@ -134,7 +136,7 @@ public class RLPlayerController : MonoBehaviour
 
     private void UpdateDashState()
     {
-        bool isDashingThisUpdate = dashTimer < dashDuration;
+        isDashingThisUpdate = dashTimer < dashDuration;
         // If we were just dashing last update, but no longer dashing now,
         // We want to signify for the end of dashing.
         if (isDashing && !isDashingThisUpdate)
@@ -147,8 +149,8 @@ public class RLPlayerController : MonoBehaviour
 
     private void ApplyStartDash()
     {
-        rb.gravityScale = 0f;
         rb.velocity = new Vector2(dashForce * (int)facingDirection, 0);
+        rb.gravityScale = 0f;
         isDashStart = false;
         dashTimer = 0f;
     }
@@ -169,7 +171,7 @@ public class RLPlayerController : MonoBehaviour
 
     private void ApplyMove()
     {
-        if (isMoveInput && !isDashing)
+        if (isMoveInput && (!isDashing || !isDashStart||!isDashingThisUpdate))
         {
             rb.velocity = new Vector2(velocity.x * moveMultiplier, rb.velocity.y);
         }
@@ -177,7 +179,7 @@ public class RLPlayerController : MonoBehaviour
 
     private void ApplyJump()
     {
-        if (isJumpInput && !isDashing)
+        if (isJumpInput && (!isDashing ||!isDashStart) )
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             isJumpInput = false;
