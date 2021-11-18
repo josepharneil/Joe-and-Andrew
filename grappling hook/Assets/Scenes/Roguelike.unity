@@ -518,6 +518,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7aed4c9a9c4994e4b9f1b38de8d5ce8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 358434515}
   dashForce: 40
   dashDurationShort: 0.15
   dashDurationLong: 0.25
