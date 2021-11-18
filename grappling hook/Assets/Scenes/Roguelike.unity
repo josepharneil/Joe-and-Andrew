@@ -505,16 +505,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b882e09b170021c4485d9344a2590d65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackDuration: 0.35
-  weaponCollider: {fileID: 1601449500}
-  playerRB: {fileID: 358434518}
-  attackTimer: 3.4028235e+38
   weaponRender: {fileID: 1601449501}
-  isAttackingThisUpdate: 0
-  isAttackStart: 0
-  isAttacking: 0
-  isAttackEnd: 0
   weaponTransform: {fileID: 781695478}
+  attackSpeed: 3
+  weaponInitialRotationZ: 70
+  weaponFinalRotationZ: 20
 --- !u!114 &358434520
 MonoBehaviour:
   m_ObjectHideFlags: 0

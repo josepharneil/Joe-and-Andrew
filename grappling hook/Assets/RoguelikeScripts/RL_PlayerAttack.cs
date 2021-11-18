@@ -5,108 +5,133 @@ using UnityEngine;
 public class RL_PlayerAttack : MonoBehaviour
 {
     [Header("Config")]
-    [SerializeField] private float attackDuration = 0.005f;
-    [SerializeField] private BoxCollider2D weaponCollider;
-    [SerializeField] private Rigidbody2D playerRB;
-    [SerializeField] private float attackTimer = float.MaxValue;
     [SerializeField] private SpriteRenderer weaponRender;
-    [SerializeField] private RL_PlayerController playerController;
-
+    [SerializeField] private Transform weaponTransform;
+    [SerializeField] private float attackSpeed = 2;
 
     [Header("Debug")]
-    [SerializeField] private bool isAttackingThisUpdate;
-    [SerializeField] private bool isAttackStart;
-    [SerializeField] private bool isAttacking;
-    [SerializeField] private bool isAttackEnd;
+    [Range(0, 360)]
+    [SerializeField] private float weaponInitialRotationZ = 70;
+    [Range(0, 360)]
+    [SerializeField] private float weaponFinalRotationZ = 20;
+
+    // Used for drawing lines in editor.
+    private float debugPreviousWeaponInitialRotationZ = 70;
+    private float debugPreviousWeaponFinalRotationZ = 70;
 
 
-    
-    public Transform weaponTransform;
-    private float weaponInitialX;
-    private float weaponInitialY;
-    private Quaternion weaponInitialRotation;
+    private enum AttackState
+    {
+        NotAttacking,
+        Start,
+        Attacking,
+        End
+    }
+    private AttackState attackState = AttackState.NotAttacking;
 
-    void Awake()
+    private void Awake()
     {
         weaponRender.enabled = false;
-        weaponInitialRotation = weaponTransform.rotation;
+        debugPreviousWeaponInitialRotationZ = weaponInitialRotationZ;
+        debugPreviousWeaponFinalRotationZ = weaponFinalRotationZ;
     }
 
-
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         HandleAttackInput();
+        // No rigidbody, so put in update.
+        ApplyAttack();
+
+        // Debug:
+        DebugDrawAttackLines();
+    }
+
+    private void DebugDrawAttackLines()
+    {
+        if (weaponInitialRotationZ != debugPreviousWeaponInitialRotationZ)
+        {
+            const float length = 3f;
+            debugPreviousWeaponInitialRotationZ = weaponInitialRotationZ;
+            Debug.DrawRay(weaponTransform.position, length *
+                new Vector3(Mathf.Cos(weaponInitialRotationZ * (Mathf.PI / 180f)), Mathf.Sin(weaponInitialRotationZ * (Mathf.PI / 180f)), 0),
+                Color.white, 0.05f);
+        }
+        if (weaponFinalRotationZ != debugPreviousWeaponFinalRotationZ)
+        {
+            const float length = 3f;
+            debugPreviousWeaponFinalRotationZ = weaponFinalRotationZ;
+            Debug.DrawRay(weaponTransform.position, length *
+                new Vector3(Mathf.Cos(weaponFinalRotationZ * (Mathf.PI / 180f)), Mathf.Sin(weaponFinalRotationZ * (Mathf.PI / 180f)), 0),
+                Color.red, 0.05f);
+        }
     }
 
     void HandleAttackInput()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0) && attackState == AttackState.NotAttacking)
         {
-            isAttackStart = true;
-            attackTimer = 0f;
+            attackState = AttackState.Start;
         }
-    }
-    void FixedUpdate()
-    {
-        ApplyAttack();
     }
 
     private void ApplyAttack()
     {
-        UpdateAttackState();
-        if (isAttackStart)
+        if (attackState == AttackState.Start)
         {
-            ApplyStartAttack();
-            
+            ApplyStartAttack();   
         }
-        UpdateAttackState();
-        if (isAttacking)
+        if (attackState == AttackState.Attacking)
         {
             ApplyUpdateAttack();
         }
-
-       if (isAttackEnd)
+        if (attackState == AttackState.End)
         {
             ApplyEndAttack();
         }
     }
 
-    private void UpdateAttackState()
-    {
-        isAttackingThisUpdate = attackTimer < attackDuration;
-        if (isAttacking && !isAttackingThisUpdate)
-        {
-            isAttackEnd = true;
-        }
-        isAttacking = isAttackingThisUpdate;
-        
-    }
-
     private void ApplyStartAttack()
     {
+        // TODO maybe set rotation based on facing direction here?
+        weaponTransform.rotation = Quaternion.Euler(weaponTransform.rotation.eulerAngles.x,
+        weaponTransform.rotation.eulerAngles.y, weaponInitialRotationZ);
+
         weaponRender.enabled = true;
-        isAttackStart = false;
+        attackState = AttackState.Attacking;
     }
 
     private void ApplyUpdateAttack()
     {
-     
-        weaponTransform.Rotate(new Vector3(0,0,1),-6f);
-        //weaponCollider.transform.position = new Vector3(weaponCollider.transform.position.x + 0.01f, weaponCollider.transform.position.y - 0.005f, transform.position.z);
-        attackTimer += Time.deltaTime;
-        if(attackTimer >= attackDuration)
+        // @JA TODO Fix this, attack doesnt seem to go whole distance.
+        // its quite inconsistent where it gets to.
+        // Maybe rotate based on attackSpeed
+        // Like lerp from initial -> final in fewer steps if higher attack speed
+        // and use more steps if lower attack speeds.
+        // This is my next todo (feel free to try it yourself)
+        if( weaponInitialRotationZ < weaponFinalRotationZ )
         {
-            isAttackEnd = true;
-            isAttacking = false;
+            weaponTransform.Rotate(new Vector3(0, 0, 1), attackSpeed);
+            if (weaponTransform.eulerAngles.z >= weaponFinalRotationZ)
+            {
+                attackState = AttackState.End;
+            }
+        }
+        else
+        {
+            weaponTransform.Rotate(new Vector3(0, 0, 1), -attackSpeed);
+            if (weaponTransform.eulerAngles.z <= weaponFinalRotationZ)
+            {
+                attackState = AttackState.End;
+            }
         }
     }
 
     private void ApplyEndAttack()
     {
         weaponRender.enabled = false;
-        attackTimer = float.MaxValue;
-        isAttackEnd = false;
-        weaponTransform.rotation = weaponInitialRotation;
+        attackState = AttackState.NotAttacking;
+        weaponTransform.rotation = Quaternion.Euler(weaponTransform.rotation.eulerAngles.x,
+            weaponTransform.rotation.eulerAngles.y, weaponInitialRotationZ);
     }
 }

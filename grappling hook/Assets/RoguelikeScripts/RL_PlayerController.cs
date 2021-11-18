@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RLPlayerController : MonoBehaviour
+public class RL_PlayerController : MonoBehaviour
 {
     [Header("Config")]
     public Rigidbody2D rb;

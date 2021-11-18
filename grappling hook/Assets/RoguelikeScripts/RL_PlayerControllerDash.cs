@@ -17,7 +17,7 @@ public class RL_PlayerControllerDash : MonoBehaviour
     private float dashTimer = float.MaxValue;
 
     // @JA TODO BAD BAD BAD CIRCULAR REFERENCE
-    [SerializeField] private RLPlayerController playerController;
+    [SerializeField] private RL_PlayerController playerController;
 
     private enum DashState
     {
