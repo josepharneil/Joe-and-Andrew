@@ -23,6 +23,12 @@ public class RLPlayerController : MonoBehaviour
         Right = 1
     }
     // @JA TODO Getters
+
+    public FacingDirection GetFacingDirection()
+    {
+        return facingDirection;
+    }
+
     [HideInInspector] public FacingDirection facingDirection = FacingDirection.Right;
     [HideInInspector] public bool isGrounded = false;
 

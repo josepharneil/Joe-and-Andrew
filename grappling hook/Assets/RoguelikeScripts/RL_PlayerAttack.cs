@@ -10,6 +10,7 @@ public class RL_PlayerAttack : MonoBehaviour
     [SerializeField] private Rigidbody2D playerRB;
     [SerializeField] private float attackTimer = float.MaxValue;
     [SerializeField] private SpriteRenderer weaponRender;
+    [SerializeField] private RL_PlayerController playerController;
 
 
     [Header("Debug")]
@@ -30,6 +31,8 @@ public class RL_PlayerAttack : MonoBehaviour
         weaponRender.enabled = false;
         weaponInitialRotation = weaponTransform.rotation;
     }
+
+
     // Update is called once per frame
     void Update()
     {
