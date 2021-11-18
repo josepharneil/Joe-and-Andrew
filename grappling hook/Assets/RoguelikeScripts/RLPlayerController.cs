@@ -30,6 +30,7 @@ public class RLPlayerController : MonoBehaviour
     [SerializeField] private float checkGroundRadius;
     [SerializeField] private LayerMask groundLayer;
 
+    // @JA TODO BAD BAD BAD CIRCULAR REFERENCE
     [SerializeField] private RL_PlayerControllerDash dashController;
 
     // Run
