@@ -5,10 +5,12 @@ using UnityEngine;
 public class RL_PlayerAttack : MonoBehaviour
 {
     [Header("Config")]
-    [SerializeField] private float attackDuration = 0.02f;
+    [SerializeField] private float attackDuration = 0.005f;
     [SerializeField] private BoxCollider2D weaponCollider;
     [SerializeField] private Rigidbody2D playerRB;
     [SerializeField] private float attackTimer = float.MaxValue;
+    [SerializeField] private SpriteRenderer weaponRender;
+
 
     [Header("Debug")]
     [SerializeField] private bool isAttackingThisUpdate;
@@ -17,19 +19,16 @@ public class RL_PlayerAttack : MonoBehaviour
     [SerializeField] private bool isAttackEnd;
 
 
-    //private Raycast hit;
-    public GameObject weapon;
+    
+    public Transform weaponTransform;
     private float weaponInitialX;
     private float weaponInitialY;
     private Quaternion weaponInitialRotation;
 
     void Awake()
     {
-        weapon.GetComponent<SpriteRenderer>().enabled = false;
-        
-        weaponInitialX = weaponCollider.transform.localPosition.x;
-        weaponInitialY = weaponCollider.transform.localPosition.y;
-        weaponInitialRotation = weaponCollider.transform.rotation;
+        weaponRender.enabled = false;
+        weaponInitialRotation = weaponTransform.rotation;
     }
     // Update is called once per frame
     void Update()
@@ -83,16 +82,15 @@ public class RL_PlayerAttack : MonoBehaviour
 
     private void ApplyStartAttack()
     {
-        weapon.GetComponent<SpriteRenderer>().enabled = true;
+        weaponRender.enabled = true;
         isAttackStart = false;
     }
 
     private void ApplyUpdateAttack()
     {
-        
-        
-        weaponCollider.transform.Rotate(new Vector3(0,0,1),-1.5f);
-        weaponCollider.transform.position = new Vector3(weaponCollider.transform.position.x + 0.02f, weaponCollider.transform.position.y - 0.02f, transform.position.z);
+     
+        weaponTransform.Rotate(new Vector3(0,0,1),-6f);
+        //weaponCollider.transform.position = new Vector3(weaponCollider.transform.position.x + 0.01f, weaponCollider.transform.position.y - 0.005f, transform.position.z);
         attackTimer += Time.deltaTime;
         if(attackTimer >= attackDuration)
         {
@@ -103,10 +101,9 @@ public class RL_PlayerAttack : MonoBehaviour
 
     private void ApplyEndAttack()
     {
-        weapon.GetComponent<SpriteRenderer>().enabled = false;
+        weaponRender.enabled = false;
         attackTimer = float.MaxValue;
         isAttackEnd = false;
-        weaponCollider.transform.localPosition = new Vector3(weaponInitialX, weaponInitialY, 0);
-        weaponCollider.transform.rotation = weaponInitialRotation;
+        weaponTransform.rotation = weaponInitialRotation;
     }
 }
