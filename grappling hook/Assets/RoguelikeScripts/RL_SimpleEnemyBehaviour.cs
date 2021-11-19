@@ -7,40 +7,71 @@ public class RL_SimpleEnemyBehaviour : MonoBehaviour
     [Header("Config")]
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Rigidbody2D playerRB;
-
     [SerializeField] private float moveSpeed = 5f;
-    private Vector2 position;
     [SerializeField] int moveDuration = 100;
-    private MoveDirection moveDirection = MoveDirection.Left;
+    [SerializeField] private float forceMultiplier;
+    [SerializeField] private MoveDirection moveDirection = MoveDirection.Left;
+
+    [Header("Debug")]
+    [SerializeField] private CollideType collideType = CollideType.None;
+    [SerializeField] private Vector2 collisionVector;
+
+    private Vector2 position;
+    
+
     private int moveCounter = 0;
-    [SerializeField] private bool playerCollide =false;
+    
 
     enum MoveDirection
     {
         Left  = -1,
         Right = 1,
     }
-    void Update()
+    enum CollideType
     {
-        Move();
-
+        Player,
+        Wall,
+        Enemy,
+        None
     }
-
+    
     void FixedUpdate()
     {
-        if (playerCollide)
+        Move();
+        switch (collideType)
         {
-            
-            playerRB.AddForce(new Vector2(500f*(int)moveDirection, 100f));
-            playerCollide = false;
+            case CollideType.Player:
+                HitPlayer();
+                collideType = CollideType.None;
+                break;
+            case CollideType.Wall:
+                ChangeDirection();
+                collideType = CollideType.None;
+                break;
+            case CollideType.Enemy:
+                ChangeDirection();
+                collideType = CollideType.None;
+                break;
+            case CollideType.None:
+                break;
         }
+        
+
     }
     
     void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            playerCollide = true;
+            collideType = CollideType.Player;
+        }
+        else if (collision.gameObject.CompareTag("Enemy"))
+        {
+            collideType = CollideType.Enemy;
+        }
+        else if( collision.gameObject.CompareTag("Wall"))
+        {
+            collideType = CollideType.Wall;
         }
     }
 
@@ -67,6 +98,16 @@ public class RL_SimpleEnemyBehaviour : MonoBehaviour
         moveCounter = 0;
     }
 
+    void HitPlayer()
+    {
+        collisionVector = playerRB.position - rb.position;
+        collisionVector = collisionVector.normalized;
+        if(Mathf.Abs(collisionVector.x )< 0.5f)
+        {
+            collisionVector.x = 0.5f * Mathf.Sign(collisionVector.x);
+        }
+        playerRB.AddForce(collisionVector * forceMultiplier);
+    }
    
 
    
