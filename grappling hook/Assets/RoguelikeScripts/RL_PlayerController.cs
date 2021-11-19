@@ -12,6 +12,7 @@ public class RL_PlayerController : MonoBehaviour
     [SerializeField] private float fallMultiplier = 2.5f;
     [SerializeField] private float lowJumpMultiplier = 2f;
 
+
     private Vector2 velocity;
 
     private bool isMoveInput = false;
@@ -22,14 +23,12 @@ public class RL_PlayerController : MonoBehaviour
         Left = -1,
         Right = 1
     }
-    // @JA TODO Getters
-
     public FacingDirection GetFacingDirection()
     {
         return facingDirection;
     }
 
-    [HideInInspector] public FacingDirection facingDirection = FacingDirection.Right;
+    private FacingDirection facingDirection = FacingDirection.Right;
     [HideInInspector] public bool isGrounded = false;
 
     [SerializeField] private Transform isGroundedChecker;
@@ -105,7 +104,7 @@ public class RL_PlayerController : MonoBehaviour
 
     private void ApplyJump()
     {
-        if (isJumpInput) //(!isDashing ||!isDashStart) )
+        if (isJumpInput)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             isJumpInput = false;

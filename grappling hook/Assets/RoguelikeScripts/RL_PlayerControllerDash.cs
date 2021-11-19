@@ -106,7 +106,7 @@ public class RL_PlayerControllerDash : MonoBehaviour
 
     private void ApplyStartDash()
     {
-        playerController.rb.velocity = new Vector2(dashForce * (int)playerController.facingDirection, 0);
+        playerController.rb.velocity = new Vector2(dashForce * (int)playerController.GetFacingDirection(), 0);
         playerController.rb.gravityScale = 0f;
         dashTimer = 0f;
         dashState = DashState.Dashing;
