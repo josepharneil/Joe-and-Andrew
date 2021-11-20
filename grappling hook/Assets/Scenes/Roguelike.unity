@@ -1102,7 +1102,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 413407025}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.054, y: 6.744, z: 117.01917}
+  m_LocalPosition: {x: 32.8998, y: 30.93135, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 536899521}
@@ -1168,12 +1168,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 413407027}
-  playerRB: {fileID: 358434518}
   moveSpeed: 2
   moveDuration: 100
   forceMultiplier: 300
   moveDirection: 1
-  collideType: 3
+  currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
 --- !u!212 &413407030
 SpriteRenderer:
@@ -1483,6 +1482,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 536899521}
+  - component: {fileID: 536899522}
   m_Layer: 0
   m_Name: Enemies
   m_TagString: Untagged
@@ -1498,7 +1498,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 536899520}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.8458, y: 24.187351, z: -117.01917}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1776685949}
@@ -1509,6 +1509,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &536899522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 536899520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1244d59a8efb54a0baa6ef8a5d4e910f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerRigidbody2D: {fileID: 358434518}
 --- !u!1 &605981541
 GameObject:
   m_ObjectHideFlags: 0
@@ -1755,7 +1768,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 638970979}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20.999, y: 6.702, z: 117.01917}
+  m_LocalPosition: {x: 37.8448, y: 30.88935, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 536899521}
@@ -1821,12 +1834,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 638970981}
-  playerRB: {fileID: 358434518}
   moveSpeed: 2
   moveDuration: 100
   forceMultiplier: 300
   moveDirection: -1
-  collideType: 3
+  currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
 --- !u!212 &638970984
 SpriteRenderer:
@@ -3050,7 +3062,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1323760052}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.2, y: 12.16, z: 117.01917}
+  m_LocalPosition: {x: 21.0458, y: 36.34735, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 536899521}
@@ -3116,12 +3128,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 1323760054}
-  playerRB: {fileID: 358434518}
   moveSpeed: 5
   moveDuration: 100
   forceMultiplier: 300
   moveDirection: -1
-  collideType: 3
+  currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
 --- !u!212 &1323760057
 SpriteRenderer:
@@ -4196,7 +4207,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1776685948}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15.49, y: 9.84, z: 117.01917}
+  m_LocalPosition: {x: 1.3558, y: 34.02735, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 536899521}
@@ -4241,12 +4252,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 1776685953}
-  playerRB: {fileID: 358434518}
   moveSpeed: 5
   moveDuration: 100
   forceMultiplier: 300
   moveDirection: -1
-  collideType: 3
+  currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
 --- !u!212 &1776685952
 SpriteRenderer:
@@ -4675,7 +4685,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1999034076}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.55, y: -23.12, z: 117.01917}
+  m_LocalPosition: {x: 17.3958, y: 1.06735, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 536899521}
@@ -4741,12 +4751,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 1999034078}
-  playerRB: {fileID: 358434518}
   moveSpeed: 5
   moveDuration: 100
   forceMultiplier: 300
   moveDirection: -1
-  collideType: 3
+  currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
 --- !u!212 &1999034081
 SpriteRenderer:

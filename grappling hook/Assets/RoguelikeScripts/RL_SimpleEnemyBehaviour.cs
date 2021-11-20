@@ -5,77 +5,114 @@ using UnityEngine;
 public class RL_SimpleEnemyBehaviour : MonoBehaviour
 {
     [Header("Config")]
+    // TODO Not sure if using a rigid body is a great idea? Might be fine though.
+    // Might have to only enable rigidbodies when close to the player.
     [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private Rigidbody2D playerRB;
     [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] int moveDuration = 100;
+    [SerializeField] private int moveDuration = 100;
     [SerializeField] private float forceMultiplier;
     [SerializeField] private MoveDirection moveDirection = MoveDirection.Left;
 
     [Header("Debug")]
-    [SerializeField] private CollideType collideType = CollideType.None;
+    [SerializeField] private CollideType currentCollisionType = CollideType.None;
     [SerializeField] private Vector2 collisionVector;
 
-    private Vector2 position;
-    
-
     private int moveCounter = 0;
-    
-
-    enum MoveDirection
+    private enum MoveDirection
     {
         Left  = -1,
         Right = 1,
     }
-    enum CollideType
+    private enum CollideType
     {
+        None,
         Player,
         Wall,
-        Enemy,
-        None
+        Enemy
     }
-    
-    void FixedUpdate()
-    {
-        Move();
-        switch (collideType)
-        {
-            case CollideType.Player:
-                HitPlayer();
-                collideType = CollideType.None;
-                break;
-            case CollideType.Wall:
-                ChangeDirection();
-                collideType = CollideType.None;
-                break;
-            case CollideType.Enemy:
-                ChangeDirection();
-                collideType = CollideType.None;
-                break;
-            case CollideType.None:
-                break;
-        }
-        
 
+    // This is different from "Dead". We might want to do something special when
+    // dead, e.g release a poisonous gas. Destroy means we're done with it. Delete!
+    public enum EnemyState
+    {
+        Alive,
+        Dead,
+        Destroy, 
     }
-    
-    void OnCollisionStay2D(Collision2D collision)
+    private EnemyState currentEnemyState = EnemyState.Alive;
+    public EnemyState CurrentEnemyState
+    {
+        get => currentEnemyState;
+        set => currentEnemyState = value;
+    }
+
+    // NOTE: Collision is like an expensive raycast, could raycast? Might be complicated.
+    void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            collideType = CollideType.Player;
+            currentCollisionType = CollideType.Player;
         }
         else if (collision.gameObject.CompareTag("Enemy"))
         {
-            collideType = CollideType.Enemy;
+            currentCollisionType = CollideType.Enemy;
         }
-        else if( collision.gameObject.CompareTag("Wall"))
+        else if (collision.gameObject.CompareTag("Wall"))
         {
-            collideType = CollideType.Wall;
+            currentCollisionType = CollideType.Wall;
         }
     }
 
-    void Move()
+    // This is effectively this object's fixed update, except its called by
+    // the EnemyManager.
+    public void EnemyUpdate()
+    {
+        switch (currentEnemyState)
+        {
+            case EnemyState.Alive:
+                {
+                    UpdateMove();
+                    UpdateCollision();
+                    break;
+                }
+            case EnemyState.Dead:
+                {
+                    MakeDead();
+                    break;
+                }
+            case EnemyState.Destroy:
+                {
+                    break;
+                }
+        }
+        if(currentEnemyState == EnemyState.Alive)
+        {
+        }
+    }
+
+    private void UpdateCollision()
+    {
+        switch (currentCollisionType)
+        {
+            case CollideType.Player:
+                HitPlayer();
+                currentCollisionType = CollideType.None;
+                break;
+            case CollideType.Wall:
+                ChangeDirection();
+                currentCollisionType = CollideType.None;
+                break;
+            case CollideType.Enemy:
+                ChangeDirection();
+                currentCollisionType = CollideType.None;
+                break;
+            case CollideType.None:
+                break;
+        };
+    }
+
+    // Update the movement of the enemy.
+    private void UpdateMove()
     {
         rb.velocity = new Vector2(moveSpeed *(int)moveDirection, 0f);
         moveCounter += 1;
@@ -85,30 +122,33 @@ public class RL_SimpleEnemyBehaviour : MonoBehaviour
         }
     }
 
-    void ChangeDirection()
+    private void ChangeDirection()
     {
         if(moveDirection == MoveDirection.Left)
         {
             moveDirection = MoveDirection.Right;
         }
-        else if(moveDirection ==MoveDirection.Right)
+        else if(moveDirection == MoveDirection.Right)
         {
             moveDirection = MoveDirection.Left;
         }
         moveCounter = 0;
     }
 
-    void HitPlayer()
+    // On collision with a player, bounce the player back.
+    private void HitPlayer()
     {
-        collisionVector = playerRB.position - rb.position;
+        collisionVector = RL_EnemyManager.Instance.playerRigidbody2D.position - rb.position;
         collisionVector = collisionVector.normalized;
         if(Mathf.Abs(collisionVector.x )< 0.5f)
         {
             collisionVector.x = 0.5f * Mathf.Sign(collisionVector.x);
         }
-        playerRB.AddForce(collisionVector * forceMultiplier);
+        RL_EnemyManager.Instance.playerRigidbody2D.AddForce(collisionVector * forceMultiplier);
     }
-   
 
-   
+    private void MakeDead()
+    {
+        currentEnemyState = EnemyState.Destroy;
+    }
 }
