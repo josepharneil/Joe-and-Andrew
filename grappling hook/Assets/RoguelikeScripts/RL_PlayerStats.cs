@@ -6,7 +6,12 @@ public class RL_PlayerStats : MonoBehaviour
 {
     [SerializeField] private IntVariable playerHealth;
     // TODO Temp just teleport
-    [SerializeField] private Transform initialSpawnPosition;
+    private Vector3 initialSpawnPosition;
+
+    private void Awake()
+    {
+        initialSpawnPosition = transform.position;
+    }
 
     private enum PlayerState
     {
@@ -46,7 +51,7 @@ public class RL_PlayerStats : MonoBehaviour
     IEnumerator WaitThenReset()
     {
         yield return new WaitForSeconds(1.5f);
-        transform.position = initialSpawnPosition.position;
+        transform.position = initialSpawnPosition;
         playerHealth.RuntimeValue = playerHealth.InitialValue;
         GetComponent<SpriteRenderer>().color = Color.white;
         GetComponent<CapsuleCollider2D>().enabled = true;
