@@ -6,12 +6,14 @@ public class RL_SimpleEnemyBehaviour : MonoBehaviour
 {
     [Header("Config")]
     // TODO Not sure if using a rigid body is a great idea? Might be fine though.
-    // Might have to only enable rigidbodies when close to the player.
+    // Might have to only enable rigidbodies when close to the player.  
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private int moveDuration = 100;
     [SerializeField] private float forceMultiplier;
     [SerializeField] private MoveDirection moveDirection = MoveDirection.Left;
+    // TODO Probably good to have scriptable object for enemy stats?
+    [SerializeField] private int damage = 5;
 
     [Header("Debug")]
     [SerializeField] private CollideType currentCollisionType = CollideType.None;
@@ -114,11 +116,14 @@ public class RL_SimpleEnemyBehaviour : MonoBehaviour
     // Update the movement of the enemy.
     private void UpdateMove()
     {
-        rb.velocity = new Vector2(moveSpeed *(int)moveDirection, 0f);
-        moveCounter += 1;
-        if(moveCounter == moveDuration)
+        if(moveSpeed != 0)
         {
-            ChangeDirection();
+            rb.velocity = new Vector2(moveSpeed *(int)moveDirection, 0f);
+            moveCounter += 1;
+            if(moveCounter == moveDuration)
+            {
+                ChangeDirection();
+            }
         }
     }
 
@@ -145,6 +150,7 @@ public class RL_SimpleEnemyBehaviour : MonoBehaviour
             collisionVector.x = 0.5f * Mathf.Sign(collisionVector.x);
         }
         RL_EnemyManager.Instance.playerRigidbody2D.AddForce(collisionVector * forceMultiplier);
+        RL_EnemyManager.Instance.playerStats.DamagePlayer(damage);
     }
 
     private void MakeDead()

@@ -7,6 +7,8 @@ public class RL_PlayerAttack : MonoBehaviour
     [Header("Components")]
     [SerializeField] private SpriteRenderer weaponRender;
     [SerializeField] private Transform weaponTransform;
+    [SerializeField] private RL_PlayerStats playerStats;
+
     // TODO bad way of doing this, shouldn't really have a reference to the controller.
     [SerializeField] private RL_PlayerController rlPlayerController;
     [Header("Config")]
@@ -49,12 +51,15 @@ public class RL_PlayerAttack : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        HandleAttackInput();
-        // No rigidbody, so put in update.
-        ApplyAttack();
+        if (!playerStats.IsPlayerDead())
+        {
+            HandleAttackInput();
+            // No rigidbody, so put in update.
+            ApplyAttack();
 
-        // Debug:
-        DebugDrawAttackLines();
+            // Debug:
+            DebugDrawAttackLines();
+        }
     }
 
     private void DebugDrawAttackLines()

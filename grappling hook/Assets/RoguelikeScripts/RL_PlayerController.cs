@@ -6,12 +6,14 @@ public class RL_PlayerController : MonoBehaviour
 {
     [Header("Config")]
     public Rigidbody2D rb;
+    [SerializeField] private RL_PlayerStats playerStats;
+    // @JA TODO BAD BAD BAD CIRCULAR REFERENCE
+    [SerializeField] private RL_PlayerControllerDash dashController;
 
     [SerializeField] private float moveMultiplier = 11f;
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float fallMultiplier = 2.5f;
     [SerializeField] private float lowJumpMultiplier = 2f;
-
 
     private Vector2 velocity;
 
@@ -35,9 +37,6 @@ public class RL_PlayerController : MonoBehaviour
     [SerializeField] private float checkGroundRadius;
     [SerializeField] private LayerMask groundLayer;
 
-    // @JA TODO BAD BAD BAD CIRCULAR REFERENCE
-    [SerializeField] private RL_PlayerControllerDash dashController;
-
     // Run
     // Jump
     // Dash / roll
@@ -45,13 +44,15 @@ public class RL_PlayerController : MonoBehaviour
     // Single wall jump
     // Parry
 
-
     // Update is called once per frame
     private void Update()
     {
-        HandleMoveInput();
-        HandleJumpInput();
-        CheckIfGrounded();
+        if(!playerStats.IsPlayerDead())
+        {
+            HandleMoveInput();
+            HandleJumpInput();
+            CheckIfGrounded();
+        }
     }
 
     private void FixedUpdate()

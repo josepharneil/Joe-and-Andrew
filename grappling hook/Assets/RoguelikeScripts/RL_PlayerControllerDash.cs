@@ -6,11 +6,13 @@ public class RL_PlayerControllerDash : MonoBehaviour
 {
     // Debug sprite renderer
     [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private RL_PlayerStats playerStats;
 
     [SerializeField] private float dashForce = 40f;
     [SerializeField] private float dashDurationShort = 0.15f;
     [SerializeField] private float dashDurationLong = 0.25f;
     [SerializeField] private float dashChargingThresholdDuration = 0.15f;
+
 
     // Timer / duration
     private float dashDurationToUse = 0.1f;
@@ -43,7 +45,10 @@ public class RL_PlayerControllerDash : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        HandleDashInput();
+        if (!playerStats.IsPlayerDead())
+        {
+            HandleDashInput();
+        }
     }
 
     private void FixedUpdate()
