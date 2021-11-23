@@ -66,7 +66,7 @@ public class RL_MovingPlatform : MonoBehaviour
 
     void Move()
     {
-        transform.Translate(new Vector3(xTranslation*(int)xDirection, yTranslation*(int)yDirection, 0));
+        transform.Translate(new Vector3(xSpeed*(int)xDirection, ySpeed*(int)yDirection, 0));
         if (xDirection != HorizontalDirection.none)
         {
             xCounter += xSpeed;
@@ -79,5 +79,15 @@ public class RL_MovingPlatform : MonoBehaviour
         {
             ChangeDirection();
         }
+    }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        col.gameObject.transform.SetParent(gameObject.transform, true);
+    }
+
+    void OnCollisionExit2D(Collision2D col)
+    {
+        col.gameObject.transform.parent = null;
     }
 }
