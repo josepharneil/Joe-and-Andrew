@@ -13,6 +13,7 @@ public class RL_PlayerControllerDash : MonoBehaviour
     [SerializeField] private float dashDurationLong = 0.25f;
     [SerializeField] private float dashChargingThresholdDuration = 0.15f;
 
+    private float initialGravityScale;
 
     // Timer / duration
     private float dashDurationToUse = 0.1f;
@@ -40,6 +41,11 @@ public class RL_PlayerControllerDash : MonoBehaviour
     public bool IsDashing()
     {
         return dashState == DashState.Charging || dashState == DashState.Start || dashState == DashState.Dashing || dashState == DashState.End;
+    }
+
+    private void Awake()
+    {
+        initialGravityScale = playerController.rb.gravityScale;
     }
 
     // Update is called once per frame
@@ -104,7 +110,7 @@ public class RL_PlayerControllerDash : MonoBehaviour
     private void ApplyChargingDash()
     {
         playerController.rb.velocity = new Vector2(0, 0);
-        playerController.rb.gravityScale = 0.75f;
+        playerController.rb.gravityScale = initialGravityScale * 0.95f;
         dashTimer += Time.deltaTime;
         spriteRenderer.color = Color.green;
     }
@@ -130,7 +136,7 @@ public class RL_PlayerControllerDash : MonoBehaviour
 
     private void ApplyEndDash()
     {
-        playerController.rb.gravityScale = 1f;
+        playerController.rb.gravityScale = initialGravityScale;
         playerController.rb.velocity = new Vector2(0, 0);
         dashState = DashState.NotDashingAndUnavailable;
         dashTimer = float.MaxValue;
