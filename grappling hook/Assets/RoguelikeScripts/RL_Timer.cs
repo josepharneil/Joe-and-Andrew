@@ -8,18 +8,22 @@ public class RL_Timer : MonoBehaviour
     //from https://vionixstudio.com/2020/11/03/unity-timer-simplified/
 
     [Header("Config")]
-    float duration = 30.0f;
-    
+    [SerializeField] private float duration = 30.0f;
+    [SerializeField] private float xPositionReset;
+    [SerializeField] private float yPositionReset;
+    [SerializeField] private Rigidbody2D playerRB;
+
     public Text displayText;
     public TimerState timerState = TimerState.NotYetActive;
+
 
     public enum TimerState
     {
         NotYetActive,
-        Start,
         Running,
-        Finished,
-    }
+        Completed,
+        Failed,
+    } 
 
     void Start()
     {
@@ -28,7 +32,16 @@ public class RL_Timer : MonoBehaviour
 
     public void StartTimer()
     {
-        StartCoroutine("RunTimer");
+        if (timerState == TimerState.NotYetActive || timerState== TimerState.Failed)
+        {
+            timerState = TimerState.Running;
+            StartCoroutine("RunTimer");
+        }
+    }
+
+    public void EndTimer()
+    {
+        timerState = TimerState.Completed;
     }
 
     IEnumerator RunTimer()
@@ -37,13 +50,27 @@ public class RL_Timer : MonoBehaviour
         displayText.enabled = true;
         while(countDown >= 0)
         {
+            if(timerState == TimerState.Completed)
+            {
+                break;
+            }
             timerState = TimerState.Running;
             float f = countDown;
             displayText.text = f.ToString();
             countDown -= Time.deltaTime;
             yield return null;
         }
-        timerState = TimerState.Finished;
+        if(timerState  != TimerState.Completed)
+        {
+            TimerFailed();
+        }
         displayText.enabled = false;
+    }
+
+    void TimerFailed()
+    {
+        //AK TODO pretty hacky method heere
+        timerState = TimerState.Failed;
+        playerRB.position = new Vector3(xPositionReset, yPositionReset, 0f);
     }
 }
