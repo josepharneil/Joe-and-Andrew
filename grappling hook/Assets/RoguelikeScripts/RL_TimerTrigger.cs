@@ -21,6 +21,7 @@ public class RL_TimerTrigger : MonoBehaviour
         switch (triggerType)
         {
             case TriggerType.Start:
+                
                 timer.StartTimer();
                 break;
             case TriggerType.End:
@@ -30,4 +31,9 @@ public class RL_TimerTrigger : MonoBehaviour
         }
         
     }
+
+    //TODO AK: Script to show or hide the goal while the timer is running
+    //          Could also Use this to implement a route of things to go to
+
+  
 }
