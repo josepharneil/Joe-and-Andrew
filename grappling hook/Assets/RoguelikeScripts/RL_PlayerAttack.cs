@@ -8,9 +8,10 @@ public class RL_PlayerAttack : MonoBehaviour
     [SerializeField] private SpriteRenderer weaponRender;
     [SerializeField] private Transform weaponTransform;
     [SerializeField] private RL_PlayerStats playerStats;
+    [SerializeField] private BoxCollider2D weaponCollider;
 
     // TODO bad way of doing this, shouldn't really have a reference to the controller.
-    [SerializeField] private RL_PlayerController rlPlayerController;
+   [SerializeField] private RL_PlayerController rlPlayerController;
     [Header("Config")]
     [SerializeField] private float attackSpeed = 2;
     [Range(0, 360)]
@@ -44,6 +45,7 @@ public class RL_PlayerAttack : MonoBehaviour
     private void Awake()
     {
         weaponRender.enabled = false;
+        weaponCollider.enabled = false;
         debugPreviousWeaponInitialRotationZ = weaponInitialRotationZ;
         debugPreviousWeaponFinalRotationZ = weaponFinalRotationZ;
     }
@@ -86,6 +88,7 @@ public class RL_PlayerAttack : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0) && attackState == AttackState.NotAttacking)
         {
+            
             attackState = AttackState.Start;
         }
     }
@@ -108,6 +111,7 @@ public class RL_PlayerAttack : MonoBehaviour
 
     private void ApplyStartAttack()
     {
+        weaponCollider.enabled = true;
         facingDirectionAtAttackTime = rlPlayerController.GetFacingDirection();
         if (facingDirectionAtAttackTime == RL_PlayerController.FacingDirection.Right)
         {
@@ -207,6 +211,7 @@ public class RL_PlayerAttack : MonoBehaviour
 
     private void ApplyEndAttack()
     {
+        weaponCollider.enabled = false;
         weaponRender.enabled = false;
         attackState = AttackState.NotAttacking;
         weaponTransform.rotation = Quaternion.Euler(weaponTransform.rotation.eulerAngles.x,
