@@ -1856,7 +1856,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 358434513}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15.55, y: 18.8, z: 0}
+  m_LocalPosition: {x: -1.31, y: 19.43, z: 0}
   m_LocalScale: {x: 0.8695, y: 0.5716114, z: 1}
   m_Children:
   - {fileID: 489613532}
@@ -3108,8 +3108,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -504.57, y: 265.42}
-  m_SizeDelta: {x: 346.3, y: 53.15}
+  m_AnchoredPosition: {x: -460.65, y: 258.79}
+  m_SizeDelta: {x: 183.69, y: 45.41}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &516289309
 MonoBehaviour:
@@ -3138,7 +3138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.16313636, g: 0.8867924, b: 0.28596815, a: 1}
+  m_Color: {r: 0.8980392, g: 0.14117646, b: 0.14117646, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -12966,9 +12966,9 @@ MonoBehaviour:
   rb: {fileID: 1254238580}
   moveSpeed: 3
   moveDuration: 75
-  forceMultiplier: 10
+  forceMultiplier: 500
   moveDirection: 1
-  damage: 5
+  damage: 4
   currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
 --- !u!212 &1254238582
@@ -13597,9 +13597,9 @@ MonoBehaviour:
   rb: {fileID: 1325464016}
   moveSpeed: 3
   moveDuration: 70
-  forceMultiplier: 10
+  forceMultiplier: 500
   moveDirection: 1
-  damage: 5
+  damage: 4
   currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
 --- !u!212 &1325464018
@@ -13858,7 +13858,7 @@ MonoBehaviour:
   rb: {fileID: 1330408020}
   moveSpeed: 1.5
   moveDuration: 400
-  forceMultiplier: 10
+  forceMultiplier: 750
   moveDirection: -1
   damage: 5
   currentCollisionType: 0
@@ -14119,9 +14119,9 @@ MonoBehaviour:
   rb: {fileID: 1417859175}
   moveSpeed: 3
   moveDuration: 75
-  forceMultiplier: 10
+  forceMultiplier: 500
   moveDirection: -1
-  damage: 5
+  damage: 4
   currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
 --- !u!212 &1417859177
@@ -17355,9 +17355,9 @@ MonoBehaviour:
   rb: {fileID: 1828139701}
   moveSpeed: 3
   moveDuration: 70
-  forceMultiplier: 10
+  forceMultiplier: 500
   moveDirection: 1
-  damage: 5
+  damage: 4
   currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
 --- !u!212 &1828139703
@@ -17616,9 +17616,9 @@ MonoBehaviour:
   rb: {fileID: 1846297774}
   moveSpeed: 3
   moveDuration: 75
-  forceMultiplier: 10
+  forceMultiplier: 500
   moveDirection: 1
-  damage: 5
+  damage: 4
   currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
 --- !u!212 &1846297776
@@ -18743,7 +18743,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 595.23, y: 258.31}
+  m_AnchoredPosition: {x: 495.73004, y: 258.31}
   m_SizeDelta: {x: 113.54, y: 46.38}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2070719861
