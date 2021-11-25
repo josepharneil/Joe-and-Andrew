@@ -33,9 +33,18 @@ public class RL_PlayerController : MonoBehaviour
     private FacingDirection facingDirection = FacingDirection.Right;
     [HideInInspector] public bool isGrounded = false;
 
-    [SerializeField] private Transform isGroundedChecker;
+    [SerializeField] private Transform rightWallChecker;
+    [SerializeField] private Transform leftWallChecker;
+    [SerializeField] private Transform groundChecker;
     [SerializeField] private float checkGroundRadius;
     [SerializeField] private LayerMask groundLayer;
+
+    private float wallGrabTimer = 0f;
+    private bool isWallGrabbing = false;
+    private float initialGravityScale = 0f;
+    [SerializeField] private float wallGrabTimeLimit = 0.25f;
+    [SerializeField] private float wallGrabFallgGravityScale = 0.05f;
+
 
     // Run
     // Jump
@@ -43,6 +52,11 @@ public class RL_PlayerController : MonoBehaviour
     // Melee hit
     // Single wall jump
     // Parry
+
+    private void Awake()
+    {
+        initialGravityScale = rb.gravityScale;
+    }
 
     // Update is called once per frame
     private void Update()
@@ -52,6 +66,7 @@ public class RL_PlayerController : MonoBehaviour
             HandleMoveInput();
             HandleJumpInput();
             CheckIfGrounded();
+            CheckIfGrabbedToWall();
         }
     }
 
@@ -59,6 +74,7 @@ public class RL_PlayerController : MonoBehaviour
     {
         ApplyMove();
         ApplyJump();
+        ApplyWallGrab();
     }
 
     private void HandleMoveInput()
@@ -125,13 +141,37 @@ public class RL_PlayerController : MonoBehaviour
         }
     }
 
+    private void CheckIfGrabbedToWall()
+    {
+        if(isGrounded)
+        {
+            wallGrabTimer = 0f;
+        }
+        if(wallGrabTimer < wallGrabTimeLimit)
+        {
+            Collider2D leftCollider = Physics2D.OverlapCircle(leftWallChecker.position, checkGroundRadius, groundLayer);
+            if(leftCollider)
+            {
+                isWallGrabbing = true;
+                wallGrabTimer += Time.deltaTime;
+            }
+            Collider2D rightCollider = Physics2D.OverlapCircle(rightWallChecker.position, checkGroundRadius, groundLayer);
+            if(rightCollider)
+            {
+                isWallGrabbing = true;
+                wallGrabTimer += Time.deltaTime;
+            }
+            if(!leftCollider && !rightCollider)
+            {
+                isWallGrabbing = false;
+            }
+        }
+    }
 
-
-
-    void CheckIfGrounded()
+    private void CheckIfGrounded()
     {
         // NOTE @JA This should probably be a down raycast?? Maybe? Layer check is a bit dodge.
-        Collider2D collider = Physics2D.OverlapCircle(isGroundedChecker.position, checkGroundRadius, groundLayer);
+        Collider2D collider = Physics2D.OverlapCircle(groundChecker.position, checkGroundRadius, groundLayer);
 
         if (collider != null)
         {
@@ -140,6 +180,29 @@ public class RL_PlayerController : MonoBehaviour
         else
         {
             isGrounded = false;
+        }
+    }
+
+    private void ApplyWallGrab()
+    {
+        if(isWallGrabbing)
+        {
+            if (wallGrabTimer > wallGrabTimeLimit)
+            {
+                // Slowly slide down
+                float vel_x = 0f;
+                float vel_y = rb.velocity.y;
+                rb.velocity = new Vector2(vel_x, vel_y);
+                rb.gravityScale = wallGrabFallgGravityScale;
+            }
+            else
+            {
+                // Stay grabbed (default behaviour)
+            }
+        }
+        else
+        {
+            rb.gravityScale = initialGravityScale;
         }
     }
 
