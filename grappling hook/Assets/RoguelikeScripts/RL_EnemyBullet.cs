@@ -17,9 +17,11 @@ public class RL_EnemyBullet : MonoBehaviour
     // Update is called once per frame
     void OnCollisionEnter2D(Collision2D col)
     {
-        
+        Debug.Log("collisionEnter");
         Die();
     }
+
+
     IEnumerator CountDownTimer()
     {
         yield return new WaitForSeconds(shotDuration);
