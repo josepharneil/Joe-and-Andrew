@@ -637,17 +637,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7271476e23d89f94299a5fa5895a11d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerRB: {fileID: 358434518}
-  enemyPosition: {fileID: 61876821}
-  shootPosition: {fileID: 1505406052}
+  playerTransform: {fileID: 358434516}
+  shootTransform: {fileID: 1505406052}
   bullet: {fileID: 7718500236972003399, guid: 1e1f08045cae8f8459759bb8ff88905d, type: 3}
   timeBetweenShots: 2
   range: 15
   shotSpeed: 10
-  distanceToPlayer: 0
+  debugDistanceToPlayer: 0
   canShoot: 0
   startRoutine: 0
-  layerMask:
+  raycastDistance: 0
+  groundLayerMask:
     serializedVersion: 2
     m_Bits: 0
 --- !u!212 &61876823

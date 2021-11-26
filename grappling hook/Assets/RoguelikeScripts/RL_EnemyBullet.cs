@@ -17,11 +17,15 @@ public class RL_EnemyBullet : MonoBehaviour
     // Update is called once per frame
     void OnCollisionEnter2D(Collision2D col)
     {
-        Debug.Log("collisionEnter");
-        Die();
+        if(col.transform.gameObject.tag != "Enemy")
+        {
+            Die();
+        }
     }
 
-
+    // TODO This is probably bad to have this per-object
+    // Would rather have this all in one manager, so if we have lots of bullets,
+    // we don't have too many updates.
     IEnumerator CountDownTimer()
     {
         yield return new WaitForSeconds(shotDuration);
