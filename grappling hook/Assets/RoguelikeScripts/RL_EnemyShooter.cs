@@ -37,11 +37,9 @@ public class RL_EnemyShooter : MonoBehaviour
     {
 
         distanceToPlayer = Vector2.Distance(playerRB.position, shootPosition.position);
-        /*if(Physics2D.Raycast(shootPosition.position, playerRB.position, range, layerMask))
-        {
-            canShoot = false;
-        }*/
-
+        
+        //AK: the range doesn't seem to apply properly
+        // it also seems to completely shut down if the layer is set to ground
         hitPlayer = Physics2D.Raycast(shootPosition.position, playerRB.position, range);
         raycastDistance = hitPlayer.distance;
         if (!Physics2D.Raycast(shootPosition.position, playerRB.position, range, layerMask) &&  hitPlayer && canShoot)
@@ -53,6 +51,7 @@ public class RL_EnemyShooter : MonoBehaviour
 
     IEnumerator Shoot()
     {
+        //AK: Can shoot stops the bullet from being generated every frame
         startRoutine = true;
         canShoot = false;
         yield return new WaitForSeconds(timeBetweenShots);
