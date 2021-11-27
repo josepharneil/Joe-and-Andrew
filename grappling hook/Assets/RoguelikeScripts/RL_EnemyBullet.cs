@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class RL_EnemyBullet : MonoBehaviour
 {
+    [Header("Setup")]
+    [SerializeField] private RL_PlayerStats playerStats;
+
     [Header("Config")]
-    public float shotDuration, damage;
+    public float shotDuration;
+    public int damage;
 
     //public GameObject diePeffect;
     // Start is called before the first frame update
     void Start()
     {
+        playerStats = GameObject.Find("Player").GetComponent<RL_PlayerStats>();
         StartCoroutine(CountDownTimer());
     }
 
@@ -19,6 +24,10 @@ public class RL_EnemyBullet : MonoBehaviour
     {
         if(col.transform.gameObject.tag != "Enemy")
         {
+            if (col.transform.gameObject.tag == "Player")
+            {
+                playerStats.DamagePlayer(damage);
+            }
             Die();
         }
     }
@@ -33,7 +42,7 @@ public class RL_EnemyBullet : MonoBehaviour
         Die();
     }
 
-    void Die()
+    public void Die()
     {
         Destroy(gameObject);
     }
