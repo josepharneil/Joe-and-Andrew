@@ -5,6 +5,7 @@ using UnityEngine;
 public class RL_PlayerStats : MonoBehaviour
 {
     [SerializeField] private IntVariable playerHealth;
+    [SerializeField] private IntVariable collectables;
     // TODO Temp just teleport
     private Vector3 initialSpawnPosition;
 
@@ -57,7 +58,6 @@ public class RL_PlayerStats : MonoBehaviour
         GetComponent<CapsuleCollider2D>().enabled = true;
         SetPlayerAlive();
     }
-
 
     public void DamagePlayer( int damage )
     {

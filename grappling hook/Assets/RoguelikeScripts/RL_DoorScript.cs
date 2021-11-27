@@ -9,10 +9,12 @@ public class RL_DoorScript : MonoBehaviour
     [SerializeField] private DoorType doorType;
     [SerializeField] private RL_EnemyManager enemyManager;
     [SerializeField] private RL_Timer timer;
+    [SerializeField] private RL_CollectableManager collectableManager;
     public enum DoorType
     {
         Enemy,
         Timer,
+        Collectable,
     }
     // Start is called before the first frame update
     void Start()
@@ -20,6 +22,9 @@ public class RL_DoorScript : MonoBehaviour
         if(doorType == DoorType.Enemy)
         {
             enemyManager = RL_EnemyManager.Instance;
+        }else if(doorType == DoorType.Collectable)
+        {
+            collectableManager = RL_CollectableManager.Instance;
         }
     }
 
@@ -34,6 +39,10 @@ public class RL_DoorScript : MonoBehaviour
             case DoorType.Timer:
                 TimerDoor();
                 break;
+            case DoorType.Collectable:
+                CollectableDoor();
+                break;
+
         }
 
         
@@ -50,6 +59,14 @@ public class RL_DoorScript : MonoBehaviour
     void TimerDoor()
     {
         if(timer.timerState == RL_Timer.TimerState.Completed)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    void CollectableDoor()
+    {
+        if (collectableManager.collectablesLeft == 0)
         {
             Destroy(gameObject);
         }
