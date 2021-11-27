@@ -10,11 +10,17 @@ public class RL_WeaponHit : MonoBehaviour
         GameObject gameObject = collider.gameObject;
         if (gameObject.tag == "Enemy")
         {
+            RL_EnemyBullet enemyBullet = gameObject.GetComponent<RL_EnemyBullet>();
             RL_SimpleEnemyBehaviour simpleEnemyBehaviour = gameObject.GetComponent<RL_SimpleEnemyBehaviour>();
-            if(simpleEnemyBehaviour)
+            if (simpleEnemyBehaviour)
             {
                 // Make dead. Enemy scripts will handle from there what to do.
                 simpleEnemyBehaviour.CurrentEnemyState = RL_SimpleEnemyBehaviour.EnemyState.Dead;
+            }else if(enemyBullet)
+            {
+
+                Debug.LogError("Bullet Hit");
+                enemyBullet.Die();
             }
             else
             {

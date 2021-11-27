@@ -19,6 +19,11 @@ public class RL_SimpleEnemyBehaviour : MonoBehaviour
     [SerializeField] private CollideType currentCollisionType = CollideType.None;
     [SerializeField] private Vector2 collisionVector;
 
+
+    //AK: Will probably have to adapt this at some point for other enemy types, currently applied to shooter enemy
+    // a bit hacky tho as the shooter doesn't move or have a rigidbody atm
+    //doesn't break anything as far as I can tell for now though
+
     private int moveCounter = 0;
     private enum MoveDirection
     {
