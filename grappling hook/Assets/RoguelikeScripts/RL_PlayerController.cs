@@ -41,10 +41,7 @@ public class RL_PlayerController : MonoBehaviour
 
     private float wallGrabTimer = 0f;
     private bool isWallGrabbing = false;
-    private float initialGravityScale = 0f;
     [SerializeField] private float wallGrabTimeLimit = 0.25f;
-    [SerializeField] private float wallGrabFallgGravityScale = 0.05f;
-
 
     // Run
     // Jump
@@ -52,11 +49,6 @@ public class RL_PlayerController : MonoBehaviour
     // Melee hit
     // Single wall jump
     // Parry
-
-    private void Awake()
-    {
-        initialGravityScale = rb.gravityScale;
-    }
 
     // Update is called once per frame
     private void Update()
@@ -147,24 +139,35 @@ public class RL_PlayerController : MonoBehaviour
         {
             wallGrabTimer = 0f;
         }
-        if(wallGrabTimer < wallGrabTimeLimit)
+
+        Collider2D rightCollider = Physics2D.OverlapCircle(rightWallChecker.position, checkGroundRadius, groundLayer);
+        Collider2D leftCollider = Physics2D.OverlapCircle(leftWallChecker.position, checkGroundRadius, groundLayer);
+        if(!isGrounded)
         {
-            Collider2D leftCollider = Physics2D.OverlapCircle(leftWallChecker.position, checkGroundRadius, groundLayer);
             if(leftCollider)
             {
                 isWallGrabbing = true;
                 wallGrabTimer += Time.deltaTime;
             }
-            Collider2D rightCollider = Physics2D.OverlapCircle(rightWallChecker.position, checkGroundRadius, groundLayer);
             if(rightCollider)
             {
                 isWallGrabbing = true;
                 wallGrabTimer += Time.deltaTime;
             }
-            if(!leftCollider && !rightCollider)
-            {
-                isWallGrabbing = false;
-            }
+        }
+        else
+        {
+
+        }
+
+        if(!leftCollider && !rightCollider)
+        {
+            isWallGrabbing = false;
+        }
+
+        if(wallGrabTimer < wallGrabTimeLimit)
+        {
+            isWallGrabbing = false;
         }
     }
 
@@ -190,19 +193,14 @@ public class RL_PlayerController : MonoBehaviour
             if (wallGrabTimer > wallGrabTimeLimit)
             {
                 // Slowly slide down
-                float vel_x = 0f;
-                float vel_y = rb.velocity.y;
+                float vel_x = rb.velocity.x;
+                float vel_y = -12;
                 rb.velocity = new Vector2(vel_x, vel_y);
-                rb.gravityScale = wallGrabFallgGravityScale;
             }
             else
             {
                 // Stay grabbed (default behaviour)
             }
-        }
-        else
-        {
-            rb.gravityScale = initialGravityScale;
         }
     }
 

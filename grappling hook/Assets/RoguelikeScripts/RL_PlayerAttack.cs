@@ -11,7 +11,7 @@ public class RL_PlayerAttack : MonoBehaviour
     [SerializeField] private BoxCollider2D weaponCollider;
 
     // TODO bad way of doing this, shouldn't really have a reference to the controller.
-   [SerializeField] private RL_PlayerController rlPlayerController;
+    [SerializeField] private RL_PlayerController rlPlayerController;
     [Header("Config")]
     [SerializeField] private float attackSpeed = 2;
     [Range(0, 360)]
