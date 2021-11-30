@@ -14,6 +14,10 @@ public class RL_SimpleEnemyBehaviour : MonoBehaviour
     [SerializeField] private MoveDirection moveDirection = MoveDirection.Left;
     // TODO Probably good to have scriptable object for enemy stats?
     [SerializeField] private int damage = 5;
+    [SerializeField] private int startingHealth =5;
+
+    
+    public int currentHealth;
 
     [Header("Debug")]
     [SerializeField] private CollideType currentCollisionType = CollideType.None;
@@ -23,6 +27,11 @@ public class RL_SimpleEnemyBehaviour : MonoBehaviour
     //AK: Will probably have to adapt this at some point for other enemy types, currently applied to shooter enemy
     // a bit hacky tho as the shooter doesn't move or have a rigidbody atm
     //doesn't break anything as far as I can tell for now though
+
+    void Start()
+    {
+        currentHealth = startingHealth;
+    }
 
     private int moveCounter = 0;
     private enum MoveDirection
@@ -35,7 +44,7 @@ public class RL_SimpleEnemyBehaviour : MonoBehaviour
         None,
         Player,
         Wall,
-        Enemy
+        Enemy,
     }
 
     // This is different from "Dead". We might want to do something special when
@@ -56,6 +65,7 @@ public class RL_SimpleEnemyBehaviour : MonoBehaviour
     // NOTE: Collision is like an expensive raycast, could raycast? Might be complicated.
     void OnCollisionEnter2D(Collision2D collision)
     {
+
         if (collision.gameObject.CompareTag("Player"))
         {
             currentCollisionType = CollideType.Player;
@@ -80,6 +90,7 @@ public class RL_SimpleEnemyBehaviour : MonoBehaviour
                 {
                     UpdateMove();
                     UpdateCollision();
+                    UpdateHealth();
                     break;
                 }
             case EnemyState.Dead:
@@ -115,6 +126,7 @@ public class RL_SimpleEnemyBehaviour : MonoBehaviour
                 break;
             case CollideType.None:
                 break;
+            
         };
     }
 
@@ -156,6 +168,19 @@ public class RL_SimpleEnemyBehaviour : MonoBehaviour
         }
         RL_EnemyManager.Instance.playerRigidbody2D.AddForce(collisionVector * forceMultiplier);
         RL_EnemyManager.Instance.playerStats.DamagePlayer(damage);
+    }
+
+    public void UpdateHealth()
+    {
+        if(currentHealth <= 0)
+        {
+            currentEnemyState = EnemyState.Dead;
+        }
+    }
+
+    public void DamageEnemy(int dmg)
+    {
+        currentHealth -= dmg;
     }
 
     private void MakeDead()

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class RL_WeaponHit : MonoBehaviour
 {
+    [Header("Config")]
+    [SerializeField] private int damage =3;
     // Start is called before the first frame update
     void OnTriggerEnter2D(Collider2D collider)
     {
@@ -15,7 +17,9 @@ public class RL_WeaponHit : MonoBehaviour
             if (simpleEnemyBehaviour)
             {
                 // Make dead. Enemy scripts will handle from there what to do.
-                simpleEnemyBehaviour.CurrentEnemyState = RL_SimpleEnemyBehaviour.EnemyState.Dead;
+                //simpleEnemyBehaviour.CurrentEnemyState = RL_SimpleEnemyBehaviour.EnemyState.Dead;
+                simpleEnemyBehaviour.DamageEnemy(damage);
+
             }else if(enemyBullet)
             {
 
