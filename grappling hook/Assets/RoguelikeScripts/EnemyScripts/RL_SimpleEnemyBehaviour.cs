@@ -22,6 +22,7 @@ public class RL_SimpleEnemyBehaviour : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private CollideType currentCollisionType = CollideType.None;
     [SerializeField] private Vector2 collisionVector;
+    [SerializeField] private Vector2 weaponHitVector;
 
 
     //AK: Will probably have to adapt this at some point for other enemy types, currently applied to shooter enemy
@@ -181,6 +182,13 @@ public class RL_SimpleEnemyBehaviour : MonoBehaviour
     public void DamageEnemy(int dmg)
     {
         currentHealth -= dmg;
+    }
+
+    public void GetHit(int force, Vector3 weaponVector)
+    {
+        weaponHitVector = (Vector2) weaponVector - rb.position;
+        weaponHitVector = weaponHitVector.normalized;
+        rb.AddForce(weaponHitVector * force);
     }
 
     private void MakeDead()
