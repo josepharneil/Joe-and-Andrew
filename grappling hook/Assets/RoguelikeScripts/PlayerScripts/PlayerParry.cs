@@ -33,8 +33,8 @@ public class PlayerParry : MonoBehaviour
             }
         }
 
-        // Temp: F for parry
-        if( Input.GetKeyDown(KeyCode.F) )
+        // Temp: E for parry
+        if( Input.GetKeyDown(KeyCode.E) )
         {
             // If we press F, and the player has been hit
             if(playerHitbox.PlayerHit)

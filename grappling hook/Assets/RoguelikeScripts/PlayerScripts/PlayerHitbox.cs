@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+//using DG.Tweening;
 
 public class PlayerHitbox : MonoBehaviour
 {
@@ -13,8 +14,15 @@ public class PlayerHitbox : MonoBehaviour
         if( collision.CompareTag( "EnemyAttack" ) )
         {
             Debug.Log("Hitbox entered");
-            PlayerHit = true;
             enemyAttack = collision.GetComponent<EnemyAttack>();
+            if(enemyAttack.IsAttacking)
+            {
+                PlayerHit = true;
+            }
+            else
+            {
+                ResetPlayerHitbox();
+            }
         }
     }
 

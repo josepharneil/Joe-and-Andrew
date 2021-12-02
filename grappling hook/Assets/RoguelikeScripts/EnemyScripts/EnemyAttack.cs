@@ -1,36 +1,54 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using DG.Tweening;
+using DG.Tweening;
 
 public class EnemyAttack : MonoBehaviour
 {
-    // public bool IsParryable ??
     public int AttackDamage = 1;
-    public float Speed = 5f;
     public float ParryTimeLimit = 0.2f;
 
-    [SerializeField] private Transform limit0;
-    [SerializeField] private Transform limit1;
+    [SerializeField] private float attackDuration = 0.8f;
+    [SerializeField] private Transform parent;
+    private Vector3 initialRotation;
 
-    // Start is called before the first frame update
-    void Awake()
-    {
-        transform.position = limit0.position;
-    }
+    public bool IsAttacking = true; // Not true if for example the sword is going back up.
 
-    // Update is called once per frame
-    void Update()
+    Tween swordSwingTween;
+
+    private void Start()
     {
-        transform.position += Vector3.down * Speed * Time.deltaTime;
-        if( transform.position.y < limit1.position.y )
-        {
-            ResetEnemyAttack();
-        }
+        initialRotation = parent.rotation.eulerAngles;
+        SwingSwordTween();
     }
 
     public void ResetEnemyAttack()
     {
-        transform.position = limit0.position;
+        IsAttacking = false;
+        swordSwingTween.Pause();
+        ParriedSwordTween();
+    }
+
+    private void SwingSwordTween()
+    {
+        swordSwingTween = parent.DORotate(
+               endValue: new Vector3(0, 0, 130),
+               duration: attackDuration,
+               mode: RotateMode.WorldAxisAdd).SetEase(Ease.InOutBack).SetLoops(-1, LoopType.Restart);
+    }
+
+    private void ParriedSwordTween()
+    {
+        parent.DORotate(
+               endValue: initialRotation,
+               duration: attackDuration / 2f,
+               mode: RotateMode.Fast)
+            .SetEase(Ease.OutQuint)
+            .OnComplete(
+            () =>
+            {
+                swordSwingTween.Restart();
+                IsAttacking = true;
+            } );
     }
 }
