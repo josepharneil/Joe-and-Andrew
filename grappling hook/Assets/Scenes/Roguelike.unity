@@ -408,6 +408,8 @@ MonoBehaviour:
   currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
   weaponHitVector: {x: 0, y: 0}
+  hasBeenHit: 0
+  hitCounter: 0
 --- !u!1 &112862265
 GameObject:
   m_ObjectHideFlags: 0
@@ -642,6 +644,8 @@ MonoBehaviour:
   currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
   weaponHitVector: {x: 0, y: 0}
+  hasBeenHit: 0
+  hitCounter: 0
 --- !u!212 &209589149
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2054,6 +2058,8 @@ MonoBehaviour:
   currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
   weaponHitVector: {x: 0, y: 0}
+  hasBeenHit: 0
+  hitCounter: 0
 --- !u!212 &585174052
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2573,6 +2579,8 @@ MonoBehaviour:
   currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
   weaponHitVector: {x: 0, y: 0}
+  hasBeenHit: 0
+  hitCounter: 0
 --- !u!212 &687615320
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -14720,6 +14728,8 @@ MonoBehaviour:
   currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
   weaponHitVector: {x: 0, y: 0}
+  hasBeenHit: 0
+  hitCounter: 0
 --- !u!212 &758003246
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -14875,6 +14885,8 @@ MonoBehaviour:
   currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
   weaponHitVector: {x: 0, y: 0}
+  hasBeenHit: 0
+  hitCounter: 0
 --- !u!212 &781145825
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -15003,7 +15015,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 0
-  force: 500
+  force: 1000
 --- !u!61 &900212295
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -15744,6 +15756,8 @@ MonoBehaviour:
   currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
   weaponHitVector: {x: 0, y: 0}
+  hasBeenHit: 0
+  hitCounter: 0
 --- !u!212 &1254238582
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -15899,6 +15913,8 @@ MonoBehaviour:
   currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
   weaponHitVector: {x: 0, y: 0}
+  hasBeenHit: 0
+  hitCounter: 0
 --- !u!212 &1325464018
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -16054,6 +16070,8 @@ MonoBehaviour:
   currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
   weaponHitVector: {x: 0, y: 0}
+  hasBeenHit: 0
+  hitCounter: 0
 --- !u!212 &1330408022
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -16288,6 +16306,8 @@ MonoBehaviour:
   currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
   weaponHitVector: {x: 0, y: 0}
+  hasBeenHit: 0
+  hitCounter: 0
 --- !u!212 &1417859177
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -17174,6 +17194,8 @@ MonoBehaviour:
   currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
   weaponHitVector: {x: 0, y: 0}
+  hasBeenHit: 0
+  hitCounter: 0
 --- !u!212 &1828139703
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -17329,6 +17351,8 @@ MonoBehaviour:
   currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
   weaponHitVector: {x: 0, y: 0}
+  hasBeenHit: 0
+  hitCounter: 0
 --- !u!212 &1846297776
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -17498,6 +17522,8 @@ MonoBehaviour:
   currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
   weaponHitVector: {x: 0, y: 0}
+  hasBeenHit: 0
+  hitCounter: 0
 --- !u!61 &1966364864
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -17657,6 +17683,8 @@ MonoBehaviour:
   currentCollisionType: 0
   collisionVector: {x: 0, y: 0}
   weaponHitVector: {x: 0, y: 0}
+  hasBeenHit: 0
+  hitCounter: 0
 --- !u!61 &1993838515
 BoxCollider2D:
   m_ObjectHideFlags: 0
