@@ -10,6 +10,7 @@ public class RL_WeaponHit : MonoBehaviour
     // Start is called before the first frame update
     void OnTriggerEnter2D(Collider2D collider)
     {
+
         GameObject colliderObject = collider.gameObject;
         if (colliderObject.tag == "Enemy")
         {
@@ -24,6 +25,7 @@ public class RL_WeaponHit : MonoBehaviour
 
             }else if(enemyBullet)
             {
+                
 
                 Debug.LogError("Bullet Hit");
                 enemyBullet.Die();

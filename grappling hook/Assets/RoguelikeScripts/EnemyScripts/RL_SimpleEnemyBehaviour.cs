@@ -23,6 +23,8 @@ public class RL_SimpleEnemyBehaviour : MonoBehaviour
     [SerializeField] private CollideType currentCollisionType = CollideType.None;
     [SerializeField] private Vector2 collisionVector;
     [SerializeField] private Vector2 weaponHitVector;
+    [SerializeField] private bool hasBeenHit;
+    [SerializeField] private int hitCounter = 0;
 
 
     //AK: Will probably have to adapt this at some point for other enemy types, currently applied to shooter enemy
@@ -32,6 +34,7 @@ public class RL_SimpleEnemyBehaviour : MonoBehaviour
     void Start()
     {
         currentHealth = startingHealth;
+        hasBeenHit = false;
     }
 
     private int moveCounter = 0;
@@ -89,7 +92,13 @@ public class RL_SimpleEnemyBehaviour : MonoBehaviour
         {
             case EnemyState.Alive:
                 {
-                    UpdateMove();
+                    if (!hasBeenHit) {
+                        UpdateMove();
+                    }
+                    else
+                    {
+                        UpdateHit();
+                    }
                     UpdateCollision();
                     UpdateHealth();
                     break;
@@ -186,7 +195,8 @@ public class RL_SimpleEnemyBehaviour : MonoBehaviour
 
     public void GetHit(int force, Vector3 weaponVector)
     {
-        weaponHitVector = (Vector2) weaponVector - rb.position;
+        hasBeenHit = true;
+        weaponHitVector =  rb.position - (Vector2)weaponVector;
         weaponHitVector = weaponHitVector.normalized;
         rb.AddForce(weaponHitVector * force);
     }
@@ -194,5 +204,16 @@ public class RL_SimpleEnemyBehaviour : MonoBehaviour
     private void MakeDead()
     {
         currentEnemyState = EnemyState.Destroy;
+    }
+
+    private void UpdateHit()
+    {
+        hitCounter++;
+        if (hitCounter >= 20)
+        {
+            hasBeenHit = false;
+            hitCounter = 0;
+        }
+
     }
 }
