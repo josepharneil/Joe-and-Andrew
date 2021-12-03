@@ -16,13 +16,56 @@ public class EnemyAttack : MonoBehaviour
 
     Tween swordSwingTween;
 
+    private void OnEnable()
+    {
+        EnemyMovement.OnEnemyMovementStateChanged += EnemyMovementOnMovementStateChanged;
+    }
+    private void OnDisable()
+    { 
+        EnemyMovement.OnEnemyMovementStateChanged -= EnemyMovementOnMovementStateChanged;
+    }
+
+    private void Awake()
+    {
+        SwingSwordTween();
+        swordSwingTween.Pause();
+    }
+
+    private void EnemyMovementOnMovementStateChanged( EnemyMovement.EnemyMovementState state)
+    {
+        switch( state )
+        {
+            case EnemyMovement.EnemyMovementState.Searching:
+                {
+                    StopEnemyAttack();
+                    break;
+                }
+            case EnemyMovement.EnemyMovementState.Moving:
+                {
+                    StopEnemyAttack();
+                    break;
+                }
+            case EnemyMovement.EnemyMovementState.Attacking:
+                {
+                    StopEnemyAttack();
+                    SwingSwordTween();
+                    break;
+                }
+        }
+    }
+
     private void Start()
     {
         initialRotation = parent.rotation.eulerAngles;
-        SwingSwordTween();
     }
 
-    public void ResetEnemyAttack()
+    public void StopEnemyAttack()
+    {
+        swordSwingTween.Restart();
+        swordSwingTween.Pause();
+    }
+
+    public void ParryTween()
     {
         IsAttacking = false;
         swordSwingTween.Pause();

@@ -7,7 +7,7 @@ public class PlayerParry : MonoBehaviour
     [SerializeField] private PlayerHitbox playerHitbox;
     [SerializeField] private RL_PlayerStats playerStats;
 
-    private bool isInvincible = false; //?? maybe
+    //private bool isInvincible = false; //?? maybe
 
     enum ParryState
     {
@@ -113,7 +113,7 @@ public class PlayerParry : MonoBehaviour
         GetComponent<SpriteRenderer>().color = Color.green;
         StartCoroutine(SetBackToWhite());
         // Rebound the enemy!
-        playerHitbox.enemyAttack.ResetEnemyAttack();
+        playerHitbox.enemyAttack.ParryTween();
 
         ResetParryState();
     }
