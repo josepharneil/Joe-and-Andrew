@@ -113,7 +113,8 @@ public class PlayerParry : MonoBehaviour
         GetComponent<SpriteRenderer>().color = Color.green;
         StartCoroutine(SetBackToWhite());
         // Rebound the enemy!
-        playerHitbox.enemyAttack.ParryTween();
+        //playerHitbox.enemyAttack.ParryTween();
+        playerHitbox.enemyAttack.Parried();
 
         ResetParryState();
     }

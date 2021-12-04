@@ -10,22 +10,15 @@ public class EnemyHealth : MonoBehaviour
 
     [SerializeField] private Text displayText;
 
-    private Vector3 initialPosition;
-
-    public enum EnemyState
-    {
-        Alive,
-        Dead,
-        Destroy
-    }
-    public EnemyState enemyState = EnemyState.Alive;
-
     private void Awake()
     {
         currentHealth = startingHealth;
-        initialPosition = transform.position;
+        UpdateHealthText();
+    }
 
-        displayText.text = "EnemyHealth: " + currentHealth.ToString() + "/" + startingHealth.ToString();
+    public void HealToFull()
+    {
+        Heal(startingHealth - currentHealth);
     }
 
     public void Heal( int value )
@@ -35,7 +28,7 @@ public class EnemyHealth : MonoBehaviour
         {
             currentHealth = startingHealth;
         }
-        displayText.text = "EnemyHealth: " + currentHealth.ToString() + "/" + startingHealth.ToString();
+        UpdateHealthText();
     }
 
     public void Damage( int value )
@@ -45,32 +38,21 @@ public class EnemyHealth : MonoBehaviour
         {
             currentHealth = 0;
         }
+        UpdateHealthText();
+    }
+
+    private void UpdateHealthText()
+    {
         displayText.text = "EnemyHealth: " + currentHealth.ToString() + "/" + startingHealth.ToString();
-
-        if ( currentHealth == 0 )
-        {
-            MakeDead();
-        }
     }
 
-    private void MakeDead()
+    public bool IsAlive()
     {
-        enemyState = EnemyState.Dead;
-
-        StartCoroutine(WaitThenSetAlive());
+        return currentHealth > 0;
     }
 
-    private IEnumerator WaitThenSetAlive()
+    public bool IsDead()
     {
-        transform.position = initialPosition;
-        yield return new WaitForSeconds(1);
-        SetAlive();
-    }
-
-    private void SetAlive()
-    {
-        currentHealth = startingHealth;
-        enemyState = EnemyState.Alive;
-        displayText.text = "EnemyHealth: " + currentHealth.ToString() + "/" + startingHealth.ToString();
+        return currentHealth == 0;
     }
 }

@@ -46,7 +46,12 @@ public class RL_PlayerStats : MonoBehaviour
 
     private void ResetPlayer()
     {
-        StartCoroutine(WaitThenReset());
+        //StartCoroutine(WaitThenReset());
+        transform.position = initialSpawnPosition;
+        playerHealth.RuntimeValue = playerHealth.InitialValue;
+        GetComponent<SpriteRenderer>().color = Color.white;
+        GetComponent<CapsuleCollider2D>().enabled = true;
+        SetPlayerAlive();
     }
 
     IEnumerator WaitThenReset()

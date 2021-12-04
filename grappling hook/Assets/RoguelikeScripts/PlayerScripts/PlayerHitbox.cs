@@ -14,8 +14,10 @@ public class PlayerHitbox : MonoBehaviour
         if( collision.CompareTag( "EnemyAttack" ) )
         {
             Debug.Log("Hitbox entered");
-            enemyAttack = collision.GetComponent<EnemyAttack>();
-            if(enemyAttack.IsAttacking)
+            // Collides with the weapon. The parent is the offset, and then the next parent is the enemy.
+            GameObject enemyGO = collision.gameObject.transform.parent.parent.gameObject;
+            enemyAttack = enemyGO.GetComponent<EnemyAttack>();
+            if (enemyAttack && enemyAttack.IsInDamageDealingPhase)
             {
                 PlayerHit = true;
             }

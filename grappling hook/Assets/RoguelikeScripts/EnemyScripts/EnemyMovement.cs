@@ -37,11 +37,11 @@ public class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(enemyHealth.enemyState == EnemyHealth.EnemyState.Dead
-            || enemyHealth.enemyState == EnemyHealth.EnemyState.Destroy)
-        {
-            return;
-        }
+        //if(enemyHealth.enemyState == EnemyHealth.EnemyState.Dead
+        //    || enemyHealth.enemyState == EnemyHealth.EnemyState.Destroy)
+        //{
+        //    return;
+        //}
         Debug.DrawRay(transform.position, player.transform.position - transform.position);
 
         ContactFilter2D contactFilter2D = new ContactFilter2D();
