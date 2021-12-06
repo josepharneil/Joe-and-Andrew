@@ -1,217 +1,123 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
+using UnityEditor;
 
 public class EnemyController : MonoBehaviour
 {
-    [SerializeField] private EnemyInput enemyInput;
+    private StateMachine stateMachine;
 
-    public enum State
+    [Header("Inputs")]
+    [SerializeField] EnemyInput input;
+    public EnemyAttackData attackData;
+
+    [Header("Output")]
+    [SerializeField] private EnemyPathing pathing;
+
+    //public enum State
+    //{
+    //    Patrolling, // Patrolling can be stationary
+    //    ReturningToPatrol, // Done chasing, now returns to patrol
+    //    SeesPlayer, // Sees player, does nothing for now... (could be out of range)
+    //    ChasePlayer, // Moves towards player
+    //    AttackPlayer, // Attacks player when in range (combat)
+    //    Dead, // Dead
+    //    Destroy // Destroy the object I guess
+    //}
+
+    [Header("Debug")]
+    [SerializeField] private bool debugShowStateName = true;
+    private void OnDrawGizmos()
     {
-        Patrolling, // Patrolling can be stationary
-        ReturningToPatrol, // Done chasing, now returns to patrol
-        SeesPlayer, // Sees player, does nothing for now... (could be out of range)
-        ChasePlayer, // Moves towards player
-        AttackPlayer, // Attacks player when in range (combat)
-        Dead, // Dead
-        Destroy // Destroy the object I guess
-    }
-    public State state = State.Patrolling;
-
-    public event Action<State> OnEnemyStateExited;
-    public event Action<State> OnEnemyStateStarted;
-
-    public void ChangeState( State newState )
-    {
-        if( state == newState)
+        if(debugShowStateName && stateMachine != null)
         {
-            return;
-        }
+            // todo encapsulate just for name
+            string stateText = stateMachine.GetCurrentStateTypeName();
 
-        OnEnemyStateExited?.Invoke( state );
+            GUIStyle customStyle = new GUIStyle();
+            customStyle.fontSize = 14;   // can also use e.g. <size=30> in Rich Text
+            customStyle.richText = true;
+            Vector3 textPosition = transform.position + (Vector3.up * 0.3f);
+            string richText = "<color=red><B>State: " + stateText + "</B></color>";
 
-        state = newState;
-
-        // TODO Exit current state?
-
-        switch( newState )
-        {
-            case State.Patrolling:
-                {
-                    HandleChangeStatePatrolling();
-                    break;
-                }
-            case State.ReturningToPatrol:
-                {
-                    HandleChangeStateReturningToPatrol();
-                    break;
-                }
-            case State.SeesPlayer:
-                {
-                    HandleChangeStateSeesPlayer();
-                    break;
-                }
-            case State.ChasePlayer:
-                {
-                    HandleChangeStateChasePlayer();
-                    break;
-                }
-            case State.AttackPlayer:
-                {
-                    HandleChangeStateAttackPlayer();
-                    break;
-                }
-            case State.Dead:
-                {
-                    HandleChangeStateDead();
-                    break;
-                }
-            case State.Destroy:
-                {
-                    HandleChangeStateDestroy();
-                    break;
-                }
-        }
-
-        OnEnemyStateStarted?.Invoke( newState );
-    }
-
-
-    //=========================== Handlers ===========================//
-
-    private void HandleChangeStatePatrolling()
-    {
-
-    }
-
-    private void HandleChangeStateReturningToPatrol()
-    {
-
-    }
-
-    private void HandleChangeStateSeesPlayer()
-    {
-
-    }
-
-    private void HandleChangeStateChasePlayer()
-    {
-
-    }
-
-    private void HandleChangeStateAttackPlayer()
-    {
-
-    }
-
-    private void HandleChangeStateDead()
-    {
-
-    }
-
-    private void HandleChangeStateDestroy()
-    {
-
-    }
-
-    //=========================== Handlers ===========================//
-
-    private void Update()
-    {
-        switch (state)
-        {
-            case State.Patrolling:
-                {
-                    CheckRaycastToPlayer();
-                    CheckIfDead();
-                    break;
-                }
-            case State.ReturningToPatrol:
-                {
-                    CheckRaycastToPlayer();
-                    if(enemyInput.IsAtOriginalPosition)
-                    {
-                        ChangeState(State.Patrolling);
-                    }
-                    CheckIfDead();
-                    break;
-                }
-            case State.SeesPlayer:
-                {
-                    CheckRaycastToPlayer();
-                    CheckIfDead();
-                    break;
-                }
-            case State.ChasePlayer:
-                {
-                    CheckRaycastToPlayer();
-                    CheckIfDead();
-                    break;
-                }
-            case State.AttackPlayer:
-                {
-                    CheckRaycastToPlayer();
-                    CheckIfDead();
-                    break;
-                }
-            case State.Dead:
-                {
-                    CheckIfAlive();
-                    break;
-                }
-            case State.Destroy:
-                {
-                    break;
-                }
+            Handles.Label(textPosition, richText, customStyle);
         }
     }
 
-    private void CheckRaycastToPlayer()
-    {
-        if( !enemyInput.IsRaycastHittingPlayer() )
-        {
-            return;
-        }
 
-        // Check within attack range.
-        if (enemyInput.IsInAttackRange())
-        {
-            ChangeState(State.AttackPlayer);
-        }
-        // Check within chase distance
-        else if (enemyInput.IsInChaseRange())
-        {
-            ChangeState(State.ChasePlayer);
-        }
-        else if (enemyInput.IsInSightRange())
-        {
-            ChangeState(State.SeesPlayer);
-        }
-        else
-        {
-            // If we're not already patrolling
-            if( state != State.Patrolling )
-            {
-                ChangeState(State.ReturningToPatrol);
-            }
-        }
+
+    private void Awake()
+    {
+        SetupStateMachine();
     }
 
-    private void CheckIfDead()
+    private void SetupStateMachine()
     {
-        if( enemyInput.enemyHealth.IsDead() )
-        {
-            ChangeState(State.Dead);
-        }
+        stateMachine = new StateMachine();
+
+        // Define states
+        var patrollingState = new EnemyPatrolling();
+        var returningToPatrolState = new EnemyReturnToPatrol( pathing );
+        var seesPlayerState = new EnemySeesPlayer();
+        var chasePlayerState = new EnemyChasePlayer( pathing );
+        var attackPlayerState = new EnemyAttackPlayer( ref attackData );
+        var deadState = new EnemyDead();
+
+        // Predicates
+        // This is based on if !sight_range, then !chase && !attack
+        Func<bool> IsInAttackRange = () => input.PlayerIsInAttackRange();
+        Func<bool> IsInChaseRange = () => input.PlayerIsInChaseRange();
+        Func<bool> IsInSightRange = () => input.PlayerIsInSightRange();
+
+        Func<bool> IsNotInSightRange = () => !input.PlayerIsInSightRange();
+        Func<bool> IsNotInChaseRange = () => !input.PlayerIsInChaseRange();
+        Func<bool> IsNotInAttackRange = () => !input.PlayerIsInAttackRange();
+
+        Func<bool> IsNotInAttackRangeAndIsInChaseRange = () => !input.PlayerIsInAttackRange() && input.PlayerIsInChaseRange();
+        Func<bool> IsNotInChaseRangeAndIsInSightRange = () => !input.PlayerIsInChaseRange() && input.PlayerIsInSightRange();
+
+        Func<bool> ShouldReturnToPatrolling = () => !input.PlayerIsInSightRange();
+
+        Func<bool> IsBackToPatrolling = () => input.IsAtOriginalPosition;
+
+        Func<bool> IsDead = () => input.enemyHealth.IsDead();
+        Func<bool> IsAlive = () => input.enemyHealth.IsAlive();
+
+
+        // Add transitions
+        // Patrolling state
+        stateMachine.AddTransition(patrollingState, seesPlayerState, IsInSightRange);
+
+        // Sees player state
+        stateMachine.AddTransition(seesPlayerState, chasePlayerState, IsInChaseRange);
+        stateMachine.AddTransition(seesPlayerState, returningToPatrolState, IsNotInSightRange);
+
+        // Chase player state
+        stateMachine.AddTransition(chasePlayerState, attackPlayerState, IsInAttackRange);
+        stateMachine.AddTransition(chasePlayerState, seesPlayerState, IsNotInChaseRangeAndIsInSightRange);
+        stateMachine.AddTransition(chasePlayerState, returningToPatrolState, IsNotInSightRange);
+
+        // Attacking state
+        stateMachine.AddTransition(attackPlayerState, returningToPatrolState, IsNotInSightRange);
+        stateMachine.AddTransition(attackPlayerState, chasePlayerState, IsNotInAttackRangeAndIsInChaseRange);
+        stateMachine.AddTransition(attackPlayerState, seesPlayerState, IsNotInChaseRangeAndIsInSightRange);
+
+        // Return to patrolling state
+        stateMachine.AddTransition(returningToPatrolState, patrollingState, IsBackToPatrolling);
+        stateMachine.AddTransition(returningToPatrolState, seesPlayerState, IsInSightRange);
+        stateMachine.AddTransition(returningToPatrolState, chasePlayerState, IsInChaseRange);
+        stateMachine.AddTransition(returningToPatrolState, attackPlayerState, IsInAttackRange);
+
+        // Dead state
+        stateMachine.AddAnyTransition(deadState, IsDead);
+        stateMachine.AddTransition(deadState, patrollingState, IsAlive);
+
+        // Set initial state.
+        stateMachine.SetState(patrollingState);
     }
 
-    private void CheckIfAlive()
-    {
-        if( enemyInput.enemyHealth.IsAlive() )
-        {
-            ChangeState(State.Patrolling);
-        }
-    }
+    private void Update() => stateMachine.Tick();
+
 
 }

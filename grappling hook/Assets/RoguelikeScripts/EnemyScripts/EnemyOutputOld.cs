@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyOutput : MonoBehaviour
+public class EnemyOutputOld : MonoBehaviour
 {
     [Header("State")]
-    [SerializeField] EnemyController enemyController;
+    [SerializeField] EnemyControllerOld enemyController;
 
     [Header("Outputs")]
     [SerializeField] EnemyPathing enemyPathing;
@@ -19,22 +19,22 @@ public class EnemyOutput : MonoBehaviour
     {
         switch (enemyController.state)
         {
-            case EnemyController.State.Patrolling:
+            case EnemyControllerOld.State.Patrolling:
                 UpdatePatrolling();
                 break;
-            case EnemyController.State.ReturningToPatrol:
+            case EnemyControllerOld.State.ReturningToPatrol:
                 UpdateReturnToPatrolling();
                 break;
-            case EnemyController.State.SeesPlayer:
+            case EnemyControllerOld.State.SeesPlayer:
                 break;
-            case EnemyController.State.ChasePlayer:
+            case EnemyControllerOld.State.ChasePlayer:
                 UpdateChasePlayer();
                 break;
-            case EnemyController.State.AttackPlayer:
+            case EnemyControllerOld.State.AttackPlayer:
                 break;
-            case EnemyController.State.Dead:
+            case EnemyControllerOld.State.Dead:
                 break;
-            case EnemyController.State.Destroy:
+            case EnemyControllerOld.State.Destroy:
                 break;
         }
     }

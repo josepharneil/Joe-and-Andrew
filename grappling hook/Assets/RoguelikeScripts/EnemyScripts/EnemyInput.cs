@@ -58,18 +58,26 @@ public class EnemyInput : MonoBehaviour
         return true;
     }
 
-    public bool IsInAttackRange()
+    public bool PlayerIsInAttackRange()
     {
         return raycastHitsTowardsPlayer[0].distance < attackMaxDistance;
     }
 
-    public bool IsInChaseRange()
+    public bool PlayerIsInChaseRange()
     {
+        if (raycastHitsTowardsPlayer.Count == 0)
+        {
+            return false;
+        }
         return raycastHitsTowardsPlayer[0].distance < chaseMaxDistance;
     }
 
-    public bool IsInSightRange()
+    public bool PlayerIsInSightRange()
     {
+        if(raycastHitsTowardsPlayer.Count == 0)
+        {
+            return false;
+        }
         return raycastHitsTowardsPlayer[0].distance < sightMaxDistance;
     }
 }

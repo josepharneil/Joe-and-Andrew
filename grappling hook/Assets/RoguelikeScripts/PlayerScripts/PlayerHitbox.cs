@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-//using DG.Tweening;
 
 public class PlayerHitbox : MonoBehaviour
 {
     public bool PlayerHit = false;
 
-    public EnemyAttack enemyAttack = null;
+    public EnemyController EnemyController = null;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -16,8 +13,8 @@ public class PlayerHitbox : MonoBehaviour
             Debug.Log("Hitbox entered");
             // Collides with the weapon. The parent is the offset, and then the next parent is the enemy.
             GameObject enemyGO = collision.gameObject.transform.parent.parent.gameObject;
-            enemyAttack = enemyGO.GetComponent<EnemyAttack>();
-            if (enemyAttack && enemyAttack.IsInDamageDealingPhase)
+            EnemyController = enemyGO.GetComponent<EnemyController>();
+            if (EnemyController != null && EnemyController.attackData.IsInDamageDealingPhase)
             {
                 PlayerHit = true;
             }
@@ -31,6 +28,6 @@ public class PlayerHitbox : MonoBehaviour
     public void ResetPlayerHitbox()
     {
         PlayerHit = false;
-        enemyAttack = null;
+        EnemyController = null;
     }
 }

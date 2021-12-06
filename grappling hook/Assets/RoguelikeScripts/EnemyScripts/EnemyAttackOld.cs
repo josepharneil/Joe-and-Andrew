@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,94 +6,146 @@ using DG.Tweening;
 
 public class EnemyAttackOld : MonoBehaviour
 {
-    public int AttackDamage = 1;
-    public float ParryTimeLimit = 0.2f;
-
+    [Header("Stats")]
+    public int AttackDamage = 5;
+    public float ParryTimeLimit = 0.2f; // Time frame for player to parry.
+    [SerializeField] private float attackWindUpTime = 0.2f;
     [SerializeField] private float attackDuration = 0.8f;
-    [SerializeField] private Transform parent;
-    private Vector3 initialRotation;
+    [SerializeField] private float timeBetweenAttackAndRecovery = 0.2f;
+    [SerializeField] private float attackRecoveryTime = 1f;
 
-    public bool IsAttacking = true; // Not true if for example the sword is going back up.
+    
+    [SerializeField] private float parryRecoilTime = 0.7f;
+    [SerializeField] private float stunTimeFromParry = 1.5f;
 
-    Tween swordSwingTween;
+    [Header("Weapon Components")]
+    [SerializeField] private Transform parentTransform;
+
+    [Header("Components")]
+    [SerializeField] EnemyControllerOld enemyController;
+
+    private Quaternion initialParentRotation; // So we can reset to this.
+
+    public bool IsInDamageDealingPhase = false; // Not true if for example the sword is going back up.
 
 
-    private void OnEnable()
-    {
-        EnemyMovement.OnEnemyMovementStateChanged += EnemyMovementOnMovementStateChanged;
-    }
-    private void OnDisable()
-    { 
-        EnemyMovement.OnEnemyMovementStateChanged -= EnemyMovementOnMovementStateChanged;
-    }
+    private Sequence attackSequence;
 
     private void Awake()
     {
-        SwingSwordTween();
-        swordSwingTween.Pause();
+        initialParentRotation = parentTransform.rotation;
+
+        attackSequence = DOTween.Sequence();
+
+        // Set up attack sequence
+        attackSequence.AppendInterval(attackWindUpTime);
+
+        attackSequence.AppendCallback(() =>
+        {
+            IsInDamageDealingPhase = true;
+        });
+
+        attackSequence.Append(
+            parentTransform.DORotate(
+               endValue: new Vector3(0, 0, 130),
+               duration: attackDuration,
+               mode: RotateMode.WorldAxisAdd)
+                    .SetEase(Ease.InOutBack)
+                    .OnComplete( () =>
+                    {
+                        IsInDamageDealingPhase = false;
+                    }));
+
+        attackSequence.AppendInterval(timeBetweenAttackAndRecovery);
+
+        attackSequence.Append(
+            parentTransform.DORotate(
+                endValue: initialParentRotation.eulerAngles,
+                duration: attackRecoveryTime,
+                mode: RotateMode.Fast)
+                    .SetEase(Ease.InOutBack));
+
+
+        // For now, just infinite loops.
+        attackSequence.SetLoops(-1, LoopType.Restart);
+
+        attackSequence.Pause();
     }
 
-    private void EnemyMovementOnMovementStateChanged( EnemyMovement.EnemyMovementState state)
+    private void OnEnable()
     {
-        switch( state )
+        enemyController.OnEnemyStateStarted += OnEnemyStateStarted;
+    }
+
+    private void OnDisable()
+    {
+        enemyController.OnEnemyStateStarted -= OnEnemyStateStarted;
+    }
+
+    private void OnEnemyStateStarted( EnemyControllerOld.State newState )
+    {
+        switch (newState)
         {
-            case EnemyMovement.EnemyMovementState.Searching:
-                {
-                    StopEnemyAttack();
-                    break;
-                }
-            case EnemyMovement.EnemyMovementState.Moving:
-                {
-                    StopEnemyAttack();
-                    break;
-                }
-            case EnemyMovement.EnemyMovementState.Attacking:
-                {
-                    StopEnemyAttack();
-                    SwingSwordTween();
-                    break;
-                }
+            case EnemyControllerOld.State.AttackPlayer:
+                StartAttacking();
+                break;
+            case EnemyControllerOld.State.Patrolling:
+            case EnemyControllerOld.State.ReturningToPatrol:
+            case EnemyControllerOld.State.SeesPlayer:
+            case EnemyControllerOld.State.ChasePlayer:
+            case EnemyControllerOld.State.Dead:
+            case EnemyControllerOld.State.Destroy:
+                StopAttacking();
+                WindBackAttack();
+                break;
         }
     }
 
-    private void Start()
+    private void StartAttacking()
     {
-        initialRotation = parent.rotation.eulerAngles;
+        parentTransform.rotation = initialParentRotation;
+        IsInDamageDealingPhase = true;
+        attackSequence.Restart();
+        attackSequence.Play();
     }
 
-    public void StopEnemyAttack()
+    private void StopAttacking()
     {
-        swordSwingTween.Restart();
-        swordSwingTween.Pause();
+        IsInDamageDealingPhase = false;
+        //attackSequence.Restart();
+        attackSequence.Pause();
     }
 
-    public void ParryTween()
+    private void WindBackAttack()
     {
-        IsAttacking = false;
-        swordSwingTween.Pause();
-        ParriedSwordTween();
+        parentTransform.DORotate(
+                endValue: initialParentRotation.eulerAngles,
+                duration: attackRecoveryTime,
+                mode: RotateMode.Fast)
+                    .SetEase(Ease.InOutBack);
     }
 
-    private void SwingSwordTween()
+    public void Parried()
     {
-        swordSwingTween = parent.DORotate(
-               endValue: new Vector3(0, 0, 130),
-               duration: attackDuration,
-               mode: RotateMode.WorldAxisAdd).SetEase(Ease.InOutBack).SetLoops(-1, LoopType.Restart);
-    }
+        // TODO Maybe this should be part of a sub-state machine for attacking... idk
+        // But parry affects animations, so maybe feed into input idk
+        StopAttacking();
 
-    private void ParriedSwordTween()
-    {
-        parent.DORotate(
-               endValue: initialRotation,
-               duration: attackDuration / 2f,
-               mode: RotateMode.Fast)
-            .SetEase(Ease.OutQuint)
-            .OnComplete(
+        Sequence parrySequence = DOTween.Sequence();
+
+        parrySequence.Append(
+            parentTransform.DORotate(
+                endValue: initialParentRotation.eulerAngles,
+                duration: parryRecoilTime,
+                mode: RotateMode.Fast)
+                    .SetEase(Ease.OutQuint));
+
+        parrySequence.AppendInterval(stunTimeFromParry);
+
+        parrySequence.OnComplete(
             () =>
             {
-                swordSwingTween.Restart();
-                IsAttacking = true;
-            } );
+                StartAttacking();
+            });
     }
 }
