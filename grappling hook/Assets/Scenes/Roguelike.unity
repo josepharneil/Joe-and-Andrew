@@ -968,6 +968,7 @@ GameObject:
   - component: {fileID: 358434519}
   - component: {fileID: 358434521}
   - component: {fileID: 358434522}
+  - component: {fileID: 358434523}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1118,7 +1119,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 358434513}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b882e09b170021c4485d9344a2590d65, type: 3}
   m_Name: 
@@ -1183,6 +1184,23 @@ MonoBehaviour:
   boomerangSpeed: 14
   boomerangRange: 32
   boomerangUseTimeLimit: 0.25
+--- !u!114 &358434523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 358434513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0369c04a9dc69d4f9440e983fec712b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponRender: {fileID: 900212296}
+  weaponTransform: {fileID: 1505435772}
+  playerController: {fileID: 358434514}
+  weaponCollider: {fileID: 900212295}
+  attackState: 0
 --- !u!1 &475642737
 GameObject:
   m_ObjectHideFlags: 0
