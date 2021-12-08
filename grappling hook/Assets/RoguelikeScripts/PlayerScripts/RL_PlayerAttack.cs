@@ -88,7 +88,6 @@ public class RL_PlayerAttack : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0) && attackState == AttackState.NotAttacking)
         {
-            
             attackState = AttackState.Start;
         }
     }

@@ -2,20 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RL_PlayerController : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
-    [Header("Config")]
+    [Header("Setup")]
     public Rigidbody2D rb;
-    [SerializeField] private RL_PlayerStats playerStats;
-    // @JA TODO BAD BAD BAD CIRCULAR REFERENCE
-    [SerializeField] private RL_PlayerControllerDash dashController;
+    [SerializeField] private Transform rightWallChecker;
+    [SerializeField] private Transform leftWallChecker;
+    [SerializeField] private Transform groundChecker;
+    [SerializeField] private float checkGroundRadius;
+    [SerializeField] private LayerMask groundLayer;
 
+    [Header("Setup")]
     [SerializeField] private float moveMultiplier = 11f;
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float fallMultiplier = 2.5f;
     [SerializeField] private float lowJumpMultiplier = 2f;
 
-    private Vector2 velocity;
+    private float velocityX;
 
     private bool isMoveInput = false;
     private bool isJumpInput = false;
@@ -33,36 +36,21 @@ public class RL_PlayerController : MonoBehaviour
     private FacingDirection facingDirection = FacingDirection.Right;
     [HideInInspector] public bool isGrounded = false;
 
-    [SerializeField] private Transform rightWallChecker;
-    [SerializeField] private Transform leftWallChecker;
-    [SerializeField] private Transform groundChecker;
-    [SerializeField] private float checkGroundRadius;
-    [SerializeField] private LayerMask groundLayer;
 
     private float wallGrabTimer = 0f;
     private bool isWallGrabbing = false;
     [SerializeField] private float wallGrabTimeLimit = 0.25f;
 
-    // Run
-    // Jump
-    // Dash / roll
-    // Melee hit
-    // Single wall jump
-    // Parry
-
     // Update is called once per frame
-    private void Update()
+    public void MovementUpdate()
     {
-        if(!playerStats.IsPlayerDead())
-        {
-            HandleMoveInput();
-            HandleJumpInput();
-            CheckIfGrounded();
-            CheckIfGrabbedToWall();
-        }
+        HandleMoveInput();
+        HandleJumpInput();
+        CheckIfGrounded();
+        CheckIfGrabbedToWall();
     }
 
-    private void FixedUpdate()
+    public void MovementFixedUpdate()
     {
         ApplyMove();
         ApplyJump();
@@ -72,9 +60,9 @@ public class RL_PlayerController : MonoBehaviour
     private void HandleMoveInput()
     {
         float horizontalAxis = Input.GetAxis("Horizontal");
-        if (horizontalAxis != 0 && dashController.IsNotDashing())
+        if (horizontalAxis != 0)
         {
-            if( horizontalAxis < 0)
+            if (horizontalAxis < 0)
             {
                 facingDirection = FacingDirection.Left;
             }
@@ -83,7 +71,7 @@ public class RL_PlayerController : MonoBehaviour
                 facingDirection = FacingDirection.Right;
             }
             isMoveInput = true;
-            velocity.x = horizontalAxis;
+            velocityX = horizontalAxis;
         }
         else
         {
@@ -93,7 +81,7 @@ public class RL_PlayerController : MonoBehaviour
 
     private void HandleJumpInput()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && dashController.IsNotDashing())
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             isJumpInput = true;
         }
@@ -104,7 +92,7 @@ public class RL_PlayerController : MonoBehaviour
     {
         if (isMoveInput)
         {
-            rb.velocity = new Vector2(velocity.x * moveMultiplier, rb.velocity.y);
+            rb.velocity = new Vector2(velocityX * moveMultiplier, rb.velocity.y);
         }
     }
 
@@ -132,21 +120,21 @@ public class RL_PlayerController : MonoBehaviour
 
     private void CheckIfGrabbedToWall()
     {
-        if(isGrounded)
+        if (isGrounded)
         {
             wallGrabTimer = 0f;
         }
 
         Collider2D rightCollider = Physics2D.OverlapCircle(rightWallChecker.position, checkGroundRadius, groundLayer);
         Collider2D leftCollider = Physics2D.OverlapCircle(leftWallChecker.position, checkGroundRadius, groundLayer);
-        if(!isGrounded)
+        if (!isGrounded)
         {
-            if(leftCollider)
+            if (leftCollider)
             {
                 isWallGrabbing = true;
                 wallGrabTimer += Time.deltaTime;
             }
-            if(rightCollider)
+            if (rightCollider)
             {
                 isWallGrabbing = true;
                 wallGrabTimer += Time.deltaTime;
@@ -157,12 +145,12 @@ public class RL_PlayerController : MonoBehaviour
 
         }
 
-        if(!leftCollider && !rightCollider)
+        if (!leftCollider && !rightCollider)
         {
             isWallGrabbing = false;
         }
 
-        if(wallGrabTimer < wallGrabTimeLimit)
+        if (wallGrabTimer < wallGrabTimeLimit)
         {
             isWallGrabbing = false;
         }
@@ -170,7 +158,6 @@ public class RL_PlayerController : MonoBehaviour
 
     private void CheckIfGrounded()
     {
-        // NOTE @JA This should probably be a down raycast?? Maybe? Layer check is a bit dodge.
         Collider2D collider = Physics2D.OverlapCircle(groundChecker.position, checkGroundRadius, groundLayer);
 
         if (collider != null)
@@ -185,7 +172,7 @@ public class RL_PlayerController : MonoBehaviour
 
     private void ApplyWallGrab()
     {
-        if(isWallGrabbing)
+        if (isWallGrabbing)
         {
             if (wallGrabTimer > wallGrabTimeLimit)
             {
