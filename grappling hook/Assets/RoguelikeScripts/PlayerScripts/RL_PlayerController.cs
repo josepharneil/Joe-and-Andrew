@@ -9,6 +9,7 @@ public class RL_PlayerController : MonoBehaviour
     [SerializeField] private RL_PlayerStats playerStats;
     // @JA TODO BAD BAD BAD CIRCULAR REFERENCE
     [SerializeField] private RL_PlayerControllerDash dashController;
+    [SerializeField] private PlayerDodgeRoll dodgeRoll;
 
     [SerializeField] private float moveMultiplier = 11f;
     [SerializeField] private float jumpForce = 5f;
@@ -19,6 +20,7 @@ public class RL_PlayerController : MonoBehaviour
 
     private bool isMoveInput = false;
     private bool isJumpInput = false;
+    [SerializeField] private bool isRollInput = false;
 
     public enum FacingDirection
     {
@@ -57,6 +59,7 @@ public class RL_PlayerController : MonoBehaviour
         {
             HandleMoveInput();
             HandleJumpInput();
+            HandleRollInput();
             CheckIfGrounded();
             CheckIfGrabbedToWall();
         }
@@ -65,6 +68,7 @@ public class RL_PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         ApplyMove();
+        ApplyRoll();
         ApplyJump();
         ApplyWallGrab();
     }
@@ -89,6 +93,7 @@ public class RL_PlayerController : MonoBehaviour
         {
             isMoveInput = false;
         }
+        
     }
 
     private void HandleJumpInput()
@@ -96,6 +101,18 @@ public class RL_PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded && dashController.IsNotDashing())
         {
             isJumpInput = true;
+        }
+    }
+
+    private void HandleRollInput()
+    {
+        if(Input.GetKeyDown(KeyCode.S) && isGrounded && dashController.IsNotDashing())
+        {
+            isRollInput = true;
+        }
+        else
+        {
+            isRollInput = false;
         }
     }
 
@@ -199,6 +216,16 @@ public class RL_PlayerController : MonoBehaviour
                 // Stay grabbed (default behaviour)
             }
         }
+    }
+
+    private void ApplyRoll()
+    {
+        if (isRollInput)
+        {
+            dodgeRoll.DoRoll(isGrounded,facingDirection);
+            isRollInput = false;
+        }
+
     }
 
 }
