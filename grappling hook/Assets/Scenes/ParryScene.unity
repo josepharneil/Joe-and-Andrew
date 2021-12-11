@@ -136,10 +136,10 @@ GameObject:
   - component: {fileID: 23155870}
   - component: {fileID: 23155869}
   - component: {fileID: 23155868}
-  - component: {fileID: 23155867}
-  - component: {fileID: 23155873}
-  - component: {fileID: 23155874}
   - component: {fileID: 23155866}
+  - component: {fileID: 23155873}
+  - component: {fileID: 23155867}
+  - component: {fileID: 23155874}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -154,7 +154,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 23155865}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76070f6e12b5649219b165e721ad9bab, type: 3}
   m_Name: 
@@ -170,11 +170,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 23155865}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 801550f2f12f245a094c323a087f8896, type: 3}
+  m_Script: {fileID: 11500000, guid: 37d0c2e8094a4a879f04238ecdc65801, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movement: {fileID: 23155873}
-  attack: {fileID: 23155874}
+  attackWindUpTime: 0.2
+  attackDuration: 0.3
+  timeBetweenAttackAndRecovery: 0.2
+  attackRecoveryTime: 1
+  parentWeaponTransform: {fileID: 85509959}
+  sprite: {fileID: 1073104205}
+  isInDamageDealingPhase: 0
+  heavyAttackWindUpTime: 0.6
+  heavyAttackDuration: 0.3
+  heavyTimeBetweenAttackAndRecovery: 0.7
+  heavyAttackRecoveryTime: 1
 --- !u!114 &23155868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -305,10 +314,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 23155865}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1e0e3dcd5145442080826d4e0cfb009, type: 3}
+  m_Script: {fileID: 11500000, guid: e8922664d39c408398d2d864d1bc42e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 23155870}
   rightWallChecker: {fileID: 2094212121}
   leftWallChecker: {fileID: 132796153}
   groundChecker: {fileID: 79894437}
@@ -316,12 +324,14 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  rb: {fileID: 23155870}
+  dodgeRoll: {fileID: 23155874}
   moveMultiplier: 11
   jumpForce: 5
   fallMultiplier: 2.5
   lowJumpMultiplier: 2
-  isGrounded: 0
   wallGrabTimeLimit: 0.25
+  swordWeapon: {fileID: 23155867}
 --- !u!114 &23155874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -331,9 +341,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 23155865}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc6815e4e76d74455a241e4b83521770, type: 3}
+  m_Script: {fileID: 11500000, guid: 33049c5c031b67a49bd2335f45c21bb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerStats: {fileID: 23155868}
+  playerRB: {fileID: 23155870}
+  playerTransform: {fileID: 23155872}
+  playerCollider: {fileID: 23155869}
+  rollDuration: 30
+  rollState: 0
 --- !u!1 &56511830
 GameObject:
   m_ObjectHideFlags: 0
@@ -1415,8 +1431,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1073104201}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 0.25, y: 1.8, z: 1}
+  m_LocalPosition: {x: 0, y: 1.6, z: 0}
+  m_LocalScale: {x: 0.25, y: 3, z: 1}
   m_Children: []
   m_Father: {fileID: 85509959}
   m_RootOrder: 0
@@ -3472,10 +3488,12 @@ MonoBehaviour:
   rb: {fileID: 1977613529}
   playerStats: {fileID: 1977613528}
   dashController: {fileID: 1977613532}
+  dodgeRoll: {fileID: 0}
   moveMultiplier: 11
   jumpForce: 10
   fallMultiplier: 5
   lowJumpMultiplier: 2
+  isRollInput: 0
   isGrounded: 0
   rightWallChecker: {fileID: 676706760}
   leftWallChecker: {fileID: 521954916}

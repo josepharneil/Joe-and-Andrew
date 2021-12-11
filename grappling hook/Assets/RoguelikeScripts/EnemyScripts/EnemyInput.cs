@@ -35,12 +35,14 @@ public class EnemyInput : MonoBehaviour
 
     private void RaycastCheckToPlayer()
     {
-        Debug.DrawRay(transform.position, playerTransform.position - transform.position);
+        var position = transform.position;
+        var playerPosition = playerTransform.position;
+        Debug.DrawRay(position, playerPosition - position);
 
         ContactFilter2D contactFilter2D = new ContactFilter2D();
         contactFilter2D.layerMask = groundAndPlayerMask;
         contactFilter2D.useLayerMask = true;
-        Physics2D.Raycast(transform.position, playerTransform.position - transform.position, contactFilter2D, raycastHitsTowardsPlayer);
+        Physics2D.Raycast(position, playerPosition - position, contactFilter2D, raycastHitsTowardsPlayer);
     }
 
     public bool IsRaycastHittingPlayer()
@@ -51,7 +53,7 @@ public class EnemyInput : MonoBehaviour
             return false;
         }
         RaycastHit2D playerHit = raycastHitsTowardsPlayer[0];
-        if (playerHit.transform.gameObject.tag != "Player")
+        if (!playerHit.transform.gameObject.CompareTag("Player"))
         {
             return false;
         }
@@ -60,6 +62,10 @@ public class EnemyInput : MonoBehaviour
 
     public bool PlayerIsInAttackRange()
     {
+        if (raycastHitsTowardsPlayer.Count == 0)
+        {
+            return false;
+        }
         return raycastHitsTowardsPlayer[0].distance < attackMaxDistance;
     }
 

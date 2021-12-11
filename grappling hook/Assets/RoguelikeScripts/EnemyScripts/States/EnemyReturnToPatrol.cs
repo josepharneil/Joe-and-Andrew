@@ -17,6 +17,10 @@ public class EnemyReturnToPatrol : IState
     {
         pathing.UpdateReturnToPatrol();
     }
+    
+    public void FixedTick()
+    {
+    }
 
     public void OnExit() {}
 }

@@ -1,19 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-public class EnemyPatrolling : IState
+public class RollState : IState
 {
-    public void OnEnter() {}
+    public void OnEnter()
+    {
+    }
 
     public void Tick()
     {
-        // No patrol.
     }
     
     public void FixedTick()
     {
     }
 
-    public void OnExit() {}
+    public void OnExit()
+    {
+    }
 }

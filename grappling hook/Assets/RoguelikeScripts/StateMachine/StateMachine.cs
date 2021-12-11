@@ -38,7 +38,7 @@ public class StateMachine
 
     // Empty list of transitions, used when we transition to state with no transitions.
     // Eg. if there are 1000s of state machines, we can just transition to this, no more memory created.
-    private readonly static List<Transition> EmptyTransitions = new List<Transition>(0);
+    private static readonly List<Transition> EmptyTransitions = new List<Transition>(0);
 
     // Called once per frame, by an Update() function.
     // Checks if we should transition, and ticks for the current state.
@@ -51,6 +51,11 @@ public class StateMachine
         }
 
         _currentState?.Tick();
+    }
+
+    public void FixedTick()
+    {
+        _currentState?.FixedTick();
     }
 
     // Set a new state

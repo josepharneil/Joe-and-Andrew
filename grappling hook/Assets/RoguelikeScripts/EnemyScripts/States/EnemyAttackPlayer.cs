@@ -10,7 +10,7 @@ public class EnemyAttackPlayer : IState
     {
         this.attackData = data;
 
-        init();
+        Init();
     }
 
     public void OnEnter()
@@ -28,6 +28,10 @@ public class EnemyAttackPlayer : IState
             attackData.Parried = false;
         }
     }
+    
+    public void FixedTick()
+    {
+    }
 
     public void OnExit()
     {
@@ -41,7 +45,7 @@ public class EnemyAttackPlayer : IState
 
     private Sequence attackSequence;
 
-    private void init()
+    private void Init()
     {
         initialParentRotation = attackData.parentWeaponTransform.rotation;
 
@@ -106,7 +110,7 @@ public class EnemyAttackPlayer : IState
                     .SetEase(Ease.InOutBack);
     }
 
-    public void Parried()
+    private void Parried()
     {
         // TODO Maybe this should be part of a sub-state machine for attacking... idk
         // But parry affects animations, so maybe feed into input idk
@@ -124,9 +128,6 @@ public class EnemyAttackPlayer : IState
         parrySequence.AppendInterval(attackData.stunTimeFromParry);
 
         parrySequence.OnComplete(
-            () =>
-            {
-                StartAttacking();
-            });
+            StartAttacking);
     }
 }

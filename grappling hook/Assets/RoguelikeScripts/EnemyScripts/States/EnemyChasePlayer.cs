@@ -16,6 +16,10 @@ public class EnemyChasePlayer : IState
     public void Tick()
     {
         pathing.UpdateChasePlayer();
+    }    
+    
+    public void FixedTick()
+    {
     }
 
     public void OnExit() {}
