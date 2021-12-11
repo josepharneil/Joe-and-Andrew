@@ -9,13 +9,15 @@ public class PlayerDodgeRoll : MonoBehaviour
     [SerializeField] RL_PlayerStats playerStats;
     [SerializeField] Rigidbody2D playerRB;
     [SerializeField] Transform playerTransform;
+    [SerializeField] CapsuleCollider2D playerCollider;
 
     [Header("Config")]
-    [SerializeField] private float rollDuration = 30;
+    [SerializeField] private int rollDuration = 30;
 
     [Header("Debug")]
     private Vector2 playerVelocity;
     private Vector2 holdVelocity;
+    private int rollCounter;
 
     public RollState rollState;
 
@@ -32,36 +34,47 @@ public class PlayerDodgeRoll : MonoBehaviour
         End
     }
 
-    public void DoRoll(bool isGrounded,RL_PlayerController.FacingDirection facingDirection)
+    public void DoRoll(bool isGrounded)
     {
-        playerRB.constraints = RigidbodyConstraints2D.None;
-        Debug.Log("Doing roll");
+
+        Debug.Log("Roll Active");
         if (isGrounded && rollState == RollState.NotRolling)
         {
             rollState = RollState.Start;
-            StartRoll(facingDirection);
         }
     }
 
-    public void StartRoll(RL_PlayerController.FacingDirection facingDirection)
+    public void StartRoll()
     {
-        Debug.Log("starting roll");
-        //TODO Make invulnerable
-        holdVelocity = playerRB.velocity;
-        playerRB.velocity = playerRB.velocity * 1.5f;
-        rollState = RollState.Rolling;
-        playerTransform.DORotate(new Vector3(0f,0f,-360f*(float)facingDirection), rollDuration, RotateMode.FastBeyond360).SetEase(Ease.Unset).OnComplete(()=>
-        {
-            EndRoll();
-        });
 
+        Debug.Log("Starting roll");
+        holdVelocity = playerRB.velocity;
+        playerRB.velocity = new Vector2(holdVelocity.x * 2f, holdVelocity.y);
+        rollCounter = 0;
+        playerCollider.transform.localScale /= 2;
+        rollState = RollState.Rolling;
+    }
+
+    public void UpdateRoll()
+    {
+        if (rollCounter < rollDuration)
+        {
+            playerRB.velocity = new Vector2(holdVelocity.x * 2f, holdVelocity.y);
+            rollCounter++;
+        }
+        else
+        {
+            rollState = RollState.End;
+        }
     }
 
     public void EndRoll()
     {
+        //playerRB.gravityScale = 2.3f;
         Debug.Log("End roll");
         playerRB.constraints = RigidbodyConstraints2D.FreezeRotation;
         playerRB.velocity = holdVelocity;
+        playerCollider.transform.localScale *= 2;
         rollState = RollState.NotRolling;
     }
     

@@ -76,7 +76,7 @@ public class RL_PlayerController : MonoBehaviour
     private void HandleMoveInput()
     {
         float horizontalAxis = Input.GetAxis("Horizontal");
-        if (horizontalAxis != 0 && dashController.IsNotDashing())
+        if (horizontalAxis != 0 && dashController.IsNotDashing() &&dodgeRoll.rollState== PlayerDodgeRoll.RollState.NotRolling)
         {
             if( horizontalAxis < 0)
             {
@@ -220,12 +220,25 @@ public class RL_PlayerController : MonoBehaviour
 
     private void ApplyRoll()
     {
-        if (isRollInput)
+        switch (dodgeRoll.rollState)
         {
-            dodgeRoll.DoRoll(isGrounded,facingDirection);
-            isRollInput = false;
+            case PlayerDodgeRoll.RollState.NotRolling:
+                if (isRollInput)
+                {
+                    dodgeRoll.DoRoll(isGrounded);
+                    isRollInput = false;
+                }
+                break;
+            case PlayerDodgeRoll.RollState.Start:
+                dodgeRoll.StartRoll();
+                break;
+            case PlayerDodgeRoll.RollState.Rolling:
+                dodgeRoll.UpdateRoll();
+                break;
+            case PlayerDodgeRoll.RollState.End:
+                dodgeRoll.EndRoll();
+                break;
         }
-
     }
 
 }
