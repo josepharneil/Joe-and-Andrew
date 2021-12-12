@@ -1219,7 +1219,9 @@ MonoBehaviour:
   playerStats: {fileID: 358434521}
   playerRB: {fileID: 358434518}
   playerTransform: {fileID: 358434516}
-  rollDuration: 1
+  playerCollider: {fileID: 358434517}
+  rollDuration: 10
+  rollSpeed: 30
   rollState: 0
 --- !u!1 &475642737
 GameObject:

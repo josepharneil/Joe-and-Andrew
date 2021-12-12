@@ -211,7 +211,7 @@ public class PlayerController2 : MonoBehaviour
         }
     }
 
-    private void ApplyRoll()
+    /*private void ApplyRoll()
     {
         switch (dodgeRoll.rollState)
         {
@@ -223,16 +223,16 @@ public class PlayerController2 : MonoBehaviour
                 }
                 break;
             case PlayerDodgeRoll.RollState.Start:
-                dodgeRoll.StartRoll();
+                dodgeRoll.StartRoll(_facingDirection);
                 break;
             case PlayerDodgeRoll.RollState.Rolling:
-                dodgeRoll.UpdateRoll();
+                dodgeRoll.UpdateRoll(_facingDirection);
                 break;
             case PlayerDodgeRoll.RollState.End:
                 dodgeRoll.EndRoll();
                 break;
         }
-    }
+    }*/
 
     #endregion
 }

@@ -230,10 +230,10 @@ public class RL_PlayerController : MonoBehaviour
                 }
                 break;
             case PlayerDodgeRoll.RollState.Start:
-                dodgeRoll.StartRoll();
+                dodgeRoll.StartRoll(facingDirection);
                 break;
             case PlayerDodgeRoll.RollState.Rolling:
-                dodgeRoll.UpdateRoll();
+                dodgeRoll.UpdateRoll(facingDirection);
                 break;
             case PlayerDodgeRoll.RollState.End:
                 dodgeRoll.EndRoll();
