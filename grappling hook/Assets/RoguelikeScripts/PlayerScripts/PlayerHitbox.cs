@@ -2,9 +2,8 @@ using UnityEngine;
 
 public class PlayerHitbox : MonoBehaviour
 {
-    public bool PlayerHit = false;
-
-    public EnemyController EnemyController = null;
+    [HideInInspector] public bool PlayerHit = false;
+    [HideInInspector] public EnemyController EnemyController = null;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

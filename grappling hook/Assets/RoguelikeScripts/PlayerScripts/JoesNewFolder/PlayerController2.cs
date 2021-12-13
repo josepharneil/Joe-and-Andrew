@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerController2 : MonoBehaviour
@@ -10,20 +11,17 @@ public class PlayerController2 : MonoBehaviour
     [SerializeField] private float checkGroundRadius;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Rigidbody2D rb;
-
-    [SerializeField] private PlayerDodgeRoll dodgeRoll;
- 
+    
     [Header("Movement Stats")]
     [SerializeField] private float moveMultiplier = 11f;
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float fallMultiplier = 2.5f;
     [SerializeField] private float lowJumpMultiplier = 2f;
+    [SerializeField] private float jumpVelocityFalloff = 2f;
 
-    
     private float _velocityX;
     private bool _isMoveInput = false;
     private bool _isJumpInput = false;
-    private bool _isRollInput = false;
     private bool _isGrounded = false;
     
     private float _wallGrabTimer = 0f;
@@ -40,33 +38,36 @@ public class PlayerController2 : MonoBehaviour
     
     
     [Header("Weapons")]
-    private IMeleeWeapon _currentWeapon;
+    private BaseMeleeWeapon _currentWeapon;
     [SerializeField] private SwordWeapon swordWeapon;
+    [SerializeField] private HammerWeapon hammerWeapon;
     private bool _isAttacking = false;
     
     private void Awake()
     {
         _currentWeapon = swordWeapon;
+        swordWeapon.SetWeaponActive(true);
+        hammerWeapon.SetWeaponActive(false);
     }
 
     #region Handle Input
     private void Update()
     {
-        if (!_isAttacking)
+        if (_isAttacking)
         {
-            HandleMoveInput();
-            HandleJumpInput();
-            //HandleRollInput();
-            CheckIfGrounded();
-            CheckIfGrabbedToWall();
-            ReadAttackInput();
+            return;
         }
+        HandleMoveInput();
+        HandleJumpInput();
+        CheckIfGrounded();
+        CheckIfGrabbedToWall();
+        ReadAttackInput();
     }
 
     private void HandleMoveInput()
     {
         float horizontalAxis = Input.GetAxis("Horizontal");
-        if (horizontalAxis != 0 && dodgeRoll.rollState == PlayerDodgeRoll.RollState.NotRolling)
+        if (horizontalAxis != 0)
         {
             _facingDirection = horizontalAxis < 0 ? FacingDirection.Left : FacingDirection.Right;
             _isMoveInput = true;
@@ -86,18 +87,6 @@ public class PlayerController2 : MonoBehaviour
         }
     }
 
-    private void HandleRollInput()
-    {
-        if(_isGrounded && Input.GetKeyDown(KeyCode.S))
-        {
-            _isRollInput = true;
-        }
-        else
-        {
-            _isRollInput = false;
-        }
-    }
-    
     private void CheckIfGrabbedToWall()
     {
         if(_isGrounded)
@@ -155,6 +144,22 @@ public class PlayerController2 : MonoBehaviour
                 () => _isAttacking = false);
             _velocityX = 0f;
         }
+        // TEMPORARY:
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (_currentWeapon == swordWeapon)
+            {
+                swordWeapon.SetWeaponActive(false);
+                hammerWeapon.SetWeaponActive(true);
+                _currentWeapon = hammerWeapon;
+            }
+            else
+            {
+                hammerWeapon.SetWeaponActive(false);
+                swordWeapon.SetWeaponActive(true);
+                _currentWeapon = swordWeapon;
+            }
+        }
     }
     #endregion
 
@@ -182,11 +187,17 @@ public class PlayerController2 : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             _isJumpInput = false;
         }
-        // Better jump
+        // Down force when -ve y
         if (rb.velocity.y < 0)
         {
             rb.velocity += Vector2.up * Physics2D.gravity * ((fallMultiplier - 1) * Time.deltaTime);
         }
+        // Additional down force when below a velocity threshold.
+        else if (rb.velocity.y < jumpVelocityFalloff)
+        {
+            rb.velocity += Vector2.up * Physics2D.gravity * ((fallMultiplier - 1) * Time.deltaTime);
+        }
+        // Low jump
         else if (rb.velocity.y > 0 && !Input.GetKey(KeyCode.Space))
         {
             rb.velocity += Vector2.up * Physics2D.gravity * ((lowJumpMultiplier - 1) * Time.deltaTime);
@@ -195,6 +206,8 @@ public class PlayerController2 : MonoBehaviour
 
     private void ApplyWallGrab()
     {
+        // TODO https://github.com/Matthew-J-Spencer/player-controller/blob/main/PlayerController.cs
+        // Use that as a reference for wall grabbing.
         if(_isWallGrabbing)
         {
             if (_wallGrabTimer > wallGrabTimeLimit)
@@ -210,29 +223,6 @@ public class PlayerController2 : MonoBehaviour
             }
         }
     }
-
-    /*private void ApplyRoll()
-    {
-        switch (dodgeRoll.rollState)
-        {
-            case PlayerDodgeRoll.RollState.NotRolling:
-                if (_isRollInput)
-                {
-                    dodgeRoll.DoRoll(_isGrounded);
-                    _isRollInput = false;
-                }
-                break;
-            case PlayerDodgeRoll.RollState.Start:
-                dodgeRoll.StartRoll(_facingDirection);
-                break;
-            case PlayerDodgeRoll.RollState.Rolling:
-                dodgeRoll.UpdateRoll(_facingDirection);
-                break;
-            case PlayerDodgeRoll.RollState.End:
-                dodgeRoll.EndRoll();
-                break;
-        }
-    }*/
 
     #endregion
 }

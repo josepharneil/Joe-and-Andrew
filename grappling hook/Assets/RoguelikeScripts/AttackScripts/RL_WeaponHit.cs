@@ -8,10 +8,10 @@ public class RL_WeaponHit : MonoBehaviour
     [SerializeField] private int damage =3;
     [SerializeField] private int force = 3;
     // Start is called before the first frame update
-    void OnTriggerEnter2D(Collider2D collider)
+    void OnTriggerEnter2D(Collider2D colliderTrigger)
     {
-        GameObject colliderObject = collider.gameObject;
-        if (colliderObject.tag == "Enemy")
+        GameObject colliderObject = colliderTrigger.gameObject;
+        if (colliderObject.CompareTag("Enemy"))
         {
             RL_EnemyBullet enemyBullet = colliderObject.GetComponent<RL_EnemyBullet>();
             RL_SimpleEnemyBehaviour simpleEnemyBehaviour = colliderObject.GetComponent<RL_SimpleEnemyBehaviour>();
