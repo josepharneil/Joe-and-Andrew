@@ -7,7 +7,7 @@ public class RL_PlayerAttack : MonoBehaviour
     [Header("Components")]
     [SerializeField] private SpriteRenderer weaponRender;
     [SerializeField] private Transform weaponTransform;
-    [SerializeField] private RL_PlayerStats playerStats;
+    [SerializeField] private PlayerStats playerStats;
     [SerializeField] private BoxCollider2D weaponCollider;
 
     // TODO bad way of doing this, shouldn't really have a reference to the controller.

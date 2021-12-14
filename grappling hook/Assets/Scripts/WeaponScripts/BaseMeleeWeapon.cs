@@ -25,6 +25,10 @@ public class BaseMeleeWeapon : MonoBehaviour
     {
         Debug.LogError("This is not supposed to be called, this is the base class");
     }
+    public virtual void SetWeaponActive(bool active)
+    {
+        Debug.LogError("This is not supposed to be called, this is the base class");
+    }
     
     private void OnEnable()
     {

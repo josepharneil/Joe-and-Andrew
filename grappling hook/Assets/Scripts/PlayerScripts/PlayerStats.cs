@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RL_PlayerStats : MonoBehaviour
+public class PlayerStats : MonoBehaviour
 {
     [SerializeField] private IntVariable playerHealth;
     [SerializeField] private IntVariable collectables;
     // TODO Temp just teleport
-    private Vector3 initialSpawnPosition;
+    private Vector3 _initialSpawnPosition;
 
     private void Awake()
     {
-        initialSpawnPosition = transform.position;
+        _initialSpawnPosition = transform.position;
     }
 
     private enum PlayerState
@@ -47,7 +47,7 @@ public class RL_PlayerStats : MonoBehaviour
     private void ResetPlayer()
     {
         //StartCoroutine(WaitThenReset());
-        transform.position = initialSpawnPosition;
+        transform.position = _initialSpawnPosition;
         playerHealth.RuntimeValue = playerHealth.InitialValue;
         GetComponent<SpriteRenderer>().color = Color.white;
         GetComponent<CapsuleCollider2D>().enabled = true;
@@ -57,7 +57,7 @@ public class RL_PlayerStats : MonoBehaviour
     IEnumerator WaitThenReset()
     {
         yield return new WaitForSeconds(1.5f);
-        transform.position = initialSpawnPosition;
+        transform.position = _initialSpawnPosition;
         playerHealth.RuntimeValue = playerHealth.InitialValue;
         GetComponent<SpriteRenderer>().color = Color.white;
         GetComponent<CapsuleCollider2D>().enabled = true;

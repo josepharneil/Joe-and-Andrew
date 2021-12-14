@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerParry : MonoBehaviour
 {
     [SerializeField] private PlayerHitbox playerHitbox;
-    [SerializeField] private RL_PlayerStats playerStats;
+    [SerializeField] private PlayerStats playerStats;
 
     //private bool isInvincible = false; //?? maybe
 

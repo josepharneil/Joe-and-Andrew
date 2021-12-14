@@ -2,7 +2,7 @@ using System;
 using DG.Tweening;
 using UnityEngine;
 
-public class HammerWeapon : BaseMeleeWeapon
+public class SwordWeapon : BaseMeleeWeapon
 {
     [Header("Light Attack")]
     [Tooltip("Time for wind back")]
@@ -20,8 +20,8 @@ public class HammerWeapon : BaseMeleeWeapon
     {
         _initialParentRotation = parentWeaponTransform.rotation;
     }
-
-    public void SetWeaponActive(bool active)
+    
+    public override void SetWeaponActive(bool active)
     {
         parentWeaponTransform.gameObject.SetActive(active);
     }

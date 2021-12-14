@@ -6,7 +6,7 @@ public class RL_PlayerControllerDash : MonoBehaviour
 {
     // Debug sprite renderer
     [SerializeField] private SpriteRenderer spriteRenderer;
-    [SerializeField] private RL_PlayerStats playerStats;
+    [SerializeField] private PlayerStats playerStats;
 
     [SerializeField] private float dashForce = 40f;
     [SerializeField] private float dashDurationShort = 0.15f;

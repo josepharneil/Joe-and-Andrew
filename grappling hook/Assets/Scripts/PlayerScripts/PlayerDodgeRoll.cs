@@ -6,7 +6,7 @@ using DG.Tweening;
 public class PlayerDodgeRoll : MonoBehaviour
 {
     [Header("components")]
-    [SerializeField] RL_PlayerStats playerStats;
+    [SerializeField] PlayerStats playerStats;
     [SerializeField] Rigidbody2D playerRB;
     [SerializeField] Transform playerTransform;
     [SerializeField] CapsuleCollider2D playerCollider;

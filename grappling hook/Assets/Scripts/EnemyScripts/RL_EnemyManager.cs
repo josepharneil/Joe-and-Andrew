@@ -12,7 +12,7 @@ public class RL_EnemyManager : MonoBehaviour
     public static RL_EnemyManager Instance { get { return _instance; } }
 
     public Rigidbody2D playerRigidbody2D;
-    public RL_PlayerStats playerStats;
+    public PlayerStats playerStats;
 
     private void Awake()
     {

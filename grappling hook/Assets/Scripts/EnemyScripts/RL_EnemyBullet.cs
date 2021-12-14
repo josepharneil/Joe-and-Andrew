@@ -5,7 +5,7 @@ using UnityEngine;
 public class RL_EnemyBullet : MonoBehaviour
 {
     [Header("Setup")]
-    [SerializeField] private RL_PlayerStats playerStats;
+    [SerializeField] private PlayerStats playerStats;
 
     [Header("Config")]
     public float shotDuration;
@@ -15,7 +15,7 @@ public class RL_EnemyBullet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerStats = GameObject.Find("Player").GetComponent<RL_PlayerStats>();
+        playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
         StartCoroutine(CountDownTimer());
     }
 

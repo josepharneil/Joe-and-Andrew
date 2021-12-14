@@ -6,7 +6,7 @@ public class RL_PlayerController : MonoBehaviour
 {
     [Header("Config")]
     public Rigidbody2D rb;
-    [SerializeField] private RL_PlayerStats playerStats;
+    [SerializeField] private PlayerStats playerStats;
     // @JA TODO BAD BAD BAD CIRCULAR REFERENCE
     [SerializeField] private RL_PlayerControllerDash dashController;
     [SerializeField] private PlayerDodgeRoll dodgeRoll;
