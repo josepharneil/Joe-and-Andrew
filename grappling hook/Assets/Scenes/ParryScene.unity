@@ -136,8 +136,8 @@ GameObject:
   - component: {fileID: 23155870}
   - component: {fileID: 23155869}
   - component: {fileID: 23155868}
-  - component: {fileID: 23155866}
   - component: {fileID: 23155873}
+  - component: {fileID: 23155866}
   - component: {fileID: 23155867}
   - component: {fileID: 23155874}
   m_Layer: 0
@@ -333,6 +333,7 @@ MonoBehaviour:
   wallGrabTimeLimit: 0.25
   swordWeapon: {fileID: 23155867}
   hammerWeapon: {fileID: 23155874}
+  parry: {fileID: 23155866}
 --- !u!114 &23155874
 MonoBehaviour:
   m_ObjectHideFlags: 0
