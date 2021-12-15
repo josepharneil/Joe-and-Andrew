@@ -34,14 +34,15 @@ public class PlayerController : MonoBehaviour
         Right = 1
     }
     private FacingDirection _facingDirection = FacingDirection.Right;
-
-    
     
     [Header("Weapons")]
     private BaseMeleeWeapon _currentWeapon;
     [SerializeField] private SwordWeapon swordWeapon;
     [SerializeField] private HammerWeapon hammerWeapon;
     private bool _isAttacking = false;
+
+    [SerializeField] private PlayerParry parry;
+    private bool _isParrying = false;
     
     private void Awake()
     {
@@ -53,7 +54,7 @@ public class PlayerController : MonoBehaviour
     #region Handle Input
     private void Update()
     {
-        if (_isAttacking)
+        if (_isAttacking || _isParrying)
         {
             return;
         }
@@ -62,6 +63,7 @@ public class PlayerController : MonoBehaviour
         CheckIfGrounded();
         CheckIfGrabbedToWall();
         ReadAttackInput();
+        ReadParryInput();
     }
 
     private void HandleMoveInput()
@@ -161,6 +163,16 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    private void ReadParryInput()
+    {
+        // Temp: E for parry
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            parry.Parry();
+        }
+    }
+    
     #endregion
 
     #region ApplyPhysics
