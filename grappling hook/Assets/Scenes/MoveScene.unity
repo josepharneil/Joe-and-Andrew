@@ -2403,27 +2403,22 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   rb: {fileID: 2057707670}
-  curve:
+  walkMoveMultiplier: 11
+  runMoveMultiplier: 11
+  accelerationRate: 0.5
+  decelerationRate: 0
+  accelerationCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0.049998462
-      value: 0.0070818067
-      inSlope: 0.031719066
-      outSlope: 0.031719066
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.20996542
-    - serializedVersion: 3
-      time: 0.75731254
-      value: 0.45888454
-      inSlope: 1.8725469
-      outSlope: 1.8725469
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.26173908
+      outWeight: 0
     - serializedVersion: 3
       time: 1
       value: 1
@@ -2436,10 +2431,30 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  walkMoveMultiplier: 11
-  runMoveMultiplier: 11
-  accelerationRate: 0.541
-  decelerationDuration: 0.1
+  decelerationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   lerpCurrent: 0
   jumpForce: 10
   fallMultiplier: 2.5
