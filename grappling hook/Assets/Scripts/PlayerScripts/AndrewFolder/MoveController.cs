@@ -16,8 +16,12 @@ public class MoveController : MonoBehaviour
     [Header("Movement Stats")]
     [SerializeField] private float walkMoveMultiplier = 11f;
     [SerializeField] private float runMoveMultiplier = 11f;
-    [SerializeField] private float accelerationDuration = 10f;
-    [SerializeField] private float decelerationTime = 7f;
+    [SerializeField] [Range(0f, 1f)] private float accelerationRate;
+    [SerializeField] [Range(0f, 1f)] private float decelerationRate;
+    [SerializeField] private AnimationCurve accelerationCurve;
+    [SerializeField] private AnimationCurve decelerationCurve;
+
+    [SerializeField] private float lerpCurrent=0;
     
 
     [Header("Jumping Stats")]
@@ -50,7 +54,8 @@ public class MoveController : MonoBehaviour
         Stopped,
         Accelerating,
         Running,
-        Decelerating
+        Decelerating,
+        ChangingDirection
     }
 
     private FacingDirection _facingDirection = FacingDirection.Right;
@@ -158,7 +163,7 @@ public class MoveController : MonoBehaviour
             switch (_runState)
             {
                 case RunState.Stopped:
-                    StartSpeedChange(_runState);
+                    StartSpeedChange();
                     break;
                 case RunState.Accelerating:
                     Accelerate();
@@ -168,22 +173,29 @@ public class MoveController : MonoBehaviour
                     break;
                 case RunState.Decelerating:
                     break;
+                case RunState.ChangingDirection:
+                    ChangeDirection();
+                    break;
             }
         }else if(!_isMoveInput && _runState != RunState.Stopped)
         {
-            StartSpeedChange(_runState);
+            if (_runState == RunState.Running)
+            {
+                StartSpeedChange();
+            }
+
             Decelerate();
         }
     } 
-    private void StartSpeedChange(RunState runState)
+    private void StartSpeedChange()
     {
-        switch (runState)
+        switch (_runState)
         {
             case RunState.Stopped:
                 _runState = RunState.Accelerating;
                 break;
             case RunState.Running:
-                _runState = RunState.Decelerating;
+                    _runState = RunState.Decelerating;
                 break;
             default:
                 Debug.Log("Invalid input to speed change");
@@ -194,9 +206,8 @@ public class MoveController : MonoBehaviour
     private void Accelerate()
     {
         Debug.Log("accelerating");
-        Debug.Log(accelerationTimer.ToString());
-        accelerationTimer += Time.deltaTime;
-        rb.velocity = Vector2.Lerp(rb.velocity, new Vector2(runMoveMultiplier *_velocityX, 0f),0.25f*accelerationTimer);
+        lerpCurrent = Mathf.MoveTowards(lerpCurrent, 1f, accelerationRate * Time.deltaTime);
+        rb.velocity = Vector2.Lerp(rb.velocity, new Vector2(_velocityX * runMoveMultiplier, rb.velocity.y), accelerationCurve.Evaluate(lerpCurrent));
         if(Mathf.Abs(rb.velocity.x) >= runMoveMultiplier)
         {
             _runState = RunState.Running;
@@ -205,6 +216,7 @@ public class MoveController : MonoBehaviour
 
     private void ApplyRun()
     {
+        lerpCurrent = 0f;
         Debug.Log("Runnig");
         rb.velocity = new Vector2(_velocityX*runMoveMultiplier,rb.velocity.y);
     }
@@ -212,6 +224,17 @@ public class MoveController : MonoBehaviour
     private void Decelerate()
     {
         Debug.Log("Decelerating");
+        lerpCurrent = Mathf.MoveTowards(lerpCurrent, 1f, decelerationRate * Time.deltaTime);
+        rb.velocity = Vector2.Lerp(rb.velocity, new Vector2(0f, rb.velocity.y), decelerationCurve.Evaluate(lerpCurrent));
+        if(rb.velocity.x == 0f)
+        {
+            _runState = RunState.Stopped;
+        }
+    }
+
+    private void ChangeDirection()
+    {
+        //not sure if this is necessary
     }
 
     private void ApplyJump()
