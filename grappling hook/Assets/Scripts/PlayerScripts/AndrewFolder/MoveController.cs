@@ -32,7 +32,6 @@ public class MoveController : MonoBehaviour
     
 
     private float _velocityX;
-    private float accelerationTimer=0;
     private bool _isMoveInput = false;
     private bool _isJumpInput = false;
     private bool _isGrounded = false;
@@ -160,6 +159,10 @@ public class MoveController : MonoBehaviour
     { 
         if (_isMoveInput)
         {
+            if (Mathf.Sign(_velocityX) != Mathf.Sign(rb.velocity.x))
+            {
+                _runState = RunState.Accelerating;
+            }
             switch (_runState)
             {
                 case RunState.Stopped:
@@ -172,9 +175,9 @@ public class MoveController : MonoBehaviour
                     ApplyRun();
                     break;
                 case RunState.Decelerating:
+                    Accelerate();
                     break;
                 case RunState.ChangingDirection:
-                    ChangeDirection();
                     break;
             }
         }else if(!_isMoveInput && _runState != RunState.Stopped)
@@ -201,7 +204,7 @@ public class MoveController : MonoBehaviour
                 Debug.Log("Invalid input to speed change");
                 break;
         }
-        accelerationTimer = 0;
+        lerpCurrent = 0;
     }
     private void Accelerate()
     {
@@ -223,19 +226,16 @@ public class MoveController : MonoBehaviour
 
     private void Decelerate()
     {
-        Debug.Log("Decelerating");
-        lerpCurrent = Mathf.MoveTowards(lerpCurrent, 1f, decelerationRate * Time.deltaTime);
-        rb.velocity = Vector2.Lerp(rb.velocity, new Vector2(0f, rb.velocity.y), decelerationCurve.Evaluate(lerpCurrent));
-        if(rb.velocity.x == 0f)
+       Debug.Log("Decelerating");
+       lerpCurrent = Mathf.MoveTowards(lerpCurrent, 1f, decelerationRate*  Time.deltaTime);
+       rb.velocity = Vector2.Lerp(rb.velocity, new Vector2(0f, rb.velocity.y), decelerationCurve.Evaluate(lerpCurrent));
+      if(rb.velocity.x == 0f)
         {
+            Debug.Log("Stopped");
             _runState = RunState.Stopped;
         }
     }
 
-    private void ChangeDirection()
-    {
-        //not sure if this is necessary
-    }
 
     private void ApplyJump()
     {
