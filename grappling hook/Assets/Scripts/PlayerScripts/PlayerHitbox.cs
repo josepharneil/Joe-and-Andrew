@@ -13,7 +13,7 @@ public class PlayerHitbox : MonoBehaviour
             // Collides with the weapon. The parent is the offset, and then the next parent is the enemy.
             GameObject enemyGO = collision.gameObject.transform.parent.parent.gameObject;
             EnemyController = enemyGO.GetComponent<EnemyController>();
-            if (EnemyController != null && EnemyController.attackData.IsInDamageDealingPhase)
+            if (EnemyController != null && EnemyController.attackPlayerState.isInDamageDealingPhase)
             {
                 PlayerHit = true;
             }

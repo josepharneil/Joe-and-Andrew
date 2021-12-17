@@ -16,7 +16,7 @@ public class PlayerParry : MonoBehaviour
         // If we press F, and the player has been hit
         if(playerHitbox.PlayerHit)
         {
-            if (_parryTimer < playerHitbox.EnemyController.attackData.ParryTimeLimit)
+            if (_parryTimer < playerHitbox.EnemyController.attackPlayerState.parryTimeLimit)
             {
                 PlayerParrySuccess();
             }
@@ -41,7 +41,7 @@ public class PlayerParry : MonoBehaviour
         
         _parryTimer += Time.deltaTime;
         
-        if(_parryTimer > playerHitbox.EnemyController.attackData.ParryTimeLimit)
+        if(_parryTimer > playerHitbox.EnemyController.attackPlayerState.parryTimeLimit)
         {
             PlayerHit();
         }
@@ -55,7 +55,7 @@ public class PlayerParry : MonoBehaviour
     private void PlayerHit()
     {
         Debug.Log("Player hit!");
-        playerStats.DamagePlayer(playerHitbox.EnemyController.attackData.AttackDamage);
+        playerStats.DamagePlayer(playerHitbox.EnemyController.attackPlayerState.attackDamage);
         ResetParryState();
     }
 
@@ -69,7 +69,7 @@ public class PlayerParry : MonoBehaviour
 
         // TODO put back in
         //playerHitbox.EnemyController.Parried();
-        playerHitbox.EnemyController.attackData.Parried = true;//This could be an event?
+        playerHitbox.EnemyController.attackPlayerState.parried = true;//This could be an event?
 
         ResetParryState();
     }
@@ -77,7 +77,7 @@ public class PlayerParry : MonoBehaviour
     private void PlayerParryFail()
     {
         Debug.Log("Hit: parried too late!");
-        playerStats.DamagePlayer(playerHitbox.EnemyController.attackData.AttackDamage);
+        playerStats.DamagePlayer(playerHitbox.EnemyController.attackPlayerState.attackDamage);
         ResetParryState();
     }
 

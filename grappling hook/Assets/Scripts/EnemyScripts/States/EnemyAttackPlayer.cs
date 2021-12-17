@@ -3,15 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class EnemyAttackPlayer : IState
+public class EnemyAttackPlayer : MonoBehaviour, IState
 {
-    public EnemyAttackData attackData;
-    public EnemyAttackPlayer( ref EnemyAttackData data )
-    {
-        this.attackData = data;
+    [Header("Stats")]
+    public int attackDamage = 5;
 
-        Init();
-    }
+    [Header("Timings")]
+    public float parryTimeLimit = 0.2f; // Time frame for player to parry.
+    [SerializeField] private float attackWindUpTime = 0.2f;
+    [SerializeField] private float attackDuration = 0.8f;
+    [SerializeField] private float timeBetweenAttackAndRecovery = 0.2f;
+    [SerializeField] private float attackRecoveryTime = 1f;
+
+    // Parry
+    [SerializeField] private float parryRecoilTime = 0.7f;
+    [SerializeField] private float stunTimeFromParry = 1.5f;
+
+    [Header("Weapon Components")]
+    [SerializeField] private Transform parentWeaponTransform;
+
+    public bool isInDamageDealingPhase = false; // Not true if for example the sword is going back up.
+
+    public bool parried = false;
+
 
     public void OnEnter()
     {
@@ -20,13 +34,9 @@ public class EnemyAttackPlayer : IState
 
     public void Tick()
     {
-        //throw new System.NotImplementedException();
-
-        if(attackData.Parried)
-        {
-            Parried();
-            attackData.Parried = false;
-        }
+        if (!parried) return;
+        Parried();
+        parried = false;
     }
     
     public void FixedTick()
@@ -41,71 +51,70 @@ public class EnemyAttackPlayer : IState
 
     // TODO This could be a state machine too.
 
-    private Quaternion initialParentRotation; // So we can reset to this.
+    private Quaternion _initialParentRotation; // So we can reset to this.
+    private Sequence _attackSequence;
 
-    private Sequence attackSequence;
-
-    private void Init()
+    private void Awake()
     {
-        initialParentRotation = attackData.parentWeaponTransform.rotation;
+        _initialParentRotation = parentWeaponTransform.rotation;
 
-        attackSequence = DOTween.Sequence();
+        _attackSequence = DOTween.Sequence();
 
         // Set up attack sequence
-        attackSequence.AppendInterval(attackData.attackWindUpTime);
+        _attackSequence.AppendInterval(attackWindUpTime);
 
-        attackSequence.AppendCallback(() =>
+        _attackSequence.AppendCallback(() =>
         {
-            attackData.IsInDamageDealingPhase = true;
+            isInDamageDealingPhase = true;
         });
 
-        attackSequence.Append(
-            attackData.parentWeaponTransform.DORotate(
+        _attackSequence.Append(
+            parentWeaponTransform.DORotate(
                endValue: new Vector3(0, 0, 130),
-               duration: attackData.attackDuration,
+               duration: attackDuration,
                mode: RotateMode.WorldAxisAdd)
                     .SetEase(Ease.InOutBack)
                     .OnComplete(() =>
                     {
-                        attackData.IsInDamageDealingPhase = false;
+                        isInDamageDealingPhase = false;
                     }));
 
-        attackSequence.AppendInterval(attackData.timeBetweenAttackAndRecovery);
+        _attackSequence.AppendInterval(timeBetweenAttackAndRecovery);
 
-        attackSequence.Append(
-            attackData.parentWeaponTransform.DORotate(
-                endValue: initialParentRotation.eulerAngles,
-                duration: attackData.attackRecoveryTime,
+        _attackSequence.Append(
+            parentWeaponTransform.DORotate(
+                endValue: _initialParentRotation.eulerAngles,
+                duration: attackRecoveryTime,
                 mode: RotateMode.Fast)
                     .SetEase(Ease.InOutBack));
 
 
         // For now, just infinite loops.
-        attackSequence.SetLoops(-1, LoopType.Restart);
+        _attackSequence.SetLoops(-1, LoopType.Restart);
 
-        attackSequence.Pause();
+        _attackSequence.Pause();
     }
 
     private void StartAttacking()
     {
-        attackData.parentWeaponTransform.rotation = initialParentRotation;
-        attackData.IsInDamageDealingPhase = true;
-        attackSequence.Restart();
-        attackSequence.Play();
+        parentWeaponTransform.rotation = _initialParentRotation;
+        isInDamageDealingPhase = true;
+        _attackSequence.Restart();
+        _attackSequence.Play();
     }
 
     private void StopAttacking()
     {
-        attackData.IsInDamageDealingPhase = false;
+        isInDamageDealingPhase = false;
         //attackSequence.Restart();
-        attackSequence.Pause();
+        _attackSequence.Pause();
     }
 
     private void WindBackAttack()
     {
-        attackData.parentWeaponTransform.DORotate(
-                endValue: initialParentRotation.eulerAngles,
-                duration: attackData.attackRecoveryTime,
+        parentWeaponTransform.DORotate(
+                endValue: _initialParentRotation.eulerAngles,
+                duration: attackRecoveryTime,
                 mode: RotateMode.Fast)
                     .SetEase(Ease.InOutBack);
     }
@@ -119,13 +128,13 @@ public class EnemyAttackPlayer : IState
         Sequence parrySequence = DOTween.Sequence();
 
         parrySequence.Append(
-            attackData.parentWeaponTransform.DORotate(
-                endValue: initialParentRotation.eulerAngles,
-                duration: attackData.parryRecoilTime,
+            parentWeaponTransform.DORotate(
+                endValue: _initialParentRotation.eulerAngles,
+                duration: parryRecoilTime,
                 mode: RotateMode.Fast)
                     .SetEase(Ease.OutQuint));
 
-        parrySequence.AppendInterval(attackData.stunTimeFromParry);
+        parrySequence.AppendInterval(stunTimeFromParry);
 
         parrySequence.OnComplete(
             StartAttacking);

@@ -10,21 +10,10 @@ public class EnemyController : MonoBehaviour
 
     [Header("Inputs")]
     [SerializeField] private EnemyInput input;
-    public EnemyAttackData attackData;
+    [SerializeField] public EnemyAttackPlayer attackPlayerState;
 
     [Header("Output")]
     [SerializeField] private EnemyPathing pathing;
-
-    //public enum State
-    //{
-    //    Patrolling, // Patrolling can be stationary
-    //    ReturningToPatrol, // Done chasing, now returns to patrol
-    //    SeesPlayer, // Sees player, does nothing for now... (could be out of range)
-    //    ChasePlayer, // Moves towards player
-    //    AttackPlayer, // Attacks player when in range (combat)
-    //    Dead, // Dead
-    //    Destroy // Destroy the object I guess
-    //}
 
     [Header("Debug")]
     [SerializeField] private bool debugShowStateName = true;
@@ -45,8 +34,6 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-
-
     private void Awake()
     {
         SetupStateMachine();
@@ -61,7 +48,6 @@ public class EnemyController : MonoBehaviour
         var returningToPatrolState = new EnemyReturnToPatrol( pathing );
         var seesPlayerState = new EnemySeesPlayer();
         var chasePlayerState = new EnemyChasePlayer( pathing );
-        var attackPlayerState = new EnemyAttackPlayer( ref attackData );
         var deadState = new EnemyDead();
 
         // Predicates
