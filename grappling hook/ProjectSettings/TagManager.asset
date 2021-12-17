@@ -8,6 +8,7 @@ TagManager:
   - Wall
   - Collectable
   - EnemyAttack
+  - Weapon
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Wall
   - Enemy
   - Projectile
-  - 
+  - Player
   - 
   - 
   - 
