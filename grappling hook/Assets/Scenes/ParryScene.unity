@@ -3147,8 +3147,8 @@ GameObject:
   - component: {fileID: 1447174601}
   - component: {fileID: 1447174600}
   - component: {fileID: 1447174605}
-  - component: {fileID: 1447174604}
   - component: {fileID: 1447174606}
+  - component: {fileID: 1447174604}
   - component: {fileID: 1447174599}
   - component: {fileID: 1447174603}
   m_Layer: 9
@@ -3171,7 +3171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   input: {fileID: 1447174604}
-  attackData: {fileID: 1447174606}
+  attackPlayerState: {fileID: 1447174606}
   pathing: {fileID: 1447174603}
   debugShowStateName: 1
 --- !u!70 &1447174600
@@ -3316,20 +3316,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 1447174598}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9af59d037924147418242eea97ebe933, type: 3}
+  m_Script: {fileID: 11500000, guid: 24fa29dd196e043389407b8337b39d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackDamage: 5
-  ParryTimeLimit: 0.1
-  attackWindUpTime: 0.8
-  attackDuration: 0.4
-  timeBetweenAttackAndRecovery: 0.4
-  attackRecoveryTime: 0.5
-  parryRecoilTime: 0.6
-  stunTimeFromParry: 1
+  attackDamage: 5
+  parryTimeLimit: 0.2
+  attackWindUpTime: 0.2
+  attackDuration: 0.8
+  timeBetweenAttackAndRecovery: 0.2
+  attackRecoveryTime: 1
+  parryRecoilTime: 0.7
+  stunTimeFromParry: 1.5
   parentWeaponTransform: {fileID: 1159202393}
-  IsInDamageDealingPhase: 0
-  Parried: 0
+  isInDamageDealingPhase: 0
+  parried: 0
 --- !u!1 &1454103755
 GameObject:
   m_ObjectHideFlags: 0
