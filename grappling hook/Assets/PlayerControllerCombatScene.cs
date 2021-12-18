@@ -2,7 +2,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerControllerCombatScene : MonoBehaviour
 {
     [Header("Movement Components")]
     [SerializeField] private Transform rightWallChecker;
@@ -39,36 +39,23 @@ public class PlayerController : MonoBehaviour
         Right = 1
     }
     private FacingDirection _facingDirection = FacingDirection.Right;
-    
-    [Header("Weapons")]
-    private BaseMeleeWeapon _currentWeapon;
-    [SerializeField] private SwordWeapon swordWeapon;
-    [SerializeField] private HammerWeapon hammerWeapon;
+
+    [SerializeField] private PlayerCombat playerCombat;
     private bool _isAttacking = false;
-
-    [SerializeField] private PlayerParry parry;
-    private bool _isParrying = false;
-
-    private void Awake()
-    {
-        _currentWeapon = swordWeapon;
-        swordWeapon.SetWeaponActive(true);
-        hammerWeapon.SetWeaponActive(false);
-    }
 
     #region Handle Input
     private void Update()
     {
-        if (_isAttacking || _isParrying)
+        if (_isAttacking)
         {
+            //_velocityX = 0f; idk if this is needed
             return;
         }
         HandleMoveInput();
         HandleJumpInput();
         CheckIfGrounded();
         CheckIfGrabbedToWall();
-        //ReadAttackInput();
-        //ReadParryInput();
+        ReadAttackInput();
 
         animator.SetFloat(SpeedID, Mathf.Abs(_velocityX));
     }
@@ -143,61 +130,22 @@ public class PlayerController : MonoBehaviour
 
     private void CheckIfGrounded()
     {
-        // NOTE @JA This should probably be a down raycast?? Maybe? Layer check is a bit dodge.
         Collider2D overlapCircle = Physics2D.OverlapCircle(groundChecker.position, checkGroundRadius, groundLayer);
         _isGrounded = overlapCircle != null;
     }
 
     private void ReadAttackInput()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            _isAttacking = true;
-            _currentWeapon.StartLightAttack(_facingDirection == FacingDirection.Left,
-                () => _isAttacking = false);
-            _velocityX = 0f;
-        }
-        else if (Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            _isAttacking = true;
-            _currentWeapon.StartHeavyAttack(_facingDirection == FacingDirection.Left,
-                () => _isAttacking = false);
-            _velocityX = 0f;
-        }
-        // TEMPORARY:
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            if (_currentWeapon == swordWeapon)
-            {
-                swordWeapon.SetWeaponActive(false);
-                hammerWeapon.SetWeaponActive(true);
-                _currentWeapon = hammerWeapon;
-            }
-            else
-            {
-                hammerWeapon.SetWeaponActive(false);
-                swordWeapon.SetWeaponActive(true);
-                _currentWeapon = swordWeapon;
-            }
-        }
+        if (!Input.GetKeyDown(KeyCode.Mouse0)) return;
+        _isAttacking = true;
+        playerCombat.StartAttack( () => _isAttacking = false );
     }
-
-    private void ReadParryInput()
-    {
-        // Temp: E for parry
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            parry.Parry();
-        }
-    }
-    
     #endregion
 
     #region ApplyPhysics
     private void FixedUpdate()
     {
         ApplyMove();
-        //ApplyRoll();
         ApplyJump();
         ApplyWallGrab();
     }
