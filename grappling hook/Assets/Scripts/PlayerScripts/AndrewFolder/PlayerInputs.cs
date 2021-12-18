@@ -13,17 +13,39 @@ public class PlayerInputs : MonoBehaviour
     [SerializeField] private float timeToJumpHeight = 0.4f;
     [SerializeField] private AnimationCurve accelerationCurve;
     [SerializeField] [Range(0f,1f)] private float accelerationRate;
-    [SerializeField] private float accelerationTime =0.4f;
-
-    //gravity and jumpVelocity are calculated based on the jump heigth and time
+    [SerializeField] private AnimationCurve decelerationCurve;
+    [SerializeField] [Range(0f, 1f)] private float decelerationRate;
+    //gravity and jumpVelocity are calculated based on the jump height and time
     private float gravity;
     private float jumpVelocity;
-    Vector3 velocity;
 
+    private bool _isMoveInput;
+    private FacingDirection _facingDirection;
     
-    private float lerpCurrent=0f;
+
+    Vector3 velocity;
+    Vector2 input;
+
+    [Header("Debug")]
+    [SerializeField] private float lerpCurrent=0f;
+    [SerializeField] MoveState _moveState;
 
     MoveController moveController;
+
+    enum FacingDirection
+    {
+        Left = -1,
+        Right = 1
+    }
+
+    enum MoveState
+    {
+        Stopped,
+        Accelerating,
+        Running,
+        Decelerating,
+        ChangingDirection
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -31,13 +53,16 @@ public class PlayerInputs : MonoBehaviour
         gravity = -2 * jumpHeight * Mathf.Pow(timeToJumpHeight, -2);
         jumpVelocity = timeToJumpHeight * Mathf.Abs(gravity);
         moveController = gameObject.GetComponent<MoveController>();
+        _moveState = MoveState.Stopped;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-
+        input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        
+        //gravity acceleration, currently does not have a max
+        velocity.y += gravity * Time.deltaTime;
         if (moveController.collisions.above || moveController.collisions.below)
         {
             //stop the acceleration due to gravity while in contact with things
@@ -47,24 +72,99 @@ public class PlayerInputs : MonoBehaviour
         {
             velocity.y = jumpVelocity;
         }
-        velocity.y += gravity * Time.deltaTime;
 
+        HandelMoveInput();
+        SetHorizontalMove();
 
-        LerpVelocity(ref velocity.x);
         moveController.Move(velocity * Time.deltaTime);
     }
 
-    void LerpVelocity(ref float velocityX)
-    {
-        float targetVelocityX = Input.GetAxisRaw("Horizontal") * moveSpeed;
 
-        if (velocityX == 0f || Mathf.Sign(velocityX) != Mathf.Sign(Input.GetAxisRaw("Horizontal")))
+    void HandelMoveInput()
+    {
+        if (input.x != 0)
         {
-            lerpCurrent = 0f;
+            _isMoveInput = true;
+            _facingDirection = input.x < 0 ? FacingDirection.Left : FacingDirection.Right;
         }
-        lerpCurrent = Mathf.Lerp(lerpCurrent, 1f, accelerationRate * Time.deltaTime);
-        Debug.Log("Lerp Current: " + lerpCurrent.ToString());
-        velocityX = Mathf.Lerp(velocityX, targetVelocityX, accelerationCurve.Evaluate(lerpCurrent));
+        else
+        {
+            _isMoveInput = false;
+        }
     }
 
+    void SetHorizontalMove()
+    {
+        if (_isMoveInput)
+        {
+            switch (_moveState)
+            {
+                case MoveState.Stopped:
+                    //begins the movement, calls sets to accelerating
+                    StartMoving();
+                    break;
+                case MoveState.Accelerating:
+                    //accelerates to run speed, sets to moveState to run once at speed
+                    Accelerate();
+                    break;
+                case MoveState.Decelerating:
+                    //this will be called if the player starts decelerating and then wants to move again
+                    Accelerate();
+                    break;
+                case MoveState.Running:
+                    //continues moving at the current speed
+                    Run();
+                    break;
+                case MoveState.ChangingDirection:
+                    //changes the speed to the opposite one
+                    break;
+            }
+        }
+        else
+        {
+            if (_moveState != MoveState.Stopped)
+            {
+                StopMoving();
+                Decelerate();
+            }
+        }
+    }
+
+    void StartMoving()
+    {
+        lerpCurrent = 0f;
+        _moveState = MoveState.Accelerating;
+    }
+
+    void StopMoving()
+    {
+        lerpCurrent = 0f;
+        _moveState = MoveState.Decelerating;
+    }
+
+    void Accelerate()
+    {
+        lerpCurrent = Mathf.Lerp(lerpCurrent, 1f, accelerationRate * Time.deltaTime);
+        velocity.x = Mathf.Lerp(velocity.x, moveSpeed * input.x, accelerationCurve.Evaluate(lerpCurrent));
+        if (Mathf.Abs(velocity.x) >= Mathf.Abs(input.x * moveSpeed))
+        {
+            _moveState = MoveState.Running;
+        }
+    }
+
+    void Run()
+    {
+        velocity.x = input.x * moveSpeed;
+    }
+
+    void Decelerate()
+    {
+        lerpCurrent = Mathf.Lerp(lerpCurrent, 1f, decelerationRate * Time.deltaTime);
+        velocity.x = Mathf.Lerp(velocity.x, 0f, decelerationCurve.Evaluate(lerpCurrent));
+        if (Mathf.Abs(velocity.x) <=0.5f)
+        {
+            velocity.x = 0f;
+            _moveState = MoveState.Stopped;
+        }
+    }
 }
