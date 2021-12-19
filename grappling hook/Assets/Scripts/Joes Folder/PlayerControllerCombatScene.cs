@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using DG.Tweening;
 using UnityEditor;
 using UnityEngine;
 
@@ -15,8 +17,25 @@ public class PlayerControllerCombatScene : MonoBehaviour
     [Header("Animation")]
     [SerializeField] private SpriteRenderer sprite;
     [SerializeField] private Animator animator;
-    private static readonly int SpeedID = Animator.StringToHash("speed");
+    
+    // private static readonly int PlayerIdleID = Animator.StringToHash("Player_Idle");
+    // private static readonly int PlayerWalkID = Animator.StringToHash("Player_Walk");
+    // private static readonly int PlayerRunID = Animator.StringToHash("Player_Run");
+    // private static readonly int PlayerJumpID = Animator.StringToHash("Player_Jump");
+    // private static readonly int PlayerAttack1ID = Animator.StringToHash("Player_Attack_1");
+    // private static readonly int PlayerAttack2ID = Animator.StringToHash("Player_Attack_2");
 
+    // private int _currentState = 0;
+    // private void ChangeAnimationState(int newStateHash)
+    // {
+    //     if (_currentState == newStateHash)
+    //     {
+    //         return;
+    //     }
+    //     animator.Play(newStateHash);
+    //     _currentState = newStateHash;
+    // }
+    
     [Header("Movement Stats")]
     [SerializeField] private float moveMultiplier = 11f;
     [SerializeField] private float jumpForce = 5f;
@@ -33,29 +52,44 @@ public class PlayerControllerCombatScene : MonoBehaviour
     private bool _isWallGrabbing = false;
     [SerializeField] private float wallGrabTimeLimit = 0.25f;
 
-    private enum FacingDirection
+    public enum FacingDirection
     {
         Left = -1,
         Right = 1
     }
-    private FacingDirection _facingDirection = FacingDirection.Right;
+    public FacingDirection _facingDirection = FacingDirection.Right;
 
     [SerializeField] private PlayerCombat playerCombat;
-    private bool _isAttacking = false;
+
+    public bool IsAttacking { private get; set; }
+    //private bool _isAttackPressed = false;
+    
+    
+    private static readonly int SpeedID = Animator.StringToHash("speed");
+    private static readonly int AttackTriggerID = Animator.StringToHash("attackTrigger");
+    private static readonly int JumpTriggerID = Animator.StringToHash("jumpTrigger");
+
+
+    public void MovePlayerOneStep()
+    {
+        
+    }
+    
 
     #region Handle Input
     private void Update()
     {
-        if (_isAttacking)
+        ReadAttackInput();
+        if (IsAttacking)
         {
-            //_velocityX = 0f; idk if this is needed
+            _velocityX = 0f;
             return;
         }
+        
         HandleMoveInput();
         HandleJumpInput();
         CheckIfGrounded();
         CheckIfGrabbedToWall();
-        ReadAttackInput();
 
         animator.SetFloat(SpeedID, Mathf.Abs(_velocityX));
     }
@@ -137,9 +171,13 @@ public class PlayerControllerCombatScene : MonoBehaviour
     private void ReadAttackInput()
     {
         if (!Input.GetKeyDown(KeyCode.Mouse0)) return;
-        _isAttacking = true;
-        playerCombat.StartAttack( () => _isAttacking = false );
+        
+        animator.SetTrigger(AttackTriggerID);
+        IsAttacking = true;
+        //ChangeAnimationState(_isAttacking ? PlayerAttack2ID : PlayerAttack1ID);
+        //_isAttackPressed = true;
     }
+
     #endregion
 
     #region ApplyPhysics
@@ -164,6 +202,7 @@ public class PlayerControllerCombatScene : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             _isJumpInput = false;
+            animator.SetTrigger(JumpTriggerID);
         }
         // Down force when -ve y
         if (rb.velocity.y < 0)

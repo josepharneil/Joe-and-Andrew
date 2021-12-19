@@ -5180,7 +5180,7 @@ MonoBehaviour:
   sprite: {fileID: 1681189294}
   animator: {fileID: 1681189296}
   moveMultiplier: 11
-  jumpForce: 5
+  jumpForce: 8
   fallMultiplier: 2.5
   lowJumpMultiplier: 2
   jumpVelocityFalloff: 2
@@ -5322,7 +5322,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80ba13d71911f4c21bda6e29ef495762, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 1681189296}
 --- !u!1 &1742159257
 GameObject:
   m_ObjectHideFlags: 0
