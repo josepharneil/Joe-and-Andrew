@@ -1909,6 +1909,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   accelerationRate: 0.876
+  airAccelerationRate: 0.282
   decelerationCurve:
     serializedVersion: 2
     m_Curve:
@@ -1934,6 +1935,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   decelerationRate: 0.7
+  airDecelerationRate: 0.194
   changeDirectionCurve:
     serializedVersion: 2
     m_Curve:
@@ -1959,6 +1961,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   changeDirectionRate: 0.665
+  airChangeDirectionRate: 0.247
   lerpCurrent: 0
   _moveState: 0
 --- !u!114 &2142903473

@@ -13,10 +13,13 @@ public class PlayerInputs : MonoBehaviour
     [SerializeField] private float timeToJumpHeight = 0.4f;
     [SerializeField] private AnimationCurve accelerationCurve;
     [SerializeField] [Range(0f,1f)] private float accelerationRate;
+    [SerializeField] [Range(0f, 1f)] private float airAccelerationRate;
     [SerializeField] private AnimationCurve decelerationCurve;
     [SerializeField] [Range(0f, 1f)] private float decelerationRate;
+    [SerializeField] [Range(0f, 1f)] private float airDecelerationRate;
     [SerializeField] private AnimationCurve changeDirectionCurve;
     [SerializeField] [Range(0f, 1f)] private float changeDirectionRate;
+    [SerializeField] [Range(0f, 1f)] private float airChangeDirectionRate;
     //gravity and jumpVelocity are calculated based on the jump height and time
     private float gravity;
     private float jumpVelocity;
@@ -157,7 +160,8 @@ public class PlayerInputs : MonoBehaviour
 
     void Accelerate()
     {
-        lerpCurrent = Mathf.Lerp(lerpCurrent, 1f, accelerationRate * Time.deltaTime);
+        float rate = (moveController.collisions.below ? accelerationRate : airAccelerationRate);
+        lerpCurrent = Mathf.Lerp(lerpCurrent, 1f, rate * Time.deltaTime);
         velocity.x = Mathf.Lerp(velocity.x, moveSpeed * input.x, accelerationCurve.Evaluate(lerpCurrent));
         if (Mathf.Abs(velocity.x)*input.x >= input.x * moveSpeed)
         {
@@ -172,7 +176,8 @@ public class PlayerInputs : MonoBehaviour
 
     void Decelerate()
     {
-        lerpCurrent = Mathf.Lerp(lerpCurrent, 1f, decelerationRate * Time.deltaTime);
+        float rate = moveController.collisions.below ? decelerationRate : airDecelerationRate;
+        lerpCurrent = Mathf.Lerp(lerpCurrent, 1f, rate * Time.deltaTime);
         velocity.x = Mathf.Lerp(velocity.x, 0f, decelerationCurve.Evaluate(lerpCurrent));
         if (Mathf.Abs(velocity.x) <=0.5f)
         {
@@ -183,11 +188,13 @@ public class PlayerInputs : MonoBehaviour
 
     void ChangeDirection()
     {
-        lerpCurrent = Mathf.Lerp(lerpCurrent, 1f, changeDirectionRate * Time.deltaTime);
+        float rate = moveController.collisions.below ? changeDirectionRate : airChangeDirectionRate;
+        lerpCurrent = Mathf.Lerp(lerpCurrent, 1f, rate * Time.deltaTime);
         velocity.x = Mathf.Lerp(velocity.x, moveSpeed*input.x ,changeDirectionCurve.Evaluate(lerpCurrent));
         if (Mathf.Abs(velocity.x)*input.x == input.x * moveSpeed)
         {
             _moveState = MoveState.Running;
         }
     }
+
 }
