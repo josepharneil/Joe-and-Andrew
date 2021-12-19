@@ -29,7 +29,7 @@ public class MoveController : MonoBehaviour
     {
         public bool above, below;
         public bool left, right;
-        public void Rest()
+        public void Reset()
         {
             above = below = false;
             left = right = false;
@@ -127,7 +127,7 @@ public class MoveController : MonoBehaviour
     {
         //Debug.Log(velocity.ToString());
         UpdateRaycastOrigins();
-        collisions.Rest();
+        collisions.Reset();
         if (velocity.x != 0)
         {
             HorizontalCollisions(ref velocity);

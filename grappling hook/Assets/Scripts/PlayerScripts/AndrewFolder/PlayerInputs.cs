@@ -15,6 +15,8 @@ public class PlayerInputs : MonoBehaviour
     [SerializeField] [Range(0f,1f)] private float accelerationRate;
     [SerializeField] private AnimationCurve decelerationCurve;
     [SerializeField] [Range(0f, 1f)] private float decelerationRate;
+    [SerializeField] private AnimationCurve changeDirectionCurve;
+    [SerializeField] [Range(0f, 1f)] private float changeDirectionRate;
     //gravity and jumpVelocity are calculated based on the jump height and time
     private float gravity;
     private float jumpVelocity;
@@ -72,10 +74,10 @@ public class PlayerInputs : MonoBehaviour
         {
             velocity.y = jumpVelocity;
         }
-
+        Debug.Log("Velocity x: " + velocity.x.ToString() + " input.x: " + input.x.ToString());
         HandelMoveInput();
         SetHorizontalMove();
-
+        //Debug.Log(moveController.collisions.below.ToString());
         moveController.Move(velocity * Time.deltaTime);
     }
 
@@ -97,6 +99,10 @@ public class PlayerInputs : MonoBehaviour
     {
         if (_isMoveInput)
         {
+            if (Mathf.Sign(velocity.x) != input.x && velocity.x!=0)
+            {
+                StartDirectionChange();
+            }
             switch (_moveState)
             {
                 case MoveState.Stopped:
@@ -109,7 +115,7 @@ public class PlayerInputs : MonoBehaviour
                     break;
                 case MoveState.Decelerating:
                     //this will be called if the player starts decelerating and then wants to move again
-                    Accelerate();
+                    StartMoving();
                     break;
                 case MoveState.Running:
                     //continues moving at the current speed
@@ -117,6 +123,7 @@ public class PlayerInputs : MonoBehaviour
                     break;
                 case MoveState.ChangingDirection:
                     //changes the speed to the opposite one
+                    ChangeDirection();
                     break;
             }
         }
@@ -142,11 +149,17 @@ public class PlayerInputs : MonoBehaviour
         _moveState = MoveState.Decelerating;
     }
 
+    void StartDirectionChange()
+    {
+        lerpCurrent = 0f;
+        _moveState = MoveState.ChangingDirection;
+    }
+
     void Accelerate()
     {
         lerpCurrent = Mathf.Lerp(lerpCurrent, 1f, accelerationRate * Time.deltaTime);
         velocity.x = Mathf.Lerp(velocity.x, moveSpeed * input.x, accelerationCurve.Evaluate(lerpCurrent));
-        if (Mathf.Abs(velocity.x) >= Mathf.Abs(input.x * moveSpeed))
+        if (Mathf.Abs(velocity.x)*input.x >= input.x * moveSpeed)
         {
             _moveState = MoveState.Running;
         }
@@ -165,6 +178,16 @@ public class PlayerInputs : MonoBehaviour
         {
             velocity.x = 0f;
             _moveState = MoveState.Stopped;
+        }
+    }
+
+    void ChangeDirection()
+    {
+        lerpCurrent = Mathf.Lerp(lerpCurrent, 1f, changeDirectionRate * Time.deltaTime);
+        velocity.x = Mathf.Lerp(velocity.x, moveSpeed*input.x ,changeDirectionCurve.Evaluate(lerpCurrent));
+        if (Mathf.Abs(velocity.x)*input.x == input.x * moveSpeed)
+        {
+            _moveState = MoveState.Running;
         }
     }
 }
