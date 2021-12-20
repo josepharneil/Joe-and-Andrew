@@ -20,19 +20,23 @@ public class PlayerInputs : MonoBehaviour
     [SerializeField] private AnimationCurve changeDirectionCurve;
     [SerializeField] [Range(0f, 1f)] private float changeDirectionRate;
     [SerializeField] [Range(0f, 1f)] private float airChangeDirectionRate;
+    [SerializeField] private float coyoteTime;
+
+    [SerializeField] private float jumpPressedTime;
+    [SerializeField] private float lastGroundedTime;
     //gravity and jumpVelocity are calculated based on the jump height and time
     private float gravity;
     private float jumpVelocity;
+    [SerializeField] private bool hasJumped;
 
     private bool _isMoveInput;
     private bool _isJumpInput;
-    private bool _isGrounded;
+    [SerializeField] private bool _isGrounded;
     private FacingDirection _facingDirection;
     
 
     Vector3 velocity;
     Vector2 input;
-    Vector3 previousVelocity;
 
     [Header("Debug")]
     [SerializeField] private float lerpCurrent=0f;
@@ -85,6 +89,7 @@ public class PlayerInputs : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _isJumpInput = true;
+            jumpPressedTime = Time.time;
         }
         else
         {
@@ -94,9 +99,13 @@ public class PlayerInputs : MonoBehaviour
 
     void Jump()
     {
-        if(_isJumpInput && _isGrounded)
+        Debug.Log((jumpPressedTime - lastGroundedTime).ToString());
+        Debug.Log(coyoteTime.ToString());
+        if(_isJumpInput && (jumpPressedTime-lastGroundedTime<=coyoteTime)&&!hasJumped)
         {
+            hasJumped = true;
             velocity.y = jumpVelocity;
+            jumpPressedTime = float.MaxValue;
         }
     }
 
@@ -122,13 +131,14 @@ public class PlayerInputs : MonoBehaviour
         if(moveController.CheckGrounded())
         {
             _isGrounded = true;
+            lastGroundedTime = Time.time;
+            hasJumped = false;
         }
         else
         {
             _isGrounded = false;
         }
     }
-
 
     #endregion
 
