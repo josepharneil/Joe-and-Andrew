@@ -18,6 +18,7 @@ public class MoveController : MonoBehaviour
     BoxCollider2D playerCollider;
     RayCastOrigins raycastOrigins;
     public CollisionInfo collisions;
+    bool wasGrounded;
 
     struct RayCastOrigins
     {
@@ -29,10 +30,19 @@ public class MoveController : MonoBehaviour
     {
         public bool above, below;
         public bool left, right;
-        public void Reset()
+        public void ResetAll()
         {
             above = below = false;
             left = right = false;
+        }
+        public void ResetHorizontal()
+        {
+            left = right = false;
+        }
+
+        public void ResetVertical()
+        {
+            above = below = false;
         }
     }
 
@@ -40,6 +50,7 @@ public class MoveController : MonoBehaviour
     {
         playerCollider = gameObject.GetComponent<BoxCollider2D>();
         CalculateRaySpacing();
+        wasGrounded = true;
 
         //used for getting corners of box collider
 
@@ -125,9 +136,8 @@ public class MoveController : MonoBehaviour
 
     public void Move(Vector3 velocity)
     {
-        //Debug.Log(velocity.ToString());
         UpdateRaycastOrigins();
-        collisions.Reset();
+        collisions.ResetAll();
         if (velocity.x != 0)
         {
             HorizontalCollisions(ref velocity);
@@ -137,5 +147,29 @@ public class MoveController : MonoBehaviour
             VerticalCollisions(ref velocity);
         }
         transform.Translate(velocity);
+    }
+
+    public void CheckGrounded(Vector3 velocity)
+    {
+        float directionY = Mathf.Sign(velocity.y);
+        float rayLength = Mathf.Abs(velocity.y) + skinWidth;
+        for (int i = 0; i < verticalRayCount; i++)
+        {
+            Vector2 rayOrigin = (directionY == -1) ? raycastOrigins.bottomLeft : raycastOrigins.topLeft;
+            rayOrigin += Vector2.right * (verticalRaySpacing * i);
+            //adding the velocity x means that the ray is cast from the point where the object will be once it has moved
+            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up * directionY, rayLength, collisionMask);
+            Debug.DrawRay(rayOrigin, Vector2.up * directionY * rayLength, Color.red);
+
+            if (hit)
+            {
+                velocity.y = (hit.distance - skinWidth) * directionY;
+                //this stops the rays from hitting something that is further away than the closest collision
+                rayLength = hit.distance;
+                collisions.below = true;
+            }
+
+        }
+
     }
 }

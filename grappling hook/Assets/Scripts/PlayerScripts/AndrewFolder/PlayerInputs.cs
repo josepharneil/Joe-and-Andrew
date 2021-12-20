@@ -25,11 +25,14 @@ public class PlayerInputs : MonoBehaviour
     private float jumpVelocity;
 
     private bool _isMoveInput;
+    private bool _isJumpInput;
+    private bool _isGrounded;
     private FacingDirection _facingDirection;
     
 
     Vector3 velocity;
     Vector2 input;
+    Vector3 previousVelocity;
 
     [Header("Debug")]
     [SerializeField] private float lerpCurrent=0f;
@@ -66,26 +69,59 @@ public class PlayerInputs : MonoBehaviour
     {
         input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         
-        //gravity acceleration, currently does not have a max
-        velocity.y += gravity * Time.deltaTime;
-        if (moveController.collisions.above || moveController.collisions.below)
+        HandleMoveInput();
+        HandleJumpInput();
+        SetHorizontalMove();
+        ApplyGravity();
+        moveController.CheckGrounded(previousVelocity);
+        moveController.CheckGrounded(velocity);
+        Jump();
+        Debug.Log(moveController.collisions.below.ToString());
+        Debug.Log(velocity.y.ToString());
+        moveController.Move(velocity * Time.deltaTime);
+        previousVelocity = velocity;
+    }
+
+    #region Jump Movement
+
+    void HandleJumpInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            //stop the acceleration due to gravity while in contact with things
-            velocity.y = 0;
+            _isJumpInput = true;
         }
-        if (Input.GetKeyDown(KeyCode.Space) && moveController.collisions.below)
+        else
+        {
+            _isJumpInput = false;
+        }
+    }
+
+    void Jump()
+    {
+        if(_isJumpInput && moveController.collisions.below)
         {
             velocity.y = jumpVelocity;
         }
-        Debug.Log("Velocity x: " + velocity.x.ToString() + " input.x: " + input.x.ToString());
-        HandelMoveInput();
-        SetHorizontalMove();
-        //Debug.Log(moveController.collisions.below.ToString());
-        moveController.Move(velocity * Time.deltaTime);
+    }
+
+    void ApplyGravity()
+    {
+        if (moveController.collisions.below || moveController.collisions.above)
+        {
+            velocity.y = 0;
+        }
+        else
+        {
+            velocity.y += gravity*Time.deltaTime;
+        }
+
     }
 
 
-    void HandelMoveInput()
+    #endregion
+
+    #region Horizontal Movement
+    void HandleMoveInput()
     {
         if (input.x != 0)
         {
@@ -196,5 +232,6 @@ public class PlayerInputs : MonoBehaviour
             _moveState = MoveState.Running;
         }
     }
+    #endregion
 
 }
