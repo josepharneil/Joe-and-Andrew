@@ -27,7 +27,6 @@ public class PlayerInputs : MonoBehaviour
     private bool _isMoveInput;
     private bool _isJumpInput;
     private bool _isGrounded;
-    private bool wasGrounded;
     private FacingDirection _facingDirection;
     
 
@@ -63,7 +62,6 @@ public class PlayerInputs : MonoBehaviour
         jumpVelocity = timeToJumpHeight * Mathf.Abs(gravity);
         moveController = gameObject.GetComponent<MoveController>();
         _moveState = MoveState.Stopped;
-        wasGrounded = false;
     }
 
     // Update is called once per frame
@@ -78,8 +76,6 @@ public class PlayerInputs : MonoBehaviour
         CheckGrounded();
         Jump();
         moveController.Move(velocity * Time.deltaTime);
-        previousVelocity = velocity;
-        Debug.Log("Space bar pushed: "+ Input.GetKeyDown(KeyCode.Space).ToString() + " Is Grounded: " + _isGrounded.ToString());
     }
 
     #region Jump Movement
