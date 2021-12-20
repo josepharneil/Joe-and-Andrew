@@ -27,6 +27,7 @@ public class PlayerInputs : MonoBehaviour
     private bool _isMoveInput;
     private bool _isJumpInput;
     private bool _isGrounded;
+    private bool wasGrounded;
     private FacingDirection _facingDirection;
     
 
@@ -62,6 +63,7 @@ public class PlayerInputs : MonoBehaviour
         jumpVelocity = timeToJumpHeight * Mathf.Abs(gravity);
         moveController = gameObject.GetComponent<MoveController>();
         _moveState = MoveState.Stopped;
+        wasGrounded = false;
     }
 
     // Update is called once per frame
@@ -73,13 +75,11 @@ public class PlayerInputs : MonoBehaviour
         HandleJumpInput();
         SetHorizontalMove();
         ApplyGravity();
-        moveController.CheckGrounded(previousVelocity);
-        moveController.CheckGrounded(velocity);
+        CheckGrounded();
         Jump();
-        Debug.Log(moveController.collisions.below.ToString());
-        Debug.Log(velocity.y.ToString());
         moveController.Move(velocity * Time.deltaTime);
         previousVelocity = velocity;
+        Debug.Log("Space bar pushed: "+ Input.GetKeyDown(KeyCode.Space).ToString() + " Is Grounded: " + _isGrounded.ToString());
     }
 
     #region Jump Movement
@@ -98,7 +98,7 @@ public class PlayerInputs : MonoBehaviour
 
     void Jump()
     {
-        if(_isJumpInput && moveController.collisions.below)
+        if(_isJumpInput && _isGrounded)
         {
             velocity.y = jumpVelocity;
         }
@@ -109,12 +109,28 @@ public class PlayerInputs : MonoBehaviour
         if (moveController.collisions.below || moveController.collisions.above)
         {
             velocity.y = 0;
+            if(!moveController.collisions.below && moveController.collisions.above)
+            {
+                velocity.y += gravity * Time.deltaTime;
+            }
         }
         else
         {
             velocity.y += gravity*Time.deltaTime;
         }
 
+    }
+
+    void CheckGrounded()
+    {
+        if(moveController.CheckGrounded())
+        {
+            _isGrounded = true;
+        }
+        else
+        {
+            _isGrounded = false;
+        }
     }
 
 

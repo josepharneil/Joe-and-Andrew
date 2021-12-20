@@ -137,39 +137,35 @@ public class MoveController : MonoBehaviour
     public void Move(Vector3 velocity)
     {
         UpdateRaycastOrigins();
-        collisions.ResetAll();
         if (velocity.x != 0)
         {
+            collisions.ResetAll();
             HorizontalCollisions(ref velocity);
         }
         if (velocity.y != 0)
         {
+            collisions.ResetAll();
             VerticalCollisions(ref velocity);
         }
         transform.Translate(velocity);
     }
 
-    public void CheckGrounded(Vector3 velocity)
-    {
-        float directionY = Mathf.Sign(velocity.y);
-        float rayLength = Mathf.Abs(velocity.y) + skinWidth;
+    public bool CheckGrounded()
+    { 
+        float rayLength = skinWidth +0.05f;
+        bool grounded = false;
         for (int i = 0; i < verticalRayCount; i++)
         {
-            Vector2 rayOrigin = (directionY == -1) ? raycastOrigins.bottomLeft : raycastOrigins.topLeft;
+            Vector2 rayOrigin =raycastOrigins.bottomLeft;
             rayOrigin += Vector2.right * (verticalRaySpacing * i);
-            //adding the velocity x means that the ray is cast from the point where the object will be once it has moved
-            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up * directionY, rayLength, collisionMask);
-            Debug.DrawRay(rayOrigin, Vector2.up * directionY * rayLength, Color.red);
+            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.down , rayLength, collisionMask);
+            Debug.DrawRay(rayOrigin, Vector2.down * rayLength, Color.red);
 
             if (hit)
-            {
-                velocity.y = (hit.distance - skinWidth) * directionY;
-                //this stops the rays from hitting something that is further away than the closest collision
-                rayLength = hit.distance;
-                collisions.below = true;
+            { 
+                grounded = true;
             }
-
         }
-
+        return grounded;
     }
 }
