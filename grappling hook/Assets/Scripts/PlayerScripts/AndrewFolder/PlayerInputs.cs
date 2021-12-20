@@ -22,7 +22,7 @@ public class PlayerInputs : MonoBehaviour
     [SerializeField] [Range(0f, 1f)] private float airChangeDirectionRate;
     [SerializeField] private float coyoteTime;
 
-    [SerializeField] private float jumpPressedTime;
+    [SerializeField] private float jumpCalledTime;
     [SerializeField] private float lastGroundedTime;
     //gravity and jumpVelocity are calculated based on the jump height and time
     private float gravity;
@@ -89,7 +89,11 @@ public class PlayerInputs : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _isJumpInput = true;
-            jumpPressedTime = Time.time;
+            if (!hasJumped)
+            {
+                jumpCalledTime = Time.time;
+            }
+
         }
         else
         {
@@ -99,13 +103,11 @@ public class PlayerInputs : MonoBehaviour
 
     void Jump()
     {
-        Debug.Log((jumpPressedTime - lastGroundedTime).ToString());
-        Debug.Log(coyoteTime.ToString());
-        if(_isJumpInput && (jumpPressedTime-lastGroundedTime<=coyoteTime)&&!hasJumped)
+        if(_isJumpInput && (jumpCalledTime-lastGroundedTime<coyoteTime))
         {
             hasJumped = true;
             velocity.y = jumpVelocity;
-            jumpPressedTime = float.MaxValue;
+            jumpCalledTime = float.MaxValue;
         }
     }
 
