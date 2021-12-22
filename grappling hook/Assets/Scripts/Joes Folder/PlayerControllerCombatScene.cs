@@ -17,25 +17,7 @@ public class PlayerControllerCombatScene : MonoBehaviour
     [Header("Animation")]
     [SerializeField] private SpriteRenderer sprite;
     [SerializeField] private Animator animator;
-    
-    // private static readonly int PlayerIdleID = Animator.StringToHash("Player_Idle");
-    // private static readonly int PlayerWalkID = Animator.StringToHash("Player_Walk");
-    // private static readonly int PlayerRunID = Animator.StringToHash("Player_Run");
-    // private static readonly int PlayerJumpID = Animator.StringToHash("Player_Jump");
-    // private static readonly int PlayerAttack1ID = Animator.StringToHash("Player_Attack_1");
-    // private static readonly int PlayerAttack2ID = Animator.StringToHash("Player_Attack_2");
 
-    // private int _currentState = 0;
-    // private void ChangeAnimationState(int newStateHash)
-    // {
-    //     if (_currentState == newStateHash)
-    //     {
-    //         return;
-    //     }
-    //     animator.Play(newStateHash);
-    //     _currentState = newStateHash;
-    // }
-    
     [Header("Movement Stats")]
     [SerializeField] private float moveMultiplier = 11f;
     [SerializeField] private float jumpForce = 5f;
@@ -43,11 +25,10 @@ public class PlayerControllerCombatScene : MonoBehaviour
     [SerializeField] private float lowJumpMultiplier = 2f;
     [SerializeField] private float jumpVelocityFalloff = 2f;
 
-    private float _velocityX;
+    private float _velocityX = 0f;
     private bool _isMoveInput = false;
     private bool _isJumpInput = false;
     private bool _isGrounded = false;
-    
     private float _wallGrabTimer = 0f;
     private bool _isWallGrabbing = false;
     [SerializeField] private float wallGrabTimeLimit = 0.25f;
@@ -57,24 +38,16 @@ public class PlayerControllerCombatScene : MonoBehaviour
         Left = -1,
         Right = 1
     }
-    public FacingDirection _facingDirection = FacingDirection.Right;
+    public FacingDirection facingDirection = FacingDirection.Right;
 
-    [SerializeField] private PlayerCombat playerCombat;
-
+    // Attack bool.
     public bool IsAttacking { private get; set; }
-    //private bool _isAttackPressed = false;
     
-    
+    // Animation parameter IDs.
     private static readonly int SpeedID = Animator.StringToHash("speed");
     private static readonly int AttackTriggerID = Animator.StringToHash("attackTrigger");
     private static readonly int JumpTriggerID = Animator.StringToHash("jumpTrigger");
 
-
-    public void MovePlayerOneStep()
-    {
-        
-    }
-    
 
     #region Handle Input
     private void Update()
@@ -102,12 +75,12 @@ public class PlayerControllerCombatScene : MonoBehaviour
             if (horizontalAxis < 0)
             {
                 sprite.flipX = true;
-                _facingDirection = FacingDirection.Left;
+                facingDirection = FacingDirection.Left;
             }
             else
             {
                 sprite.flipX = false;
-                _facingDirection = FacingDirection.Right;
+                facingDirection = FacingDirection.Right;
             }
             
             _isMoveInput = true;
@@ -174,8 +147,6 @@ public class PlayerControllerCombatScene : MonoBehaviour
         
         animator.SetTrigger(AttackTriggerID);
         IsAttacking = true;
-        //ChangeAnimationState(_isAttacking ? PlayerAttack2ID : PlayerAttack1ID);
-        //_isAttackPressed = true;
     }
 
     #endregion
