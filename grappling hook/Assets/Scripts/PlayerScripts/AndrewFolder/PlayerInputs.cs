@@ -76,8 +76,8 @@ public class PlayerInputs : MonoBehaviour
         HandleMoveInput();
         HandleJumpInput();
         SetHorizontalMove();
-        ApplyGravity();
         CheckGrounded();
+        ApplyGravity();
         Jump();
         moveController.Move(velocity * Time.deltaTime);
     }
@@ -103,7 +103,8 @@ public class PlayerInputs : MonoBehaviour
 
     void Jump()
     {
-        if(_isJumpInput && (jumpCalledTime-lastGroundedTime<coyoteTime))
+        //todo re add(jumpCalledTime-lastGroundedTime<coyoteTime)
+        if (_isJumpInput && _isGrounded )
         {
             hasJumped = true;
             velocity.y = jumpVelocity;
@@ -134,7 +135,7 @@ public class PlayerInputs : MonoBehaviour
         {
             _isGrounded = true;
             lastGroundedTime = Time.time;
-            hasJumped = false;
+            //hasJumped = false;
         }
         else
         {

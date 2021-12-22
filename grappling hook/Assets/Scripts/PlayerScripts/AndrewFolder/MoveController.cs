@@ -153,7 +153,7 @@ public class MoveController : MonoBehaviour
     public bool CheckGrounded()
     {
         UpdateRaycastOrigins();
-        float rayLength = skinWidth;
+        float rayLength = skinWidth+0.01f;
         bool grounded = false;
         for (int i = 0; i < verticalRayCount; i++)
         {
