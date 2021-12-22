@@ -27,7 +27,6 @@ public class PlayerInputs : MonoBehaviour
     //gravity and jumpVelocity are calculated based on the jump height and time
     private float gravity;
     private float jumpVelocity;
-    [SerializeField] private bool hasJumped;
 
     private bool _isMoveInput;
     private bool _isJumpInput;
@@ -89,11 +88,7 @@ public class PlayerInputs : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _isJumpInput = true;
-            if (!hasJumped)
-            {
-                jumpCalledTime = Time.time;
-            }
-
+            StartCoyoteTime();
         }
         else
         {
@@ -104,9 +99,8 @@ public class PlayerInputs : MonoBehaviour
     void Jump()
     {
         //todo re add(jumpCalledTime-lastGroundedTime<coyoteTime)
-        if (_isJumpInput && _isGrounded )
+        if (_isJumpInput && (_isGrounded || (jumpCalledTime - lastGroundedTime < coyoteTime)))
         {
-            hasJumped = true;
             velocity.y = jumpVelocity;
             jumpCalledTime = float.MaxValue;
         }
@@ -135,11 +129,19 @@ public class PlayerInputs : MonoBehaviour
         {
             _isGrounded = true;
             lastGroundedTime = Time.time;
-            //hasJumped = false;
+            jumpCalledTime = 0f;
         }
         else
         {
             _isGrounded = false;
+        }
+    }
+
+    void StartCoyoteTime()
+    {
+        if (_isJumpInput&&jumpCalledTime!=float.MaxValue)
+        {
+            jumpCalledTime = Time.time;
         }
     }
 
