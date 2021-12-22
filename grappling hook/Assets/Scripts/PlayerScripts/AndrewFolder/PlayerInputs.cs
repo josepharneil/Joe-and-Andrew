@@ -22,12 +22,11 @@ public class PlayerInputs : MonoBehaviour
     [SerializeField] [Range(0f, 1f)] private float airChangeDirectionRate;
     [SerializeField] private float coyoteTime;
 
-    [SerializeField] private float jumpPressedTime;
+    [SerializeField] private float jumpCalledTime;
     [SerializeField] private float lastGroundedTime;
     //gravity and jumpVelocity are calculated based on the jump height and time
     private float gravity;
     private float jumpVelocity;
-    [SerializeField] private bool hasJumped;
 
     private bool _isMoveInput;
     private bool _isJumpInput;
@@ -76,8 +75,8 @@ public class PlayerInputs : MonoBehaviour
         HandleMoveInput();
         HandleJumpInput();
         SetHorizontalMove();
-        ApplyGravity();
         CheckGrounded();
+        ApplyGravity();
         Jump();
         moveController.Move(velocity * Time.deltaTime);
     }
@@ -89,7 +88,7 @@ public class PlayerInputs : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _isJumpInput = true;
-            jumpPressedTime = Time.time;
+            StartCoyoteTime();
         }
         else
         {
@@ -99,13 +98,11 @@ public class PlayerInputs : MonoBehaviour
 
     void Jump()
     {
-        Debug.Log((jumpPressedTime - lastGroundedTime).ToString());
-        Debug.Log(coyoteTime.ToString());
-        if(_isJumpInput && (jumpPressedTime-lastGroundedTime<=coyoteTime)&&!hasJumped)
+        //todo re add(jumpCalledTime-lastGroundedTime<coyoteTime)
+        if (_isJumpInput && (_isGrounded || (jumpCalledTime - lastGroundedTime < coyoteTime)))
         {
-            hasJumped = true;
             velocity.y = jumpVelocity;
-            jumpPressedTime = float.MaxValue;
+            jumpCalledTime = float.MaxValue;
         }
     }
 
@@ -132,11 +129,19 @@ public class PlayerInputs : MonoBehaviour
         {
             _isGrounded = true;
             lastGroundedTime = Time.time;
-            hasJumped = false;
+            jumpCalledTime = 0f;
         }
         else
         {
             _isGrounded = false;
+        }
+    }
+
+    void StartCoyoteTime()
+    {
+        if (_isJumpInput&&jumpCalledTime!=float.MaxValue)
+        {
+            jumpCalledTime = Time.time;
         }
     }
 
