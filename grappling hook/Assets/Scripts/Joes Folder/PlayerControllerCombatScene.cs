@@ -41,6 +41,7 @@ public class PlayerControllerCombatScene : MonoBehaviour
     public FacingDirection facingDirection = FacingDirection.Right;
 
     // Attack bool.
+    [SerializeField] private PlayerCombat playerCombat; 
     public bool IsAttacking { private get; set; }
     
     // Animation parameter IDs.
@@ -143,8 +144,17 @@ public class PlayerControllerCombatScene : MonoBehaviour
 
     private void ReadAttackInput()
     {
-        if (!Input.GetKeyDown(KeyCode.Mouse0)) return;
+        if (Input.GetKeyDown(KeyCode.Mouse0) && _isJumpInput)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            animator.SetTrigger("attackJumpTrigger");
+            IsAttacking = true;
+            _isJumpInput = false;
+        }
         
+        if (!Input.GetKeyDown(KeyCode.Mouse0)) return;
+
+        //playerCombat.Attack( facingDirection == FacingDirection.Left );
         animator.SetTrigger(AttackTriggerID);
         IsAttacking = true;
     }

@@ -6,16 +6,17 @@ public class AttackBehaviour : PlayerStateBase
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        float moveDistance = 4f;
-        if (GetPlayerController(animator).facingDirection == PlayerControllerCombatScene.FacingDirection.Left)
-        {
-            moveDistance = -moveDistance;
-        }
-        Transform transform = GetPlayerController(animator).transform;
-        float animationLength = animator.GetCurrentAnimatorStateInfo(0).length;
-        
+        GetPlayerController(animator).IsAttacking = true;
+        // float moveDistance = 4f;
+        // if (GetPlayerController(animator).facingDirection == PlayerControllerCombatScene.FacingDirection.Left)
+        // {
+        //     moveDistance = -moveDistance;
+        // }
+        // Transform transform = GetPlayerController(animator).transform;
+        // float animationLength = animator.GetCurrentAnimatorStateInfo(0).length;
+
         // TODO DOTween is not good here. You clip through walls. Use a movement script?
-        transform.DOMoveX(transform.position.x + moveDistance, animationLength).SetEase(Ease.InOutQuint);
+        //transform.DOMoveX(transform.position.x + moveDistance, animationLength).SetEase(Ease.InOutQuint);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
