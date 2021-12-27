@@ -40,9 +40,10 @@ public class PlayerControllerCombatScene : MonoBehaviour
     }
     public FacingDirection facingDirection = FacingDirection.Right;
 
+    [Header("Attacking")]
     // Attack bool.
-    [SerializeField] private PlayerCombat playerCombat; 
-    public bool IsAttacking { private get; set; }
+    [SerializeField] private PlayerCombat playerCombat;
+    public bool isAttacking;// { private get; set; }
     
     // Animation parameter IDs.
     private static readonly int SpeedID = Animator.StringToHash("speed");
@@ -54,7 +55,7 @@ public class PlayerControllerCombatScene : MonoBehaviour
     private void Update()
     {
         ReadAttackInput();
-        if (IsAttacking)
+        if (isAttacking)
         {
             _velocityX = 0f;
             return;
@@ -148,7 +149,7 @@ public class PlayerControllerCombatScene : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             animator.SetTrigger("attackJumpTrigger");
-            IsAttacking = true;
+            isAttacking = true;
             _isJumpInput = false;
         }
         
@@ -156,7 +157,7 @@ public class PlayerControllerCombatScene : MonoBehaviour
 
         //playerCombat.Attack( facingDirection == FacingDirection.Left );
         animator.SetTrigger(AttackTriggerID);
-        IsAttacking = true;
+        isAttacking = true;
     }
 
     #endregion

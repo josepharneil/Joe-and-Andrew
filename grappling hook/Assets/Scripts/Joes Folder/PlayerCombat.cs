@@ -21,6 +21,9 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private LayerMask whatIsDamageable;
     [SerializeField] private PlayerControllerCombatScene controller; //bad circular reference
 
+    [SerializeField] private CameraFollow playerCamera;
+    
+    
     public void CheckAttackHitBox(int attackIndex)
     {
         ref AttackInfo attackInfo = ref attackInfo1;
@@ -51,16 +54,23 @@ public class PlayerCombat : MonoBehaviour
         };
         List<Collider2D> detectedObjects = new List<Collider2D>();
         Physics2D.OverlapCircle(overlapCirclePosition, attackInfo.radius, contactFilter2D, detectedObjects);
-        
+
+        bool sandbagHit = false;
         foreach (Collider2D coll in detectedObjects)
         {
             SandbagEnemy sandbagEnemy = coll.gameObject.GetComponent<SandbagEnemy>();
             if (sandbagEnemy)
             {
                 sandbagEnemy.DamageThisEnemy( attackInfo.damage );
+                sandbagHit = true;
             }
             
             // Instantiate a hit particle here if we want
+        }
+
+        if (sandbagHit)
+        {
+            playerCamera.Shake();
         }
     }
 

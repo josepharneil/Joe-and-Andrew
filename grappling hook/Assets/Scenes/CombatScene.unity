@@ -5033,6 +5033,7 @@ MonoBehaviour:
   wallGrabTimeLimit: 0.25
   facingDirection: 1
   playerCombat: {fileID: 1681189288}
+  isAttacking: 0
 --- !u!114 &1681189288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5057,6 +5058,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   controller: {fileID: 1681189287}
+  playerCamera: {fileID: 2120136977}
 --- !u!70 &1681189292
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -5496,6 +5498,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   followTransform: {fileID: 1681189295}
+  cameraShakeDuration: 0.15
+  cameraShakeAmount: 0.15
 --- !u!81 &2120136978
 AudioListener:
   m_ObjectHideFlags: 0
