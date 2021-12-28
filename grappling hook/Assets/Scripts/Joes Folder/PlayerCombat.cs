@@ -6,6 +6,10 @@ using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
+    [Header("Setup")]
+    [SerializeField] private LayerMask whatIsDamageable;
+    [SerializeField] private PlayerControllerCombatScene controller; //bad circular reference
+
     [Serializable]
     private struct AttackInfo
     {
@@ -14,25 +18,87 @@ public class PlayerCombat : MonoBehaviour
         public float radius;
     }
 
+    [Header("Attack infos")]
     [SerializeField] private AttackInfo attackInfo1;
     [SerializeField] private AttackInfo attackInfo2;
 
-    
-    [SerializeField] private LayerMask whatIsDamageable;
-    [SerializeField] private PlayerControllerCombatScene controller; //bad circular reference
+    [SerializeField] private AttackInfo attackUp;
+    [SerializeField] private AttackInfo attackDown;
 
-    [SerializeField] private CameraFollow playerCamera;
     
+
+    [Header("Swipes")]
+    [SerializeField] private float swipeShowTime = 1f;
+    [SerializeField] private SpriteRenderer upSwipe;
+    [SerializeField] private SpriteRenderer downSwipe;
+    [SerializeField] private SpriteRenderer rightSwipe;
+    [SerializeField] private SpriteRenderer leftSwipe;
+
+    [Header("Shake")]
+    [SerializeField] private CinemachineShake cinemachineShake;
+    [SerializeField] private float shakeAmplitude = 3f;
+    [SerializeField] private float shakeFrequency = 1f;
+    [SerializeField] private float shakeDuration = 0.1f;
     
+    private void OnEnable()
+    {
+        upSwipe.enabled = false;
+        downSwipe.enabled = false;
+        rightSwipe.enabled = false;
+        leftSwipe.enabled = false;
+    }
+
+
+    private enum SwipeDirection
+    {
+        Up,
+        Down,
+        Left,
+        Right
+    }
+
     public void CheckAttackHitBox(int attackIndex)
     {
         ref AttackInfo attackInfo = ref attackInfo1;
+        
+        // Todo, figure out indexes to make more sense
+        switch (attackIndex)
+        {
+            case 3:
+                StartCoroutine(ShowSwipe(SwipeDirection.Up));
+                break;
+            case 4:
+                StartCoroutine(ShowSwipe(SwipeDirection.Down));
+                break;
+            // 0, 1, 2, left and right, and.. err... something else... nothing...
+            default:
+            {
+                // Swipes
+                StartCoroutine(controller.facingDirection == PlayerControllerCombatScene.FacingDirection.Left
+                    ? ShowSwipe(SwipeDirection.Left)
+                    : ShowSwipe(SwipeDirection.Right));
+
+                break;
+            }
+        }
+        // todo up, down
+        
+        
         switch (attackIndex)
         {
             case 0:
                 break;
             case 1:
                 attackInfo = ref attackInfo2;
+                break;
+            case 2:
+                // todo didnt mean to skip this number.. need to figure out numbering
+                break;
+            case 3:
+                attackInfo = ref attackUp;
+                break;
+            case 4:
+                attackInfo = ref attackDown;
                 break;
             default:
                 Debug.LogError("No such attack index");
@@ -70,7 +136,8 @@ public class PlayerCombat : MonoBehaviour
 
         if (sandbagHit)
         {
-            playerCamera.Shake();
+            cinemachineShake.ShakeCamera(shakeAmplitude, shakeFrequency, shakeDuration);
+            //playerCamera.Shake();
         }
     }
 
@@ -97,5 +164,39 @@ public class PlayerCombat : MonoBehaviour
         {
             Gizmos.DrawWireSphere(attackInfo2.hitBoxPosition.position, attackInfo2.radius);
         }
+        
+        Gizmos.DrawWireSphere(attackUp.hitBoxPosition.position, attackUp.radius);
+        Gizmos.DrawWireSphere(attackDown.hitBoxPosition.position, attackDown.radius);
+
+    }
+
+
+    private IEnumerator ShowSwipe(SwipeDirection index)
+    {
+        SpriteRenderer swipe = upSwipe;
+        if (index != SwipeDirection.Up)
+        {
+            switch (index)
+            {
+                case SwipeDirection.Down:
+                    swipe = downSwipe;
+                    break;
+                case SwipeDirection.Left:
+                    swipe = leftSwipe;
+                    break;
+                case SwipeDirection.Right:
+                    swipe = rightSwipe;
+                    break;
+                default:
+                    Debug.LogError("No such index");
+                    break;
+            }
+        }
+        
+        swipe.enabled = true;
+        
+        yield return new WaitForSeconds(swipeShowTime);
+
+        swipe.enabled = false;
     }
 }

@@ -28,7 +28,7 @@ public class PlayerControllerCombatScene : MonoBehaviour
     private float _velocityX = 0f;
     private bool _isMoveInput = false;
     private bool _isJumpInput = false;
-    private bool _isGrounded = false;
+    [SerializeField] private bool isGrounded = false;
     private float _wallGrabTimer = 0f;
     private bool _isWallGrabbing = false;
     [SerializeField] private float wallGrabTimeLimit = 0.25f;
@@ -44,11 +44,13 @@ public class PlayerControllerCombatScene : MonoBehaviour
     // Attack bool.
     [SerializeField] private PlayerCombat playerCombat;
     public bool isAttacking;// { private get; set; }
-    
+
     // Animation parameter IDs.
     private static readonly int SpeedID = Animator.StringToHash("speed");
     private static readonly int AttackTriggerID = Animator.StringToHash("attackTrigger");
     private static readonly int JumpTriggerID = Animator.StringToHash("jumpTrigger");
+    private static readonly int AttackUpTriggerID = Animator.StringToHash("attackUpTrigger");
+    private static readonly int AttackDownTriggerID = Animator.StringToHash("attackDownTrigger");
 
 
     #region Handle Input
@@ -97,7 +99,7 @@ public class PlayerControllerCombatScene : MonoBehaviour
 
     private void HandleJumpInput()
     {
-        if (_isGrounded && Input.GetKeyDown(KeyCode.Space))
+        if (isGrounded && Input.GetKeyDown(KeyCode.Space))
         {
             _isJumpInput = true;
         }
@@ -105,14 +107,14 @@ public class PlayerControllerCombatScene : MonoBehaviour
 
     private void CheckIfGrabbedToWall()
     {
-        if(_isGrounded)
+        if(isGrounded)
         {
             _wallGrabTimer = 0f;
         }
 
         Collider2D rightCollider = Physics2D.OverlapCircle(rightWallChecker.position, checkGroundRadius, groundLayer);
         Collider2D leftCollider = Physics2D.OverlapCircle(leftWallChecker.position, checkGroundRadius, groundLayer);
-        if(!_isGrounded)
+        if(!isGrounded)
         {
             if(leftCollider)
             {
@@ -140,24 +142,36 @@ public class PlayerControllerCombatScene : MonoBehaviour
     private void CheckIfGrounded()
     {
         Collider2D overlapCircle = Physics2D.OverlapCircle(groundChecker.position, checkGroundRadius, groundLayer);
-        _isGrounded = overlapCircle != null;
+        isGrounded = overlapCircle != null;
     }
 
     private void ReadAttackInput()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && _isJumpInput)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-            animator.SetTrigger("attackJumpTrigger");
-            isAttacking = true;
-            _isJumpInput = false;
-        }
-        
-        if (!Input.GetKeyDown(KeyCode.Mouse0)) return;
+        // if (Input.GetKeyDown(KeyCode.Mouse0) && _isJumpInput)
+        // {
+        //     rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        //     animator.SetTrigger("attackJumpTrigger");
+        //     isAttacking = true;
+        //     _isJumpInput = false;
+        // }
 
-        //playerCombat.Attack( facingDirection == FacingDirection.Left );
-        animator.SetTrigger(AttackTriggerID);
-        isAttacking = true;
+        if (!Input.GetKeyDown(KeyCode.Mouse0)) return;
+        
+        if (Input.GetKey(KeyCode.W))
+        {
+            animator.SetTrigger(AttackUpTriggerID);
+            isAttacking = true;
+        }
+        else if (!isGrounded && Input.GetKey(KeyCode.S))
+        {
+            animator.SetTrigger(AttackDownTriggerID);
+            isAttacking = true;
+        }
+        else
+        {
+            animator.SetTrigger(AttackTriggerID);
+            isAttacking = true;
+        }
     }
 
     #endregion
