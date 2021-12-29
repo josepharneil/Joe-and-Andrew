@@ -111,16 +111,8 @@ public class PlayerInputs : MonoBehaviour
         if (moveController.collisions.below || moveController.collisions.above)
         {
             velocity.y = 0;
-            if(!moveController.collisions.below && moveController.collisions.above)
-            {
-                velocity.y += gravity * Time.deltaTime;
-            }
         }
-        else
-        {
             velocity.y += gravity*Time.deltaTime;
-        }
-
     }
 
     void CheckGrounded()
