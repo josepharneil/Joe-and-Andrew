@@ -264,6 +264,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   followTransform: {fileID: 2142903476}
+  followSpeed: 10
+  cameraShakeDuration: 0.2
+  cameraShakeAmount: 0.2
 --- !u!1 &1823624214
 GameObject:
   m_ObjectHideFlags: 0
@@ -2131,13 +2134,11 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   changeDirectionRate: 0.877
-  airChangeDirectionRate: 0.118
+  airChangeDirectionRate: 0.736
   coyoteTime: 0
-  jumpCalledTime: 0
-  lastGroundedTime: 0
-  _isGrounded: 0
-  lerpCurrent: 0.005696554
-  _moveState: 0
+  rollDistance: 10
+  rollDuration: 0.5
+  rollTimer: 0
 --- !u!114 &2142903473
 MonoBehaviour:
   m_ObjectHideFlags: 0

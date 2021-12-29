@@ -21,26 +21,27 @@ public class PlayerInputs : MonoBehaviour
     [SerializeField] [Range(0f, 1f)] private float changeDirectionRate;
     [SerializeField] [Range(0f, 1f)] private float airChangeDirectionRate;
     [SerializeField] private float coyoteTime;
+    [SerializeField] private float rollDistance;
+    [SerializeField] private float rollDuration;
 
-    [SerializeField] private float jumpCalledTime;
-    [SerializeField] private float lastGroundedTime;
+    private float jumpCalledTime;
+    private float lastGroundedTime;
     //gravity and jumpVelocity are calculated based on the jump height and time
     private float gravity;
     private float jumpVelocity;
+    private float rollDirection;
+   [SerializeField]  private float rollTimer =0f;
 
     private bool _isMoveInput;
     private bool _isJumpInput;
-    [SerializeField] private bool _isGrounded;
+    private bool _isGrounded;
+    private bool _isRollInput;
     private FacingDirection _facingDirection;
-    
-
+    private float lerpCurrent = 0f;
+    MoveState _moveState;
+    RollState _rollState;
     Vector3 velocity;
     Vector2 input;
-
-    [Header("Debug")]
-    [SerializeField] private float lerpCurrent=0f;
-    [SerializeField] MoveState _moveState;
-
     MoveController moveController;
 
     enum FacingDirection
@@ -55,7 +56,16 @@ public class PlayerInputs : MonoBehaviour
         Accelerating,
         Running,
         Decelerating,
-        ChangingDirection
+        ChangingDirection,
+        Rolling
+    }
+
+    enum RollState
+    {
+        StartRoll,
+        Rolling,
+        EndRoll,
+        NotRolling
     }
 
     // Start is called before the first frame update
@@ -65,13 +75,14 @@ public class PlayerInputs : MonoBehaviour
         jumpVelocity = timeToJumpHeight * Mathf.Abs(gravity);
         moveController = gameObject.GetComponent<MoveController>();
         _moveState = MoveState.Stopped;
+        _rollState = RollState.NotRolling;
     }
 
     // Update is called once per frame
     void Update()
     {
         input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        
+        HandleRollInput();
         HandleMoveInput();
         HandleJumpInput();
         SetHorizontalMove();
@@ -98,7 +109,6 @@ public class PlayerInputs : MonoBehaviour
 
     void Jump()
     {
-        //todo re add(jumpCalledTime-lastGroundedTime<coyoteTime)
         if (_isJumpInput && (_isGrounded || (jumpCalledTime - lastGroundedTime < coyoteTime)))
         {
             velocity.y = jumpVelocity;
@@ -155,6 +165,25 @@ public class PlayerInputs : MonoBehaviour
 
     void SetHorizontalMove()
     {
+        if (_isRollInput)
+        {
+            StartRoll();
+        }
+        if (_rollState != RollState.NotRolling)
+        {
+            switch (_rollState)
+            {
+                case RollState.Rolling:
+                    Roll();
+                    break;
+                case RollState.EndRoll:
+                    StopRoll();
+                    break;
+                case RollState.StartRoll:
+                    break;
+            }
+            return;
+        }
         if (_isMoveInput)
         {
             if (Mathf.Sign(velocity.x) != input.x && velocity.x!=0)
@@ -250,6 +279,49 @@ public class PlayerInputs : MonoBehaviour
         {
             _moveState = MoveState.Running;
         }
+    }
+
+    void HandleRollInput()
+    {
+        if(Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            _isRollInput = true;
+        }
+        else
+        {
+            _isRollInput = false;
+        }
+    }
+
+    void StartRoll()
+    {
+        if (_isGrounded)
+        {
+            _moveState = MoveState.Rolling;
+            rollTimer = 0f;
+            _rollState = RollState.Rolling;
+            rollDirection = (float)_facingDirection;
+        }
+    }
+
+    void Roll()
+    {
+        if (rollTimer <= rollDuration)
+        {
+            velocity.x = rollDistance * (int)rollDirection / rollDuration;
+            rollTimer += Time.deltaTime;
+        }
+        else
+        {
+            _rollState = RollState.EndRoll;
+        }
+    }
+
+    void StopRoll()
+    {
+        _moveState = MoveState.Stopped;
+        velocity.x = 0f;
+        _rollState = RollState.NotRolling;
     }
     #endregion
 
