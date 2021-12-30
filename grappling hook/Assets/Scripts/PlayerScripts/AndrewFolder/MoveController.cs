@@ -28,6 +28,7 @@ public class MoveController : MonoBehaviour
 
     public struct CollisionInfo
     {
+        //stoers the collision info, this gets updated each time we call move
         public bool above, below;
         public bool left, right;
         public void ResetAll()
@@ -52,11 +53,10 @@ public class MoveController : MonoBehaviour
         CalculateRaySpacing();
         wasGrounded = true;
 
-        //used for getting corners of box collider
 
     }
 
-
+    //gets the positions of bounds of the rays, which is used for each move
     void UpdateRaycastOrigins()
     {
         Bounds bounds = playerCollider.bounds;
@@ -71,60 +71,69 @@ public class MoveController : MonoBehaviour
 
     void CalculateRaySpacing()
     {
+        //claculates the spacing of the rays, based on how many rays were set at the start
         Bounds bounds = playerCollider.bounds;
         //fires the raycasts from a bit inside the collider
         bounds.Expand(skinWidth * -2);
         //limits the minimum number of rays to 2
         horizontalRayCount = Mathf.Clamp(horizontalRayCount, 2, int.MaxValue);
         verticalRayCount = Mathf.Clamp(verticalRayCount, 2, int.MaxValue);
-
+        //calculates the ray spacing
         horizontalRaySpacing = bounds.size.y / (horizontalRayCount - 1);
         verticalRaySpacing = bounds.size.x / (verticalRayCount - 1);
     }
 
-    void VerticalCollisions(ref Vector3 velocity)
+    void VerticalCollisions(ref Vector3 displacement)
     {
-        //gets the direction and values of the y velocity
-        float directionY = Mathf.Sign(velocity.y);
-        float rayLength = Mathf.Abs(velocity.y) +skinWidth;
+        //gets the direction and values of the y displacement
+        float directionY = Mathf.Sign(displacement.y);
+        float rayLength = Mathf.Abs(displacement.y) +skinWidth;
         for (int i = 0; i < verticalRayCount; i++)
         {
             Vector2 rayOrigin = (directionY == -1) ? raycastOrigins.bottomLeft : raycastOrigins.topLeft;
-            rayOrigin += Vector2.right * (verticalRaySpacing * i + velocity.x);
-            //adding the velocity x means that the ray is cast from the point where the object will be once it has moved
+            rayOrigin += Vector2.right * (verticalRaySpacing * i + displacement.x);
+            //adding the displacement x means that the ray is cast from the point where the object will be after the x displacement
+            //do this because we call the y displacement after x
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up * directionY, rayLength, collisionMask);
             Debug.DrawRay(rayOrigin,Vector2.up*directionY*rayLength, Color.red);
 
             if (hit)
             {
-                velocity.y = (hit.distance - skinWidth) * directionY;
+                //same as horizontal collisions, this sets the amount of displacement to be the max
+                //that we can get to without a collision
+                displacement.y = (hit.distance - skinWidth) * directionY;
                 //this stops the rays from hitting something that is further away than the closest collision
                 rayLength = hit.distance;
-
+                //checks whether the collision is above or below (or both)
                 collisions.above = directionY == 1;
                 collisions.below = directionY == -1;
             }
         }
     }
 
-    void HorizontalCollisions(ref Vector3 velocity)
+    void HorizontalCollisions(ref Vector3 displacement)
     {
-        //gets the direction and values of the y velocity
-        float directionX = Mathf.Sign(velocity.x);
-        float rayLength = Mathf.Abs(velocity.x) + skinWidth;
-
+        //gets the direction and values of the x displacement, this is effectively the move direction
+        float directionX = Mathf.Sign(displacement.x);
+        //ensures the ray length is fired properly with the skin width
+        float rayLength = Mathf.Abs(displacement.x) + skinWidth;
+        //fires each of the rays
         for (int i = 0; i < horizontalRayCount; i++)
         {
+            //checks which way the ray should be fired, based on the displacement direction
             Vector2 rayOrigin = (directionX == -1) ? raycastOrigins.bottomLeft : raycastOrigins.bottomRight;
+            //moves the ray origin along for each ray
             rayOrigin += Vector2.up * (horizontalRaySpacing * i);
-            //adding the velocity x means that the ray is cast from the point where the object will be once it has moved
+            //adding the displacement x means that the ray is cast from the point where the object will be once it has moved
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right * directionX, rayLength, collisionMask);
 
             Debug.DrawRay(rayOrigin, Vector2.right * directionX * rayLength, Color.red);
 
             if (hit)
             {
-                velocity.x = (hit.distance - skinWidth) * directionX;
+                //this is where the real collision detection and movement comes from
+                //it changes the displacement so that it will only be as far as the box can move before hitting a collider
+                displacement.x = (hit.distance - skinWidth) * directionX;
                 //this stops the rays from hitting something that is further away than the closest collision
                 rayLength = hit.distance;
                 collisions.left = directionX == -1;
@@ -134,24 +143,28 @@ public class MoveController : MonoBehaviour
     }
 
 
-    public void Move(Vector3 velocity)
+    public void Move(Vector3 displacement)
     {
+        //sets the origins for all the raycasts
         UpdateRaycastOrigins();
-        if (velocity.x != 0)
+
+        //only have the set to be a bit more efficient, but we could just call them each frame.
+        if (displacement.x != 0)
         {
             collisions.ResetAll();
-            HorizontalCollisions(ref velocity);
+            HorizontalCollisions(ref displacement);
         }
-        if (velocity.y != 0)
+        if (displacement.y != 0)
         {
             collisions.ResetAll();
-            VerticalCollisions(ref velocity);
+            VerticalCollisions(ref displacement);
         }
-        transform.Translate(velocity);
+        transform.Translate(displacement);
     }
 
     public bool CheckGrounded()
     {
+        //works the same as the other two
         UpdateRaycastOrigins();
         float rayLength = skinWidth+0.01f;
         bool grounded = false;

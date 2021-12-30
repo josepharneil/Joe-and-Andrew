@@ -2135,9 +2135,9 @@ MonoBehaviour:
     m_RotationOrder: 4
   changeDirectionRate: 0.877
   airChangeDirectionRate: 0.736
-  coyoteTime: 0
-  rollDistance: 10
-  rollDuration: 0.5
+  coyoteTime: 0.5
+  rollDistance: 5
+  rollDuration: 0.25
   rollTimer: 0
 --- !u!114 &2142903473
 MonoBehaviour:
@@ -2155,7 +2155,7 @@ MonoBehaviour:
   verticalRayCount: 4
   collisionMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 576
 --- !u!61 &2142903474
 BoxCollider2D:
   m_ObjectHideFlags: 0

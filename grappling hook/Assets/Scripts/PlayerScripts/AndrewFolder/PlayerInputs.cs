@@ -90,6 +90,9 @@ public class PlayerInputs : MonoBehaviour
         ApplyGravity();
         Jump();
         moveController.Move(velocity * Time.deltaTime);
+        //move works by taking in a displacement, firing raycasts in the directions of the displacement
+        //then if the raycasts collide with anything the displacement is altered to be the distance from the player edge to the collider
+        //then at the end of controller it uses transform.translate(displacement) with the edited displacement 
     }
 
     #region Jump Movement
@@ -118,6 +121,9 @@ public class PlayerInputs : MonoBehaviour
 
     void ApplyGravity()
     {
+        //this makes sure that the gravity is always properly applied
+        //if its in an else of this if it really fucks up the jumping
+
         if (moveController.collisions.below || moveController.collisions.above)
         {
             velocity.y = 0;
@@ -238,12 +244,16 @@ public class PlayerInputs : MonoBehaviour
 
     void StartDirectionChange()
     {
+        //resets the lerp to 0 each time we change direction
         lerpCurrent = 0f;
         _moveState = MoveState.ChangingDirection;
     }
 
     void Accelerate()
     {
+        //uses a lerp which is then used to evaluate along an animation curve for the acceleration
+        //once we get to the max speed change to running
+        //checks if there is a collision below the player, and if so use the air timers
         float rate = (moveController.collisions.below ? accelerationRate : airAccelerationRate);
         lerpCurrent = Mathf.Lerp(lerpCurrent, 1f, rate * Time.deltaTime);
         velocity.x = Mathf.Lerp(velocity.x, moveSpeed * input.x, accelerationCurve.Evaluate(lerpCurrent));
@@ -260,6 +270,9 @@ public class PlayerInputs : MonoBehaviour
 
     void Decelerate()
     {
+        //same lerp method as accelerate
+        //this time changes to stopped after getting low enough 
+        //(I tried doing if(speed==0) but that was glitchy af
         float rate = moveController.collisions.below ? decelerationRate : airDecelerationRate;
         lerpCurrent = Mathf.Lerp(lerpCurrent, 1f, rate * Time.deltaTime);
         velocity.x = Mathf.Lerp(velocity.x, 0f, decelerationCurve.Evaluate(lerpCurrent));
@@ -272,6 +285,7 @@ public class PlayerInputs : MonoBehaviour
 
     void ChangeDirection()
     {
+        //same lerp method as accelerate
         float rate = moveController.collisions.below ? changeDirectionRate : airChangeDirectionRate;
         lerpCurrent = Mathf.Lerp(lerpCurrent, 1f, rate * Time.deltaTime);
         velocity.x = Mathf.Lerp(velocity.x, moveSpeed*input.x ,changeDirectionCurve.Evaluate(lerpCurrent));
@@ -295,6 +309,9 @@ public class PlayerInputs : MonoBehaviour
 
     void StartRoll()
     {
+        //starts the roll timer and does the enums, could be state machine for animation purposes?
+        //roll ovverides other movement
+        //can only do while grounded for now, but we could change this later on 
         if (_isGrounded)
         {
             _moveState = MoveState.Rolling;
@@ -306,6 +323,7 @@ public class PlayerInputs : MonoBehaviour
 
     void Roll()
     {
+        //keeps rolling while the timer is on
         if (rollTimer <= rollDuration)
         {
             velocity.x = rollDistance * (int)rollDirection / rollDuration;
@@ -317,8 +335,10 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
+    //TODO: Make roll stopping feel better
     void StopRoll()
     {
+        //stops the player dead, this doesn't feel great tho going to have another look once the enemy AI is done
         _moveState = MoveState.Stopped;
         velocity.x = 0f;
         _rollState = RollState.NotRolling;
