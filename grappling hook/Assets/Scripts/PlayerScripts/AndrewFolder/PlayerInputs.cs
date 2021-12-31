@@ -1,18 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 //thieved shamelessly from https://www.youtube.com/watch?v=MbWK8bCAU2w&list=PLFt_AvWsXl0f0hqURlhyIoAabKPgRsqjz&index=1
 
-[RequireComponent(typeof( MoveController))]
+[RequireComponent(typeof(MoveController))]
 public class PlayerInputs : MonoBehaviour
 {
+    [Header("Components")]
+    [SerializeField] private MoveController moveController;
+
     [Header("Move Stats")]
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float jumpHeight = 3f;
     [SerializeField] private float timeToJumpHeight = 0.4f;
     [SerializeField] private AnimationCurve accelerationCurve;
-    [SerializeField] [Range(0f,1f)] private float accelerationRate;
+    [SerializeField] [Range(0f, 1f)] private float accelerationRate;
     [SerializeField] [Range(0f, 1f)] private float airAccelerationRate;
     [SerializeField] private AnimationCurve decelerationCurve;
     [SerializeField] [Range(0f, 1f)] private float decelerationRate;
@@ -24,33 +26,32 @@ public class PlayerInputs : MonoBehaviour
     [SerializeField] private float rollDistance;
     [SerializeField] private float rollDuration;
 
-    private float jumpCalledTime;
-    private float lastGroundedTime;
+    private float _jumpCalledTime;
+    private float _lastGroundedTime;
     //gravity and jumpVelocity are calculated based on the jump height and time
-    private float gravity;
-    private float jumpVelocity;
-    private float rollDirection;
-   [SerializeField]  private float rollTimer =0f;
+    private float _gravity;
+    private float _jumpVelocity;
+    private float _rollDirection;
+    [SerializeField] private float rollTimer =0f;
 
     private bool _isMoveInput;
     private bool _isJumpInput;
     private bool _isGrounded;
     private bool _isRollInput;
     private FacingDirection _facingDirection;
-    private float lerpCurrent = 0f;
-    MoveState _moveState;
-    RollState _rollState;
-    Vector3 velocity;
-    Vector2 input;
-    MoveController moveController;
+    private float _lerpCurrent = 0f;
+    private MoveState _moveState;
+    private RollState _rollState;
+    private Vector3 _velocity;
+    private Vector2 _input;
 
-    enum FacingDirection
+    private enum FacingDirection
     {
         Left = -1,
         Right = 1
     }
 
-    enum MoveState
+    private enum MoveState
     {
         Stopped,
         Accelerating,
@@ -60,7 +61,7 @@ public class PlayerInputs : MonoBehaviour
         Rolling
     }
 
-    enum RollState
+    private enum RollState
     {
         StartRoll,
         Rolling,
@@ -69,19 +70,18 @@ public class PlayerInputs : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        gravity = -2 * jumpHeight * Mathf.Pow(timeToJumpHeight, -2);
-        jumpVelocity = timeToJumpHeight * Mathf.Abs(gravity);
-        moveController = gameObject.GetComponent<MoveController>();
+        _gravity = -2 * jumpHeight * Mathf.Pow(timeToJumpHeight, -2);
+        _jumpVelocity = timeToJumpHeight * Mathf.Abs(_gravity);
         _moveState = MoveState.Stopped;
         _rollState = RollState.NotRolling;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        _input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         HandleRollInput();
         HandleMoveInput();
         HandleJumpInput();
@@ -89,7 +89,7 @@ public class PlayerInputs : MonoBehaviour
         CheckGrounded();
         ApplyGravity();
         Jump();
-        moveController.Move(velocity * Time.deltaTime);
+        moveController.Move(_velocity * Time.deltaTime);
         //move works by taking in a displacement, firing raycasts in the directions of the displacement
         //then if the raycasts collide with anything the displacement is altered to be the distance from the player edge to the collider
         //then at the end of controller it uses transform.translate(displacement) with the edited displacement 
@@ -97,7 +97,7 @@ public class PlayerInputs : MonoBehaviour
 
     #region Jump Movement
 
-    void HandleJumpInput()
+    private void HandleJumpInput()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -110,34 +110,34 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
-    void Jump()
+    private void Jump()
     {
-        if (_isJumpInput && (_isGrounded || (jumpCalledTime - lastGroundedTime < coyoteTime)))
+        if (_isJumpInput && (_isGrounded || (_jumpCalledTime - _lastGroundedTime < coyoteTime)))
         {
-            velocity.y = jumpVelocity;
-            jumpCalledTime = float.MaxValue;
+            _velocity.y = _jumpVelocity;
+            _jumpCalledTime = float.MaxValue;
         }
     }
 
-    void ApplyGravity()
+    private void ApplyGravity()
     {
         //this makes sure that the gravity is always properly applied
         //if its in an else of this if it really fucks up the jumping
 
-        if (moveController.collisions.below || moveController.collisions.above)
+        if (moveController.Collisions.Below || moveController.Collisions.Above)
         {
-            velocity.y = 0;
+            _velocity.y = 0;
         }
-            velocity.y += gravity*Time.deltaTime;
+        _velocity.y += _gravity * Time.deltaTime;
     }
 
-    void CheckGrounded()
+    private void CheckGrounded()
     {
         if(moveController.CheckGrounded())
         {
             _isGrounded = true;
-            lastGroundedTime = Time.time;
-            jumpCalledTime = 0f;
+            _lastGroundedTime = Time.time;
+            _jumpCalledTime = 0f;
         }
         else
         {
@@ -145,23 +145,23 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
-    void StartCoyoteTime()
+    private void StartCoyoteTime()
     {
-        if (_isJumpInput&&jumpCalledTime!=float.MaxValue)
+        if (_isJumpInput && _jumpCalledTime != float.MaxValue )
         {
-            jumpCalledTime = Time.time;
+            _jumpCalledTime = Time.time;
         }
     }
 
     #endregion
 
     #region Horizontal Movement
-    void HandleMoveInput()
+    private void HandleMoveInput()
     {
-        if (input.x != 0)
+        if (_input.x != 0)
         {
             _isMoveInput = true;
-            _facingDirection = input.x < 0 ? FacingDirection.Left : FacingDirection.Right;
+            _facingDirection = _input.x < 0 ? FacingDirection.Left : FacingDirection.Right;
         }
         else
         {
@@ -169,8 +169,9 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
-    void SetHorizontalMove()
+    private void SetHorizontalMove()
     {
+        // Rolling
         if (_isRollInput)
         {
             StartRoll();
@@ -190,9 +191,11 @@ public class PlayerInputs : MonoBehaviour
             }
             return;
         }
+        
+        // Moving
         if (_isMoveInput)
         {
-            if (Mathf.Sign(velocity.x) != input.x && velocity.x!=0)
+            if ((int)Mathf.Sign(_velocity.x) != (int)_input.x && _velocity.x != 0)
             {
                 StartDirectionChange();
             }
@@ -200,6 +203,7 @@ public class PlayerInputs : MonoBehaviour
             {
                 case MoveState.Stopped:
                     //begins the movement, calls sets to accelerating
+                    //todo Joe here, is this correct? Start moving in the stopped state?
                     StartMoving();
                     break;
                 case MoveState.Accelerating:
@@ -230,74 +234,82 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
-    void StartMoving()
+    private void StartMoving()
     {
-        lerpCurrent = 0f;
+        _lerpCurrent = 0f;
         _moveState = MoveState.Accelerating;
     }
 
-    void StopMoving()
+    private void StopMoving()
     {
-        lerpCurrent = 0f;
+        _lerpCurrent = 0f;
         _moveState = MoveState.Decelerating;
     }
 
-    void StartDirectionChange()
+    private void StartDirectionChange()
     {
         //resets the lerp to 0 each time we change direction
-        lerpCurrent = 0f;
+        _lerpCurrent = 0f;
         _moveState = MoveState.ChangingDirection;
     }
 
-    void Accelerate()
+    private void Accelerate()
     {
         //uses a lerp which is then used to evaluate along an animation curve for the acceleration
         //once we get to the max speed change to running
         //checks if there is a collision below the player, and if so use the air timers
-        float rate = (moveController.collisions.below ? accelerationRate : airAccelerationRate);
-        lerpCurrent = Mathf.Lerp(lerpCurrent, 1f, rate * Time.deltaTime);
-        velocity.x = Mathf.Lerp(velocity.x, moveSpeed * input.x, accelerationCurve.Evaluate(lerpCurrent));
-        if (Mathf.Abs(velocity.x)*input.x >= input.x * moveSpeed)
+        float rate = (moveController.Collisions.Below ? accelerationRate : airAccelerationRate);
+        _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
+        _velocity.x = Mathf.Lerp(_velocity.x, moveSpeed * _input.x, accelerationCurve.Evaluate(_lerpCurrent));
+        if (Mathf.Abs(_velocity.x) * _input.x >= _input.x * moveSpeed)
         {
             _moveState = MoveState.Running;
         }
     }
 
-    void Run()
+    private void Run()
     {
-        velocity.x = input.x * moveSpeed;
+        _velocity.x = _input.x * moveSpeed;
     }
 
-    void Decelerate()
+    private void Decelerate()
     {
         //same lerp method as accelerate
         //this time changes to stopped after getting low enough 
         //(I tried doing if(speed==0) but that was glitchy af
-        float rate = moveController.collisions.below ? decelerationRate : airDecelerationRate;
-        lerpCurrent = Mathf.Lerp(lerpCurrent, 1f, rate * Time.deltaTime);
-        velocity.x = Mathf.Lerp(velocity.x, 0f, decelerationCurve.Evaluate(lerpCurrent));
-        if (Mathf.Abs(velocity.x) <=0.5f)
+        float rate = moveController.Collisions.Below ? decelerationRate : airDecelerationRate;
+        _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
+        _velocity.x = Mathf.Lerp(_velocity.x, 0f, decelerationCurve.Evaluate(_lerpCurrent));
+        if (Mathf.Abs(_velocity.x) <= 0.5f)
         {
-            velocity.x = 0f;
+            _velocity.x = 0f;
             _moveState = MoveState.Stopped;
         }
     }
 
-    void ChangeDirection()
+    private void ChangeDirection()
     {
         //same lerp method as accelerate
-        float rate = moveController.collisions.below ? changeDirectionRate : airChangeDirectionRate;
-        lerpCurrent = Mathf.Lerp(lerpCurrent, 1f, rate * Time.deltaTime);
-        velocity.x = Mathf.Lerp(velocity.x, moveSpeed*input.x ,changeDirectionCurve.Evaluate(lerpCurrent));
-        if (Mathf.Abs(velocity.x)*input.x == input.x * moveSpeed)
+        float rate = moveController.Collisions.Below ? changeDirectionRate : airChangeDirectionRate;
+        _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
+        _velocity.x = Mathf.Lerp(_velocity.x, moveSpeed * _input.x, changeDirectionCurve.Evaluate(_lerpCurrent));
+        
+        // TODO You need to be careful with floating point comparisons, eg:
+        // 0.000001 == 0.000000 is false, but we might want them to be equal.
+        // I'm not sure what the goal of the this bit of code is so I'm leaving for now.
+        // But should prob be of the form:
+        // if(Math.Abs(Mathf.Abs(_velocity.x) - moveSpeed) < TOLERANCE)
+        // Where TOLERANCE is some constant small value.
+        // You might want to set velocity.x = moveSpeed if this is true?
+        if (Mathf.Abs(_velocity.x) == moveSpeed)
         {
             _moveState = MoveState.Running;
         }
     }
 
-    void HandleRollInput()
+    private void HandleRollInput()
     {
-        if(Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             _isRollInput = true;
         }
@@ -307,26 +319,26 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
-    void StartRoll()
+    private void StartRoll()
     {
         //starts the roll timer and does the enums, could be state machine for animation purposes?
-        //roll ovverides other movement
+        //roll overrides other movement
         //can only do while grounded for now, but we could change this later on 
         if (_isGrounded)
         {
             _moveState = MoveState.Rolling;
             rollTimer = 0f;
             _rollState = RollState.Rolling;
-            rollDirection = (float)_facingDirection;
+            _rollDirection = (float)_facingDirection;
         }
     }
 
-    void Roll()
+    private void Roll()
     {
         //keeps rolling while the timer is on
         if (rollTimer <= rollDuration)
         {
-            velocity.x = rollDistance * (int)rollDirection / rollDuration;
+            _velocity.x = rollDistance * (int)_rollDirection / rollDuration;
             rollTimer += Time.deltaTime;
         }
         else
@@ -336,11 +348,11 @@ public class PlayerInputs : MonoBehaviour
     }
 
     //TODO: Make roll stopping feel better
-    void StopRoll()
+    private void StopRoll()
     {
         //stops the player dead, this doesn't feel great tho going to have another look once the enemy AI is done
         _moveState = MoveState.Stopped;
-        velocity.x = 0f;
+        _velocity.x = 0f;
         _rollState = RollState.NotRolling;
     }
     #endregion

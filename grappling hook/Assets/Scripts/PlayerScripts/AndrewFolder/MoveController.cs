@@ -6,54 +6,57 @@ using UnityEditor;
 [RequireComponent(typeof(BoxCollider2D))]
 public class MoveController : MonoBehaviour
 {
+    [Header("Components")]
+    [SerializeField] private BoxCollider2D playerCollider;
+    
     [Header("Ray Setup")]
-    [SerializeField] const float skinWidth = 0.15f;
     [SerializeField] private int horizontalRayCount = 4;
     [SerializeField] private int verticalRayCount = 4;
     [SerializeField] private LayerMask collisionMask;
+    
+    private const float SkinWidth = 0.15f;
 
-    float horizontalRaySpacing;
-    float verticalRaySpacing;
+    private float _horizontalRaySpacing;
+    private float _verticalRaySpacing;
 
-    BoxCollider2D playerCollider;
-    RayCastOrigins raycastOrigins;
-    public CollisionInfo collisions;
-    bool wasGrounded;
+    private RayCastOrigins _raycastOrigins;
+    public CollisionInfo Collisions;
 
-    struct RayCastOrigins
+    // ===================================================================
+    // Raycast Origins
+    // ===================================================================
+    private struct RayCastOrigins
     {
-        public Vector2 topLeft, topRight;
-        public Vector2 bottomLeft, bottomRight;
+        public Vector2 TopLeft, TopRight;
+        public Vector2 BottomLeft, BottomRight;
     }
 
+    // ===================================================================
+    // Stores the collision info, this gets updated each time we call move
+    // ===================================================================
     public struct CollisionInfo
     {
-        //stoers the collision info, this gets updated each time we call move
-        public bool above, below;
-        public bool left, right;
+        public bool Above, Below;
+        public bool Left, Right;
         public void ResetAll()
         {
-            above = below = false;
-            left = right = false;
+            Above = Below = false;
+            Left = Right = false;
         }
         public void ResetHorizontal()
         {
-            left = right = false;
+            Left = Right = false;
         }
 
         public void ResetVertical()
         {
-            above = below = false;
+            Above = Below = false;
         }
     }
 
     private void Start()
     {
-        playerCollider = gameObject.GetComponent<BoxCollider2D>();
         CalculateRaySpacing();
-        wasGrounded = true;
-
-
     }
 
     //gets the positions of bounds of the rays, which is used for each move
@@ -61,69 +64,69 @@ public class MoveController : MonoBehaviour
     {
         Bounds bounds = playerCollider.bounds;
         //fires the raycasts from a bit inside the collider
-        bounds.Expand(skinWidth * -2);
-        raycastOrigins.bottomLeft = new Vector2(bounds.min.x, bounds.min.y);
-        raycastOrigins.topLeft = new Vector2(bounds.min.x, bounds.max.y);
-        raycastOrigins.bottomRight = new Vector2(bounds.max.x, bounds.min.y);
-        raycastOrigins.topRight = new Vector2(bounds.max.x, bounds.max.y);
+        bounds.Expand(SkinWidth * -2);
+        _raycastOrigins.BottomLeft = new Vector2(bounds.min.x, bounds.min.y);
+        _raycastOrigins.TopLeft = new Vector2(bounds.min.x, bounds.max.y);
+        _raycastOrigins.BottomRight = new Vector2(bounds.max.x, bounds.min.y);
+        _raycastOrigins.TopRight = new Vector2(bounds.max.x, bounds.max.y);
 
     }
 
-    void CalculateRaySpacing()
+    private void CalculateRaySpacing()
     {
-        //claculates the spacing of the rays, based on how many rays were set at the start
+        // calculates the spacing of the rays, based on how many rays were set at the start
         Bounds bounds = playerCollider.bounds;
         //fires the raycasts from a bit inside the collider
-        bounds.Expand(skinWidth * -2);
+        bounds.Expand(SkinWidth * -2);
         //limits the minimum number of rays to 2
         horizontalRayCount = Mathf.Clamp(horizontalRayCount, 2, int.MaxValue);
         verticalRayCount = Mathf.Clamp(verticalRayCount, 2, int.MaxValue);
         //calculates the ray spacing
-        horizontalRaySpacing = bounds.size.y / (horizontalRayCount - 1);
-        verticalRaySpacing = bounds.size.x / (verticalRayCount - 1);
+        _horizontalRaySpacing = bounds.size.y / (horizontalRayCount - 1);
+        _verticalRaySpacing = bounds.size.x / (verticalRayCount - 1);
     }
 
-    void VerticalCollisions(ref Vector3 displacement)
+    private void VerticalCollisions(ref Vector3 displacement)
     {
         //gets the direction and values of the y displacement
-        float directionY = Mathf.Sign(displacement.y);
-        float rayLength = Mathf.Abs(displacement.y) +skinWidth;
-        for (int i = 0; i < verticalRayCount; i++)
+        int directionY = (int)Mathf.Sign(displacement.y);
+        float rayLength = Mathf.Abs(displacement.y) +SkinWidth;
+        for (int rayIndex = 0; rayIndex < verticalRayCount; rayIndex++)
         {
-            Vector2 rayOrigin = (directionY == -1) ? raycastOrigins.bottomLeft : raycastOrigins.topLeft;
-            rayOrigin += Vector2.right * (verticalRaySpacing * i + displacement.x);
+            Vector2 rayOrigin = (directionY == -1) ? _raycastOrigins.BottomLeft : _raycastOrigins.TopLeft;
+            rayOrigin += Vector2.right * (_verticalRaySpacing * rayIndex + displacement.x);
             //adding the displacement x means that the ray is cast from the point where the object will be after the x displacement
             //do this because we call the y displacement after x
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up * directionY, rayLength, collisionMask);
-            Debug.DrawRay(rayOrigin,Vector2.up*directionY*rayLength, Color.red);
+            Debug.DrawRay(rayOrigin,Vector2.up * (directionY * rayLength), Color.red);
 
             if (hit)
             {
                 //same as horizontal collisions, this sets the amount of displacement to be the max
                 //that we can get to without a collision
-                displacement.y = (hit.distance - skinWidth) * directionY;
+                displacement.y = (hit.distance - SkinWidth) * directionY;
                 //this stops the rays from hitting something that is further away than the closest collision
                 rayLength = hit.distance;
                 //checks whether the collision is above or below (or both)
-                collisions.above = directionY == 1;
-                collisions.below = directionY == -1;
+                Collisions.Above = directionY == 1;
+                Collisions.Below = directionY == -1;
             }
         }
     }
 
-    void HorizontalCollisions(ref Vector3 displacement)
+    private void HorizontalCollisions(ref Vector3 displacement)
     {
         //gets the direction and values of the x displacement, this is effectively the move direction
-        float directionX = Mathf.Sign(displacement.x);
+        int directionX = (int)Mathf.Sign(displacement.x);
         //ensures the ray length is fired properly with the skin width
-        float rayLength = Mathf.Abs(displacement.x) + skinWidth;
+        float rayLength = Mathf.Abs(displacement.x) + SkinWidth;
         //fires each of the rays
-        for (int i = 0; i < horizontalRayCount; i++)
+        for (int rayIndex = 0; rayIndex < horizontalRayCount; rayIndex++)
         {
             //checks which way the ray should be fired, based on the displacement direction
-            Vector2 rayOrigin = (directionX == -1) ? raycastOrigins.bottomLeft : raycastOrigins.bottomRight;
+            Vector2 rayOrigin = (directionX == -1) ? _raycastOrigins.BottomLeft : _raycastOrigins.BottomRight;
             //moves the ray origin along for each ray
-            rayOrigin += Vector2.up * (horizontalRaySpacing * i);
+            rayOrigin += Vector2.up * (_horizontalRaySpacing * rayIndex);
             //adding the displacement x means that the ray is cast from the point where the object will be once it has moved
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right * directionX, rayLength, collisionMask);
 
@@ -133,11 +136,11 @@ public class MoveController : MonoBehaviour
             {
                 //this is where the real collision detection and movement comes from
                 //it changes the displacement so that it will only be as far as the box can move before hitting a collider
-                displacement.x = (hit.distance - skinWidth) * directionX;
+                displacement.x = (hit.distance - SkinWidth) * directionX;
                 //this stops the rays from hitting something that is further away than the closest collision
                 rayLength = hit.distance;
-                collisions.left = directionX == -1;
-                collisions.right = directionX == 1;
+                Collisions.Left = directionX == -1;
+                Collisions.Right = directionX == 1;
             }
         }
     }
@@ -151,12 +154,12 @@ public class MoveController : MonoBehaviour
         //only have the set to be a bit more efficient, but we could just call them each frame.
         if (displacement.x != 0)
         {
-            collisions.ResetAll();
+            Collisions.ResetAll();
             HorizontalCollisions(ref displacement);
         }
         if (displacement.y != 0)
         {
-            collisions.ResetAll();
+            Collisions.ResetAll();
             VerticalCollisions(ref displacement);
         }
         transform.Translate(displacement);
@@ -166,12 +169,12 @@ public class MoveController : MonoBehaviour
     {
         //works the same as the other two
         UpdateRaycastOrigins();
-        float rayLength = skinWidth+0.01f;
+        const float rayLength = SkinWidth + 0.01f;
         bool grounded = false;
-        for (int i = 0; i < verticalRayCount; i++)
+        for (int rayIndex = 0; rayIndex < verticalRayCount; rayIndex++)
         {
-            Vector2 rayOrigin =raycastOrigins.bottomLeft;
-            rayOrigin += Vector2.right * (verticalRaySpacing * i);
+            Vector2 rayOrigin =_raycastOrigins.BottomLeft;
+            rayOrigin += Vector2.right * (_verticalRaySpacing * rayIndex);
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.down , rayLength, collisionMask);
             Debug.DrawRay(rayOrigin, Vector2.down * rayLength, Color.red);
 
