@@ -5793,9 +5793,15 @@ MonoBehaviour:
   rollDuration: 0.25
   rollTimer: 0
   facingDirection: 0
+  debugUseAnimations: 1
   animator: {fileID: 1467600180}
   spriteRenderer: {fileID: 582754437}
+  defaultSquareSprite: {fileID: 0}
   isAttacking: 0
+  prototypeAttackCustomisation:
+    movementDisabledByAttacks: 0
+    attackSpeedStyle: 1
+    cancellables: 0
 --- !u!114 &1467600176
 MonoBehaviour:
   m_ObjectHideFlags: 0

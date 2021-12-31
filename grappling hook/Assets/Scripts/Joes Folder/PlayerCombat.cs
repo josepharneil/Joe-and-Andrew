@@ -8,10 +8,9 @@ public class PlayerCombat : MonoBehaviour
 {
     [Header("Setup")]
     [SerializeField] private LayerMask whatIsDamageable;
-    [SerializeField] private PlayerInputs inputs; //bad circular reference
-
-    [Serializable]
-    private struct AttackInfo
+    [SerializeField] private PlayerInputs inputs;
+    
+    [Serializable] private struct AttackInfo
     {
         public Transform hitBoxPosition;
         public int damage;
@@ -39,7 +38,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float shakeAmplitude = 3f;
     [SerializeField] private float shakeFrequency = 1f;
     [SerializeField] private float shakeDuration = 0.1f;
-    
+
     private void OnEnable()
     {
         upSwipe.enabled = false;
@@ -136,7 +135,6 @@ public class PlayerCombat : MonoBehaviour
         if (sandbagHit)
         {
             cinemachineShake.ShakeCamera(shakeAmplitude, shakeFrequency, shakeDuration);
-            //playerCamera.Shake();
         }
     }
 
@@ -166,7 +164,6 @@ public class PlayerCombat : MonoBehaviour
         
         Gizmos.DrawWireSphere(attackUp.hitBoxPosition.position, attackUp.radius);
         Gizmos.DrawWireSphere(attackDown.hitBoxPosition.position, attackDown.radius);
-
     }
 
 
@@ -198,4 +195,13 @@ public class PlayerCombat : MonoBehaviour
 
         swipe.enabled = false;
     }
+
+    public void ForceHideSwipes()
+    {
+        downSwipe.enabled = false;
+        upSwipe.enabled = false;
+        rightSwipe.enabled = false;
+        leftSwipe.enabled = false;
+    }
 }
+

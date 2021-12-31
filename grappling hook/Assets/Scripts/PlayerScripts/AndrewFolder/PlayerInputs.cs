@@ -60,6 +60,43 @@ public class PlayerInputs : MonoBehaviour
     private static readonly int JumpTriggerID = Animator.StringToHash("jumpTrigger");
     private static readonly int AttackUpTriggerID = Animator.StringToHash("attackUpTrigger");
     private static readonly int AttackDownTriggerID = Animator.StringToHash("attackDownTrigger");
+    
+    
+    
+    // Attack speed type
+    private enum PrototypeAttackSpeedStyle
+    {
+        HollowKnight,
+        Middling,
+        DarkSouls,
+    }
+
+    // What can cancel attacks?
+    [Flags] private enum PrototypeCancellables
+    {
+        None = 0,
+        Movement = 1 << 0,
+        Roll = 1 << 1,
+        Jump = 1 << 2,
+    }
+
+    [Serializable] private struct PrototypeAttackCustomisation
+    {
+        [Tooltip("Is movement disabled by attacks?")]
+        public bool movementDisabledByAttacks;
+        
+        [Tooltip("Attack speed style")]
+        public PrototypeAttackSpeedStyle attackSpeedStyle;
+        
+        [Tooltip("What can cancel attacks?")]
+        public PrototypeCancellables cancellables;
+    }
+
+    [Header("Prototype Customisation")]
+    [SerializeField] private PrototypeAttackCustomisation prototypeAttackCustomisation;
+
+    
+    
 
     private enum MoveState
     {
@@ -96,25 +133,30 @@ public class PlayerInputs : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        // Attack
-        if (isAttacking)
+        if (debugUseAnimations)
         {
-            // TODO Not sure what to do here.
-            if (_isGrounded)
+            // Attack
+            if (isAttacking)
             {
-                //_velocity.x = 0f;
+                // Does attacking disable movement?
+                if (prototypeAttackCustomisation.movementDisabledByAttacks)
+                {
+                    // TODO Not sure what to do here.
+                    if (_isGrounded)
+                    {
+                        _velocity.x = 0f;
+                    }
+                    CheckGrounded();
+                    ApplyGravity();
+                    moveController.Move(_velocity * Time.deltaTime);
+                }
             }
-            //StartMoving();
-            HandleMoveInput();
-            SetHorizontalMove();
-            CheckGrounded();
-            ApplyGravity();
-            moveController.Move(_velocity * Time.deltaTime);
-            return;
+            else
+            {
+                ReadAttackInput();
+            }
         }
         
-        ReadAttackInput();
-
         // Movement
         _moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         HandleRollInput();
@@ -124,16 +166,54 @@ public class PlayerInputs : MonoBehaviour
         CheckGrounded();
         ApplyGravity();
         Jump();
-        
-        //move works by taking in a displacement, firing raycasts in the directions of the displacement
-        //then if the raycasts collide with anything the displacement is altered to be the distance from the player edge to the collider
-        //then at the end of controller it uses transform.translate(displacement) with the edited displacement 
-        moveController.Move(_velocity * Time.deltaTime);
-        
+
+        if (!isAttacking || (isAttacking && !prototypeAttackCustomisation.movementDisabledByAttacks))
+        {
+            //move works by taking in a displacement, firing raycasts in the directions of the displacement
+            //then if the raycasts collide with anything the displacement is altered to be the distance from the player edge to the collider
+            //then at the end of controller it uses transform.translate(displacement) with the edited displacement 
+            moveController.Move(_velocity * Time.deltaTime);
+        }
+
         // Animation
         if (debugUseAnimations)
         {
             animator.SetFloat(SpeedID, Mathf.Abs(_velocity.x));
+
+            if (isAttacking)
+            {
+                // What cancels attacks?
+                if ((prototypeAttackCustomisation.cancellables & PrototypeCancellables.Roll) != PrototypeCancellables.None)
+                {
+                    if (_isRollInput)
+                    {
+                        isAttacking = false;
+                        animator.Play("Player_Idle");
+                        // todo getting playercombat here is bad.
+                        GetComponent<PlayerCombat>().ForceHideSwipes();
+                    }
+                }
+
+                if ((prototypeAttackCustomisation.cancellables & PrototypeCancellables.Jump) != PrototypeCancellables.None) 
+                {
+                    if (_isJumpInput)
+                    {
+                        isAttacking = false;
+                        animator.Play("Player_Jump");
+                        GetComponent<PlayerCombat>().ForceHideSwipes();
+                    }
+                }
+                
+                if ((prototypeAttackCustomisation.cancellables & PrototypeCancellables.Movement) != PrototypeCancellables.None) 
+                {
+                    if (_isMoveInput)
+                    {
+                        isAttacking = false;
+                        animator.Play("Player_Idle");
+                        GetComponent<PlayerCombat>().ForceHideSwipes();
+                    }
+                }
+            }
         }
         spriteRenderer.flipX = facingDirection == FacingDirection.Left;
     }
@@ -415,6 +495,20 @@ public class PlayerInputs : MonoBehaviour
     private void ReadAttackInput()
     {
         if (!Input.GetKeyDown(KeyCode.Mouse0)) return;
+        
+        // TODO Switch which animations we're going to use.        
+        // switch (prototypeCustomisation.attackSpeedStyle)
+        // {
+        //     case PrototypeAttackSpeedStyle.Middling:
+        //         // Switch the animation we're going to use
+        //         break;
+        //     case PrototypeAttackSpeedStyle.DarkSouls:
+        //         break;
+        //     case PrototypeAttackSpeedStyle.HollowKnight:
+        //         break;
+        //     default:
+        //         throw new ArgumentOutOfRangeException();
+        // }
         
         if (Input.GetKey(KeyCode.W))
         {
