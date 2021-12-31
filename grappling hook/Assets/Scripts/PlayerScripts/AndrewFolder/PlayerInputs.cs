@@ -32,24 +32,34 @@ public class PlayerInputs : MonoBehaviour
     private float _gravity;
     private float _jumpVelocity;
     private float _rollDirection;
-    [SerializeField] private float rollTimer =0f;
+    [SerializeField] private float rollTimer = 0f;
 
     private bool _isMoveInput;
     private bool _isJumpInput;
     private bool _isGrounded;
     private bool _isRollInput;
-    private FacingDirection _facingDirection;
+    [HideInInspector] public FacingDirection facingDirection;
     private float _lerpCurrent = 0f;
     private MoveState _moveState;
     private RollState _rollState;
     private Vector3 _velocity;
-    private Vector2 _input;
+    private Vector2 _moveInput;
+    
+    // Attacks
+    [Header("Attacking")] [SerializeField] private bool debugUseAnimations = true;
+    [SerializeField] private Animator animator;
+    [SerializeField] private SpriteRenderer spriteRenderer;
 
-    private enum FacingDirection
-    {
-        Left = -1,
-        Right = 1
-    }
+    [SerializeField] private Sprite defaultSquareSprite;
+    //[SerializeField] private PlayerCombat playerCombat;
+    [HideInInspector] public bool isAttacking;
+
+    // Animation parameter IDs.
+    private static readonly int SpeedID = Animator.StringToHash("speed");
+    private static readonly int AttackTriggerID = Animator.StringToHash("attackTrigger");
+    private static readonly int JumpTriggerID = Animator.StringToHash("jumpTrigger");
+    private static readonly int AttackUpTriggerID = Animator.StringToHash("attackUpTrigger");
+    private static readonly int AttackDownTriggerID = Animator.StringToHash("attackDownTrigger");
 
     private enum MoveState
     {
@@ -72,6 +82,11 @@ public class PlayerInputs : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        if (!debugUseAnimations)
+        {
+            spriteRenderer.sprite = defaultSquareSprite;
+        }
+        
         _gravity = -2 * jumpHeight * Mathf.Pow(timeToJumpHeight, -2);
         _jumpVelocity = timeToJumpHeight * Mathf.Abs(_gravity);
         _moveState = MoveState.Stopped;
@@ -81,7 +96,27 @@ public class PlayerInputs : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        _input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        // Attack
+        if (isAttacking)
+        {
+            // TODO Not sure what to do here.
+            if (_isGrounded)
+            {
+                //_velocity.x = 0f;
+            }
+            //StartMoving();
+            HandleMoveInput();
+            SetHorizontalMove();
+            CheckGrounded();
+            ApplyGravity();
+            moveController.Move(_velocity * Time.deltaTime);
+            return;
+        }
+        
+        ReadAttackInput();
+
+        // Movement
+        _moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         HandleRollInput();
         HandleMoveInput();
         HandleJumpInput();
@@ -89,10 +124,18 @@ public class PlayerInputs : MonoBehaviour
         CheckGrounded();
         ApplyGravity();
         Jump();
-        moveController.Move(_velocity * Time.deltaTime);
+        
         //move works by taking in a displacement, firing raycasts in the directions of the displacement
         //then if the raycasts collide with anything the displacement is altered to be the distance from the player edge to the collider
         //then at the end of controller it uses transform.translate(displacement) with the edited displacement 
+        moveController.Move(_velocity * Time.deltaTime);
+        
+        // Animation
+        if (debugUseAnimations)
+        {
+            animator.SetFloat(SpeedID, Mathf.Abs(_velocity.x));
+        }
+        spriteRenderer.flipX = facingDirection == FacingDirection.Left;
     }
 
     #region Jump Movement
@@ -101,6 +144,10 @@ public class PlayerInputs : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            if (debugUseAnimations)
+            {
+                animator.SetTrigger(JumpTriggerID);
+            }
             _isJumpInput = true;
             StartCoyoteTime();
         }
@@ -158,10 +205,10 @@ public class PlayerInputs : MonoBehaviour
     #region Horizontal Movement
     private void HandleMoveInput()
     {
-        if (_input.x != 0)
+        if (_moveInput.x != 0)
         {
             _isMoveInput = true;
-            _facingDirection = _input.x < 0 ? FacingDirection.Left : FacingDirection.Right;
+            facingDirection = _moveInput.x < 0 ? FacingDirection.Left : FacingDirection.Right;
         }
         else
         {
@@ -195,7 +242,7 @@ public class PlayerInputs : MonoBehaviour
         // Moving
         if (_isMoveInput)
         {
-            if ((int)Mathf.Sign(_velocity.x) != (int)_input.x && _velocity.x != 0)
+            if ((int)Mathf.Sign(_velocity.x) != (int)_moveInput.x && _velocity.x != 0)
             {
                 StartDirectionChange();
             }
@@ -260,10 +307,10 @@ public class PlayerInputs : MonoBehaviour
         //checks if there is a collision below the player, and if so use the air timers
         float rate = (moveController.Collisions.Below ? accelerationRate : airAccelerationRate);
         _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
-        _velocity.x = Mathf.Lerp(_velocity.x, moveSpeed * _input.x, accelerationCurve.Evaluate(_lerpCurrent));
+        _velocity.x = Mathf.Lerp(_velocity.x, moveSpeed * _moveInput.x, accelerationCurve.Evaluate(_lerpCurrent));
         
         // TODO Can input.x just be deleted here? They look like they cancel to me.
-        if (Mathf.Abs(_velocity.x) * _input.x >= _input.x * moveSpeed)
+        if (Mathf.Abs(_velocity.x) * _moveInput.x >= _moveInput.x * moveSpeed)
         {
             _moveState = MoveState.Running;
         }
@@ -271,7 +318,7 @@ public class PlayerInputs : MonoBehaviour
 
     private void Run()
     {
-        _velocity.x = _input.x * moveSpeed;
+        _velocity.x = _moveInput.x * moveSpeed;
     }
 
     private void Decelerate()
@@ -294,7 +341,7 @@ public class PlayerInputs : MonoBehaviour
         //same lerp method as accelerate
         float rate = moveController.Collisions.Below ? changeDirectionRate : airChangeDirectionRate;
         _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
-        _velocity.x = Mathf.Lerp(_velocity.x, moveSpeed * _input.x, changeDirectionCurve.Evaluate(_lerpCurrent));
+        _velocity.x = Mathf.Lerp(_velocity.x, moveSpeed * _moveInput.x, changeDirectionCurve.Evaluate(_lerpCurrent));
         
         // TODO You need to be careful with floating point comparisons, eg:
         // 0.000001 == 0.000000 is false, but we might want them to be equal.
@@ -335,7 +382,7 @@ public class PlayerInputs : MonoBehaviour
             _moveState = MoveState.Rolling;
             rollTimer = 0f;
             _rollState = RollState.Rolling;
-            _rollDirection = (float)_facingDirection;
+            _rollDirection = (float)facingDirection;
         }
     }
 
@@ -363,4 +410,43 @@ public class PlayerInputs : MonoBehaviour
     }
     #endregion
 
+    #region Attacks
+
+    private void ReadAttackInput()
+    {
+        if (!Input.GetKeyDown(KeyCode.Mouse0)) return;
+        
+        if (Input.GetKey(KeyCode.W))
+        {
+            if (debugUseAnimations)
+            {
+                animator.SetTrigger(AttackUpTriggerID);
+                isAttacking = true;
+            }
+        }
+        else if (!_isGrounded && Input.GetKey(KeyCode.S))
+        {
+            if (debugUseAnimations)
+            {
+                animator.SetTrigger(AttackDownTriggerID);
+                isAttacking = true;
+            }
+        }
+        else
+        {
+            if (debugUseAnimations)
+            {
+                animator.SetTrigger(AttackTriggerID);
+                isAttacking = true;
+            }
+        }
+    }
+
+    #endregion
+}
+
+public enum FacingDirection
+{
+    Left = -1,
+    Right = 1
 }

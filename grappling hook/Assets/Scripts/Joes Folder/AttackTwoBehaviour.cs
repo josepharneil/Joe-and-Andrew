@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-public class AttackTwoBehaviour : PlayerStateBase
+public class AttackTwoBehaviour : PlayerStateMachineBehaviourBase
 {
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

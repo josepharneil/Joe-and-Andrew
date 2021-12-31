@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AttackOneTransitionBehaviour : PlayerStateBase
+public class AttackOneTransitionBehaviour : PlayerStateMachineBehaviourBase
 {
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     // public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

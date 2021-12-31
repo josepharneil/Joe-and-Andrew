@@ -8,7 +8,7 @@ public class PlayerCombat : MonoBehaviour
 {
     [Header("Setup")]
     [SerializeField] private LayerMask whatIsDamageable;
-    [SerializeField] private PlayerControllerCombatScene controller; //bad circular reference
+    [SerializeField] private PlayerInputs inputs; //bad circular reference
 
     [Serializable]
     private struct AttackInfo
@@ -19,8 +19,8 @@ public class PlayerCombat : MonoBehaviour
     }
 
     [Header("Attack infos")]
-    [SerializeField] private AttackInfo attackInfo1;
-    [SerializeField] private AttackInfo attackInfo2;
+    [SerializeField] private AttackInfo attackSide1;
+    //[SerializeField] private AttackInfo attackSide2;
 
     [SerializeField] private AttackInfo attackUp;
     [SerializeField] private AttackInfo attackDown;
@@ -31,8 +31,8 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float swipeShowTime = 1f;
     [SerializeField] private SpriteRenderer upSwipe;
     [SerializeField] private SpriteRenderer downSwipe;
-    [SerializeField] private SpriteRenderer rightSwipe;
     [SerializeField] private SpriteRenderer leftSwipe;
+    [SerializeField] private SpriteRenderer rightSwipe;
 
     [Header("Shake")]
     [SerializeField] private CinemachineShake cinemachineShake;
@@ -47,8 +47,7 @@ public class PlayerCombat : MonoBehaviour
         rightSwipe.enabled = false;
         leftSwipe.enabled = false;
     }
-
-
+    
     private enum SwipeDirection
     {
         Up,
@@ -59,7 +58,7 @@ public class PlayerCombat : MonoBehaviour
 
     public void CheckAttackHitBox(int attackIndex)
     {
-        ref AttackInfo attackInfo = ref attackInfo1;
+        ref AttackInfo attackInfo = ref attackSide1;
         
         // Todo, figure out indexes to make more sense
         switch (attackIndex)
@@ -74,7 +73,7 @@ public class PlayerCombat : MonoBehaviour
             default:
             {
                 // Swipes
-                StartCoroutine(controller.facingDirection == PlayerControllerCombatScene.FacingDirection.Left
+                StartCoroutine(inputs.facingDirection == FacingDirection.Left
                     ? ShowSwipe(SwipeDirection.Left)
                     : ShowSwipe(SwipeDirection.Right));
 
@@ -89,7 +88,7 @@ public class PlayerCombat : MonoBehaviour
             case 0:
                 break;
             case 1:
-                attackInfo = ref attackInfo2;
+                //attackInfo = ref attackSide2;
                 break;
             case 2:
                 // todo didnt mean to skip this number.. need to figure out numbering
@@ -105,7 +104,7 @@ public class PlayerCombat : MonoBehaviour
                 break;
         }
         Vector2 overlapCirclePosition;
-        if (controller.facingDirection == PlayerControllerCombatScene.FacingDirection.Left)
+        if (inputs.facingDirection == FacingDirection.Left)
         {
             var localPosition = attackInfo.hitBoxPosition.localPosition;
             overlapCirclePosition = (Vector2)transform.position + new Vector2(-localPosition.x, localPosition.y );
@@ -143,27 +142,27 @@ public class PlayerCombat : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (controller.facingDirection == PlayerControllerCombatScene.FacingDirection.Left)
+        if (inputs.facingDirection == FacingDirection.Left)
         {
-            var localPosition = attackInfo1.hitBoxPosition.localPosition;
+            var localPosition = attackSide1.hitBoxPosition.localPosition;
             Vector3 position = transform.position + new Vector3(-localPosition.x, localPosition.y );
-            Gizmos.DrawWireSphere(position, attackInfo1.radius);
+            Gizmos.DrawWireSphere(position, attackSide1.radius);
         }
         else
         {
-            Gizmos.DrawWireSphere(attackInfo1.hitBoxPosition.position, attackInfo1.radius);
+            Gizmos.DrawWireSphere(attackSide1.hitBoxPosition.position, attackSide1.radius);
         }
         
-        if (controller.facingDirection == PlayerControllerCombatScene.FacingDirection.Left)
-        {
-            var localPosition = attackInfo2.hitBoxPosition.localPosition;
-            Vector3 position = transform.position + new Vector3(-localPosition.x, localPosition.y );
-            Gizmos.DrawWireSphere(position, attackInfo2.radius);
-        }
-        else
-        {
-            Gizmos.DrawWireSphere(attackInfo2.hitBoxPosition.position, attackInfo2.radius);
-        }
+        // if (controller.facingDirection == PlayerControllerCombatScene.FacingDirection.Left)
+        // {
+        //     var localPosition = attackSide2.hitBoxPosition.localPosition;
+        //     Vector3 position = transform.position + new Vector3(-localPosition.x, localPosition.y );
+        //     Gizmos.DrawWireSphere(position, attackSide2.radius);
+        // }
+        // else
+        // {
+        //     Gizmos.DrawWireSphere(attackSide2.hitBoxPosition.position, attackSide2.radius);
+        // }
         
         Gizmos.DrawWireSphere(attackUp.hitBoxPosition.position, attackUp.radius);
         Gizmos.DrawWireSphere(attackDown.hitBoxPosition.position, attackDown.radius);
