@@ -261,6 +261,8 @@ public class PlayerInputs : MonoBehaviour
         float rate = (moveController.Collisions.Below ? accelerationRate : airAccelerationRate);
         _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
         _velocity.x = Mathf.Lerp(_velocity.x, moveSpeed * _input.x, accelerationCurve.Evaluate(_lerpCurrent));
+        
+        // TODO Can input.x just be deleted here? They look like they cancel to me.
         if (Mathf.Abs(_velocity.x) * _input.x >= _input.x * moveSpeed)
         {
             _moveState = MoveState.Running;
@@ -301,6 +303,10 @@ public class PlayerInputs : MonoBehaviour
         // if(Math.Abs(Mathf.Abs(_velocity.x) - moveSpeed) < TOLERANCE)
         // Where TOLERANCE is some constant small value.
         // You might want to set velocity.x = moveSpeed if this is true?
+        
+        // TODO P.S I changed this from:
+        // if (Mathf.Abs(velocity.x)*input.x == input.x * moveSpeed)
+        // Because they cancel. Delete this comment if that's all good.
         if (Mathf.Abs(_velocity.x) == moveSpeed)
         {
             _moveState = MoveState.Running;
