@@ -60,7 +60,7 @@ public class MoveController : MonoBehaviour
     }
 
     //gets the positions of bounds of the rays, which is used for each move
-    void UpdateRaycastOrigins()
+    private void UpdateRaycastOrigins()
     {
         Bounds bounds = playerCollider.bounds;
         //fires the raycasts from a bit inside the collider

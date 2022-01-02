@@ -10,6 +10,7 @@ public class PlayerInputs : MonoBehaviour
     [SerializeField] private MoveController moveController;
 
     [Header("Move Stats")]
+    // TODO Separate these into jump, roll and move categories
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float jumpHeight = 3f;
     [SerializeField] private float timeToJumpHeight = 0.4f;
@@ -46,10 +47,10 @@ public class PlayerInputs : MonoBehaviour
     private Vector2 _moveInput;
     
     // Attacks
-    [Header("Attacking")] [SerializeField] private bool debugUseAnimations = true;
+    [Header("Attacking")] 
+    [SerializeField] private bool debugUseAnimations = true;
     [SerializeField] private Animator animator;
     [SerializeField] private SpriteRenderer spriteRenderer;
-
     [SerializeField] private Sprite defaultSquareSprite;
     //[SerializeField] private PlayerCombat playerCombat;
     [HideInInspector] public bool isAttacking;
@@ -62,17 +63,19 @@ public class PlayerInputs : MonoBehaviour
     private static readonly int AttackDownTriggerID = Animator.StringToHash("attackDownTrigger");
     
     
-    
+    // TODO possibly do different kinds of animations
+    // Currently the animation is linear frame by frame,
+    // but for example we could stutter actual hitting later
     // Attack speed type
-    private enum PrototypeAttackSpeedStyle
-    {
-        HollowKnight,
-        Middling,
-        DarkSouls,
-    }
+    // public enum PrototypeAttackSpeedStyle
+    // {
+    //     Fast,
+    //     Middling,
+    //     Slow,
+    // }
 
     // What can cancel attacks?
-    [Flags] private enum PrototypeCancellables
+    [Flags] public enum PrototypeCancellables
     {
         None = 0,
         Movement = 1 << 0,
@@ -80,23 +83,37 @@ public class PlayerInputs : MonoBehaviour
         Jump = 1 << 2,
     }
 
-    [Serializable] private struct PrototypeAttackCustomisation
+    // Phases of an attack.
+    [Flags] public enum PrototypeAttackPhases
+    {
+        None = 0,
+        PreDamage = 1 << 0,
+        //DamageFrame - Not allowed to be cancelled as its a single frame for now.
+        PostDamage = 2 << 0
+    }
+
+    [Serializable] public struct PrototypeAttackCustomisation
     {
         [Tooltip("Is movement disabled by attacks?")]
         public bool movementDisabledByAttacks;
         
+        [Tooltip("Can you change directions mid attack?")] 
+        public bool canChangeDirectionsDuringAttack;
+        
         [Tooltip("Attack speed style")]
-        public PrototypeAttackSpeedStyle attackSpeedStyle;
+        public float attackSpeed;
         
         [Tooltip("What can cancel attacks?")]
         public PrototypeCancellables cancellables;
+
+        [Tooltip("In which phases can we cancel an attack?")]
+        public PrototypeAttackPhases cancellableAttackPhases;
     }
 
     [Header("Prototype Customisation")]
-    [SerializeField] private PrototypeAttackCustomisation prototypeAttackCustomisation;
+    [SerializeField] public PrototypeAttackCustomisation prototypeAttackCustomisation;
 
-    
-    
+    [HideInInspector] public bool isInPreDamageAttackPhase = true;
 
     private enum MoveState
     {
@@ -175,47 +192,16 @@ public class PlayerInputs : MonoBehaviour
             moveController.Move(_velocity * Time.deltaTime);
         }
 
+        // TODO Not sure if its wise to flipX every frame
+        spriteRenderer.flipX = facingDirection == FacingDirection.Left;
+
         // Animation
         if (debugUseAnimations)
         {
             animator.SetFloat(SpeedID, Mathf.Abs(_velocity.x));
-
-            if (isAttacking)
-            {
-                // What cancels attacks?
-                if ((prototypeAttackCustomisation.cancellables & PrototypeCancellables.Roll) != PrototypeCancellables.None)
-                {
-                    if (_isRollInput)
-                    {
-                        isAttacking = false;
-                        animator.Play("Player_Idle");
-                        // todo getting playercombat here is bad.
-                        GetComponent<PlayerCombat>().ForceHideSwipes();
-                    }
-                }
-
-                if ((prototypeAttackCustomisation.cancellables & PrototypeCancellables.Jump) != PrototypeCancellables.None) 
-                {
-                    if (_isJumpInput)
-                    {
-                        isAttacking = false;
-                        animator.Play("Player_Jump");
-                        GetComponent<PlayerCombat>().ForceHideSwipes();
-                    }
-                }
-                
-                if ((prototypeAttackCustomisation.cancellables & PrototypeCancellables.Movement) != PrototypeCancellables.None) 
-                {
-                    if (_isMoveInput)
-                    {
-                        isAttacking = false;
-                        animator.Play("Player_Idle");
-                        GetComponent<PlayerCombat>().ForceHideSwipes();
-                    }
-                }
-            }
         }
-        spriteRenderer.flipX = facingDirection == FacingDirection.Left;
+
+        CheckIfAttackIsCancellable();
     }
 
     #region Jump Movement
@@ -288,7 +274,10 @@ public class PlayerInputs : MonoBehaviour
         if (_moveInput.x != 0)
         {
             _isMoveInput = true;
-            facingDirection = _moveInput.x < 0 ? FacingDirection.Left : FacingDirection.Right;
+            if (!isAttacking || isAttacking && prototypeAttackCustomisation.canChangeDirectionsDuringAttack)
+            {
+                facingDirection = _moveInput.x < 0 ? FacingDirection.Left : FacingDirection.Right;
+            }
         }
         else
         {
@@ -495,21 +484,7 @@ public class PlayerInputs : MonoBehaviour
     private void ReadAttackInput()
     {
         if (!Input.GetKeyDown(KeyCode.Mouse0)) return;
-        
-        // TODO Switch which animations we're going to use.        
-        // switch (prototypeCustomisation.attackSpeedStyle)
-        // {
-        //     case PrototypeAttackSpeedStyle.Middling:
-        //         // Switch the animation we're going to use
-        //         break;
-        //     case PrototypeAttackSpeedStyle.DarkSouls:
-        //         break;
-        //     case PrototypeAttackSpeedStyle.HollowKnight:
-        //         break;
-        //     default:
-        //         throw new ArgumentOutOfRangeException();
-        // }
-        
+
         if (Input.GetKey(KeyCode.W))
         {
             if (debugUseAnimations)
@@ -532,6 +507,64 @@ public class PlayerInputs : MonoBehaviour
             {
                 animator.SetTrigger(AttackTriggerID);
                 isAttacking = true;
+            }
+        }
+    }
+
+    private void CheckIfAttackIsCancellable()
+    {
+        // Cancellable attack phases
+        if (!isAttacking) return;
+
+        // TODO There are only really two phases right now
+        // the actual attack phase is only 1 frame right now.
+        if (isInPreDamageAttackPhase)
+        {
+            // What phases are cancellable?
+            if ((prototypeAttackCustomisation.cancellableAttackPhases &
+                 PrototypeAttackPhases.PreDamage) == PrototypeAttackPhases.None)
+            {
+                return;
+            }
+        }
+        else // Post damage
+        {
+            if ((prototypeAttackCustomisation.cancellableAttackPhases &
+                 PrototypeAttackPhases.PostDamage) == PrototypeAttackPhases.None)
+            {
+                return;
+            }
+        }
+        
+        // What cancels attacks?
+        if ((prototypeAttackCustomisation.cancellables & PrototypeCancellables.Roll) != PrototypeCancellables.None)
+        {
+            if (_isRollInput)
+            {
+                isAttacking = false;
+                animator.Play("Player_Idle");
+                // todo getting playercombat here is bad.
+                GetComponent<PlayerCombat>().ForceHideSwipes();
+            }
+        }
+
+        if ((prototypeAttackCustomisation.cancellables & PrototypeCancellables.Jump) != PrototypeCancellables.None) 
+        {
+            if (_isJumpInput)
+            {
+                isAttacking = false;
+                animator.Play("Player_Jump");
+                GetComponent<PlayerCombat>().ForceHideSwipes();
+            }
+        }
+            
+        if ((prototypeAttackCustomisation.cancellables & PrototypeCancellables.Movement) != PrototypeCancellables.None) 
+        {
+            if (_isMoveInput)
+            {
+                isAttacking = false;
+                animator.Play("Player_Idle");
+                GetComponent<PlayerCombat>().ForceHideSwipes();
             }
         }
     }

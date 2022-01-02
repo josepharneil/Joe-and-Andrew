@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 
@@ -7,6 +8,11 @@ public class AttackBehaviour : PlayerStateMachineBehaviourBase
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         GetPlayerController(animator).isAttacking = true;
+
+        SetSpeedBasedOnPrototypeCustomisation(animator);
+
+        GetPlayerController(animator).isInPreDamageAttackPhase = true;
+
         // float moveDistance = 4f;
         // if (GetPlayerController(animator).facingDirection == PlayerControllerCombatScene.FacingDirection.Left)
         // {
@@ -26,8 +32,8 @@ public class AttackBehaviour : PlayerStateMachineBehaviourBase
     //}
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    //public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
+    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        ResetSpeed(animator);
+    }
 }

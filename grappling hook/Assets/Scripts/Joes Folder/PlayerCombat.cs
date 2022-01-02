@@ -24,8 +24,6 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private AttackInfo attackUp;
     [SerializeField] private AttackInfo attackDown;
 
-    
-
     [Header("Swipes")]
     [SerializeField] private float swipeShowTime = 1f;
     [SerializeField] private SpriteRenderer upSwipe;
@@ -38,7 +36,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float shakeAmplitude = 3f;
     [SerializeField] private float shakeFrequency = 1f;
     [SerializeField] private float shakeDuration = 0.1f;
-
+    
     private void OnEnable()
     {
         upSwipe.enabled = false;
@@ -58,7 +56,8 @@ public class PlayerCombat : MonoBehaviour
     public void CheckAttackHitBox(int attackIndex)
     {
         ref AttackInfo attackInfo = ref attackSide1;
-        
+        FacingDirection attackDirection = inputs.facingDirection;
+
         // Todo, figure out indexes to make more sense
         switch (attackIndex)
         {
@@ -72,7 +71,7 @@ public class PlayerCombat : MonoBehaviour
             default:
             {
                 // Swipes
-                StartCoroutine(inputs.facingDirection == FacingDirection.Left
+                StartCoroutine(attackDirection == FacingDirection.Left
                     ? ShowSwipe(SwipeDirection.Left)
                     : ShowSwipe(SwipeDirection.Right));
 
@@ -103,7 +102,7 @@ public class PlayerCombat : MonoBehaviour
                 break;
         }
         Vector2 overlapCirclePosition;
-        if (inputs.facingDirection == FacingDirection.Left)
+        if (attackDirection == FacingDirection.Left)
         {
             var localPosition = attackInfo.hitBoxPosition.localPosition;
             overlapCirclePosition = (Vector2)transform.position + new Vector2(-localPosition.x, localPosition.y );
@@ -136,6 +135,9 @@ public class PlayerCombat : MonoBehaviour
         {
             cinemachineShake.ShakeCamera(shakeAmplitude, shakeFrequency, shakeDuration);
         }
+
+        // At the end, we're now post damage.
+        inputs.isInPreDamageAttackPhase = false;
     }
 
     private void OnDrawGizmos()
@@ -191,7 +193,7 @@ public class PlayerCombat : MonoBehaviour
         
         swipe.enabled = true;
         
-        yield return new WaitForSeconds(swipeShowTime);
+        yield return new WaitForSeconds(swipeShowTime / GetComponent<PlayerInputs>().prototypeAttackCustomisation.attackSpeed);
 
         swipe.enabled = false;
     }

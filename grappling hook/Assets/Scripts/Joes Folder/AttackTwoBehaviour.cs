@@ -7,6 +7,11 @@ public class AttackTwoBehaviour : PlayerStateMachineBehaviourBase
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         GetPlayerController(animator).isAttacking = true;
+
+        SetSpeedBasedOnPrototypeCustomisation(animator);
+        
+        GetPlayerController(animator).isInPreDamageAttackPhase = true;
+
         // float moveDistance = 4f;
         // if (GetPlayerController(animator).facingDirection == PlayerControllerCombatScene.FacingDirection.Left)
         // {
@@ -29,5 +34,7 @@ public class AttackTwoBehaviour : PlayerStateMachineBehaviourBase
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         GetPlayerController(animator).isAttacking = false;
+        
+        ResetSpeed(animator);
     }
 }
