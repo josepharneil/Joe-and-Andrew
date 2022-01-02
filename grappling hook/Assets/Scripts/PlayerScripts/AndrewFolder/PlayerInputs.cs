@@ -54,6 +54,7 @@ public class PlayerInputs : MonoBehaviour
     [SerializeField] private Sprite defaultSquareSprite;
     //[SerializeField] private PlayerCombat playerCombat;
     [HideInInspector] public bool isAttacking;
+    [HideInInspector] public bool isInPreDamageAttackPhase = true;
 
     // Animation parameter IDs.
     private static readonly int SpeedID = Animator.StringToHash("speed");
@@ -92,6 +93,14 @@ public class PlayerInputs : MonoBehaviour
         PostDamage = 2 << 0
     }
 
+    public enum PrototypeAttackStyles
+    {
+        None,
+        HollowKnight,
+        Middling,
+        DarkSouls,
+    }
+
     [Serializable] public struct PrototypeAttackCustomisation
     {
         [Tooltip("Is movement disabled by attacks?")]
@@ -113,8 +122,10 @@ public class PlayerInputs : MonoBehaviour
     [Header("Prototype Customisation")]
     [SerializeField] public PrototypeAttackCustomisation prototypeAttackCustomisation;
 
-    [HideInInspector] public bool isInPreDamageAttackPhase = true;
-
+    [Tooltip("Quick-set an attack style")] 
+    [SerializeField] public PrototypeAttackStyles prototypeAttackStyle; 
+    private PrototypeAttackStyles _prevPrototypeAttackStyle;
+    
     private enum MoveState
     {
         Stopped,
@@ -145,6 +156,8 @@ public class PlayerInputs : MonoBehaviour
         _jumpVelocity = timeToJumpHeight * Mathf.Abs(_gravity);
         _moveState = MoveState.Stopped;
         _rollState = RollState.NotRolling;
+
+        _prevPrototypeAttackStyle = prototypeAttackStyle;
     }
 
     // https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnValidate.html
@@ -155,6 +168,46 @@ public class PlayerInputs : MonoBehaviour
     {
         _gravity = -2 * jumpHeight * Mathf.Pow(timeToJumpHeight, -2);
         _jumpVelocity = timeToJumpHeight * Mathf.Abs(_gravity);
+
+        if (prototypeAttackStyle != _prevPrototypeAttackStyle)
+        {
+            _prevPrototypeAttackStyle = prototypeAttackStyle;
+            switch (prototypeAttackStyle)
+            {
+                case PrototypeAttackStyles.None:
+                    prototypeAttackCustomisation.movementDisabledByAttacks = false;
+                    prototypeAttackCustomisation.canChangeDirectionsDuringAttack = false;
+                    prototypeAttackCustomisation.attackSpeed = 1.0f;
+                    prototypeAttackCustomisation.cancellables = PrototypeCancellables.None;
+                    prototypeAttackCustomisation.cancellableAttackPhases = PrototypeAttackPhases.None;
+                    break;
+                case PrototypeAttackStyles.HollowKnight:
+                    prototypeAttackCustomisation.movementDisabledByAttacks = false;
+                    prototypeAttackCustomisation.canChangeDirectionsDuringAttack = false;
+                    prototypeAttackCustomisation.attackSpeed = 2.0f;
+                    prototypeAttackCustomisation.cancellables = PrototypeCancellables.None;
+                    prototypeAttackCustomisation.cancellableAttackPhases = PrototypeAttackPhases.None;
+                    break;
+                case PrototypeAttackStyles.Middling:
+                    prototypeAttackCustomisation.movementDisabledByAttacks = true;
+                    prototypeAttackCustomisation.canChangeDirectionsDuringAttack = false;
+                    prototypeAttackCustomisation.attackSpeed = 1.0f;
+                    prototypeAttackCustomisation.cancellables = PrototypeCancellables.Roll;
+                    prototypeAttackCustomisation.cancellableAttackPhases = PrototypeAttackPhases.PreDamage;
+                    break;
+                case PrototypeAttackStyles.DarkSouls:
+                    prototypeAttackCustomisation.movementDisabledByAttacks = true;
+                    prototypeAttackCustomisation.canChangeDirectionsDuringAttack = false;
+                    prototypeAttackCustomisation.attackSpeed = 0.5f;
+                    prototypeAttackCustomisation.cancellables = PrototypeCancellables.None;
+                    prototypeAttackCustomisation.cancellableAttackPhases = PrototypeAttackPhases.None;
+                    break;
+                default:
+                    Debug.LogError("Out of range");
+                    break;
+            }
+        }
+
     }
 
     // Update is called once per frame
