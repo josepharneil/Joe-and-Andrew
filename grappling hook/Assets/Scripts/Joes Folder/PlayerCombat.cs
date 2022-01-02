@@ -147,7 +147,7 @@ public class PlayerCombat : MonoBehaviour
         if (inputs.facingDirection == FacingDirection.Left)
         {
             var localPosition = attackSide1.hitBoxPosition.localPosition;
-            Vector3 position = transform.position + new Vector3(-localPosition.x, localPosition.y );
+            Vector3 position = transform.position + new Vector3(-localPosition.x, localPosition.y);
             Gizmos.DrawWireSphere(position, attackSide1.radius);
         }
         else
