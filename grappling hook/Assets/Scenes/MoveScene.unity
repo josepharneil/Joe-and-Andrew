@@ -2054,6 +2054,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c86546bf22606b243bc43e516930e92c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveController: {fileID: 2142903473}
   moveSpeed: 11
   jumpHeight: 2
   timeToJumpHeight: 0.4
@@ -2139,6 +2140,12 @@ MonoBehaviour:
   rollDistance: 5
   rollDuration: 0.25
   rollTimer: 0
+  facingDirection: 0
+  debugUseAnimations: 0
+  animator: {fileID: 0}
+  spriteRenderer: {fileID: 2142903475}
+  defaultSquareSprite: {fileID: 7482667652216324306, guid: 5205f3571171146c886d386aeaa65929, type: 3}
+  isAttacking: 0
 --- !u!114 &2142903473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2151,6 +2158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f0a2491b5b57940bd30e364ca30ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerCollider: {fileID: 2142903474}
   horizontalRayCount: 4
   verticalRayCount: 4
   collisionMask:
