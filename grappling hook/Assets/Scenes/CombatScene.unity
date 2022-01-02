@@ -5099,6 +5099,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1467600174}
+  attackRange: 2
+  animator: {fileID: 866036386}
   health: 100
 --- !u!1 &924657550
 GameObject:
