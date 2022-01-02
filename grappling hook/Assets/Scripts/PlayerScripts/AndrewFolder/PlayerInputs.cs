@@ -17,12 +17,15 @@ public class PlayerInputs : MonoBehaviour
     [SerializeField] private AnimationCurve accelerationCurve;
     [SerializeField] [Range(0f, 1f)] private float accelerationRate;
     [SerializeField] [Range(0f, 1f)] private float airAccelerationRate;
+    [SerializeField] private float accelerationTolerance;
     [SerializeField] private AnimationCurve decelerationCurve;
     [SerializeField] [Range(0f, 1f)] private float decelerationRate;
     [SerializeField] [Range(0f, 1f)] private float airDecelerationRate;
+    [SerializeField] private float decelerationTolerance;
     [SerializeField] private AnimationCurve changeDirectionCurve;
     [SerializeField] [Range(0f, 1f)] private float changeDirectionRate;
     [SerializeField] [Range(0f, 1f)] private float airChangeDirectionRate;
+    [SerializeField] private float changeDirectionTolerance;
     [SerializeField] private float coyoteTime;
     [SerializeField] private float rollDistance;
     [SerializeField] private float rollDuration;
@@ -383,6 +386,7 @@ public class PlayerInputs : MonoBehaviour
                 case MoveState.Stopped:
                     //begins the movement, calls sets to accelerating
                     //todo Joe here, is this correct? Start moving in the stopped state?
+                    //AK: yeah this is correct, this is for if the player has stopped and an input comes in to start moving
                     StartMoving();
                     break;
                 case MoveState.Accelerating:
@@ -441,8 +445,9 @@ public class PlayerInputs : MonoBehaviour
         _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
         _velocity.x = Mathf.Lerp(_velocity.x, moveSpeed * _moveInput.x, accelerationCurve.Evaluate(_lerpCurrent));
         
-        // TODO Can input.x just be deleted here? They look like they cancel to me.
-        if (Mathf.Abs(_velocity.x) * _moveInput.x >= _moveInput.x * moveSpeed)
+        // TODO Can input.x just be deleted here? They look like they cancel to me
+        // AK: yes its gone now!
+        if (Mathf.Abs(_velocity.x)-accelerationTolerance >=  moveSpeed)
         {
             _moveState = MoveState.Running;
         }
@@ -461,7 +466,7 @@ public class PlayerInputs : MonoBehaviour
         float rate = moveController.Collisions.Below ? decelerationRate : airDecelerationRate;
         _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
         _velocity.x = Mathf.Lerp(_velocity.x, 0f, decelerationCurve.Evaluate(_lerpCurrent));
-        if (Mathf.Abs(_velocity.x) <= 0.5f)
+        if (Mathf.Abs(_velocity.x) <= decelerationTolerance)
         {
             _velocity.x = 0f;
             _moveState = MoveState.Stopped;
@@ -483,10 +488,7 @@ public class PlayerInputs : MonoBehaviour
         // Where TOLERANCE is some constant small value.
         // You might want to set velocity.x = moveSpeed if this is true?
         
-        // TODO P.S I changed this from:
-        // if (Mathf.Abs(velocity.x)*input.x == input.x * moveSpeed)
-        // Because they cancel. Delete this comment if that's all good.
-        if (Mathf.Abs(_velocity.x) == moveSpeed)
+        if ((Mathf.Abs(_velocity.x) - moveSpeed)<changeDirectionTolerance)
         {
             _moveState = MoveState.Running;
         }

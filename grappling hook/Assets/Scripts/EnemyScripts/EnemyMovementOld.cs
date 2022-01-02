@@ -4,7 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using System;
 
-public class EnemyMovement : MonoBehaviour
+public class EnemyMovementOld : MonoBehaviour
 {
     [SerializeField] private GameObject player;
     [SerializeField] private LayerMask groundAndPlayerMasks;
