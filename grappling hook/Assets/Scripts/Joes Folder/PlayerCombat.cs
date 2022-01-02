@@ -24,6 +24,8 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private AttackInfo attackUp;
     [SerializeField] private AttackInfo attackDown;
 
+    [SerializeField] private float knockbackStrength;
+    
     [Header("Swipes")]
     [SerializeField] private float swipeShowTime = 1f;
     [SerializeField] private SpriteRenderer upSwipe;
@@ -124,7 +126,7 @@ public class PlayerCombat : MonoBehaviour
             SandbagEnemy sandbagEnemy = coll.gameObject.GetComponent<SandbagEnemy>();
             if (sandbagEnemy)
             {
-                sandbagEnemy.DamageThisEnemy( attackInfo.damage );
+                sandbagEnemy.DamageThisEnemy( attackInfo.damage, sandbagEnemy.transform.position - transform.position, knockbackStrength );
                 sandbagHit = true;
             }
             

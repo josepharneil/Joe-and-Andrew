@@ -92,12 +92,12 @@ public class PlayerInputs : MonoBehaviour
         //DamageFrame - Not allowed to be cancelled as its a single frame for now.
         PostDamage = 2 << 0
     }
-
+    
     public enum PrototypeAttackStyles
     {
         None,
         HollowKnight,
-        Middling,
+        EasyCancel,
         DarkSouls,
     }
 
@@ -188,19 +188,19 @@ public class PlayerInputs : MonoBehaviour
                     prototypeAttackCustomisation.cancellables = PrototypeCancellables.None;
                     prototypeAttackCustomisation.cancellableAttackPhases = PrototypeAttackPhases.None;
                     break;
-                case PrototypeAttackStyles.Middling:
+                case PrototypeAttackStyles.EasyCancel:
                     prototypeAttackCustomisation.movementDisabledByAttacks = true;
                     prototypeAttackCustomisation.canChangeDirectionsDuringAttack = false;
                     prototypeAttackCustomisation.attackSpeed = 1.0f;
-                    prototypeAttackCustomisation.cancellables = PrototypeCancellables.Roll;
+                    prototypeAttackCustomisation.cancellables = PrototypeCancellables.Roll & PrototypeCancellables.Jump;
                     prototypeAttackCustomisation.cancellableAttackPhases = PrototypeAttackPhases.PreDamage;
                     break;
                 case PrototypeAttackStyles.DarkSouls:
                     prototypeAttackCustomisation.movementDisabledByAttacks = true;
                     prototypeAttackCustomisation.canChangeDirectionsDuringAttack = false;
                     prototypeAttackCustomisation.attackSpeed = 0.5f;
-                    prototypeAttackCustomisation.cancellables = PrototypeCancellables.None;
-                    prototypeAttackCustomisation.cancellableAttackPhases = PrototypeAttackPhases.None;
+                    prototypeAttackCustomisation.cancellables = PrototypeCancellables.Roll;
+                    prototypeAttackCustomisation.cancellableAttackPhases = PrototypeAttackPhases.PostDamage;
                     break;
                 default:
                     Debug.LogError("Out of range");

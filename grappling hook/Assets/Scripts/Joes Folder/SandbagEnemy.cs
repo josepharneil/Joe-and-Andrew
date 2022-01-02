@@ -8,12 +8,15 @@ using UnityEngine;
 public class SandbagEnemy : MonoBehaviour
 {
     [SerializeField] private int health;
-    public void DamageThisEnemy( int damage )
+    public void DamageThisEnemy( int damage, Vector3 hitDirection, float knockbackStrength )
     {
         health -= damage;
-        print("Hit! "+health);
+        print("Hit! " + health);
 
-        transform.DOMove(transform.position + (Vector3)(Vector2.right*0.5f ), 1f).SetEase(Ease.OutElastic);
+        hitDirection.Normalize();
+        hitDirection.y = 0f;
+        hitDirection.z = 0f;
+        transform.DOMove(transform.position + (hitDirection*knockbackStrength ), 1f).SetEase(Ease.OutCubic);
     }
 
     private void OnGUI()

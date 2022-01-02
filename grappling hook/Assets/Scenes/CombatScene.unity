@@ -5798,10 +5798,14 @@ MonoBehaviour:
   spriteRenderer: {fileID: 582754437}
   defaultSquareSprite: {fileID: 0}
   isAttacking: 0
+  isInPreDamageAttackPhase: 1
   prototypeAttackCustomisation:
     movementDisabledByAttacks: 0
-    attackSpeed: 1
+    canChangeDirectionsDuringAttack: 0
+    attackSpeed: 2
     cancellables: 0
+    cancellableAttackPhases: 0
+  prototypeAttackStyle: 1
 --- !u!114 &1467600176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5909,6 +5913,7 @@ MonoBehaviour:
     hitBoxPosition: {fileID: 2116292218}
     damage: 5
     radius: 1
+  knockbackStrength: 2
   swipeShowTime: 0.3
   upSwipe: {fileID: 2137884868}
   downSwipe: {fileID: 1462172480}
@@ -6147,6 +6152,7 @@ MonoBehaviour:
     hitBoxPosition: {fileID: 2050379889}
     damage: 5
     radius: 1.5
+  knockbackStrength: 0
   swipeShowTime: 0.3
   upSwipe: {fileID: 1371632583}
   downSwipe: {fileID: 1856116301}
