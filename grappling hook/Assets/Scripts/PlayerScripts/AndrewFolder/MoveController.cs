@@ -69,7 +69,6 @@ public class MoveController : MonoBehaviour
         _raycastOrigins.TopLeft = new Vector2(bounds.min.x, bounds.max.y);
         _raycastOrigins.BottomRight = new Vector2(bounds.max.x, bounds.min.y);
         _raycastOrigins.TopRight = new Vector2(bounds.max.x, bounds.max.y);
-
     }
 
     private void CalculateRaySpacing()

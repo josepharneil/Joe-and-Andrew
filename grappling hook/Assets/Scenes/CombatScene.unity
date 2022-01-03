@@ -4747,7 +4747,7 @@ GameObject:
   - component: {fileID: 694407302}
   - component: {fileID: 694407301}
   - component: {fileID: 694407300}
-  - component: {fileID: 694407303}
+  - component: {fileID: 694407304}
   m_Layer: 9
   m_Name: Sandbag Enemy
   m_TagString: Enemy
@@ -4846,7 +4846,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &694407303
+--- !u!114 &694407304
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4855,7 +4855,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 694407299}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ceac715edb9b41bcb79b07121dc3afa, type: 3}
+  m_Script: {fileID: 11500000, guid: 81bcdf0702639460ca280acb5dee23dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
@@ -4993,9 +4993,11 @@ GameObject:
   m_Component:
   - component: {fileID: 866036385}
   - component: {fileID: 866036384}
+  - component: {fileID: 866036389}
   - component: {fileID: 866036386}
   - component: {fileID: 866036387}
-  m_Layer: 0
+  - component: {fileID: 866036388}
+  m_Layer: 9
   m_Name: AttackingEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5043,7 +5045,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 2ba30ca67c9134461b6689927750cb9b, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -5098,10 +5100,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4524cfc23476d467387c8a3f39c631ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1467600174}
-  attackRange: 2
   animator: {fileID: 866036386}
+  spriteRenderer: {fileID: 866036384}
+  player: {fileID: 1467600174}
+  attackRange: 3
+  whatIsDamageable:
+    serializedVersion: 2
+    m_Bits: 2048
+  doesThisEnemyDealKnockback: 1
+  attackDamage: 5
+  knockbackStrength: 1
+--- !u!114 &866036388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 866036383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81bcdf0702639460ca280acb5dee23dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   health: 100
+--- !u!61 &866036389
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 866036383}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 3.125, y: 3}
+    newSize: {x: 3.125, y: 3}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.5, y: 3}
+  m_EdgeRadius: 0
 --- !u!1 &924657550
 GameObject:
   m_ObjectHideFlags: 0
@@ -5876,6 +5923,8 @@ GameObject:
   - component: {fileID: 1467600176}
   - component: {fileID: 1467600175}
   - component: {fileID: 1467600181}
+  - component: {fileID: 1467600178}
+  - component: {fileID: 1467600182}
   - component: {fileID: 1467600180}
   m_Layer: 11
   m_Name: Player
@@ -5992,13 +6041,7 @@ MonoBehaviour:
   defaultSquareSprite: {fileID: 0}
   isAttacking: 0
   isInPreDamageAttackPhase: 1
-  prototypeAttackCustomisation:
-    movementDisabledByAttacks: 0
-    canChangeDirectionsDuringAttack: 0
-    attackSpeed: 2
-    cancellables: 0
-    cancellableAttackPhases: 0
-  prototypeAttackStyle: 1
+  playerCombatPrototyping: {fileID: 1467600178}
 --- !u!114 &1467600176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6043,6 +6086,26 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &1467600178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1467600174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99eca67b715954c598626d10823444e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementDisabledByAttacks: 0
+  canChangeDirectionsDuringAttack: 0
+  attackSpeed: 2
+  cancellables: 0
+  cancellableAttackPhases: 0
+  doesPlayerDealKnockback: 1
+  knockbackStrength: 2.5
+  prototypeAttackStyle: 1
 --- !u!4 &1467600179
 Transform:
   m_ObjectHideFlags: 0
@@ -6107,7 +6170,6 @@ MonoBehaviour:
     hitBoxPosition: {fileID: 2116292218}
     damage: 5
     radius: 1
-  knockbackStrength: 2
   swipeShowTime: 0.3
   upSwipe: {fileID: 2137884868}
   downSwipe: {fileID: 1462172480}
@@ -6117,6 +6179,20 @@ MonoBehaviour:
   shakeAmplitude: 3
   shakeFrequency: 1
   shakeDuration: 0.1
+  playerCombatPrototyping: {fileID: 1467600178}
+--- !u!114 &1467600182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1467600174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81bcdf0702639460ca280acb5dee23dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
 --- !u!1 &1494434727
 GameObject:
   m_ObjectHideFlags: 0
@@ -6346,7 +6422,6 @@ MonoBehaviour:
     hitBoxPosition: {fileID: 2050379889}
     damage: 5
     radius: 1.5
-  knockbackStrength: 0
   swipeShowTime: 0.3
   upSwipe: {fileID: 1371632583}
   downSwipe: {fileID: 1856116301}
@@ -6356,6 +6431,7 @@ MonoBehaviour:
   shakeAmplitude: 4
   shakeFrequency: 2
   shakeDuration: 0.1
+  playerCombatPrototyping: {fileID: 0}
 --- !u!70 &1681189292
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

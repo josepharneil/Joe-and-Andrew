@@ -1,39 +1,40 @@
 using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
 public class AttackingEnemy : MonoBehaviour
 {
-    [SerializeField] private GameObject player;
-
-    [SerializeField] private float attackRange;
-
+    [Header("Animation")]
     [SerializeField] private Animator animator; 
+    [SerializeField] private SpriteRenderer spriteRenderer;
     
-    [SerializeField] private int health;
+    [Header("Combat")]
+    [SerializeField] private GameObject player;
+    [SerializeField] private float attackRange;
+    [SerializeField] private LayerMask whatIsDamageable;
+    [SerializeField] private bool doesThisEnemyDealKnockback;
+    [SerializeField] private int attackDamage;
+    [SerializeField] private float knockbackStrength;
+
+    private FacingDirection _facingDirection = FacingDirection.Right; 
+    
     private static readonly int PlayerInAttackRange = Animator.StringToHash("playerInAttackRange");
-
-    // todo consider composition of classes
-    // eg. a "damageable" has this function 
-    public void DamageThisEnemy( int damage, Vector3 hitDirection, float knockbackStrength )
-    {
-        health -= damage;
-        print("Hit! " + health);
-
-        hitDirection.Normalize();
-        hitDirection.y = 0f;
-        hitDirection.z = 0f;
-        transform.DOMove(transform.position + (hitDirection*knockbackStrength ), 1f).SetEase(Ease.OutCubic);
-    }
-
-    private void OnGUI()
-    {
-        GUILayout.TextArea("Text here!" + health.ToString());
-    }
 
     private void Update()
     {
         CheckPlayerInRange();
+
+        if (player.transform.position.x < transform.position.x)
+        {
+            _facingDirection = FacingDirection.Left;
+            spriteRenderer.flipX = true;
+        }
+        else
+        {
+            _facingDirection = FacingDirection.Right;
+            spriteRenderer.flipX = false;
+        }
     }
 
     private void CheckPlayerInRange()
@@ -42,10 +43,54 @@ public class AttackingEnemy : MonoBehaviour
         animator.SetBool(PlayerInAttackRange, sqDistance < attackRange * attackRange);
     }
 
-    //todo this is called by an event
     //todo consider composition of classes for this ?
+    /// <summary>
+    /// This is called by Animation events
+    /// </summary>
+    /// <param name="attackIndex"></param>
     private void CheckAttackHitBox(int attackIndex)
     {
+        Vector2 overlapCirclePosition;
+        if (_facingDirection == FacingDirection.Left)
+        {
+            overlapCirclePosition = (Vector2)transform.position + new Vector2(-1f, 0 );
+        }
+        else
+        {
+            overlapCirclePosition = (Vector2)transform.position + new Vector2(1f, 0 );
+        }
         
+        ContactFilter2D contactFilter2D = new ContactFilter2D
+        {
+            layerMask = whatIsDamageable,
+            useLayerMask = true,
+        };
+        List<Collider2D> detectedObjects = new List<Collider2D>();
+        Physics2D.OverlapCircle(overlapCirclePosition, 1f, contactFilter2D, detectedObjects);
+
+        bool playerHit = false;
+        foreach (Collider2D coll in detectedObjects)
+        {
+            EntityHealth entityHealth = coll.gameObject.GetComponent<EntityHealth>();
+            if (entityHealth)
+            {
+                entityHealth.Damage( attackDamage );
+                if (doesThisEnemyDealKnockback)
+                {
+                    entityHealth.Knockback(entityHealth.transform.position - transform.position, knockbackStrength, 0.5f);
+                    playerHit = true;
+                }
+            }
+
+            // Instantiate a hit particle here if we want
+        }
+
+        // if (sandbagHit)
+        // {
+        //     cinemachineShake.ShakeCamera(shakeAmplitude, shakeFrequency, shakeDuration);
+        // }
+
+        // At the end, we're now post damage.
+        // inputs.isInPreDamageAttackPhase = false;
     }
 }

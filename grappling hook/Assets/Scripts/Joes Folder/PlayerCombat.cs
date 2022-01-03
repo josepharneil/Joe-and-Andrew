@@ -23,8 +23,6 @@ public class PlayerCombat : MonoBehaviour
 
     [SerializeField] private AttackInfo attackUp;
     [SerializeField] private AttackInfo attackDown;
-
-    [SerializeField] private float knockbackStrength;
     
     [Header("Swipes")]
     [SerializeField] private float swipeShowTime = 1f;
@@ -39,13 +37,8 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float shakeFrequency = 1f;
     [SerializeField] private float shakeDuration = 0.1f;
     
-    private void OnEnable()
-    {
-        upSwipe.enabled = false;
-        downSwipe.enabled = false;
-        rightSwipe.enabled = false;
-        leftSwipe.enabled = false;
-    }
+    [Header("Prototyping")]
+    public PlayerCombatPrototyping playerCombatPrototyping;
     
     private enum SwipeDirection
     {
@@ -55,9 +48,21 @@ public class PlayerCombat : MonoBehaviour
         Right
     }
 
+    private void OnEnable()
+    {
+        upSwipe.enabled = false;
+        downSwipe.enabled = false;
+        rightSwipe.enabled = false;
+        leftSwipe.enabled = false;
+    }
+
+    /// <summary>
+    /// Called by Animation Events.
+    /// </summary>
+    /// <param name="attackIndex"> Index of the attack </param>
     public void CheckAttackHitBox(int attackIndex)
     {
-        ref AttackInfo attackInfo = ref attackSide1;
+        ref AttackInfo currentAttackInfo = ref attackSide1;
         FacingDirection attackDirection = inputs.facingDirection;
 
         // Todo, figure out indexes to make more sense
@@ -94,10 +99,10 @@ public class PlayerCombat : MonoBehaviour
                 // todo didnt mean to skip this number.. need to figure out numbering
                 break;
             case 3:
-                attackInfo = ref attackUp;
+                currentAttackInfo = ref attackUp;
                 break;
             case 4:
-                attackInfo = ref attackDown;
+                currentAttackInfo = ref attackDown;
                 break;
             default:
                 Debug.LogError("No such attack index");
@@ -106,34 +111,39 @@ public class PlayerCombat : MonoBehaviour
         Vector2 overlapCirclePosition;
         if (attackDirection == FacingDirection.Left)
         {
-            var localPosition = attackInfo.hitBoxPosition.localPosition;
+            var localPosition = currentAttackInfo.hitBoxPosition.localPosition;
             overlapCirclePosition = (Vector2)transform.position + new Vector2(-localPosition.x, localPosition.y );
         }
         else
         {
-            overlapCirclePosition = attackInfo.hitBoxPosition.position;
+            overlapCirclePosition = currentAttackInfo.hitBoxPosition.position;
         }
         ContactFilter2D contactFilter2D = new ContactFilter2D
         {
-            layerMask = whatIsDamageable
+            layerMask = whatIsDamageable,
+            useLayerMask = true
         };
         List<Collider2D> detectedObjects = new List<Collider2D>();
-        Physics2D.OverlapCircle(overlapCirclePosition, attackInfo.radius, contactFilter2D, detectedObjects);
+        Physics2D.OverlapCircle(overlapCirclePosition, currentAttackInfo.radius, contactFilter2D, detectedObjects);
 
-        bool sandbagHit = false;
+        bool enemyHit = false;
         foreach (Collider2D coll in detectedObjects)
         {
-            SandbagEnemy sandbagEnemy = coll.gameObject.GetComponent<SandbagEnemy>();
-            if (sandbagEnemy)
+            EntityHealth entityHealth = coll.gameObject.GetComponent<EntityHealth>();
+            if (entityHealth)
             {
-                sandbagEnemy.DamageThisEnemy( attackInfo.damage, sandbagEnemy.transform.position - transform.position, knockbackStrength );
-                sandbagHit = true;
+                entityHealth.Damage( currentAttackInfo.damage );
+                if (playerCombatPrototyping.doesPlayerDealKnockback)
+                {
+                    entityHealth.Knockback(entityHealth.transform.position - transform.position, playerCombatPrototyping.knockbackStrength, 1.0f);
+                    enemyHit = true;
+                }
             }
             
             // Instantiate a hit particle here if we want
         }
 
-        if (sandbagHit)
+        if (enemyHit)
         {
             cinemachineShake.ShakeCamera(shakeAmplitude, shakeFrequency, shakeDuration);
         }
@@ -195,7 +205,7 @@ public class PlayerCombat : MonoBehaviour
         
         swipe.enabled = true;
         
-        yield return new WaitForSeconds(swipeShowTime / GetComponent<PlayerInputs>().prototypeAttackCustomisation.attackSpeed);
+        yield return new WaitForSeconds(swipeShowTime / GetComponent<PlayerInputs>().playerCombatPrototyping.attackSpeed);
 
         swipe.enabled = false;
     }

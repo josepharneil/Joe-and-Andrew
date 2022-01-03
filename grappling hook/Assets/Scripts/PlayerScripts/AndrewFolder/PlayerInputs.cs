@@ -66,69 +66,9 @@ public class PlayerInputs : MonoBehaviour
     private static readonly int AttackUpTriggerID = Animator.StringToHash("attackUpTrigger");
     private static readonly int AttackDownTriggerID = Animator.StringToHash("attackDownTrigger");
     
-    
-    // TODO possibly do different kinds of animations
-    // Currently the animation is linear frame by frame,
-    // but for example we could stutter actual hitting later
-    // Attack speed type
-    // public enum PrototypeAttackSpeedStyle
-    // {
-    //     Fast,
-    //     Middling,
-    //     Slow,
-    // }
+    [Header("Prototyping")]
+    public PlayerCombatPrototyping playerCombatPrototyping;
 
-    // What can cancel attacks?
-    [Flags] public enum PrototypeCancellables
-    {
-        None = 0,
-        Movement = 1 << 0,
-        Roll = 1 << 1,
-        Jump = 1 << 2,
-    }
-
-    // Phases of an attack.
-    [Flags] public enum PrototypeAttackPhases
-    {
-        None = 0,
-        PreDamage = 1 << 0,
-        //DamageFrame - Not allowed to be cancelled as its a single frame for now.
-        PostDamage = 2 << 0
-    }
-    
-    public enum PrototypeAttackStyles
-    {
-        None,
-        HollowKnight,
-        EasyCancel,
-        DarkSouls,
-    }
-
-    [Serializable] public struct PrototypeAttackCustomisation
-    {
-        [Tooltip("Is movement disabled by attacks?")]
-        public bool movementDisabledByAttacks;
-        
-        [Tooltip("Can you change directions mid attack?")] 
-        public bool canChangeDirectionsDuringAttack;
-        
-        [Tooltip("Attack speed style")]
-        public float attackSpeed;
-        
-        [Tooltip("What can cancel attacks?")]
-        public PrototypeCancellables cancellables;
-
-        [Tooltip("In which phases can we cancel an attack?")]
-        public PrototypeAttackPhases cancellableAttackPhases;
-    }
-
-    [Header("Prototype Customisation")]
-    [SerializeField] public PrototypeAttackCustomisation prototypeAttackCustomisation;
-
-    [Tooltip("Quick-set an attack style")] 
-    [SerializeField] public PrototypeAttackStyles prototypeAttackStyle; 
-    private PrototypeAttackStyles _prevPrototypeAttackStyle;
-    
     private enum MoveState
     {
         Stopped,
@@ -159,8 +99,6 @@ public class PlayerInputs : MonoBehaviour
         _jumpVelocity = timeToJumpHeight * Mathf.Abs(_gravity);
         _moveState = MoveState.Stopped;
         _rollState = RollState.NotRolling;
-
-        _prevPrototypeAttackStyle = prototypeAttackStyle;
     }
 
     // https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnValidate.html
@@ -171,46 +109,6 @@ public class PlayerInputs : MonoBehaviour
     {
         _gravity = -2 * jumpHeight * Mathf.Pow(timeToJumpHeight, -2);
         _jumpVelocity = timeToJumpHeight * Mathf.Abs(_gravity);
-
-        if (prototypeAttackStyle != _prevPrototypeAttackStyle)
-        {
-            _prevPrototypeAttackStyle = prototypeAttackStyle;
-            switch (prototypeAttackStyle)
-            {
-                case PrototypeAttackStyles.None:
-                    prototypeAttackCustomisation.movementDisabledByAttacks = false;
-                    prototypeAttackCustomisation.canChangeDirectionsDuringAttack = false;
-                    prototypeAttackCustomisation.attackSpeed = 1.0f;
-                    prototypeAttackCustomisation.cancellables = PrototypeCancellables.None;
-                    prototypeAttackCustomisation.cancellableAttackPhases = PrototypeAttackPhases.None;
-                    break;
-                case PrototypeAttackStyles.HollowKnight:
-                    prototypeAttackCustomisation.movementDisabledByAttacks = false;
-                    prototypeAttackCustomisation.canChangeDirectionsDuringAttack = false;
-                    prototypeAttackCustomisation.attackSpeed = 2.0f;
-                    prototypeAttackCustomisation.cancellables = PrototypeCancellables.None;
-                    prototypeAttackCustomisation.cancellableAttackPhases = PrototypeAttackPhases.None;
-                    break;
-                case PrototypeAttackStyles.EasyCancel:
-                    prototypeAttackCustomisation.movementDisabledByAttacks = true;
-                    prototypeAttackCustomisation.canChangeDirectionsDuringAttack = false;
-                    prototypeAttackCustomisation.attackSpeed = 1.0f;
-                    prototypeAttackCustomisation.cancellables = PrototypeCancellables.Roll & PrototypeCancellables.Jump;
-                    prototypeAttackCustomisation.cancellableAttackPhases = PrototypeAttackPhases.PreDamage;
-                    break;
-                case PrototypeAttackStyles.DarkSouls:
-                    prototypeAttackCustomisation.movementDisabledByAttacks = true;
-                    prototypeAttackCustomisation.canChangeDirectionsDuringAttack = false;
-                    prototypeAttackCustomisation.attackSpeed = 0.5f;
-                    prototypeAttackCustomisation.cancellables = PrototypeCancellables.Roll;
-                    prototypeAttackCustomisation.cancellableAttackPhases = PrototypeAttackPhases.PostDamage;
-                    break;
-                default:
-                    Debug.LogError("Out of range");
-                    break;
-            }
-        }
-
     }
 
     // Update is called once per frame
@@ -222,7 +120,7 @@ public class PlayerInputs : MonoBehaviour
             if (isAttacking)
             {
                 // Does attacking disable movement?
-                if (prototypeAttackCustomisation.movementDisabledByAttacks)
+                if (playerCombatPrototyping.movementDisabledByAttacks)
                 {
                     // TODO Not sure what to do here.
                     if (_isGrounded)
@@ -250,7 +148,7 @@ public class PlayerInputs : MonoBehaviour
         ApplyGravity();
         Jump();
 
-        if (!isAttacking || (isAttacking && !prototypeAttackCustomisation.movementDisabledByAttacks))
+        if (!isAttacking || (isAttacking && !playerCombatPrototyping.movementDisabledByAttacks))
         {
             //move works by taking in a displacement, firing raycasts in the directions of the displacement
             //then if the raycasts collide with anything the displacement is altered to be the distance from the player edge to the collider
@@ -340,7 +238,7 @@ public class PlayerInputs : MonoBehaviour
         if (_moveInput.x != 0)
         {
             _isMoveInput = true;
-            if (!isAttacking || isAttacking && prototypeAttackCustomisation.canChangeDirectionsDuringAttack)
+            if (!isAttacking || isAttacking && playerCombatPrototyping.canChangeDirectionsDuringAttack)
             {
                 facingDirection = _moveInput.x < 0 ? FacingDirection.Left : FacingDirection.Right;
             }
@@ -444,10 +342,8 @@ public class PlayerInputs : MonoBehaviour
         float rate = (moveController.Collisions.Below ? accelerationRate : airAccelerationRate);
         _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
         _velocity.x = Mathf.Lerp(_velocity.x, moveSpeed * _moveInput.x, accelerationCurve.Evaluate(_lerpCurrent));
-        
-        // TODO Can input.x just be deleted here? They look like they cancel to me
-        // AK: yes its gone now!
-        if (Mathf.Abs(_velocity.x)-accelerationTolerance >=  moveSpeed)
+
+        if (Mathf.Abs(_velocity.x) - accelerationTolerance >= moveSpeed)
         {
             _moveState = MoveState.Running;
         }
@@ -479,16 +375,8 @@ public class PlayerInputs : MonoBehaviour
         float rate = moveController.Collisions.Below ? changeDirectionRate : airChangeDirectionRate;
         _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
         _velocity.x = Mathf.Lerp(_velocity.x, moveSpeed * _moveInput.x, changeDirectionCurve.Evaluate(_lerpCurrent));
-        
-        // TODO You need to be careful with floating point comparisons, eg:
-        // 0.000001 == 0.000000 is false, but we might want them to be equal.
-        // I'm not sure what the goal of the this bit of code is so I'm leaving for now.
-        // But should prob be of the form:
-        // if(Math.Abs(Mathf.Abs(_velocity.x) - moveSpeed) < TOLERANCE)
-        // Where TOLERANCE is some constant small value.
-        // You might want to set velocity.x = moveSpeed if this is true?
-        
-        if ((Mathf.Abs(_velocity.x) - moveSpeed)<changeDirectionTolerance)
+
+        if ((Mathf.Abs(_velocity.x) - moveSpeed) < changeDirectionTolerance) 
         {
             _moveState = MoveState.Running;
         }
@@ -586,7 +474,7 @@ public class PlayerInputs : MonoBehaviour
         if (isInPreDamageAttackPhase)
         {
             // What phases are cancellable?
-            if ((prototypeAttackCustomisation.cancellableAttackPhases &
+            if ((playerCombatPrototyping.cancellableAttackPhases &
                  PrototypeAttackPhases.PreDamage) == PrototypeAttackPhases.None)
             {
                 return;
@@ -594,7 +482,7 @@ public class PlayerInputs : MonoBehaviour
         }
         else // Post damage
         {
-            if ((prototypeAttackCustomisation.cancellableAttackPhases &
+            if ((playerCombatPrototyping.cancellableAttackPhases &
                  PrototypeAttackPhases.PostDamage) == PrototypeAttackPhases.None)
             {
                 return;
@@ -602,7 +490,7 @@ public class PlayerInputs : MonoBehaviour
         }
         
         // What cancels attacks?
-        if ((prototypeAttackCustomisation.cancellables & PrototypeCancellables.Roll) != PrototypeCancellables.None)
+        if ((playerCombatPrototyping.cancellables & PrototypeCancellables.Roll) != PrototypeCancellables.None)
         {
             if (_isRollInput)
             {
@@ -613,7 +501,7 @@ public class PlayerInputs : MonoBehaviour
             }
         }
 
-        if ((prototypeAttackCustomisation.cancellables & PrototypeCancellables.Jump) != PrototypeCancellables.None) 
+        if ((playerCombatPrototyping.cancellables & PrototypeCancellables.Jump) != PrototypeCancellables.None) 
         {
             if (_isJumpInput)
             {
@@ -623,7 +511,7 @@ public class PlayerInputs : MonoBehaviour
             }
         }
             
-        if ((prototypeAttackCustomisation.cancellables & PrototypeCancellables.Movement) != PrototypeCancellables.None) 
+        if ((playerCombatPrototyping.cancellables & PrototypeCancellables.Movement) != PrototypeCancellables.None) 
         {
             if (_isMoveInput)
             {
