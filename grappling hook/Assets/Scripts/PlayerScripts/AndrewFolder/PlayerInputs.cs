@@ -44,7 +44,7 @@ public class PlayerInputs : MonoBehaviour
     private bool _isRollInput;
     [HideInInspector] public FacingDirection facingDirection;
     private float _lerpCurrent = 0f;
-    private MoveState _moveState;
+    [SerializeField] private MoveState _moveState;
     private RollState _rollState;
     private Vector3 _velocity;
     private Vector2 _moveInput;
@@ -342,8 +342,10 @@ public class PlayerInputs : MonoBehaviour
         float rate = (moveController.Collisions.Below ? accelerationRate : airAccelerationRate);
         _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
         _velocity.x = Mathf.Lerp(_velocity.x, moveSpeed * _moveInput.x, accelerationCurve.Evaluate(_lerpCurrent));
-
-        if (Mathf.Abs(_velocity.x) - accelerationTolerance >= moveSpeed)
+        
+        // TODO Can input.x just be deleted here? They look like they cancel to me
+        // AK: yes its gone now!
+        if (Mathf.Abs(_velocity.x)-moveSpeed <=  accelerationTolerance)
         {
             _moveState = MoveState.Running;
         }
@@ -399,7 +401,7 @@ public class PlayerInputs : MonoBehaviour
         //starts the roll timer and does the enums, could be state machine for animation purposes?
         //roll overrides other movement
         //can only do while grounded for now, but we could change this later on 
-        if (_isGrounded)
+        if (_isRollInput)
         {
             _moveState = MoveState.Rolling;
             rollTimer = 0f;
@@ -426,8 +428,8 @@ public class PlayerInputs : MonoBehaviour
     private void StopRoll()
     {
         //stops the player dead, this doesn't feel great tho going to have another look once the enemy AI is done
-        _moveState = MoveState.Stopped;
-        _velocity.x = 0f;
+        _moveState = MoveState.Decelerating;
+       // _velocity.x = moveSpeed;
         _rollState = RollState.NotRolling;
     }
     #endregion

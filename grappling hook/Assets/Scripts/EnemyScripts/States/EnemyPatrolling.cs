@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class EnemyPatrolling : IState
 {
+    private EnemyPathing pathing;
+
+    public EnemyPatrolling(EnemyPathing pathing)
+    {
+        this.pathing = pathing;
+    }
     public void OnEnter() {}
 
     public void Tick()
     {
-        // No patrol.
+        pathing.UpdatePatrol();
     }
     
     public void FixedTick()

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class EnemyAttackPlayer : MonoBehaviour, IState
+public class EnemyAttackPlayer: MonoBehaviour, IState
 {
     [Header("Stats")]
     public int attackDamage = 5;
