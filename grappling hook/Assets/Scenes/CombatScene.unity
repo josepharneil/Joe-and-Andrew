@@ -4675,6 +4675,7 @@ GameObject:
   - component: {fileID: 866036391}
   - component: {fileID: 866036388}
   - component: {fileID: 866036390}
+  - component: {fileID: 866036392}
   m_Layer: 9
   m_Name: AttackingEnemy
   m_TagString: Untagged
@@ -4791,6 +4792,7 @@ MonoBehaviour:
   knockbackDuration: 0.5
   doesThisEnemyDealDaze: 1
   entityDaze: {fileID: 866036390}
+  parryable: {fileID: 866036392}
 --- !u!114 &866036388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4857,6 +4859,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fbb600d3206748e0ab9eb971f394754, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &866036392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 866036383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2148b64c125a4e8b8bd001bc5e30e49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isCurrentlyParryable: 0
+  hasBeenParried: 0
+  parryDuration: 1
+  spriteRenderer: {fileID: 866036384}
 --- !u!1 &924657550
 GameObject:
   m_ObjectHideFlags: 0
@@ -5151,6 +5169,7 @@ GameObject:
   - component: {fileID: 1467600183}
   - component: {fileID: 1467600184}
   - component: {fileID: 1467600180}
+  - component: {fileID: 1467600185}
   m_Layer: 11
   m_Name: Player
   m_TagString: Player
@@ -5170,7 +5189,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c86546bf22606b243bc43e516930e92c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveController: {fileID: 0}
+  moveController: {fileID: 1467600176}
   moveSpeed: 7
   jumpHeight: 2
   timeToJumpHeight: 0.4
@@ -5267,6 +5286,7 @@ MonoBehaviour:
   defaultSquareSprite: {fileID: 7482667652216324306, guid: 5205f3571171146c886d386aeaa65929, type: 3}
   isAttacking: 0
   isInPreDamageAttackPhase: 1
+  entityParry: {fileID: 1467600185}
   playerCombatPrototyping: {fileID: 1467600178}
   entityDaze: {fileID: 1467600184}
 --- !u!114 &1467600176
@@ -5449,6 +5469,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dazeDuration: 0.8
   isDazed: 0
+--- !u!114 &1467600185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1467600174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abc1d255e971545bc997b6d22cea764d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputs: {fileID: 1467600175}
+  whatIsParryable:
+    serializedVersion: 2
+    m_Bits: 512
+  parryRadius: 1
 --- !u!1 &1494434727
 GameObject:
   m_ObjectHideFlags: 0

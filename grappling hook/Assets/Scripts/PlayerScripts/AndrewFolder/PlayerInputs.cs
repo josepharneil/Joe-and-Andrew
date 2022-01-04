@@ -67,6 +67,9 @@ public class PlayerInputs : MonoBehaviour
     [HideInInspector] public bool isAttacking;
     [HideInInspector] public bool isInPreDamageAttackPhase = true;
 
+    [Header("Parrying")]
+    [SerializeField] private EntityParry entityParry;
+    
     // Animation parameter IDs.
     private static readonly int SpeedID = Animator.StringToHash("speed");
     private static readonly int AttackTriggerID = Animator.StringToHash("attackTrigger");
@@ -144,6 +147,15 @@ public class PlayerInputs : MonoBehaviour
             else
             {
                 ReadAttackInput();
+            }
+            
+            // For now, parrying is instant and you can do anything else during it.
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                if (entityParry)
+                {
+                    entityParry.CheckParry();
+                }
             }
         }
         

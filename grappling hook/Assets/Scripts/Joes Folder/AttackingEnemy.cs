@@ -26,11 +26,13 @@ public class AttackingEnemy : MonoBehaviour
     [Tooltip("When this enemy hits, does it daze the hit entity?")]
     [SerializeField] private bool doesThisEnemyDealDaze;
     [SerializeField] private EntityDaze entityDaze;
+    [SerializeField] private EntityParryable parryable;
 
     private FacingDirection _facingDirection = FacingDirection.Right; 
     
     private static readonly int PlayerInAttackRange = Animator.StringToHash("playerInAttackRange");
     private static readonly int IsDazed = Animator.StringToHash("isDazed");
+    private static readonly int IsParried = Animator.StringToHash("isParried");
 
     private void Update()
     {
@@ -38,7 +40,8 @@ public class AttackingEnemy : MonoBehaviour
         
         UpdateFacingDirection();
 
-        animator.SetBool(IsDazed, entityDaze.isDazed);
+        animator.SetBool(IsDazed, entityDaze && entityDaze.isDazed );
+        animator.SetBool(IsParried, parryable && parryable.hasBeenParried);
     }
 
     private void CheckPlayerInRange()

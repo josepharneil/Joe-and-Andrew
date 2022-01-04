@@ -17,7 +17,6 @@ public class EntityHealth : MonoBehaviour
         {
             currentHealth = 0;
         }
-        print("Damage! " + maxHealth);
     }
 
     public void Heal( int heal )
@@ -27,6 +26,5 @@ public class EntityHealth : MonoBehaviour
         {
             currentHealth = maxHealth;
         }
-        print("Heal! " + maxHealth);
     }
 }

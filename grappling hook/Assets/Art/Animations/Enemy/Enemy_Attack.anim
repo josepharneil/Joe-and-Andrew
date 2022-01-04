@@ -31,11 +31,13 @@ AnimationClip:
       value: {fileID: 21300000, guid: 8e56bfcef434049fcaee4eb135b6599c, type: 3}
     - time: 0.625
       value: {fileID: 21300000, guid: 38f477855f9f5453589a289a86346eae, type: 3}
+    - time: 0.6875
+      value: {fileID: 21300000, guid: 38f477855f9f5453589a289a86346eae, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
     script: {fileID: 0}
-  m_SampleRate: 8
+  m_SampleRate: 16
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -55,6 +57,7 @@ AnimationClip:
     - {fileID: 21300000, guid: 92b7533c1c84c470b808d845324363cb, type: 3}
     - {fileID: 21300000, guid: 31339cb79ed434d0c94edd7de0c374c1, type: 3}
     - {fileID: 21300000, guid: 8e56bfcef434049fcaee4eb135b6599c, type: 3}
+    - {fileID: 21300000, guid: 38f477855f9f5453589a289a86346eae, type: 3}
     - {fileID: 21300000, guid: 38f477855f9f5453589a289a86346eae, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
@@ -81,8 +84,22 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
+  - time: 0.125
+    functionName: SetParryable
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 0.375
     functionName: CheckAttackHitBox
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.375
+    functionName: SetNotParryable
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
