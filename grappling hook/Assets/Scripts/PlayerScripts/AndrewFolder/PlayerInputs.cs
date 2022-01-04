@@ -207,7 +207,7 @@ public class PlayerInputs : MonoBehaviour
         //this makes sure that the gravity is always properly applied
         //if its in an else of this if it really fucks up the jumping
 
-        if (moveController.Collisions.Below || moveController.Collisions.Above)
+        if (moveController.Collisions.Below || moveController.Collisions.Above||_rollState!=RollState.NotRolling)
         {
             _velocity.y = 0;
         }
@@ -406,13 +406,13 @@ public class PlayerInputs : MonoBehaviour
     {
         //starts the roll timer and does the enums, could be state machine for animation purposes?
         //roll overrides other movement
-        //can only do while grounded for now, but we could change this later on 
         if (_isRollInput)
         {
             _moveState = MoveState.Rolling;
             rollTimer = 0f;
             _rollState = RollState.Rolling;
             _rollDirection = (float)facingDirection;
+            gameObject.GetComponent<SpriteRenderer>().color = Color.black;
         }
     }
 
@@ -430,13 +430,11 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
-    //TODO: Make roll stopping feel better
     private void StopRoll()
     {
-        //stops the player dead, this doesn't feel great tho going to have another look once the enemy AI is done
         _moveState = MoveState.Decelerating;
-       // _velocity.x = moveSpeed;
         _rollState = RollState.NotRolling;
+        gameObject.GetComponent<SpriteRenderer>().color = Color.white;
     }
     #endregion
 
