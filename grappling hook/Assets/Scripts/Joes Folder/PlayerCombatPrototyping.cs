@@ -51,6 +51,7 @@ public class PlayerCombatPrototyping : MonoBehaviour
                     cancellableAttackPhases = PrototypeAttackPhases.None;
                     doesPlayerDealKnockback = false;
                     knockbackStrength = 1f;
+                    doesPlayerDealDaze = true;
                     break;
                 case PrototypeAttackStyles.HollowKnight:
                     movementDisabledByAttacks = false;
@@ -60,6 +61,7 @@ public class PlayerCombatPrototyping : MonoBehaviour
                     cancellableAttackPhases = PrototypeAttackPhases.None;
                     doesPlayerDealKnockback = true;
                     knockbackStrength = 2.5f;
+                    doesPlayerDealDaze = false;
                     break;
                 case PrototypeAttackStyles.EasyCancel:
                     movementDisabledByAttacks = true;
@@ -69,6 +71,7 @@ public class PlayerCombatPrototyping : MonoBehaviour
                     cancellableAttackPhases = PrototypeAttackPhases.PreDamage;
                     doesPlayerDealKnockback = true;
                     knockbackStrength = 1f;
+                    doesPlayerDealDaze = true;
                     break;
                 case PrototypeAttackStyles.DarkSouls:
                     movementDisabledByAttacks = true;
@@ -78,6 +81,7 @@ public class PlayerCombatPrototyping : MonoBehaviour
                     cancellableAttackPhases = PrototypeAttackPhases.PostDamage;
                     doesPlayerDealKnockback = true;
                     knockbackStrength = 1f;
+                    doesPlayerDealDaze = true;
                     break;
                 default:
                     Debug.LogError("Out of range");
