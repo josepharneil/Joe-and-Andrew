@@ -23,6 +23,12 @@ public class EnemyInput : MonoBehaviour
     private List<RaycastHit2D> raycastHitsTowardsPlayer = new List<RaycastHit2D>();
 
     public bool IsAtOriginalPosition = false;
+    public Vector2 originalPosition;
+
+    private void Start()
+    {
+        originalPosition = gameObject.transform.position;
+    }
 
     private void Update()
     {
@@ -30,7 +36,7 @@ public class EnemyInput : MonoBehaviour
         RaycastCheckToPlayer();
 
         // Check initial position (hardcoded)
-        IsAtOriginalPosition = transform.position.x == 15;
+        IsAtOriginalPosition = transform.position.x == originalPosition.x;
     }
 
     private void RaycastCheckToPlayer()
@@ -53,11 +59,11 @@ public class EnemyInput : MonoBehaviour
             return false;
         }
         RaycastHit2D playerHit = raycastHitsTowardsPlayer[0];
-        if (!playerHit.transform.gameObject.CompareTag("Player"))
+        if (playerHit.transform.gameObject.CompareTag("Player"))
         {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     public bool PlayerIsInAttackRange()
@@ -84,6 +90,11 @@ public class EnemyInput : MonoBehaviour
         {
             return false;
         }
-        return raycastHitsTowardsPlayer[0].distance < sightMaxDistance;
+        RaycastHit2D playerHit = raycastHitsTowardsPlayer[0];
+        if (playerHit.transform.gameObject.CompareTag("Player")&&playerHit.distance<sightMaxDistance)
+        {
+            return true;
+        }
+        return false;
     }
 }

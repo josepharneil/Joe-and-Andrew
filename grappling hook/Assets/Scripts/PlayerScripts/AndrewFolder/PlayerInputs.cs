@@ -9,24 +9,30 @@ public class PlayerInputs : MonoBehaviour
     [Header("Components")]
     [SerializeField] private MoveController moveController;
 
-    [Header("Move Stats")]
+    [Header("Jump Stats")]
     // TODO Separate these into jump, roll and move categories
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float jumpHeight = 3f;
     [SerializeField] private float timeToJumpHeight = 0.4f;
+    [SerializeField] private float coyoteTime;
+
+    [Header("Ground Move Stats")]
     [SerializeField] private AnimationCurve accelerationCurve;
     [SerializeField] [Range(0f, 1f)] private float accelerationRate;
-    [SerializeField] [Range(0f, 1f)] private float airAccelerationRate;
     [SerializeField] private float accelerationTolerance;
     [SerializeField] private AnimationCurve decelerationCurve;
     [SerializeField] [Range(0f, 1f)] private float decelerationRate;
-    [SerializeField] [Range(0f, 1f)] private float airDecelerationRate;
     [SerializeField] private float decelerationTolerance;
     [SerializeField] private AnimationCurve changeDirectionCurve;
     [SerializeField] [Range(0f, 1f)] private float changeDirectionRate;
-    [SerializeField] [Range(0f, 1f)] private float airChangeDirectionRate;
     [SerializeField] private float changeDirectionTolerance;
-    [SerializeField] private float coyoteTime;
+
+    [Header("Air Move Stats")]
+    [SerializeField] [Range(0f, 1f)] private float airAccelerationRate;
+    [SerializeField] [Range(0f, 1f)] private float airDecelerationRate;
+    [SerializeField] [Range(0f, 1f)] private float airChangeDirectionRate;
+
+    [Header("Roll Stats")]
     [SerializeField] private float rollDistance;
     [SerializeField] private float rollDuration;
 
@@ -36,7 +42,7 @@ public class PlayerInputs : MonoBehaviour
     private float _gravity;
     private float _jumpVelocity;
     private float _rollDirection;
-    [SerializeField] private float rollTimer = 0f;
+    private float rollTimer = 0f;
 
     private bool _isMoveInput;
     private bool _isJumpInput;

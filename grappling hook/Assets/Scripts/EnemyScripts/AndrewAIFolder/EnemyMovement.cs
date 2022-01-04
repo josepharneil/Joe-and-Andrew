@@ -15,7 +15,7 @@ public class EnemyMovement : MonoBehaviour
     float horizontalRaySpacing;
     float verticalRaySpacing;
 
-    CapsuleCollider2D enemyCollider;
+    BoxCollider2D enemyCollider;
     RayCastOrigins raycastOrigins;
     public CollisionInfo collisions;
 
@@ -67,7 +67,7 @@ public class EnemyMovement : MonoBehaviour
     #endregion
     void Start()
     {
-        enemyCollider = gameObject.GetComponent<CapsuleCollider2D>();
+        enemyCollider = gameObject.GetComponent<BoxCollider2D>();
         CalculateRaySpacing();
         UpdateRaycastOrigins();
     }

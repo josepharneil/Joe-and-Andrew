@@ -230,7 +230,7 @@ MonoBehaviour:
   playerTransform: {fileID: 2142903476}
   groundAndPlayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2112
   attackMaxDistance: 1.5
   chaseMaxDistance: 10
   sightMaxDistance: 15
@@ -355,6 +355,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTransform: {fileID: 2142903476}
+  accelerationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  accelerationRate: 0.5
+  enemyMovement: {fileID: 1107681642}
   walkSpeed: 2
   runSpeed: 4
 --- !u!114 &1107681641
@@ -503,7 +529,7 @@ GameObject:
   - component: {fileID: 1823624216}
   m_Layer: 6
   m_Name: Tilemap
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2280,6 +2306,7 @@ MonoBehaviour:
   moveSpeed: 11
   jumpHeight: 2
   timeToJumpHeight: 0.4
+  coyoteTime: 0.5
   accelerationCurve:
     serializedVersion: 2
     m_Curve:
@@ -2305,7 +2332,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   accelerationRate: 0.876
-  airAccelerationRate: 0.282
   accelerationTolerance: 0.005
   decelerationCurve:
     serializedVersion: 2
@@ -2332,7 +2358,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   decelerationRate: 0.86
-  airDecelerationRate: 0.194
   decelerationTolerance: 0.005
   changeDirectionCurve:
     serializedVersion: 2
@@ -2359,12 +2384,12 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   changeDirectionRate: 0.877
-  airChangeDirectionRate: 0.736
   changeDirectionTolerance: 0.005
-  coyoteTime: 0.5
+  airAccelerationRate: 0.282
+  airDecelerationRate: 0.194
+  airChangeDirectionRate: 0.736
   rollDistance: 3
   rollDuration: 0.25
-  rollTimer: 0
   facingDirection: 0
   _moveState: 0
   debugUseAnimations: 0
@@ -2373,13 +2398,7 @@ MonoBehaviour:
   defaultSquareSprite: {fileID: 7482667652216324306, guid: 5205f3571171146c886d386aeaa65929, type: 3}
   isAttacking: 0
   isInPreDamageAttackPhase: 1
-  prototypeAttackCustomisation:
-    movementDisabledByAttacks: 0
-    canChangeDirectionsDuringAttack: 0
-    attackSpeed: 0
-    cancellables: 0
-    cancellableAttackPhases: 0
-  prototypeAttackStyle: 0
+  playerCombatPrototyping: {fileID: 0}
 --- !u!114 &2142903473
 MonoBehaviour:
   m_ObjectHideFlags: 0
