@@ -38,7 +38,7 @@ public class AttackingEnemy : MonoBehaviour
         
         UpdateFacingDirection();
 
-        animator.SetBool(IsDazed,entityDaze.isDazed);
+        animator.SetBool(IsDazed, entityDaze.isDazed);
     }
 
     private void CheckPlayerInRange()
@@ -102,11 +102,7 @@ public class AttackingEnemy : MonoBehaviour
             
             if (doesThisEnemyDealDaze)
             {
-                EntityDaze entityDaze = coll.gameObject.GetComponent<EntityDaze>();
-                if (entityDaze)
-                {
-                    entityDaze.Daze();
-                }
+                coll.gameObject.GetComponent<EntityDaze>()?.Daze();
             }
             
 

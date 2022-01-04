@@ -5,29 +5,33 @@ using UnityEngine;
 
 public class PlayerCombatPrototyping : MonoBehaviour
 {
-    [Header("Prototype Customisation")]
+    [Header("Movement and Combat")]
     [Tooltip("Is movement disabled by attacks?")]
     public bool movementDisabledByAttacks;
-        
     [Tooltip("Can you change directions mid attack?")] 
     public bool canChangeDirectionsDuringAttack;
         
+    [Header("Attack Speed Style")]
     [Tooltip("Attack speed style")]
     public float attackSpeed;
         
+    [Header("Cancellables")]
     [Tooltip("What can cancel attacks?")]
     public PrototypeCancellables cancellables;
-
     [Tooltip("In which phases can we cancel an attack?")]
     public PrototypeAttackPhases cancellableAttackPhases;
 
+    [Header("Knockback")]
     [Tooltip("Does player deal knockback?")]
     public bool doesPlayerDealKnockback;
-    public float knockbackStrength;
+    public float knockbackStrength = 2f;
+    public float knockbackDuration = 0.5f;
     
+    [Header("Daze")]
     [Tooltip("Does player deal daze?")]
     public bool doesPlayerDealDaze = true;
 
+    [Header("Preset")]
     [Tooltip("Quick-set an attack style")]
     [SerializeField] public PrototypeAttackStyles prototypeAttackStyle;
     private PrototypeAttackStyles _prevPrototypeAttackStyle = PrototypeAttackStyles.None;

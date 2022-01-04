@@ -141,7 +141,7 @@ public class PlayerCombat : MonoBehaviour
             EntityKnockback entityKnockback = coll.gameObject.GetComponent<EntityKnockback>();
             if (entityKnockback && playerCombatPrototyping.doesPlayerDealKnockback)
             {
-                entityKnockback.Knockback(entityHealth.transform.position - transform.position, playerCombatPrototyping.knockbackStrength, 1.0f);
+                entityKnockback.Knockback(entityHealth.transform.position - transform.position, playerCombatPrototyping.knockbackStrength, playerCombatPrototyping.knockbackDuration);
             }
 
             EntityDaze entityDaze = coll.gameObject.GetComponent<EntityDaze>();

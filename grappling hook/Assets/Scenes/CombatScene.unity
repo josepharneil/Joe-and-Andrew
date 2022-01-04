@@ -4787,8 +4787,8 @@ MonoBehaviour:
   attackRange: 3
   attackDamage: 5
   doesThisEnemyDealKnockback: 1
-  knockbackStrength: 1
-  knockbackDuration: 1
+  knockbackStrength: 2
+  knockbackDuration: 0.5
   doesThisEnemyDealDaze: 1
   entityDaze: {fileID: 866036390}
 --- !u!114 &866036388
@@ -5268,7 +5268,7 @@ MonoBehaviour:
   isAttacking: 0
   isInPreDamageAttackPhase: 1
   playerCombatPrototyping: {fileID: 1467600178}
-  entityDaze: {fileID: 0}
+  entityDaze: {fileID: 1467600184}
 --- !u!114 &1467600176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5332,6 +5332,7 @@ MonoBehaviour:
   cancellableAttackPhases: 0
   doesPlayerDealKnockback: 1
   knockbackStrength: 2.5
+  knockbackDuration: 0.5
   doesPlayerDealDaze: 1
   prototypeAttackStyle: 1
 --- !u!4 &1467600179
