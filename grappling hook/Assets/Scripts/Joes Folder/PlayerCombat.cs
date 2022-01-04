@@ -134,18 +134,20 @@ public class PlayerCombat : MonoBehaviour
             EntityHealth entityHealth = coll.gameObject.GetComponent<EntityHealth>();
             if (entityHealth)
             {
-                entityHealth.Damage( currentAttackInfo.damage );
-                if (playerCombatPrototyping.doesPlayerDealKnockback)
-                {
-                    entityHealth.Knockback(entityHealth.transform.position - transform.position, playerCombatPrototyping.knockbackStrength, 1.0f);
-                    enemyHit = true;
-                }
+                entityHealth.Damage(currentAttackInfo.damage);
+                enemyHit = true;
+            }
 
-                AttackingEnemy attackingEnemy = coll.gameObject.GetComponent<AttackingEnemy>();
-                if (attackingEnemy && attackingEnemy.canThisEnemyBeDazed)
-                {
-                    StartCoroutine(DazeEnemy(attackingEnemy));
-                }
+            EntityKnockback entityKnockback = coll.gameObject.GetComponent<EntityKnockback>();
+            if (entityKnockback && playerCombatPrototyping.doesPlayerDealKnockback)
+            {
+                entityKnockback.Knockback(entityHealth.transform.position - transform.position, playerCombatPrototyping.knockbackStrength, 1.0f);
+            }
+
+            EntityDaze entityDaze = coll.gameObject.GetComponent<EntityDaze>();
+            if (entityDaze && playerCombatPrototyping.doesPlayerDealDaze)
+            {
+                entityDaze.Daze();
             }
             
             // Instantiate a hit particle here if we want
@@ -158,14 +160,6 @@ public class PlayerCombat : MonoBehaviour
 
         // At the end, we're now post damage.
         inputs.isInPreDamageAttackPhase = false;
-    }
-
-    private IEnumerator DazeEnemy(AttackingEnemy attackingEnemy)
-    {
-        attackingEnemy.animator.SetBool(IsDazed, true);
-        // Todo this could prob just be controlled by the animator
-        yield return new WaitForSeconds(attackingEnemy.dazeDuration);
-        attackingEnemy.animator.SetBool(IsDazed, false);
     }
 
     private void OnDrawGizmos()

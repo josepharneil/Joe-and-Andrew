@@ -24,17 +24,14 @@ public class PlayerCombatPrototyping : MonoBehaviour
     [Tooltip("Does player deal knockback?")]
     public bool doesPlayerDealKnockback;
     public float knockbackStrength;
+    
+    [Tooltip("Does player deal daze?")]
+    public bool doesPlayerDealDaze = true;
 
     [Tooltip("Quick-set an attack style")]
     [SerializeField] public PrototypeAttackStyles prototypeAttackStyle;
     private PrototypeAttackStyles _prevPrototypeAttackStyle = PrototypeAttackStyles.None;
-
-    [Tooltip("When player is hit, is control taken away?")]
-    public bool canBeDazedWhenHit = false;
-    [HideInInspector] public bool isDazed = false;
-    [Tooltip("When player is hit, how long are they dazed for?")]
-    public float dazeDuration = 0.5f;
-
+    
     private void OnValidate()
     {
         if (prototypeAttackStyle != _prevPrototypeAttackStyle)

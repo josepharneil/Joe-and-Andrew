@@ -76,6 +76,7 @@ public class PlayerInputs : MonoBehaviour
     
     [Header("Prototyping")]
     public PlayerCombatPrototyping playerCombatPrototyping;
+    [SerializeField] private EntityDaze entityDaze;
 
     private enum MoveState
     {
@@ -179,7 +180,7 @@ public class PlayerInputs : MonoBehaviour
 
     private void HandleJumpInput()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !playerCombatPrototyping.isDazed)
+        if (Input.GetKeyDown(KeyCode.Space) && !(entityDaze && entityDaze.isDazed))
         {
             if (debugUseAnimations)
             {
@@ -208,7 +209,7 @@ public class PlayerInputs : MonoBehaviour
         //this makes sure that the gravity is always properly applied
         //if its in an else of this if it really fucks up the jumping
 
-        if (moveController.Collisions.Below || moveController.Collisions.Above||_rollState!=RollState.NotRolling)
+        if (moveController.Collisions.Below || moveController.Collisions.Above || _rollState != RollState.NotRolling)
         {
             _velocity.y = 0;
         }
@@ -243,7 +244,7 @@ public class PlayerInputs : MonoBehaviour
     private void HandleMoveInput()
     {
         _moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        if (playerCombatPrototyping.isDazed)
+        if (entityDaze && entityDaze.isDazed)
         {
             _moveInput = Vector2.zero;
         }
@@ -398,7 +399,7 @@ public class PlayerInputs : MonoBehaviour
 
     private void HandleRollInput()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !playerCombatPrototyping.isDazed)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !(entityDaze && entityDaze.isDazed))
         {
             _isRollInput = true;
         }
