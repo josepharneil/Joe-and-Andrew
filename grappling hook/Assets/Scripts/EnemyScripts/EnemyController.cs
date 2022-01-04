@@ -44,7 +44,7 @@ public class EnemyController : MonoBehaviour
         _stateMachine = new StateMachine();
 
         // Define states
-        var patrollingState = new EnemyPatrolling();
+        var patrollingState = new EnemyPatrolling( pathing );
         var returningToPatrolState = new EnemyReturnToPatrol( pathing );
         var seesPlayerState = new EnemySeesPlayer();
         var chasePlayerState = new EnemyChasePlayer( pathing );
