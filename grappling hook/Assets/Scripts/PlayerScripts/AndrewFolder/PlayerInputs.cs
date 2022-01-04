@@ -35,6 +35,7 @@ public class PlayerInputs : MonoBehaviour
     [Header("Roll Stats")]
     [SerializeField] private float rollDistance;
     [SerializeField] private float rollDuration;
+    [SerializeField] private float rollCoolDown;
 
     private float _jumpCalledTime;
     private float _lastGroundedTime;
@@ -42,7 +43,8 @@ public class PlayerInputs : MonoBehaviour
     private float _gravity;
     private float _jumpVelocity;
     private float _rollDirection;
-    private float rollTimer = 0f;
+    private float rollDurationTimer = 0f;
+    private float rollCoolDownTimer = 0f;
 
     private bool _isMoveInput;
     private bool _isJumpInput;
@@ -406,10 +408,10 @@ public class PlayerInputs : MonoBehaviour
     {
         //starts the roll timer and does the enums, could be state machine for animation purposes?
         //roll overrides other movement
-        if (_isRollInput)
+        if (_isRollInput && (Time.time - rollCoolDownTimer > rollCoolDown)&&_rollState!=RollState.Rolling) 
         {
             _moveState = MoveState.Rolling;
-            rollTimer = 0f;
+            rollDurationTimer = 0f;
             _rollState = RollState.Rolling;
             _rollDirection = (float)facingDirection;
             gameObject.GetComponent<SpriteRenderer>().color = Color.black;
@@ -419,10 +421,10 @@ public class PlayerInputs : MonoBehaviour
     private void Roll()
     {
         //keeps rolling while the timer is on
-        if (rollTimer <= rollDuration)
+        if (rollDurationTimer <= rollDuration)
         {
             _velocity.x = rollDistance * (int)_rollDirection / rollDuration;
-            rollTimer += Time.deltaTime;
+            rollDurationTimer += Time.deltaTime;
         }
         else
         {
@@ -435,6 +437,7 @@ public class PlayerInputs : MonoBehaviour
         _moveState = MoveState.Decelerating;
         _rollState = RollState.NotRolling;
         gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+       rollCoolDownTimer = Time.time;
     }
     #endregion
 
