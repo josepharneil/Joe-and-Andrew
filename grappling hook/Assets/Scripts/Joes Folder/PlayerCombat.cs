@@ -39,7 +39,9 @@ public class PlayerCombat : MonoBehaviour
     
     [Header("Prototyping")]
     public PlayerCombatPrototyping playerCombatPrototyping;
-    
+
+    private static readonly int IsDazed = Animator.StringToHash("isDazed");
+
     private enum SwipeDirection
     {
         Up,
@@ -138,6 +140,12 @@ public class PlayerCombat : MonoBehaviour
                     entityHealth.Knockback(entityHealth.transform.position - transform.position, playerCombatPrototyping.knockbackStrength, 1.0f);
                     enemyHit = true;
                 }
+
+                AttackingEnemy attackingEnemy = coll.gameObject.GetComponent<AttackingEnemy>();
+                if (attackingEnemy && attackingEnemy.canThisEnemyBeDazed)
+                {
+                    StartCoroutine(DazeEnemy(attackingEnemy));
+                }
             }
             
             // Instantiate a hit particle here if we want
@@ -150,6 +158,14 @@ public class PlayerCombat : MonoBehaviour
 
         // At the end, we're now post damage.
         inputs.isInPreDamageAttackPhase = false;
+    }
+
+    private IEnumerator DazeEnemy(AttackingEnemy attackingEnemy)
+    {
+        attackingEnemy.animator.SetBool(IsDazed, true);
+        // Todo this could prob just be controlled by the animator
+        yield return new WaitForSeconds(attackingEnemy.dazeDuration);
+        attackingEnemy.animator.SetBool(IsDazed, false);
     }
 
     private void OnDrawGizmos()

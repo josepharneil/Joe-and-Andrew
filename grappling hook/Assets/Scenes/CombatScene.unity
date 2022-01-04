@@ -246,7 +246,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &135500741
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4578,7 +4578,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81bcdf0702639460ca280acb5dee23dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  maxHealth: 100
+  currentHealth: 0
 --- !u!1 &779166324
 GameObject:
   m_ObjectHideFlags: 0
@@ -4783,6 +4784,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   doesThisEnemyDealKnockback: 1
+  doesThisEnemyDealDaze: 1
+  canThisEnemyBeDazed: 1
+  dazeDuration: 1.2
   attackDamage: 5
   knockbackStrength: 1
 --- !u!114 &866036388
@@ -4797,7 +4801,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81bcdf0702639460ca280acb5dee23dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  maxHealth: 100
+  currentHealth: 0
 --- !u!61 &866036389
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5139,6 +5144,7 @@ MonoBehaviour:
   moveSpeed: 11
   jumpHeight: 2
   timeToJumpHeight: 0.4
+  coyoteTime: 0.5
   accelerationCurve:
     serializedVersion: 2
     m_Curve:
@@ -5164,7 +5170,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   accelerationRate: 0.876
-  airAccelerationRate: 0.282
   accelerationTolerance: 0
   decelerationCurve:
     serializedVersion: 2
@@ -5191,7 +5196,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   decelerationRate: 0.86
-  airDecelerationRate: 0.194
   decelerationTolerance: 0
   changeDirectionCurve:
     serializedVersion: 2
@@ -5218,18 +5222,19 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   changeDirectionRate: 0.877
-  airChangeDirectionRate: 0.736
   changeDirectionTolerance: 0
-  coyoteTime: 0.5
+  airAccelerationRate: 0.282
+  airDecelerationRate: 0.194
+  airChangeDirectionRate: 0.736
   rollDistance: 5
   rollDuration: 0.25
-  rollTimer: 0
+  rollCoolDown: 0.75
   facingDirection: 0
   _moveState: 0
   debugUseAnimations: 1
   animator: {fileID: 1467600180}
   spriteRenderer: {fileID: 582754437}
-  defaultSquareSprite: {fileID: 0}
+  defaultSquareSprite: {fileID: 7482667652216324306, guid: 5205f3571171146c886d386aeaa65929, type: 3}
   isAttacking: 0
   isInPreDamageAttackPhase: 1
   playerCombatPrototyping: {fileID: 1467600178}
@@ -5297,6 +5302,9 @@ MonoBehaviour:
   doesPlayerDealKnockback: 1
   knockbackStrength: 2.5
   prototypeAttackStyle: 1
+  canBeDazedWhenHit: 1
+  isDazed: 0
+  dazeDuration: 1
 --- !u!4 &1467600179
 Transform:
   m_ObjectHideFlags: 0
@@ -5383,7 +5391,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81bcdf0702639460ca280acb5dee23dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  maxHealth: 100
+  currentHealth: 0
 --- !u!1 &1494434727
 GameObject:
   m_ObjectHideFlags: 0
@@ -5597,6 +5606,49 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2008422334
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2008422335}
+  - component: {fileID: 2008422336}
+  m_Layer: 0
+  m_Name: DebugShowHealth
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2008422335
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2008422334}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2008422336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2008422334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bb27bf9d02a2409391fdd37a37f55a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2116292217
 GameObject:
   m_ObjectHideFlags: 0

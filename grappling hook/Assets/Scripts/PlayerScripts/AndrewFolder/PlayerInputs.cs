@@ -147,7 +147,6 @@ public class PlayerInputs : MonoBehaviour
         }
         
         // Movement
-        _moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         HandleRollInput();
         HandleMoveInput();
         HandleJumpInput();
@@ -180,7 +179,7 @@ public class PlayerInputs : MonoBehaviour
 
     private void HandleJumpInput()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !playerCombatPrototyping.isDazed)
         {
             if (debugUseAnimations)
             {
@@ -243,6 +242,11 @@ public class PlayerInputs : MonoBehaviour
     #region Horizontal Movement
     private void HandleMoveInput()
     {
+        _moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        if (playerCombatPrototyping.isDazed)
+        {
+            _moveInput = Vector2.zero;
+        }
         if (_moveInput.x != 0)
         {
             _isMoveInput = true;
@@ -394,7 +398,7 @@ public class PlayerInputs : MonoBehaviour
 
     private void HandleRollInput()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !playerCombatPrototyping.isDazed)
         {
             _isRollInput = true;
         }
@@ -414,7 +418,6 @@ public class PlayerInputs : MonoBehaviour
             rollDurationTimer = 0f;
             _rollState = RollState.Rolling;
             _rollDirection = (float)facingDirection;
-            gameObject.GetComponent<SpriteRenderer>().color = Color.black;
         }
     }
 
@@ -436,8 +439,7 @@ public class PlayerInputs : MonoBehaviour
     {
         _moveState = MoveState.Decelerating;
         _rollState = RollState.NotRolling;
-        gameObject.GetComponent<SpriteRenderer>().color = Color.white;
-       rollCoolDownTimer = Time.time;
+        rollCoolDownTimer = Time.time;
     }
     #endregion
 

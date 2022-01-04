@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine;
 public class AttackingEnemy : MonoBehaviour
 {
     [Header("Animation")]
-    [SerializeField] private Animator animator; 
+    public Animator animator; 
     [SerializeField] private SpriteRenderer spriteRenderer;
     
     [Header("Combat")]
@@ -14,6 +15,9 @@ public class AttackingEnemy : MonoBehaviour
     [SerializeField] private float attackRange;
     [SerializeField] private LayerMask whatIsDamageable;
     [SerializeField] private bool doesThisEnemyDealKnockback;
+    [SerializeField] private bool doesThisEnemyDealDaze;
+    public bool canThisEnemyBeDazed = true;
+    public float dazeDuration = 0.8f;
     [SerializeField] private int attackDamage;
     [SerializeField] private float knockbackStrength;
 
@@ -68,18 +72,29 @@ public class AttackingEnemy : MonoBehaviour
         List<Collider2D> detectedObjects = new List<Collider2D>();
         Physics2D.OverlapCircle(overlapCirclePosition, 1f, contactFilter2D, detectedObjects);
 
-        bool playerHit = false;
+        //bool playerHit = false;
         foreach (Collider2D coll in detectedObjects)
         {
             EntityHealth entityHealth = coll.gameObject.GetComponent<EntityHealth>();
             if (entityHealth)
             {
                 entityHealth.Damage( attackDamage );
+                
                 if (doesThisEnemyDealKnockback)
                 {
                     entityHealth.Knockback(entityHealth.transform.position - transform.position, knockbackStrength, 0.5f);
-                    playerHit = true;
+                    //playerHit = true;
                 }
+                
+                if (doesThisEnemyDealDaze)
+                {
+                    PlayerCombatPrototyping playerCombatPrototyping = coll.gameObject.GetComponent<PlayerCombatPrototyping>();
+                    if (playerCombatPrototyping && playerCombatPrototyping.canBeDazedWhenHit)
+                    {
+                        StartCoroutine(DazePlayer(playerCombatPrototyping));
+                    }
+                }
+                
             }
 
             // Instantiate a hit particle here if we want
@@ -92,5 +107,12 @@ public class AttackingEnemy : MonoBehaviour
 
         // At the end, we're now post damage.
         // inputs.isInPreDamageAttackPhase = false;
+    }
+
+    private IEnumerator DazePlayer(PlayerCombatPrototyping playerCombatPrototyping)
+    {
+        playerCombatPrototyping.isDazed = true;
+        yield return new WaitForSeconds(playerCombatPrototyping.dazeDuration);
+        playerCombatPrototyping.isDazed = false;
     }
 }
