@@ -1,21 +1,38 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 
 public class EntityHealth : MonoBehaviour
 {
-    [SerializeField] private int health;
+    public int maxHealth;
+    [HideInInspector] public int currentHealth;
+
+    private void Start()
+    {
+        currentHealth = maxHealth;
+    }
+
     public void Damage( int damage )
     {
-        health -= damage;
-        print("Hit! " + health);
+        currentHealth -= damage;
+        if (currentHealth < 0)
+        {
+            currentHealth = 0;
+        }
+        print("Damage! " + maxHealth);
     }
 
     public void Heal( int heal )
     {
-        health += heal;
-        print("Hit! " + health);
+        currentHealth += heal;
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
+        print("Heal! " + maxHealth);
     }
 
+    // todo this should prob not be in health.
     public void Knockback(Vector3 hitDirection, float knockbackStrength, float duration)
     {
         hitDirection.Normalize();
