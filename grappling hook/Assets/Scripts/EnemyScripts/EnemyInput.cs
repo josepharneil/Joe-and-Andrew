@@ -53,11 +53,6 @@ public class EnemyInput : MonoBehaviour
 
     public bool IsRaycastHittingPlayer()
     {
-        // Check if we've hit the player first (before ground)
-        if (raycastHitsTowardsPlayer.Count == 0)
-        {
-            return false;
-        }
         RaycastHit2D playerHit = raycastHitsTowardsPlayer[0];
         if (playerHit.transform.gameObject.CompareTag("Player"))
         {
@@ -65,19 +60,21 @@ public class EnemyInput : MonoBehaviour
         }
         return false;
     }
-
+    //TODO AK: make a single method for if raycast is hitting the player
+    //We will need a few differnt ones for enemy types, but thats fine
     public bool PlayerIsInAttackRange()
     {
-        if (raycastHitsTowardsPlayer.Count == 0)
+        if (raycastHitsTowardsPlayer.Count == 0||!IsRaycastHittingPlayer())
         {
             return false;
         }
+        
         return raycastHitsTowardsPlayer[0].distance < attackMaxDistance;
     }
 
     public bool PlayerIsInChaseRange()
     {
-        if (raycastHitsTowardsPlayer.Count == 0)
+        if (raycastHitsTowardsPlayer.Count == 0||!IsRaycastHittingPlayer())
         {
             return false;
         }
@@ -86,7 +83,7 @@ public class EnemyInput : MonoBehaviour
 
     public bool PlayerIsInSightRange()
     {
-        if(raycastHitsTowardsPlayer.Count == 0)
+        if (raycastHitsTowardsPlayer.Count == 0 || !IsRaycastHittingPlayer()) 
         {
             return false;
         }
