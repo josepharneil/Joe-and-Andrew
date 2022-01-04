@@ -353,7 +353,7 @@ public class PlayerInputs : MonoBehaviour
         
         // TODO Can input.x just be deleted here? They look like they cancel to me
         // AK: yes its gone now!
-        if (Mathf.Abs(_velocity.x)-moveSpeed <=  accelerationTolerance)
+        if (moveSpeed- Mathf.Abs(_velocity.x) <=  accelerationTolerance)
         {
             _moveState = MoveState.Running;
         }
