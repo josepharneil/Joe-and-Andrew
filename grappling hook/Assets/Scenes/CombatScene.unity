@@ -5170,8 +5170,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c86546bf22606b243bc43e516930e92c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveController: {fileID: 1467600176}
-  moveSpeed: 11
+  moveController: {fileID: 0}
+  moveSpeed: 7
   jumpHeight: 2
   timeToJumpHeight: 0.4
   coyoteTime: 0.5
@@ -5200,7 +5200,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   accelerationRate: 0.876
-  accelerationTolerance: 0
+  accelerationTolerance: 0.005
   decelerationCurve:
     serializedVersion: 2
     m_Curve:
@@ -5226,7 +5226,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   decelerationRate: 0.86
-  decelerationTolerance: 0
+  decelerationTolerance: 0.005
   changeDirectionCurve:
     serializedVersion: 2
     m_Curve:
@@ -5252,13 +5252,13 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   changeDirectionRate: 0.877
-  changeDirectionTolerance: 0
+  changeDirectionTolerance: 0.005
   airAccelerationRate: 0.282
   airDecelerationRate: 0.194
   airChangeDirectionRate: 0.736
-  rollDistance: 5
-  rollDuration: 0.25
-  rollCoolDown: 0.75
+  rollDistance: 3
+  rollDuration: 0.2
+  rollCoolDown: 0.5
   facingDirection: 0
   _moveState: 0
   debugUseAnimations: 1
@@ -5333,7 +5333,7 @@ MonoBehaviour:
   doesPlayerDealKnockback: 1
   knockbackStrength: 2.5
   knockbackDuration: 0.5
-  doesPlayerDealDaze: 1
+  doesPlayerDealDaze: 0
   prototypeAttackStyle: 1
 --- !u!4 &1467600179
 Transform:
