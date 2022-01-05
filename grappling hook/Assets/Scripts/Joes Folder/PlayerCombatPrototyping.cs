@@ -31,11 +31,20 @@ public class PlayerCombatPrototyping : MonoBehaviour
     [Tooltip("Does player deal daze?")]
     public bool doesPlayerDealDaze = true;
 
+    [Header("Parry")]
+    [Tooltip("Does attacking a parried enemy deal bonus damage?")]
+    public bool doesAttackingParriedDealBonusDamage = false;
+    [Tooltip("How much bonus damage?")]
+    public int attackParriedBonusDamageAmount = 2;
+
+    // [Header("Block")] 
+    // [Tooltip("How much does the move speed get modified when blocking?")]
+    
     [Header("Preset")]
     [Tooltip("Quick-set an attack style")]
     [SerializeField] public PrototypeAttackStyles prototypeAttackStyle;
     private PrototypeAttackStyles _prevPrototypeAttackStyle = PrototypeAttackStyles.None;
-    
+
     private void OnValidate()
     {
         if (prototypeAttackStyle != _prevPrototypeAttackStyle)

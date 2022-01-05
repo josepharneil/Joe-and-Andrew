@@ -11,12 +11,12 @@ public class PlayerInputs : MonoBehaviour
 
     [Header("Jump Stats")]
     // TODO Separate these into jump, roll and move categories
-    [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float jumpHeight = 3f;
     [SerializeField] private float timeToJumpHeight = 0.4f;
     [SerializeField] private float coyoteTime;
 
     [Header("Ground Move Stats")]
+    [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private AnimationCurve accelerationCurve;
     [SerializeField] [Range(0f, 1f)] private float accelerationRate;
     [SerializeField] private float accelerationTolerance;
@@ -69,6 +69,9 @@ public class PlayerInputs : MonoBehaviour
 
     [Header("Parrying")]
     [SerializeField] private EntityParry entityParry;
+
+    [Header("Blocking")] 
+    [SerializeField] private EntityBlock entityBlock;
     
     // Animation parameter IDs.
     private static readonly int SpeedID = Animator.StringToHash("speed");
@@ -146,17 +149,23 @@ public class PlayerInputs : MonoBehaviour
             }
             else
             {
-                ReadAttackInput();
-            }
-            
-            // For now, parrying is instant and you can do anything else during it.
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                if (entityParry)
+                if (entityBlock && !entityBlock.isBlocking || !entityBlock)
+                {
+                    ReadAttackInput();
+                }
+
+                // For now, parrying is instant and you can still move during it.
+                if (entityParry && Input.GetKeyDown(KeyCode.E))
                 {
                     entityParry.CheckParry();
                 }
+                else if(entityBlock)
+                {
+                    // For now, don't need to worry about whether you're mid parry /attack
+                    entityBlock.isBlocking = Input.GetKey(KeyCode.R);
+                }
             }
+            
         }
         
         // Movement
@@ -370,7 +379,7 @@ public class PlayerInputs : MonoBehaviour
         
         // TODO Can input.x just be deleted here? They look like they cancel to me
         // AK: yes its gone now!
-        if (moveSpeed- Mathf.Abs(_velocity.x) <=  accelerationTolerance)
+        if (moveSpeed - Mathf.Abs(_velocity.x) <=  accelerationTolerance)
         {
             _moveState = MoveState.Running;
         }
@@ -378,7 +387,12 @@ public class PlayerInputs : MonoBehaviour
 
     private void Run()
     {
-        _velocity.x = _moveInput.x * moveSpeed;
+        float blockMoveSpeedModifier = 1.0f;
+        if (entityBlock && entityBlock.isBlocking)
+        {
+            blockMoveSpeedModifier = entityBlock.blockSpeedModifier;
+        }
+        _velocity.x = _moveInput.x * moveSpeed * blockMoveSpeedModifier;
     }
 
     private void Decelerate()

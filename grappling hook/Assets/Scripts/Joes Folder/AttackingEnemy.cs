@@ -71,14 +71,14 @@ public class AttackingEnemy : MonoBehaviour
     /// <param name="attackIndex"></param>
     private void CheckAttackHitBox(int attackIndex)
     {
-        Vector2 overlapCirclePosition;
+        Vector2 overlapCirclePosition = (Vector2)transform.position;
         if (_facingDirection == FacingDirection.Left)
         {
-            overlapCirclePosition = (Vector2)transform.position + new Vector2(-1f, 0 );
+            overlapCirclePosition += new Vector2(-1f, 0 );
         }
         else
         {
-            overlapCirclePosition = (Vector2)transform.position + new Vector2(1f, 0 );
+            overlapCirclePosition += new Vector2(1f, 0 );
         }
         
         ContactFilter2D contactFilter2D = new ContactFilter2D
@@ -91,10 +91,19 @@ public class AttackingEnemy : MonoBehaviour
 
         foreach (Collider2D coll in detectedObjects)
         {
+            int actualDamageDealt = attackDamage;
+            
+            EntityBlock entityBlock = coll.gameObject.GetComponent<EntityBlock>();
+            if (entityBlock && entityBlock.isBlocking)
+            {
+                actualDamageDealt /= entityBlock.blockDamageReductionFactor;
+                entityBlock.BreakBlock();
+            }
+            
             EntityHealth entityHealth = coll.gameObject.GetComponent<EntityHealth>();
             if (entityHealth)
             {
-                entityHealth.Damage( attackDamage );
+                entityHealth.Damage( actualDamageDealt );
             }
             
             EntityKnockback entityKnockback = coll.gameObject.GetComponent<EntityKnockback>();

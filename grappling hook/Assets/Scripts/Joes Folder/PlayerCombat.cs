@@ -134,7 +134,12 @@ public class PlayerCombat : MonoBehaviour
             EntityHealth entityHealth = coll.gameObject.GetComponent<EntityHealth>();
             if (entityHealth)
             {
-                entityHealth.Damage(currentAttackInfo.damage);
+                int damage = currentAttackInfo.damage;
+                if (playerCombatPrototyping.doesAttackingParriedDealBonusDamage)
+                {
+                    damage *= playerCombatPrototyping.attackParriedBonusDamageAmount;
+                }
+                entityHealth.Damage(damage);
                 enemyHit = true;
             }
 
