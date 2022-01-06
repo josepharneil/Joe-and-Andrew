@@ -7,9 +7,11 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class EntitySpiky : MonoBehaviour
 {
+    [SerializeField] private bool isEnabled = true;
+    
     [Header("Components")]
     [SerializeField] private LayerMask spikesWhat;
-
+    
     [Header("Customisation")]
     [SerializeField] private int spikeDamage = 5;
     [SerializeField] private float spikeKnockbackDistance = 2f;
@@ -17,6 +19,10 @@ public class EntitySpiky : MonoBehaviour
     
     private void OnCollisionEnter2D(Collision2D col)
     {
+        if (!isEnabled)
+        {
+            return;
+        }
         GameObject colGameObject = col.gameObject;
         
         if ((colGameObject.layer & spikesWhat) != 0) return;

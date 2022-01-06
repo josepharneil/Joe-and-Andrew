@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 //thieved shamelessly from https://www.youtube.com/watch?v=MbWK8bCAU2w&list=PLFt_AvWsXl0f0hqURlhyIoAabKPgRsqjz&index=1
 
@@ -57,12 +58,6 @@ public class PlayerInputs : MonoBehaviour
     private Vector3 _velocity;
     private Vector2 _moveInput;
     
-    // Inputs:
-    private bool _jumpCurrentlyPressedDown = false;
-    private bool _parryCurrentlyPressedDown = false;
-    private bool _rollCurrentlyPressedDown = false;
-    private bool _attackCurrentlyPressedDown = false;
-
     // Attacks
     [Header("Attacking")] 
     [SerializeField] private bool debugUseAnimations = true;
@@ -152,23 +147,10 @@ public class PlayerInputs : MonoBehaviour
                     moveController.Move(_velocity * Time.deltaTime);
                 }
             }
-            else
-            {
-                if (entityBlock && !entityBlock.isBlocking || !entityBlock)
-                {
-                    ReadAttackInput();
-                }
-                
-                HandleParryInput();
-                HandleBlockInput();
-            }
-            
         }
         
         // Movement
-        HandleRollInput();
-        HandleMoveInput();
-        HandleJumpInput();
+        // ReadMoveInput();
         SetHorizontalMove();
         CheckGrounded();
         ApplyGravity();
@@ -196,28 +178,12 @@ public class PlayerInputs : MonoBehaviour
 
     #region Jump Movement
     
-    private void HandleJumpInput()
+    /// <summary>
+    /// Called by PlayerInput Unity Event.
+    /// </summary>
+    public void ReadJumpInput(InputAction.CallbackContext context)
     {
-        bool jumpInputReceived = false;
-        float rawJumpInput = Input.GetAxisRaw("Jump");
-        if (!_jumpCurrentlyPressedDown)
-        {
-            if (rawJumpInput > 0f)
-            {
-                jumpInputReceived = true;
-                _jumpCurrentlyPressedDown = true;
-            }
-        }
-        else
-        {
-            if (rawJumpInput <= 0f)
-            {
-                jumpInputReceived = false;
-                _jumpCurrentlyPressedDown = false;
-            }
-        }
-
-        if (jumpInputReceived && !(entityDaze && entityDaze.isDazed))
+        if (context.started && !(entityDaze && entityDaze.isDazed))
         {
             if (debugUseAnimations)
             {
@@ -225,10 +191,6 @@ public class PlayerInputs : MonoBehaviour
             }
             _isJumpInput = true;
             StartCoyoteTime();
-        }
-        else
-        {
-            _isJumpInput = false;
         }
     }
 
@@ -238,6 +200,7 @@ public class PlayerInputs : MonoBehaviour
         {
             _velocity.y = _jumpVelocity;
             _jumpCalledTime = float.MaxValue;
+            _isJumpInput = false;
         }
     }
 
@@ -278,9 +241,9 @@ public class PlayerInputs : MonoBehaviour
     #endregion
 
     #region Horizontal Movement
-    private void HandleMoveInput()
+    public void ReadMoveInput(InputAction.CallbackContext context)
     {
-        _moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        _moveInput = context.ReadValue<Vector2>();
         if (entityDaze && entityDaze.isDazed)
         {
             _moveInput = Vector2.zero;
@@ -305,6 +268,7 @@ public class PlayerInputs : MonoBehaviour
         if (_isRollInput)
         {
             StartRoll();
+            _isRollInput = false;
         }
         if (_rollState != RollState.NotRolling)
         {
@@ -439,34 +403,15 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
-    private void HandleRollInput()
+    /// <summary>
+    /// Called by PlayerInput Unity Event.
+    /// </summary>
+    public void ReadRollInput(InputAction.CallbackContext context)
     {
-        bool rollInputReceived = false;
-        float rawRollInput = Input.GetAxisRaw("RollDash");
-        if (!_rollCurrentlyPressedDown)
-        {
-            if (rawRollInput > 0f)
-            {
-                rollInputReceived = true;
-                _rollCurrentlyPressedDown = true;
-            }
-        }
-        else
-        {
-            if (rawRollInput <= 0f)
-            {
-                rollInputReceived = false;
-                _rollCurrentlyPressedDown = false;
-            }
-        }
-        
-        if (rollInputReceived && !(entityDaze && entityDaze.isDazed))
+        // TODO maybe should just directly call here.
+        if (context.started && !(entityDaze && entityDaze.isDazed))
         {
             _isRollInput = true;
-        }
-        else
-        {
-            _isRollInput = false;
         }
     }
 
@@ -507,32 +452,26 @@ public class PlayerInputs : MonoBehaviour
 
     #region Combat
     
-    private void ReadAttackInput()
+    /// <summary>
+    /// Called by PlayerInput Unity Event.
+    /// </summary>
+    /// <param name="context"></param>
+    public void ReadAttackInput(InputAction.CallbackContext context)
     {
-        bool attackInputReceived = false;
-        float rawAttackInput = Input.GetAxisRaw("Attack");
-        if (!_attackCurrentlyPressedDown)
+        if ((!entityBlock || entityBlock.isBlocking) && entityBlock)
         {
-            if (rawAttackInput > 0f)
-            {
-                attackInputReceived = true;
-                _attackCurrentlyPressedDown = true;
-            }
+            return;
         }
-        else
+
+        if (!context.started)
         {
-            if (rawAttackInput <= 0f)
-            {
-                attackInputReceived = false;
-                _attackCurrentlyPressedDown = false;
-            }
+            return;
         }
-        
-        if (!attackInputReceived) return;
 
         const float upwardsInputThreshold = 0.5f;
         const float downwardsInputThreshold = -upwardsInputThreshold;
-        if (Input.GetAxis("Vertical") > upwardsInputThreshold)
+        print(_moveInput);
+        if (_moveInput.y > upwardsInputThreshold)
         {
             if (debugUseAnimations)
             {
@@ -540,7 +479,7 @@ public class PlayerInputs : MonoBehaviour
                 isAttacking = true;
             }
         }
-        else if (!_isGrounded && Input.GetAxis("Vertical") < downwardsInputThreshold)
+        else if (!_isGrounded && _moveInput.y < downwardsInputThreshold)
         {
             if (debugUseAnimations)
             {
@@ -616,46 +555,47 @@ public class PlayerInputs : MonoBehaviour
         }
     }
     
-    private void HandleParryInput()
+    /// <summary>
+    /// Called by PlayerInput Unity Event.
+    /// </summary>
+    /// <param name="context"></param>
+    public void ReadParryInput(InputAction.CallbackContext context)
     {
-        if (!entityParry)
+        if (!entityParry || isAttacking)
+        {
+            return;
+        }
+
+        // For now, parrying is instant and you can still move during it.
+        if (!context.started)
         {
             return;
         }
         
-        bool parryInputReceived = false;
-        float rawParryInput = Input.GetAxisRaw("Parry");
-        //print(rawParryInput);
-        if (!_parryCurrentlyPressedDown)
+        entityParry.CheckParry();
+    }
+
+    /// <summary>
+    /// Called by PlayerInput Unity Event.
+    /// </summary>
+    /// <param name="context"></param>
+    public void ReadBlockInput(InputAction.CallbackContext context)
+    {
+        if (!entityBlock)
         {
-            if (rawParryInput > 0f)
-            {
-                parryInputReceived = true;
-                _parryCurrentlyPressedDown = true;
-            }
-        }
-        else
-        {
-            if (rawParryInput <= 0f)
-            {
-                parryInputReceived = false;
-                _parryCurrentlyPressedDown = false;
-            }
+            return;
         }
 
-        // For now, parrying is instant and you can still move during it.
-        if (parryInputReceived)
+        if (context.performed && !isAttacking)
         {
-            entityParry.CheckParry();
+            // For now, don't need to worry about whether you're mid parry /attack
+            entityBlock.isBlocking = true;
         }
-    }
-    
-    private void HandleBlockInput()
-    {
-        if (!entityBlock) return;
-        
-        // For now, don't need to worry about whether you're mid parry /attack
-        entityBlock.isBlocking = Input.GetAxisRaw("Block") > 0f;
+
+        if (context.canceled)
+        {
+            entityBlock.isBlocking = false;
+        }
     }
 
     #endregion
