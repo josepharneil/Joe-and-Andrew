@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 974940299}
   - component: {fileID: 974940298}
   - component: {fileID: 974940297}
-  - component: {fileID: 974940296}
+  - component: {fileID: 974940302}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -187,18 +187,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &974940296
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 974940295}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 047c4fabcf608da45a2a45ad2e72f751, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &974940297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,9 +200,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTransform: {fileID: 2142903476}
-  sightDistance: 5
-  patrolDistance: 10
-  moveSpeed: 1
+  sightDistance: 0
+  patrolDistance: 0
+  moveSpeed: 0
 --- !u!114 &974940298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -292,6 +280,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &974940302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 974940295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d5e98ab7d35acd479e59f99c9cf0d83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerTransform: {fileID: 2142903476}
+  minAttackRange: 15
+  maxAttackRange: 25
 --- !u!1 &1115024855
 GameObject:
   m_ObjectHideFlags: 0
@@ -2010,10 +2013,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveController: {fileID: 2142903473}
-  moveSpeed: 7
   jumpHeight: 2
   timeToJumpHeight: 0.4
   coyoteTime: 0.5
+  moveSpeed: 7
   accelerationCurve:
     serializedVersion: 2
     m_Curve:
@@ -2099,7 +2102,7 @@ MonoBehaviour:
   rollDuration: 0.2
   rollCoolDown: 0.5
   facingDirection: 0
-  _moveState: 0
+  moveState: 0
   debugUseAnimations: 0
   animator: {fileID: 0}
   spriteRenderer: {fileID: 2142903475}
@@ -2107,6 +2110,7 @@ MonoBehaviour:
   isAttacking: 0
   isInPreDamageAttackPhase: 1
   entityParry: {fileID: 0}
+  entityBlock: {fileID: 0}
   playerCombatPrototyping: {fileID: 0}
   entityDaze: {fileID: 0}
 --- !u!114 &2142903473
