@@ -458,7 +458,7 @@ public class PlayerInputs : MonoBehaviour
     /// <param name="context"></param>
     public void ReadAttackInput(InputAction.CallbackContext context)
     {
-        if ((!entityBlock || entityBlock.isBlocking) && entityBlock)
+        if (!debugUseAnimations || (!entityBlock || entityBlock.isBlocking) && entityBlock)
         {
             return;
         }
@@ -470,30 +470,20 @@ public class PlayerInputs : MonoBehaviour
 
         const float upwardsInputThreshold = 0.5f;
         const float downwardsInputThreshold = -upwardsInputThreshold;
-        print(_moveInput);
         if (_moveInput.y > upwardsInputThreshold)
         {
-            if (debugUseAnimations)
-            {
-                animator.SetTrigger(AttackUpTriggerID);
-                isAttacking = true;
-            }
+            animator.SetTrigger(AttackUpTriggerID);
+            isAttacking = true;
         }
         else if (!_isGrounded && _moveInput.y < downwardsInputThreshold)
         {
-            if (debugUseAnimations)
-            {
-                animator.SetTrigger(AttackDownTriggerID);
-                isAttacking = true;
-            }
+            animator.SetTrigger(AttackDownTriggerID);
+            isAttacking = true;
         }
         else
         {
-            if (debugUseAnimations)
-            {
-                animator.SetTrigger(AttackTriggerID);
-                isAttacking = true;
-            }
+            animator.SetTrigger(AttackTriggerID);
+            isAttacking = true;
         }
     }
 
