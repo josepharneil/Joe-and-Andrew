@@ -7,5 +7,7 @@ using UnityEngine;
 public abstract class BaseState:MonoBehaviour
 { 
     public abstract Type Tick();
+    //currently my thinking is that the int here be a priority tag
+    public Dictionary<StateTransition,int> transitions = new Dictionary<StateTransition, int>();
     
 }

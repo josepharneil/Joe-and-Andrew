@@ -22,11 +22,8 @@ public class PatrolState : BaseState
 
     public override Type Tick()
     {
-        if (Mathf.Abs(Mathf.Abs(gameObject.transform.position.x) - Mathf.Abs(playerTransform.position.x)) <= sightDistance)
-        {
-            return typeof(ChaseState);
-        }
-        DoPathing();
+
+        //DoPathing();
         Debug.Log("I am patrolling");
         return null;
     }
