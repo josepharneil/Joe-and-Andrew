@@ -43,8 +43,8 @@ public class PlayerInputs : MonoBehaviour
     private float _gravity;
     private float _jumpVelocity;
     private float _rollDirection;
-    private float rollDurationTimer = 0f;
-    private float rollCoolDownTimer = 0f;
+    private float _rollDurationTimer = 0f;
+    private float _rollCoolDownTimer = 0f;
 
     private bool _isMoveInput;
     private bool _isJumpInput;
@@ -52,18 +52,23 @@ public class PlayerInputs : MonoBehaviour
     private bool _isRollInput;
     [HideInInspector] public FacingDirection facingDirection;
     private float _lerpCurrent = 0f;
-    [SerializeField] private MoveState _moveState;
+    [SerializeField] private MoveState moveState;
     private RollState _rollState;
     private Vector3 _velocity;
     private Vector2 _moveInput;
     
+    // Inputs:
+    private bool _jumpCurrentlyPressedDown = false;
+    private bool _parryCurrentlyPressedDown = false;
+    private bool _rollCurrentlyPressedDown = false;
+    private bool _attackCurrentlyPressedDown = false;
+
     // Attacks
     [Header("Attacking")] 
     [SerializeField] private bool debugUseAnimations = true;
     [SerializeField] private Animator animator;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Sprite defaultSquareSprite;
-    //[SerializeField] private PlayerCombat playerCombat;
     [HideInInspector] public bool isAttacking;
     [HideInInspector] public bool isInPreDamageAttackPhase = true;
 
@@ -112,7 +117,7 @@ public class PlayerInputs : MonoBehaviour
         
         _gravity = -2 * jumpHeight * Mathf.Pow(timeToJumpHeight, -2);
         _jumpVelocity = timeToJumpHeight * Mathf.Abs(_gravity);
-        _moveState = MoveState.Stopped;
+        moveState = MoveState.Stopped;
         _rollState = RollState.NotRolling;
     }
 
@@ -153,17 +158,9 @@ public class PlayerInputs : MonoBehaviour
                 {
                     ReadAttackInput();
                 }
-
-                // For now, parrying is instant and you can still move during it.
-                if (entityParry && Input.GetKeyDown(KeyCode.E))
-                {
-                    entityParry.CheckParry();
-                }
-                else if(entityBlock)
-                {
-                    // For now, don't need to worry about whether you're mid parry /attack
-                    entityBlock.isBlocking = Input.GetKey(KeyCode.R);
-                }
+                
+                HandleParryInput();
+                HandleBlockInput();
             }
             
         }
@@ -198,10 +195,29 @@ public class PlayerInputs : MonoBehaviour
     }
 
     #region Jump Movement
-
+    
     private void HandleJumpInput()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !(entityDaze && entityDaze.isDazed))
+        bool jumpInputReceived = false;
+        float rawJumpInput = Input.GetAxisRaw("Jump");
+        if (!_jumpCurrentlyPressedDown)
+        {
+            if (rawJumpInput > 0f)
+            {
+                jumpInputReceived = true;
+                _jumpCurrentlyPressedDown = true;
+            }
+        }
+        else
+        {
+            if (rawJumpInput <= 0f)
+            {
+                jumpInputReceived = false;
+                _jumpCurrentlyPressedDown = false;
+            }
+        }
+
+        if (jumpInputReceived && !(entityDaze && entityDaze.isDazed))
         {
             if (debugUseAnimations)
             {
@@ -313,7 +329,7 @@ public class PlayerInputs : MonoBehaviour
             {
                 StartDirectionChange();
             }
-            switch (_moveState)
+            switch (moveState)
             {
                 case MoveState.Stopped:
                     //begins the movement, calls sets to accelerating
@@ -341,7 +357,7 @@ public class PlayerInputs : MonoBehaviour
         }
         else
         {
-            if (_moveState != MoveState.Stopped)
+            if (moveState != MoveState.Stopped)
             {
                 StopMoving();
                 Decelerate();
@@ -352,20 +368,20 @@ public class PlayerInputs : MonoBehaviour
     private void StartMoving()
     {
         _lerpCurrent = 0f;
-        _moveState = MoveState.Accelerating;
+        moveState = MoveState.Accelerating;
     }
 
     private void StopMoving()
     {
         _lerpCurrent = 0f;
-        _moveState = MoveState.Decelerating;
+        moveState = MoveState.Decelerating;
     }
 
     private void StartDirectionChange()
     {
         //resets the lerp to 0 each time we change direction
         _lerpCurrent = 0f;
-        _moveState = MoveState.ChangingDirection;
+        moveState = MoveState.ChangingDirection;
     }
 
     private void Accelerate()
@@ -381,7 +397,7 @@ public class PlayerInputs : MonoBehaviour
         // AK: yes its gone now!
         if (moveSpeed - Mathf.Abs(_velocity.x) <=  accelerationTolerance)
         {
-            _moveState = MoveState.Running;
+            moveState = MoveState.Running;
         }
     }
 
@@ -406,7 +422,7 @@ public class PlayerInputs : MonoBehaviour
         if (Mathf.Abs(_velocity.x) <= decelerationTolerance)
         {
             _velocity.x = 0f;
-            _moveState = MoveState.Stopped;
+            moveState = MoveState.Stopped;
         }
     }
 
@@ -419,13 +435,32 @@ public class PlayerInputs : MonoBehaviour
 
         if ((Mathf.Abs(_velocity.x) - moveSpeed) < changeDirectionTolerance) 
         {
-            _moveState = MoveState.Running;
+            moveState = MoveState.Running;
         }
     }
 
     private void HandleRollInput()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !(entityDaze && entityDaze.isDazed))
+        bool rollInputReceived = false;
+        float rawRollInput = Input.GetAxisRaw("RollDash");
+        if (!_rollCurrentlyPressedDown)
+        {
+            if (rawRollInput > 0f)
+            {
+                rollInputReceived = true;
+                _rollCurrentlyPressedDown = true;
+            }
+        }
+        else
+        {
+            if (rawRollInput <= 0f)
+            {
+                rollInputReceived = false;
+                _rollCurrentlyPressedDown = false;
+            }
+        }
+        
+        if (rollInputReceived && !(entityDaze && entityDaze.isDazed))
         {
             _isRollInput = true;
         }
@@ -439,10 +474,10 @@ public class PlayerInputs : MonoBehaviour
     {
         //starts the roll timer and does the enums, could be state machine for animation purposes?
         //roll overrides other movement
-        if (_isRollInput && (Time.time - rollCoolDownTimer > rollCoolDown)&&_rollState!=RollState.Rolling) 
+        if (_isRollInput && (Time.time - _rollCoolDownTimer > rollCoolDown)&&_rollState!=RollState.Rolling) 
         {
-            _moveState = MoveState.Rolling;
-            rollDurationTimer = 0f;
+            moveState = MoveState.Rolling;
+            _rollDurationTimer = 0f;
             _rollState = RollState.Rolling;
             _rollDirection = (float)facingDirection;
         }
@@ -451,10 +486,10 @@ public class PlayerInputs : MonoBehaviour
     private void Roll()
     {
         //keeps rolling while the timer is on
-        if (rollDurationTimer <= rollDuration)
+        if (_rollDurationTimer <= rollDuration)
         {
             _velocity.x = rollDistance * (int)_rollDirection / rollDuration;
-            rollDurationTimer += Time.deltaTime;
+            _rollDurationTimer += Time.deltaTime;
         }
         else
         {
@@ -464,19 +499,40 @@ public class PlayerInputs : MonoBehaviour
 
     private void StopRoll()
     {
-        _moveState = MoveState.Decelerating;
+        moveState = MoveState.Decelerating;
         _rollState = RollState.NotRolling;
-        rollCoolDownTimer = Time.time;
+        _rollCoolDownTimer = Time.time;
     }
     #endregion
 
-    #region Attacks
-
+    #region Combat
+    
     private void ReadAttackInput()
     {
-        if (!Input.GetKeyDown(KeyCode.Mouse0)) return;
+        bool attackInputReceived = false;
+        float rawAttackInput = Input.GetAxisRaw("Attack");
+        if (!_attackCurrentlyPressedDown)
+        {
+            if (rawAttackInput > 0f)
+            {
+                attackInputReceived = true;
+                _attackCurrentlyPressedDown = true;
+            }
+        }
+        else
+        {
+            if (rawAttackInput <= 0f)
+            {
+                attackInputReceived = false;
+                _attackCurrentlyPressedDown = false;
+            }
+        }
+        
+        if (!attackInputReceived) return;
 
-        if (Input.GetKey(KeyCode.W))
+        const float upwardsInputThreshold = 0.5f;
+        const float downwardsInputThreshold = -upwardsInputThreshold;
+        if (Input.GetAxis("Vertical") > upwardsInputThreshold)
         {
             if (debugUseAnimations)
             {
@@ -484,7 +540,7 @@ public class PlayerInputs : MonoBehaviour
                 isAttacking = true;
             }
         }
-        else if (!_isGrounded && Input.GetKey(KeyCode.S))
+        else if (!_isGrounded && Input.GetAxis("Vertical") < downwardsInputThreshold)
         {
             if (debugUseAnimations)
             {
@@ -558,6 +614,48 @@ public class PlayerInputs : MonoBehaviour
                 GetComponent<PlayerCombat>().ForceHideSwipes();
             }
         }
+    }
+    
+    private void HandleParryInput()
+    {
+        if (!entityParry)
+        {
+            return;
+        }
+        
+        bool parryInputReceived = false;
+        float rawParryInput = Input.GetAxisRaw("Parry");
+        //print(rawParryInput);
+        if (!_parryCurrentlyPressedDown)
+        {
+            if (rawParryInput > 0f)
+            {
+                parryInputReceived = true;
+                _parryCurrentlyPressedDown = true;
+            }
+        }
+        else
+        {
+            if (rawParryInput <= 0f)
+            {
+                parryInputReceived = false;
+                _parryCurrentlyPressedDown = false;
+            }
+        }
+
+        // For now, parrying is instant and you can still move during it.
+        if (parryInputReceived)
+        {
+            entityParry.CheckParry();
+        }
+    }
+    
+    private void HandleBlockInput()
+    {
+        if (!entityBlock) return;
+        
+        // For now, don't need to worry about whether you're mid parry /attack
+        entityBlock.isBlocking = Input.GetAxisRaw("Block") > 0f;
     }
 
     #endregion
