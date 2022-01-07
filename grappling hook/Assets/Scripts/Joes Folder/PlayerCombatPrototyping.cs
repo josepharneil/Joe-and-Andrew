@@ -65,7 +65,7 @@ public class PlayerCombatPrototyping : MonoBehaviour
                 case PrototypeAttackStyles.HollowKnight:
                     movementDisabledByAttacks = false;
                     canChangeDirectionsDuringAttack = false;
-                    attackSpeed = 2.0f;
+                    attackSpeed = 2.5f;
                     cancellables = PrototypeCancellables.None;
                     cancellableAttackPhases = PrototypeAttackPhases.None;
                     doesPlayerDealKnockback = true;

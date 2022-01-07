@@ -5475,7 +5475,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementDisabledByAttacks: 0
   canChangeDirectionsDuringAttack: 0
-  attackSpeed: 2
+  attackSpeed: 2.5
   cancellables: 0
   cancellableAttackPhases: 0
   doesPlayerDealKnockback: 1
@@ -5558,6 +5558,7 @@ MonoBehaviour:
   shakeAmplitude: 3
   shakeFrequency: 1
   shakeDuration: 0.1
+  gamepadVibrator: {fileID: 1467600188}
   playerCombatPrototyping: {fileID: 1467600178}
 --- !u!114 &1467600182
 MonoBehaviour:
@@ -5772,6 +5773,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d710a5068048470ca2934eb6dc1a53e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInput: {fileID: 1467600187}
 --- !u!1 &1494434727
 GameObject:
   m_ObjectHideFlags: 0
