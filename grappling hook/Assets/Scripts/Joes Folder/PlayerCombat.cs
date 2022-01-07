@@ -36,6 +36,9 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float shakeAmplitude = 3f;
     [SerializeField] private float shakeFrequency = 1f;
     [SerializeField] private float shakeDuration = 0.1f;
+
+    [Header("Gamepad Vibration")]
+    [SerializeField] private GamepadVibrator gamepadVibrator;
     
     [Header("Prototyping")]
     public PlayerCombatPrototyping playerCombatPrototyping;
