@@ -433,7 +433,7 @@ public class PlayerInputs : MonoBehaviour
         //keeps rolling while the timer is on
         if (_rollDurationTimer <= rollDuration)
         {
-            _velocity.x = rollDistance * (int)_rollDirection / rollDuration;
+            _velocity.x = (int)_rollDirection * (rollDistance / rollDuration);
             _rollDurationTimer += Time.deltaTime;
         }
         else
@@ -482,6 +482,14 @@ public class PlayerInputs : MonoBehaviour
         }
         else
         {
+            if (_moveInput.x < 0)
+            {
+                facingDirection = FacingDirection.Left;
+            }
+            else if ( _moveInput.x > 0 )
+            {
+                facingDirection = FacingDirection.Right;
+            }
             animator.SetTrigger(AttackTriggerID);
             isAttacking = true;
         }

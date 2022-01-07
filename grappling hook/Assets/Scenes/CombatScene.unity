@@ -5401,9 +5401,9 @@ MonoBehaviour:
   airAccelerationRate: 0.282
   airDecelerationRate: 0.194
   airChangeDirectionRate: 0.736
-  rollDistance: 3
+  rollDistance: 4
   rollDuration: 0.2
-  rollCoolDown: 0.5
+  rollCoolDown: 0.8
   facingDirection: 0
   moveState: 0
   debugUseAnimations: 1
