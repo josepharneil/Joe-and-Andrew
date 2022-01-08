@@ -14,11 +14,11 @@ public class PlayerStateMachineBehaviourBase : StateMachineBehaviour
 
     protected void SetSpeedBasedOnPrototypeCustomisation(Animator animator)
     {
-        if (GetPlayerController(animator).playerCombatPrototyping.attackSpeed == 0f)
+        if (GetPlayerController(animator).playerCombatPrototyping.data.attackSpeed == 0f)
         {
-            GetPlayerController(animator).playerCombatPrototyping.attackSpeed = 1f;
+            GetPlayerController(animator).playerCombatPrototyping.data.attackSpeed = 1f;
         }
-        animator.speed = GetPlayerController(animator).playerCombatPrototyping.attackSpeed;
+        animator.speed = GetPlayerController(animator).playerCombatPrototyping.data.attackSpeed;
     }
 
     protected void ResetSpeed(Animator animator)

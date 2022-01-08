@@ -5473,18 +5473,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99eca67b715954c598626d10823444e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementDisabledByAttacks: 0
-  canChangeDirectionsDuringAttack: 0
-  attackSpeed: 2.5
-  cancellables: 0
-  cancellableAttackPhases: 0
-  doesPlayerDealKnockback: 1
-  knockbackStrength: 2.5
-  knockbackDuration: 0.5
-  doesPlayerDealDaze: 0
-  doesAttackingParriedDealBonusDamage: 0
-  attackParriedBonusDamageAmount: 2
-  prototypeAttackStyle: 1
+  data: {fileID: 11400000, guid: da0ef0e9cf5bc4773971a7538dd0f6c7, type: 2}
 --- !u!4 &1467600179
 Transform:
   m_ObjectHideFlags: 0

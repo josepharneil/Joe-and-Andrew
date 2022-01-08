@@ -135,7 +135,7 @@ public class PlayerInputs : MonoBehaviour
             if (isAttacking)
             {
                 // Does attacking disable movement?
-                if (playerCombatPrototyping.movementDisabledByAttacks)
+                if (playerCombatPrototyping.data.movementDisabledByAttacks)
                 {
                     // TODO Not sure what to do here.
                     if (_isGrounded)
@@ -156,7 +156,7 @@ public class PlayerInputs : MonoBehaviour
         ApplyGravity();
         Jump();
 
-        if (!isAttacking || (isAttacking && !playerCombatPrototyping.movementDisabledByAttacks))
+        if (!isAttacking || (isAttacking && !playerCombatPrototyping.data.movementDisabledByAttacks))
         {
             //move works by taking in a displacement, firing raycasts in the directions of the displacement
             //then if the raycasts collide with anything the displacement is altered to be the distance from the player edge to the collider
@@ -167,7 +167,7 @@ public class PlayerInputs : MonoBehaviour
                 facingDirection = FacingDirection.Left;
                 spriteRenderer.flipX = true;
             }
-            else
+            else if( _moveInput.x > 0)
             {                    
                 facingDirection = FacingDirection.Right;
                 spriteRenderer.flipX = false;
@@ -258,7 +258,7 @@ public class PlayerInputs : MonoBehaviour
         if (_moveInput.x != 0)
         {
             _isMoveInput = true;
-            if (!isAttacking || isAttacking && playerCombatPrototyping.canChangeDirectionsDuringAttack)
+            if (!isAttacking || isAttacking && playerCombatPrototyping.data.canChangeDirectionsDuringAttack)
             {
                 if (_moveInput.x < 0)
                 {
@@ -523,7 +523,7 @@ public class PlayerInputs : MonoBehaviour
         if (isInPreDamageAttackPhase)
         {
             // What phases are cancellable?
-            if ((playerCombatPrototyping.cancellableAttackPhases &
+            if ((playerCombatPrototyping.data.cancellableAttackPhases &
                  PrototypeAttackPhases.PreDamage) == PrototypeAttackPhases.None)
             {
                 return;
@@ -531,7 +531,7 @@ public class PlayerInputs : MonoBehaviour
         }
         else // Post damage
         {
-            if ((playerCombatPrototyping.cancellableAttackPhases &
+            if ((playerCombatPrototyping.data.cancellableAttackPhases &
                  PrototypeAttackPhases.PostDamage) == PrototypeAttackPhases.None)
             {
                 return;
@@ -539,7 +539,7 @@ public class PlayerInputs : MonoBehaviour
         }
         
         // What cancels attacks?
-        if ((playerCombatPrototyping.cancellables & PrototypeCancellables.Roll) != PrototypeCancellables.None)
+        if ((playerCombatPrototyping.data.cancellables & PrototypeCancellables.Roll) != PrototypeCancellables.None)
         {
             if (_isRollInput)
             {
@@ -550,7 +550,7 @@ public class PlayerInputs : MonoBehaviour
             }
         }
 
-        if ((playerCombatPrototyping.cancellables & PrototypeCancellables.Jump) != PrototypeCancellables.None) 
+        if ((playerCombatPrototyping.data.cancellables & PrototypeCancellables.Jump) != PrototypeCancellables.None) 
         {
             if (_isJumpInput)
             {
@@ -560,7 +560,7 @@ public class PlayerInputs : MonoBehaviour
             }
         }
             
-        if ((playerCombatPrototyping.cancellables & PrototypeCancellables.Movement) != PrototypeCancellables.None) 
+        if ((playerCombatPrototyping.data.cancellables & PrototypeCancellables.Movement) != PrototypeCancellables.None) 
         {
             if (_isMoveInput)
             {

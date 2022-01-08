@@ -47,9 +47,7 @@ public class PlayerCombat : MonoBehaviour
 
     [Header("Prototyping")]
     public PlayerCombatPrototyping playerCombatPrototyping;
-
-    private static readonly int IsDazed = Animator.StringToHash("isDazed");
-
+    
     private enum SwipeDirection
     {
         Up,
@@ -143,22 +141,22 @@ public class PlayerCombat : MonoBehaviour
             if (entityHealth)
             {
                 int damage = currentAttackInfo.damage;
-                if (playerCombatPrototyping.doesAttackingParriedDealBonusDamage)
+                if (playerCombatPrototyping.data.doesAttackingParriedDealBonusDamage)
                 {
-                    damage *= playerCombatPrototyping.attackParriedBonusDamageAmount;
+                    damage *= playerCombatPrototyping.data.attackParriedBonusDamageAmount;
                 }
                 entityHealth.Damage(damage);
                 enemyHit = true;
             }
 
             EntityKnockback entityKnockback = coll.gameObject.GetComponent<EntityKnockback>();
-            if (entityKnockback && playerCombatPrototyping.doesPlayerDealKnockback)
+            if (entityKnockback && playerCombatPrototyping.data.doesPlayerDealKnockback)
             {
-                entityKnockback.Knockback(entityHealth.transform.position - transform.position, playerCombatPrototyping.knockbackStrength, playerCombatPrototyping.knockbackDuration);
+                entityKnockback.Knockback(entityHealth.transform.position - transform.position, playerCombatPrototyping.data.knockbackStrength, playerCombatPrototyping.data.knockbackDuration);
             }
 
             EntityDaze entityDaze = coll.gameObject.GetComponent<EntityDaze>();
-            if (entityDaze && playerCombatPrototyping.doesPlayerDealDaze)
+            if (entityDaze && playerCombatPrototyping.data.doesPlayerDealDaze)
             {
                 entityDaze.Daze();
             }
@@ -201,18 +199,7 @@ public class PlayerCombat : MonoBehaviour
         {
             Gizmos.DrawWireSphere(attackSide1.hitBoxPosition.position, attackSide1.radius);
         }
-        
-        // if (controller.facingDirection == PlayerControllerCombatScene.FacingDirection.Left)
-        // {
-        //     var localPosition = attackSide2.hitBoxPosition.localPosition;
-        //     Vector3 position = transform.position + new Vector3(-localPosition.x, localPosition.y );
-        //     Gizmos.DrawWireSphere(position, attackSide2.radius);
-        // }
-        // else
-        // {
-        //     Gizmos.DrawWireSphere(attackSide2.hitBoxPosition.position, attackSide2.radius);
-        // }
-        
+
         Gizmos.DrawWireSphere(attackUp.hitBoxPosition.position, attackUp.radius);
         Gizmos.DrawWireSphere(attackDown.hitBoxPosition.position, attackDown.radius);
     }
@@ -242,7 +229,7 @@ public class PlayerCombat : MonoBehaviour
         
         swipe.enabled = true;
         
-        yield return new WaitForSeconds(swipeShowTime / GetComponent<PlayerInputs>().playerCombatPrototyping.attackSpeed);
+        yield return new WaitForSeconds(swipeShowTime / GetComponent<PlayerInputs>().playerCombatPrototyping.data.attackSpeed);
 
         swipe.enabled = false;
     }
