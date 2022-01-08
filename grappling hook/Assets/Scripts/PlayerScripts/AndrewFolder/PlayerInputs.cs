@@ -162,10 +162,17 @@ public class PlayerInputs : MonoBehaviour
             //then if the raycasts collide with anything the displacement is altered to be the distance from the player edge to the collider
             //then at the end of controller it uses transform.translate(displacement) with the edited displacement 
             moveController.Move(_velocity * Time.deltaTime);
+            if (_moveInput.x < 0)
+            {
+                facingDirection = FacingDirection.Left;
+                spriteRenderer.flipX = true;
+            }
+            else
+            {                    
+                facingDirection = FacingDirection.Right;
+                spriteRenderer.flipX = false;
+            }
         }
-
-        // TODO Not sure if its wise to flipX every frame
-        spriteRenderer.flipX = facingDirection == FacingDirection.Left;
 
         // Animation
         if (debugUseAnimations)
@@ -253,7 +260,16 @@ public class PlayerInputs : MonoBehaviour
             _isMoveInput = true;
             if (!isAttacking || isAttacking && playerCombatPrototyping.canChangeDirectionsDuringAttack)
             {
-                facingDirection = _moveInput.x < 0 ? FacingDirection.Left : FacingDirection.Right;
+                if (_moveInput.x < 0)
+                {
+                    facingDirection = FacingDirection.Left;
+                    spriteRenderer.flipX = true;
+                }
+                else
+                {                    
+                    facingDirection = FacingDirection.Right;
+                    spriteRenderer.flipX = false;
+                }
             }
         }
         else
@@ -485,10 +501,12 @@ public class PlayerInputs : MonoBehaviour
             if (_moveInput.x < 0)
             {
                 facingDirection = FacingDirection.Left;
+                spriteRenderer.flipX = true;
             }
             else if ( _moveInput.x > 0 )
             {
                 facingDirection = FacingDirection.Right;
+                spriteRenderer.flipX = false;
             }
             animator.SetTrigger(AttackTriggerID);
             isAttacking = true;

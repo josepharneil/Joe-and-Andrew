@@ -40,6 +40,11 @@ public class PlayerCombat : MonoBehaviour
     [Header("Gamepad Vibration")]
     [SerializeField] private GamepadVibrator gamepadVibrator;
     
+    [Header("Time Scale On Hit")]
+    private float _slowTimeScaleTimer = 0f;
+    [SerializeField] private float slowTimeScaleDuration = 0.2f;
+    [SerializeField] private float slowTimeScaleAmount = 1 / 20f;
+
     [Header("Prototyping")]
     public PlayerCombatPrototyping playerCombatPrototyping;
 
@@ -164,10 +169,24 @@ public class PlayerCombat : MonoBehaviour
         if (enemyHit)
         {
             cinemachineShake.ShakeCamera(shakeAmplitude, shakeFrequency, shakeDuration);
+            Time.timeScale = slowTimeScaleAmount;
+            _slowTimeScaleTimer = slowTimeScaleDuration;
         }
 
         // At the end, we're now post damage.
         inputs.isInPreDamageAttackPhase = false;
+    }
+
+    private void Update()
+    {
+        if (_slowTimeScaleTimer > 0f)
+        {
+            _slowTimeScaleTimer -= Time.unscaledDeltaTime;
+            if (_slowTimeScaleTimer < 0f)
+            {
+                Time.timeScale = 1f;
+            }
+        }
     }
 
     private void OnDrawGizmos()

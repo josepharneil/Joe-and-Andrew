@@ -5559,6 +5559,8 @@ MonoBehaviour:
   shakeFrequency: 1
   shakeDuration: 0.1
   gamepadVibrator: {fileID: 1467600188}
+  slowTimeScaleDuration: 0.15
+  slowTimeScaleAmount: 0.01
   playerCombatPrototyping: {fileID: 1467600178}
 --- !u!114 &1467600182
 MonoBehaviour:
