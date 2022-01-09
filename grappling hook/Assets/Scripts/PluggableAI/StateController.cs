@@ -9,15 +9,18 @@ namespace PluggableAI
     /// </summary>
     public class StateController : MonoBehaviour
     {
+        [Tooltip("Current state.")]
         public State currentState;
 
-        private bool _aiActive = true;
+        [Tooltip("Is the AI Active?")]
+        [SerializeField] private bool aiActive = true;
 
-        public static State RemainState; // Special state that indicates we don't transition away.
+        [Tooltip("Unique, special state that indicates we don't transition away.")]
+        public State remainState;
 
         private void Update()
         {
-            if (!_aiActive)
+            if (!aiActive)
             {
                 return;
             }
@@ -39,7 +42,7 @@ namespace PluggableAI
 
         public void TransitionToState(State nextState)
         {
-            if (nextState != RemainState)
+            if (nextState != remainState)
             {
                 currentState = nextState;
             }
