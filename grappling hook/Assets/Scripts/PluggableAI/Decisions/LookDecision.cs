@@ -1,4 +1,3 @@
-using UnityEditor;
 using UnityEngine;
 
 namespace PluggableAI
@@ -6,23 +5,34 @@ namespace PluggableAI
     [CreateAssetMenu(menuName = "PluggableAI/Decisions/Look")]
     public class LookDecision : Decision
     {
+        private ChasePathing _chasePathing;
+        private EnemyMovement _enemyMovement;
+        
         public override bool Decide(StateController controller)
         {
-            bool targetVisible = Look(controller);
-            return targetVisible;
+            return Look(controller);
         }
 
         private bool Look(StateController controller)
         {
-            ChasePathing chasePathing = controller.gameObject.GetComponent<ChasePathing>();
-            int facingDirection = (int)controller.gameObject.GetComponent<EnemyMovement>().facingDirection;
-            Debug.DrawRay(controller.gameObject.transform.position , new Vector3(facingDirection * chasePathing.sightRange,0f,0f) );
-            RaycastHit2D hit = Physics2D.CircleCast(controller.gameObject.transform.position, chasePathing.sightWidth, new Vector2(facingDirection,0f),chasePathing.sightRange);
-            if (hit && hit.collider.CompareTag("Player"))
+            if (_chasePathing == null)
             {
-                return true;
+                _chasePathing = controller.gameObject.GetComponent<ChasePathing>();
+                Debug.Assert(_chasePathing != null);
             }
-            return false;
+            if (_enemyMovement == null)
+            {
+                _enemyMovement = controller.gameObject.GetComponent<EnemyMovement>();
+                Debug.Assert(_chasePathing != null);
+            }
+            
+            int facingDirection = (int)_enemyMovement.facingDirection;
+            var gameObjectPosition = controller.gameObject.transform.position;
+            
+            Debug.DrawRay(gameObjectPosition , new Vector3(facingDirection * _chasePathing.sightRange,0f,0f) );
+            RaycastHit2D hit = Physics2D.CircleCast(gameObjectPosition, _chasePathing.sightWidth, new Vector2(facingDirection,0f),_chasePathing.sightRange);
+            
+            return hit && hit.collider.CompareTag("Player");
         }
     }
 }

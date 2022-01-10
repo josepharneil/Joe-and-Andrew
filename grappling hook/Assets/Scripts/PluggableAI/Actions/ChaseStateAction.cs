@@ -1,12 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace PluggableAI
 {
-    [CreateAssetMenu(menuName ="PluggableAI/Actions/Chase")]
+    [CreateAssetMenu(menuName = "PluggableAI/Actions/Chase")]
     public class ChaseStateAction : StateAction
     {
+        private ChasePathing _chasePathing;
+
         public override void Act(StateController controller)
         {
             Chase(controller);
@@ -14,7 +14,11 @@ namespace PluggableAI
 
         private void Chase(StateController controller)
         {
-            controller.gameObject.GetComponent<ChasePathing>().UpdateChase();
+            if (_chasePathing == null)
+            {
+                _chasePathing = controller.gameObject.GetComponent<ChasePathing>();
+            }
+            _chasePathing.UpdateChase();
         }
     }
 }
