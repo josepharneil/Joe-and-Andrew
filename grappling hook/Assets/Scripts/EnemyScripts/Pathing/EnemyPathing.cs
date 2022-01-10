@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(EnemyMovement))]
 public class EnemyPathing : MonoBehaviour
 {
     [SerializeField] private Transform playerTransform;
@@ -57,7 +58,6 @@ public class EnemyPathing : MonoBehaviour
         {
             WalkTowards(startingPosition);
         }
-        
     }
 
     public void UpdateChasePlayer()

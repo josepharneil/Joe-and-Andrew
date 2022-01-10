@@ -14,9 +14,14 @@ namespace PluggableAI
 
         private bool Look(StateController controller)
         {
-            // TODO do code here, e.g RayCast, SphereCast
-            // Can include Debug.DrawRay for example
-            // SphereCast gives a nice area
+            ChasePathing chasePathing = controller.gameObject.GetComponent<ChasePathing>();
+            int facingDirection = (int)controller.gameObject.GetComponent<EnemyMovement>().facingDirection;
+            Debug.DrawRay(controller.gameObject.transform.position , new Vector3(facingDirection * chasePathing.sightRange,0f,0f) );
+            RaycastHit2D hit = Physics2D.CircleCast(controller.gameObject.transform.position, chasePathing.sightWidth, new Vector2(facingDirection,0f),chasePathing.sightRange);
+            if (hit && hit.collider.CompareTag("Player"))
+            {
+                return true;
+            }
             return false;
         }
     }

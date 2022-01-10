@@ -18,7 +18,12 @@ public class EnemyMovement : MonoBehaviour
     BoxCollider2D enemyCollider;
     RayCastOrigins raycastOrigins;
     public CollisionInfo collisions;
-
+    public FacingDirection facingDirection{ get; private set; }
+   public enum FacingDirection
+    {
+        Left=-1,
+        Right=1
+    }
 
     struct RayCastOrigins
     {
@@ -159,6 +164,7 @@ public class EnemyMovement : MonoBehaviour
             collisions.ResetAll();
             VerticalCollisions(ref displacement);
         }
+        facingDirection = (FacingDirection)Mathf.Sign(displacement.x);
         transform.Translate(displacement);
     }
 }
