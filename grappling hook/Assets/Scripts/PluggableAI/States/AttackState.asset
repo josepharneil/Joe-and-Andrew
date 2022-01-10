@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: abff8becdaa8246c2811460059a5389a, type: 3}
-  m_Name: ChaseState
+  m_Name: AttackState
   m_EditorClassIdentifier: 
   actions:
-  - {fileID: 11400000, guid: 43eac013c5886ab46850224f3358f42a, type: 2}
+  - {fileID: 11400000, guid: 708d7fd60627d4b30a48f030957d8c2a, type: 2}
   transitions: []
-  sceneGizmoColour: {r: 0.9528302, g: 0.5760586, b: 0.27416337, a: 1}
+  sceneGizmoColour: {r: 0.8207547, g: 0.011614433, b: 0.011614433, a: 1}

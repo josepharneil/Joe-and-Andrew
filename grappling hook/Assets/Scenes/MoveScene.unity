@@ -203,7 +203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentState: {fileID: 11400000, guid: 7fbdbb4309653e34aaae14a321c288a4, type: 2}
   aiActive: 1
-  remainState: {fileID: 0}
+  remainState: {fileID: 11400000, guid: 61b1e796c6caf40fab97c10b7c1bcfce, type: 2}
 --- !u!114 &974940297
 MonoBehaviour:
   m_ObjectHideFlags: 0

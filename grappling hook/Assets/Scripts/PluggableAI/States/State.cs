@@ -18,6 +18,7 @@ namespace PluggableAI
         [Tooltip("Colour of the gizmo in the scene.")]
         public Color sceneGizmoColour = Color.grey;
         
+        // NOTE: We may want to add OnEnter and OnExit ?
         public void UpdateState(StateController controller)
         {
             DoActions(controller);

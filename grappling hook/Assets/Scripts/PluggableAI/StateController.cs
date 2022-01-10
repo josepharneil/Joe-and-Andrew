@@ -42,6 +42,7 @@ namespace PluggableAI
 
         public void TransitionToState(State nextState)
         {
+            // NOTE: We maybe want to implement OnEnter and OnExit on states?
             if (nextState != remainState)
             {
                 currentState = nextState;
