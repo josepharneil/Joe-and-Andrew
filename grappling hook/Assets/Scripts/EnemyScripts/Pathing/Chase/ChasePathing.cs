@@ -16,6 +16,7 @@ public abstract class ChasePathing : MonoBehaviour
     [SerializeField] protected float moveSpeed;
     [SerializeField] public float sightRange;
     [SerializeField] public float sightWidth;
+    [SerializeField] public LayerMask mask;
 
     private float _lerpCurrent = 0f;
     private float _currentSpeed = 0f;
@@ -34,7 +35,8 @@ public abstract class ChasePathing : MonoBehaviour
         {
             _lerpCurrent = 0f;
         }
-        movement.Move(new Vector2(_currentSpeed * Time.deltaTime, _currentSpeed * Time.deltaTime));
+        //ToDo AK: allow for decent vertical movement
+        movement.Move(new Vector2(_currentSpeed * Time.deltaTime,0f));
     }
 
     protected virtual void Accelerate(Vector2 target, float goalSpeed)
