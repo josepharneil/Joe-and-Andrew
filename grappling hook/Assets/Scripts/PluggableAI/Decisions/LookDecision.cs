@@ -29,10 +29,17 @@ namespace PluggableAI
             int facingDirection = (int)_enemyMovement.facingDirection;
             var gameObjectPosition = controller.gameObject.transform.position;
             LayerMask mask = _chasePathing.mask;
-
-            Debug.DrawRay(gameObjectPosition , new Vector3(facingDirection * _chasePathing.sightRange,0f,0f) );
-            RaycastHit2D hit = Physics2D.Raycast(gameObjectPosition, new Vector2(facingDirection, 0f), _chasePathing.sightRange,mask);
-            //Physics2D.CircleCast(gameObjectPosition, _chasePathing.sightWidth, new Vector2(facingDirection,0f),_chasePathing.sightRange);
+            RaycastHit2D hit = new RaycastHit2D();
+            for (int i = 0; i < _chasePathing.sightHeight; i++)
+            {
+                Vector3 heightVector = new Vector3(0f, 0.5f*i, 0f);
+                Debug.DrawRay(gameObjectPosition+heightVector, new Vector3(facingDirection * _chasePathing.sightRange, 0f, 0f));
+                hit = Physics2D.CircleCast(gameObjectPosition+heightVector, _chasePathing.sightWidth, new Vector2(facingDirection, 0f), _chasePathing.sightRange, mask);
+                if (hit)
+                {
+                    break;
+                }
+            }
             
             return hit && hit.collider.CompareTag("Player");
         }

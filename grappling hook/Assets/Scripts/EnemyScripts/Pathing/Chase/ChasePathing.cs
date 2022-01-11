@@ -16,6 +16,7 @@ public abstract class ChasePathing : MonoBehaviour
     [SerializeField] protected float moveSpeed;
     [SerializeField] public float sightRange;
     [SerializeField] public float sightWidth;
+    [SerializeField] public int sightHeight;
     [SerializeField] public LayerMask mask;
 
     private float _lerpCurrent = 0f;
