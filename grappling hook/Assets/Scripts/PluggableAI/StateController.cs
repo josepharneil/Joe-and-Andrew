@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace PluggableAI
@@ -13,14 +14,22 @@ namespace PluggableAI
         public State currentState;
 
         [Tooltip("Is the AI Active?")]
-        [SerializeField] private bool aiActive = true;
+        [SerializeField] private bool AIActive = true;
 
-        [Tooltip("Unique, special state that indicates we don't transition away.")]
-        public State remainState;
+        private void Start()
+        {
+            if (!AIActive)
+            {
+                return;
+            }
+            // NOTE This could cause a bug if aiActive isn't initially active at the start,
+            // and then its turned on during play... 
+            currentState.OnEnter(this);
+        }
 
         private void Update()
         {
-            if (!aiActive)
+            if (!AIActive)
             {
                 return;
             }
@@ -40,13 +49,15 @@ namespace PluggableAI
             // Gizmos.DrawWireSphere(eyes.position, enemyStats.lookSphereCastRadius);
         }
 
+        /// <summary>
+        /// Called within States when a TransitionPredicate is satisfied.
+        /// </summary>
+        /// <param name="nextState">The next state to transition to.</param>
         public void TransitionToState(State nextState)
         {
-            // NOTE: We maybe want to implement OnEnter and OnExit on states?
-            if (nextState != remainState)
-            {
-                currentState = nextState;
-            }
+            currentState.OnExit(this);
+            currentState = nextState;
+            currentState.OnEnter(this);
         }
     }
 }

@@ -3,12 +3,12 @@ using UnityEngine;
 namespace PluggableAI
 {
     [CreateAssetMenu(menuName = "PluggableAI/Decisions/Look")]
-    public class LookDecision : Decision
+    public class LookTransitionPredicate : TransitionPredicate
     {
         private ChasePathing _chasePathing;
         private EnemyMovement _enemyMovement;
         
-        public override bool Decide(StateController controller)
+        public override bool PredicateIsSatisfied(StateController controller)
         {
             return Look(controller);
         }
