@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1893448595, guid: a040fb66244a7f54289914d98ea4ef7d, type: 3}
+  m_Name: CanSeePlayer
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"graph":{"variables":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[],"controlOutputDefinitions":[],"valueInputDefinitions":[],"valueOutputDefinitions":[],"title":"CanSeePlayer","summary":null,"pan":{"x":0.0,"y":0.0},"zoom":1.0,"elements":[{"defaultValues":{},"position":{"x":76.0,"y":-73.0},"guid":"a6d6228d-efb9-49f1-8ffc-002af150ec91","$version":"A","$type":"Bolt.TriggerStateTransition","$id":"9"},{"argumentCount":0,"coroutine":false,"defaultValues":{"target":null,"name":{"$content":"","$type":"System.String"}},"position":{"x":-123.0,"y":-90.0},"guid":"56a16069-3a05-4a8c-a92a-5260a6030b6d","$version":"A","$type":"Bolt.CustomEvent","$id":"11"},{"member":{"name":"CanSeePlayer","parameterTypes":null,"targetType":"Bolt.BoltEvents","targetTypeName":"Bolt.BoltEvents","$version":"A"},"defaultValues":{},"position":{"x":-374.0,"y":-66.0},"guid":"9ba184dc-e6ef-419c-82bb-d4ac0e199dc0","$version":"A","$type":"Bolt.GetMember","$id":"13"},{"sourceUnit":{"$ref":"11"},"sourceKey":"trigger","destinationUnit":{"$ref":"9"},"destinationKey":"trigger","guid":"2ea7d6a7-1103-4c16-b1b7-ff330da448b4","$type":"Bolt.ControlConnection"},{"sourceUnit":{"$ref":"13"},"sourceKey":"value","destinationUnit":{"$ref":"11"},"destinationKey":"name","guid":"06bd4190-a558-4baf-b833-a305c91d22a0","$type":"Bolt.ValueConnection"}],"$version":"A"}}'
+    _objectReferences: []

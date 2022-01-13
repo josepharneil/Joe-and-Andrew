@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1893448595, guid: a040fb66244a7f54289914d98ea4ef7d, type: 3}
+  m_Name: PlayerNotInAttackRange
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"graph":{"variables":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[],"controlOutputDefinitions":[],"valueInputDefinitions":[],"valueOutputDefinitions":[],"title":"PlayerIsNotInAttackRange","summary":null,"pan":{"x":0.0,"y":0.0},"zoom":1.0,"elements":[{"defaultValues":{},"position":{"x":169.0,"y":-54.0},"guid":"64f00a26-46a6-400d-a80a-2499ffd3cbf9","$version":"A","$type":"Bolt.TriggerStateTransition","$id":"9"},{"member":{"name":"PlayerIsNotInAttackRange","parameterTypes":null,"targetType":"Bolt.BoltEvents","targetTypeName":"Bolt.BoltEvents","$version":"A"},"defaultValues":{},"position":{"x":-343.0,"y":-62.0},"guid":"4d3fb1f5-84d0-4cd9-8190-dfe909904480","$version":"A","$type":"Bolt.GetMember","$id":"11"},{"argumentCount":0,"coroutine":false,"defaultValues":{"target":null,"name":{"$content":"","$type":"System.String"}},"position":{"x":-38.0,"y":-74.0},"guid":"e966ff48-cb99-4682-9706-8caff76dbddb","$version":"A","$type":"Bolt.CustomEvent","$id":"14"},{"sourceUnit":{"$ref":"14"},"sourceKey":"trigger","destinationUnit":{"$ref":"9"},"destinationKey":"trigger","guid":"d8d364ca-9d42-4df6-9483-a8e1ee6993e1","$type":"Bolt.ControlConnection"},{"sourceUnit":{"$ref":"11"},"sourceKey":"value","destinationUnit":{"$ref":"14"},"destinationKey":"name","guid":"8ce3f5b7-9317-4508-ac22-856ef6192af4","$type":"Bolt.ValueConnection"}],"$version":"A"}}'
+    _objectReferences: []

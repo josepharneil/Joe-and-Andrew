@@ -26,7 +26,7 @@ namespace PluggableAI
                 Debug.Assert(_chasePathing != null);
             }
             
-            int facingDirection = (int)_enemyMovement.facingDirection;
+            int facingDirection = (int)_enemyMovement.FacingDirection;
             var gameObjectPosition = controller.gameObject.transform.position;
             LayerMask mask = _chasePathing.mask;
             RaycastHit2D hit = new RaycastHit2D();

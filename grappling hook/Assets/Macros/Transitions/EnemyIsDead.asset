@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1893448595, guid: a040fb66244a7f54289914d98ea4ef7d, type: 3}
+  m_Name: EnemyIsDead
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"graph":{"variables":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[],"controlOutputDefinitions":[],"valueInputDefinitions":[],"valueOutputDefinitions":[],"title":"EnemyIsDead","summary":null,"pan":{"x":0.0,"y":0.0},"zoom":1.0,"elements":[{"defaultValues":{},"position":{"x":100.0,"y":-50.0},"guid":"f68c0c32-33db-4ef9-aa63-e40c05edb756","$version":"A","$type":"Bolt.TriggerStateTransition","$id":"9"},{"argumentCount":0,"coroutine":false,"defaultValues":{"target":null,"name":{"$content":"","$type":"System.String"}},"position":{"x":-106.0,"y":-56.0},"guid":"9697e0c2-1628-464a-80c2-b8ba31d9d9cd","$version":"A","$type":"Bolt.CustomEvent","$id":"11"},{"member":{"name":"EnemyIsDead","parameterTypes":null,"targetType":"Bolt.BoltEvents","targetTypeName":"Bolt.BoltEvents","$version":"A"},"defaultValues":{},"position":{"x":-299.0,"y":-38.0},"guid":"7010955b-a654-48e7-b9d8-6016f54e8a1f","$version":"A","$type":"Bolt.GetMember","$id":"13"},{"sourceUnit":{"$ref":"11"},"sourceKey":"trigger","destinationUnit":{"$ref":"9"},"destinationKey":"trigger","guid":"f50a8fe5-1015-4f51-9af4-ed0b5fede29e","$type":"Bolt.ControlConnection"},{"sourceUnit":{"$ref":"13"},"sourceKey":"value","destinationUnit":{"$ref":"11"},"destinationKey":"name","guid":"4ed956e6-1d75-42e1-bf83-0ed445684172","$type":"Bolt.ValueConnection"}],"$version":"A"}}'
+    _objectReferences: []
