@@ -145,6 +145,11 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    public void MoveAtSpeed(Vector2 speed)
+    {
+        Move(speed * Time.deltaTime);
+    }
+    
     public void Move(Vector2 displacement)
     {
         //sets the origins for all the raycasts

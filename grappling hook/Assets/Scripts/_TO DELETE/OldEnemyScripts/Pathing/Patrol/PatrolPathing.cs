@@ -26,8 +26,7 @@ public abstract class PatrolPathing : MonoBehaviour
     {
         //gets the initial position and sets it as the first waypoint
         startingPosition = gameObject.transform.position;
-        wayPoints = new List<Vector2>();
-        wayPoints.Add(startingPosition);
+        wayPoints = new List<Vector2> { startingPosition };
     }
     //ToDo AK: Make this work for y movement
     public virtual void GoTowardsAtSpeed(Vector2 target, float speed)
