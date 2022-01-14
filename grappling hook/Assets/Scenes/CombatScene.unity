@@ -4608,7 +4608,7 @@ PrefabInstance:
     - target: {fileID: 9147847883264161609, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 4108777256154593774, guid: 8c46f898597823a44b639dfdfd598f45, type: 3}
+      objectReference: {fileID: 21300000, guid: 2ba30ca67c9134461b6689927750cb9b, type: 3}
     - target: {fileID: 9147847883264161609, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
@@ -4617,6 +4617,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652280, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: c897fdb21d16149cb9040b56902eafaa, type: 2}
     - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: cinemachineShake
       value: 
