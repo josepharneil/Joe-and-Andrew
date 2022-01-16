@@ -1,11 +1,11 @@
-using System;
 using Bolt;
 using Ludiq;
+using UnityEngine;
 
 namespace AI
 {
     [UnitCategory("Custom Units")]
-    [UnitTitle("Transition Predicate Node")]
+    [UnitTitle("TransitionPredicateNode")]
     public class TransitionPredicateNode : Unit
     {
         [DoNotSerialize] // No need to serialize ports.
@@ -13,33 +13,44 @@ namespace AI
         private ControlInput _inputTrigger; //Adding the ControlInput port variable
 
         [DoNotSerialize] // No need to serialize ports.
-        private ControlOutput _outputTrigger;//Adding the ControlOutput port variable.
+        private ControlOutput _outputTriggerTrue;//Adding the ControlOutput port variable.
+        
+        private ControlOutput _outputTriggerFalse;//Adding the ControlOutput port variable.
 
         [DoNotSerialize] // No need to serialize ports.
         private ValueInput _transitionPredicateInputValue;
-
-        [DoNotSerialize] // No need to serialize ports.
-        private ValueOutput _transitionPredicateOutputValue;
         
+        [DoNotSerialize] // No need to serialize ports.
+        private ValueInput _targetGameObject;
+
         protected override void Definition()
         {
             //Making the ControlInput port visible, setting its key and running the anonymous action method to pass the flow to the outputTrigger port.
             _inputTrigger = ControlInput("", flow =>
             {
-                TransitionPredicate transitionPredicate = flow.GetValue<TransitionPredicate>(_transitionPredicateInputValue);
-                if (transitionPredicate)
+                GameObject gameObject = flow.GetValue<GameObject>(_targetGameObject);
+                if (gameObject == null)
                 {
-                    bool result = transitionPredicate.IsPredicateSatisfied(flow.stack.gameObject);
-                    flow.SetValue(_transitionPredicateOutputValue, result);
+                    Debug.LogError("Missing target Game Object");
+                    return _outputTriggerFalse;
                 }
-                return _outputTrigger;
+                TransitionPredicate transitionPredicate = flow.GetValue<TransitionPredicate>(_transitionPredicateInputValue);
+                if (transitionPredicate == null)
+                {
+                    Debug.LogError("Missing transition predicate", gameObject);
+                    return _outputTriggerFalse;
+                }
+
+                return transitionPredicate.IsPredicateSatisfied(gameObject) ? _outputTriggerTrue : _outputTriggerFalse;
             });
             //Making the ControlOutput port visible and setting its key.
-            _outputTrigger = ControlOutput("");
+            _outputTriggerTrue = ControlOutput("True");
+            _outputTriggerFalse = ControlOutput("False");
             
+            // TriggerCustomEvent
             _transitionPredicateInputValue = ValueInput<TransitionPredicate>("Transition Predicate", null);
-            
-            _transitionPredicateOutputValue = ValueOutput<bool>("Predicate");
+
+            _targetGameObject = ValueInput("Target", (GameObject)null).NullMeansSelf();
         }
     }
 }

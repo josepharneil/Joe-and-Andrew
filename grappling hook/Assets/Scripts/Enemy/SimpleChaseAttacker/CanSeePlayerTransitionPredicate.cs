@@ -1,11 +1,14 @@
 using AI;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "AI/Transition Predicates/Can See Player")]
-public class CanSeePlayerTransitionPredicate : TransitionPredicate
+namespace AI
 {
-    public override bool IsPredicateSatisfied(GameObject aiGameObject)
+    [CreateAssetMenu(menuName = "AI/Transition Predicates/Can See Player")]
+    public class CanSeePlayerTransitionPredicate : TransitionPredicate
     {
-        return aiGameObject.GetComponent<CheckLookForPlayer>().Check();
+        public override bool IsPredicateSatisfied(GameObject aiGameObject)
+        {
+            return aiGameObject.GetComponent<CheckLookForPlayer>().Check(5f);
+        }
     }
 }

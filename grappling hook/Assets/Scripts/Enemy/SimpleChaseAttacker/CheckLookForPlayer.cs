@@ -8,11 +8,10 @@ namespace AI
     public class CheckLookForPlayer : MonoBehaviour
     {
         [SerializeField] private Transform player;
-        [SerializeField] private float closenessThreshold = 2f;
 
-        public bool Check()
+        public bool Check( float distanceThreshold )
         {
-            return Vector2.Distance(player.position, transform.position) < closenessThreshold;
+            return Vector2.Distance(player.position, transform.position) < distanceThreshold;
         }
 
     }
