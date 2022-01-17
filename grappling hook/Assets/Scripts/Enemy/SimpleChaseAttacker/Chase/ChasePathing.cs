@@ -23,7 +23,7 @@ public abstract class ChasePathing : MonoBehaviour
     private float _currentSpeed = 0f;
 
     //Todo AK: combine gotowards and accelerate into a pathing class
-    protected virtual void GoTowardsAtSpeed(Vector2 target, float speed)
+    protected void GoTowardsAtSpeed(Vector2 target, float speed)
     {
         float moveDirection = Mathf.Sign(target.x - transform.position.x);
         // TODO: Tolerance, not equivalence.
@@ -40,7 +40,7 @@ public abstract class ChasePathing : MonoBehaviour
         movement.Move(new Vector2(_currentSpeed * Time.deltaTime,0f));
     }
 
-    protected virtual void Accelerate(Vector2 target, float goalSpeed)
+    private void Accelerate(Vector2 target, float goalSpeed)
     {
         float moveDirection = Mathf.Sign(target.x - transform.position.x);
         _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, accelerationRate * Time.deltaTime);

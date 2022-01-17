@@ -31,7 +31,7 @@ public class EnemyMovement : MonoBehaviour
     #region setup
     private struct CollisionInfo
     {
-        //stoers the collision info, this gets updated each time we call move
+        //stores the collision info, this gets updated each time we call move
         //won't be using this that much for the basic enemy
         public bool Above, Below;
         public bool Left, Right;
