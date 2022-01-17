@@ -414,9 +414,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveController: {fileID: 9147847883452652284}
-  jumpHeight: 2.5
-  timeToJumpHeight: 0.4
+  jumpHeight: 15
+  timeToJumpHeight: 1.16
   coyoteTime: 0.5
+  _minFallSpeed: 35
+  _maxFallSpeed: 45
+  _jumpApexThreshold: 10
+  _fallClamp: -40
   moveSpeed: 10
   accelerationCurve:
     serializedVersion: 2
