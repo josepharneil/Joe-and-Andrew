@@ -11,10 +11,20 @@ public class PlayerInputs : MonoBehaviour
     [SerializeField] private MoveController moveController;
 
     [Header("Jump Stats")]
-    // TODO Separate these into jump, roll and move categories
     [SerializeField] private float jumpHeight = 3f;
     [SerializeField] private float timeToJumpHeight = 0.4f;
     [SerializeField] private float coyoteTime;
+    [SerializeField] private float _minFallSpeed = 80f;
+    [SerializeField] private float _maxFallSpeed = 120f;
+    [SerializeField] private float _jumpApexThreshold = 10f;
+    [SerializeField] private float _fallClamp = -40f;
+    private float _apexPoint; //This becomes 1 at the end of the jump
+    private float _fallSpeed;
+    private float _jumpVelocity;
+    private float _gravity;
+    //note: gravity is about to be replaced by fall speed
+
+
 
     [Header("Ground Move Stats")]
     [SerializeField] private float moveSpeed = 10f;
@@ -41,8 +51,6 @@ public class PlayerInputs : MonoBehaviour
     private float _jumpCalledTime;
     private float _lastGroundedTime;
     //gravity and jumpVelocity are calculated based on the jump height and time
-    private float _gravity;
-    private float _jumpVelocity;
     private float _rollDirection;
     private float _rollDurationTimer = 0f;
     private float _rollCoolDownTimer = 0f;
@@ -110,6 +118,7 @@ public class PlayerInputs : MonoBehaviour
             spriteRenderer.sprite = defaultSquareSprite;
         }
         
+        //AK 17/1/22 These are going to be altered for a more flexible gravity calculation, don't use for now
         _gravity = -2 * jumpHeight * Mathf.Pow(timeToJumpHeight, -2);
         _jumpVelocity = timeToJumpHeight * Mathf.Abs(_gravity);
         moveState = MoveState.Stopped;
@@ -153,7 +162,9 @@ public class PlayerInputs : MonoBehaviour
         // ReadMoveInput();
         SetHorizontalMove();
         CheckGrounded();
-        ApplyGravity();
+        CalculateJumpApex();
+        CalculateGravity();
+    //    ApplyGravity();
         Jump();
 
         if (!isAttacking || (isAttacking && !playerCombatPrototyping.data.movementDisabledByAttacks))
@@ -183,8 +194,33 @@ public class PlayerInputs : MonoBehaviour
         CheckIfAttackIsCancellable();
     }
 
+    #region Gravity and Fall calculations
+
+
+    //Taken from Tarodevs GitHub: https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/blob/main/Scripts/PlayerController.cs
+    private void CalculateGravity()
+    {
+        if (moveController.Collisions.Below)
+        {
+            if (_velocity.y < 0) _velocity.y = 0;
+        }
+        else
+        {
+            //TODO add in the early jump letgo Code
+
+            //Makes the player actually fall
+            _velocity.y -= _fallSpeed * Time.deltaTime;
+
+            //Clamps the y velocity to a certain value
+            if (_velocity.y < _fallClamp) _velocity.y = _fallClamp;
+        }
+    }
+
+    #endregion
+
+
     #region Jump Movement
-    
+
     /// <summary>
     /// Called by PlayerInput Unity Event.
     /// </summary>
@@ -205,22 +241,39 @@ public class PlayerInputs : MonoBehaviour
     {
         if (_isJumpInput && (_isGrounded || (_jumpCalledTime - _lastGroundedTime < coyoteTime)))
         {
-            _velocity.y = _jumpVelocity;
+            _velocity.y = jumpHeight;
             _jumpCalledTime = float.MaxValue;
             _isJumpInput = false;
         }
     }
 
+    private void CalculateJumpApex()
+    {
+        if (!moveController.Collisions.Below)
+        {
+            //sets the apexPoint based on how large the y velocity is
+            _apexPoint = Mathf.InverseLerp(_jumpApexThreshold, 0, Mathf.Abs(_velocity.y));
+            //uses the apexPoint to lerp between the min and max fallspeeds (our new gravity replacement)
+            _fallSpeed = Mathf.Lerp(_minFallSpeed, _maxFallSpeed, _apexPoint);
+        }
+        else
+        {
+            _apexPoint = 0f;
+        }
+    }
+
+
     private void ApplyGravity()
     {
         //this makes sure that the gravity is always properly applied
         //if its in an else of this if it really fucks up the jumping
+        //AK 17/1/22: Gravity has now been replaced with fall speed
 
         if (moveController.Collisions.Below || moveController.Collisions.Above || _rollState != RollState.NotRolling)
         {
             _velocity.y = 0;
         }
-        _velocity.y += _gravity * Time.deltaTime;
+        _velocity.y -= _fallSpeed * Time.deltaTime;
     }
 
     private void CheckGrounded()
