@@ -25,16 +25,8 @@ namespace AI
                 StateAction stateAction = flow.GetValue<StateAction>(_stateActionInputValue);
                 if (stateAction)
                 {
-                    stateAction.PerformAction(flow.stack.gameObject);
+                    stateAction.PerformAction(flow.stack.self);
                 }
-                // var array = flow.GetValue<List<PatrolStateAction>>(_stateActionInputValue);
-                // foreach (StateAction stateAction in array)
-                // {
-                //     if (stateAction == null) continue;
-                //     stateAction.PerformAction();
-                // }
-                
-                
                 return _outputTrigger;
             });
             //Making the ControlOutput port visible and setting its key.
