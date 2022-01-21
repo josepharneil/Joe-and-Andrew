@@ -138,6 +138,7 @@ GameObject:
   - component: {fileID: 64683677}
   - component: {fileID: 64683676}
   - component: {fileID: 64683675}
+  - component: {fileID: 64683679}
   - component: {fileID: 64683674}
   - component: {fileID: 64683673}
   - component: {fileID: 64683678}
@@ -270,11 +271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81c355cba3505ad4e952f1f6a7bfd7b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalRayCount: 4
-  verticalRayCount: 4
-  collisionMask:
-    serializedVersion: 2
-    m_Bits: 2112
+  customCollider2D: {fileID: 64683679}
 --- !u!114 &64683675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -355,6 +352,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 10
   currentHealth: 0
+--- !u!114 &64683679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 64683668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0a3f3a819c084b16854b357d15c2464, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxCollider: {fileID: 2092242610}
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 2112
 --- !u!1 &76782473
 GameObject:
   m_ObjectHideFlags: 0
@@ -548,9 +561,11 @@ GameObject:
   - component: {fileID: 462065305}
   - component: {fileID: 462065303}
   - component: {fileID: 462065307}
+  - component: {fileID: 462065311}
   - component: {fileID: 462065304}
   - component: {fileID: 462065309}
   - component: {fileID: 462065308}
+  - component: {fileID: 462065310}
   m_Layer: 0
   m_Name: SimplePatrolChase
   m_TagString: Untagged
@@ -635,11 +650,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81c355cba3505ad4e952f1f6a7bfd7b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalRayCount: 4
-  verticalRayCount: 4
-  collisionMask:
-    serializedVersion: 2
-    m_Bits: 64
+  customCollider2D: {fileID: 462065311}
 --- !u!114 &462065305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -724,6 +735,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1608203359}
+--- !u!114 &462065310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 462065301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0a3f3a819c084b16854b357d15c2464, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxCollider: {fileID: 0}
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 0
+--- !u!114 &462065311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 462065301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0a3f3a819c084b16854b357d15c2464, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxCollider: {fileID: 462065307}
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 2112
 --- !u!4 &474727738 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2256995661825768344, guid: ed5456cd62fd24da08ad66ab296d9d83, type: 3}
@@ -4336,7 +4379,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1774038816}
   m_Layer: 0
-  m_Name: <-----ENEMIES ----->
+  m_Name: <-----Enemies ----->
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4506,6 +4549,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 76782474}
     m_Modifications:
+    - target: {fileID: -5534176409033904270, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: boxCollider
+      value: 
+      objectReference: {fileID: 2092242610}
+    - target: {fileID: -5534176409033904270, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: collisionMask.m_Bits
+      value: 576
+      objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652258, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: m_Name
       value: Player
@@ -4560,6 +4611,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+--- !u!61 &2092242610 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 9147847883452652285, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+  m_PrefabInstance: {fileID: 2092242609}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2256995662610030123
 PrefabInstance:
   m_ObjectHideFlags: 0

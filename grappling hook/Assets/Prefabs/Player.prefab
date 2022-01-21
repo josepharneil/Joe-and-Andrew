@@ -194,6 +194,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9147847883452652287}
   - component: {fileID: 9147847883452652285}
+  - component: {fileID: 2302908442463871428}
   - component: {fileID: 9147847883452652284}
   - component: {fileID: 9147847883452652279}
   - component: {fileID: 9147847883452652259}
@@ -257,6 +258,22 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 2.1}
   m_EdgeRadius: 0
+--- !u!114 &2302908442463871428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9147847883452652258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0a3f3a819c084b16854b357d15c2464, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxCollider: {fileID: 9147847883452652285}
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 576
 --- !u!114 &9147847883452652284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269,12 +286,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f0a2491b5b57940bd30e364ca30ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCollider: {fileID: 9147847883452652285}
-  horizontalRayCount: 4
-  verticalRayCount: 4
-  collisionMask:
-    serializedVersion: 2
-    m_Bits: 576
+  customCollider2D: {fileID: 2302908442463871428}
 --- !u!114 &9147847883452652279
 MonoBehaviour:
   m_ObjectHideFlags: 0

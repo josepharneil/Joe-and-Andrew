@@ -1,10 +1,12 @@
 using System;
+using Physics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 //thieved shamelessly from https://www.youtube.com/watch?v=MbWK8bCAU2w&list=PLFt_AvWsXl0f0hqURlhyIoAabKPgRsqjz&index=1
 
 [RequireComponent(typeof(MoveController))]
+[RequireComponent(typeof(CustomCollider2D))]
 public class PlayerInputs : MonoBehaviour
 {
     [Header("Components")]
@@ -23,8 +25,6 @@ public class PlayerInputs : MonoBehaviour
     private float _jumpVelocity;
     private float _gravity;
     //note: gravity is about to be replaced by fall speed
-
-
 
     [Header("Ground Move Stats")]
     [SerializeField] private float moveSpeed = 10f;
@@ -200,7 +200,7 @@ public class PlayerInputs : MonoBehaviour
     //Taken from Tarodevs GitHub: https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/blob/main/Scripts/PlayerController.cs
     private void CalculateGravity()
     {
-        if (moveController.Collisions.Below)
+        if (moveController.customCollider2D.CollisionBelow)
         {
             if (_velocity.y < 0) _velocity.y = 0;
         }
@@ -249,7 +249,7 @@ public class PlayerInputs : MonoBehaviour
 
     private void CalculateJumpApex()
     {
-        if (!moveController.Collisions.Below)
+        if (!moveController.customCollider2D.CollisionBelow)
         {
             //sets the apexPoint based on how large the y velocity is
             _apexPoint = Mathf.InverseLerp(_jumpApexThreshold, 0, Mathf.Abs(_velocity.y));
@@ -269,7 +269,7 @@ public class PlayerInputs : MonoBehaviour
         //if its in an else of this if it really fucks up the jumping
         //AK 17/1/22: Gravity has now been replaced with fall speed
 
-        if (moveController.Collisions.Below || moveController.Collisions.Above || _rollState != RollState.NotRolling)
+        if (moveController.customCollider2D.CollisionBelow || moveController.customCollider2D.CollisionAbove || _rollState != RollState.NotRolling)
         {
             _velocity.y = 0;
         }
@@ -278,7 +278,7 @@ public class PlayerInputs : MonoBehaviour
 
     private void CheckGrounded()
     {
-        if(moveController.CheckGrounded())
+        if(moveController.customCollider2D.CheckIfGrounded())
         {
             _isGrounded = true;
             _lastGroundedTime = Time.time;
@@ -292,6 +292,8 @@ public class PlayerInputs : MonoBehaviour
 
     private void StartCoyoteTime()
     {
+        // Note for the future, because this is setting an exact value... it should be fine?? Hopefully...
+        // This is a little bit of a "magic number" fix though.
         if (_isJumpInput && _jumpCalledTime != float.MaxValue )
         {
             _jumpCalledTime = Time.time;
@@ -422,7 +424,7 @@ public class PlayerInputs : MonoBehaviour
         //uses a lerp which is then used to evaluate along an animation curve for the acceleration
         //once we get to the max speed change to running
         //checks if there is a collision below the player, and if so use the air timers
-        float rate = (moveController.Collisions.Below ? accelerationRate : airAccelerationRate);
+        float rate = (moveController.customCollider2D.CollisionBelow ? accelerationRate : airAccelerationRate);
         _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
         _velocity.x = Mathf.Lerp(_velocity.x, moveSpeed * _moveInput.x, accelerationCurve.Evaluate(_lerpCurrent));
         
@@ -449,7 +451,7 @@ public class PlayerInputs : MonoBehaviour
         //same lerp method as accelerate
         //this time changes to stopped after getting low enough 
         //(I tried doing if(speed==0) but that was glitchy af
-        float rate = moveController.Collisions.Below ? decelerationRate : airDecelerationRate;
+        float rate = moveController.customCollider2D.CollisionBelow ? decelerationRate : airDecelerationRate;
         _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
         _velocity.x = Mathf.Lerp(_velocity.x, 0f, decelerationCurve.Evaluate(_lerpCurrent));
         if (Mathf.Abs(_velocity.x) <= decelerationTolerance)
@@ -462,7 +464,7 @@ public class PlayerInputs : MonoBehaviour
     private void ChangeDirection()
     {
         //same lerp method as accelerate
-        float rate = moveController.Collisions.Below ? changeDirectionRate : airChangeDirectionRate;
+        float rate = moveController.customCollider2D.CollisionBelow ? changeDirectionRate : airChangeDirectionRate;
         _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
         _velocity.x = Mathf.Lerp(_velocity.x, moveSpeed * _moveInput.x, changeDirectionCurve.Evaluate(_lerpCurrent));
 
