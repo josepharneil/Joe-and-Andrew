@@ -8,7 +8,7 @@ public class MyPlayerController : MonoBehaviour
 
     [Header("Config")]
     [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private CapsuleCollider2D collider;
+    [SerializeField] private CapsuleCollider2D capsuleCollider;
     [SerializeField] private float moveScale = 5f;
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float fallMultiplier = 2.5f;
@@ -111,7 +111,7 @@ public class MyPlayerController : MonoBehaviour
         for (float i = 1;i <=slideDuration; i++)
         {
             //rotates
-            collider.transform.Rotate(0f,0f,90f/slideDuration *slideSign);
+            capsuleCollider.transform.Rotate(0f,0f,90f/slideDuration *slideSign);
             yield return new WaitForSeconds(slideDuration/slideScaler);
         }
         yield return new WaitForSeconds(slideDuration/20f);
@@ -137,7 +137,7 @@ public class MyPlayerController : MonoBehaviour
         for (float i = slideDuration; i > 0; i--)
         {
             //rotates the collider back up 90 degrees based on the slide time
-            collider.transform.Rotate(0f, 0f, -90f / slideDuration * slideSign);
+            capsuleCollider.transform.Rotate(0f, 0f, -90f / slideDuration * slideSign);
             yield return new WaitForSeconds(slideDuration/slideScaler);
         }
         isSliding = false;

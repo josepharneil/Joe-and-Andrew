@@ -21,32 +21,4 @@ public class CameraFollow : MonoBehaviour
 
         //transform.position = new Vector3(followPosition.x, followPosition.y, transform.position.z);
     }
-
-    [SerializeField] private float cameraShakeDuration = 0.2f;
-    [SerializeField] private float cameraShakeAmount = 0.2f;
-
-    public void Shake()
-    {
-        // todo
-        //StartCoroutine(_Shake(cameraShakeDuration, cameraShakeAmount));
-    }
-
-    private IEnumerator _Shake(float duration, float magnitude)
-    {
-        Vector3 originalPos = transform.localPosition;
-        float elapsed = 0f;
-        while (elapsed < duration)
-        {
-            float x = Random.Range(-1f, 1f) * magnitude;
-            float y = Random.Range(-1f, 1f) * magnitude;
-
-            transform.localPosition = new Vector3(x, y, originalPos.z);
-
-            elapsed += Time.deltaTime;
-            
-            yield return null;
-        }
-
-        transform.localPosition = originalPos;
-    }
 }

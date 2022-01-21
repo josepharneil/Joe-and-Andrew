@@ -16,7 +16,7 @@ public class RL_MovingPlatform : MonoBehaviour
     [SerializeField] private float xCounter;
     [SerializeField] private float yCounter;
 
-    private Transform transform;
+    private Transform gameObjectTransform;
 
     public enum HorizontalDirection
     {
@@ -32,7 +32,7 @@ public class RL_MovingPlatform : MonoBehaviour
     }
     void Awake()
     {
-        transform = gameObject.transform;
+        gameObjectTransform = gameObject.transform;
     }
     // Update is called once per frame
     void Update()
@@ -66,7 +66,7 @@ public class RL_MovingPlatform : MonoBehaviour
 
     void Move()
     {
-        transform.Translate(new Vector3(xSpeed*(int)xDirection, ySpeed*(int)yDirection, 0));
+        gameObjectTransform.Translate(new Vector3(xSpeed*(int)xDirection, ySpeed*(int)yDirection, 0));
         if (xDirection != HorizontalDirection.none)
         {
             xCounter += xSpeed;

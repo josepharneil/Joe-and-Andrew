@@ -13,7 +13,7 @@ public class Temp_Patrol : MonoBehaviour
 
     private float distanceMoved = 0f;
     [SerializeField] Animator animator;
-    [SerializeField] SpriteRenderer renderer;
+    [SerializeField] SpriteRenderer spriteRenderer;
     bool _isAttacking = false;
 
     private FacingDirection _currentPatrolDirection = FacingDirection.Right;
@@ -45,13 +45,13 @@ public class Temp_Patrol : MonoBehaviour
         if (_currentPatrolDirection == FacingDirection.Left)
         {
             _currentPatrolDirection = FacingDirection.Right;
-            renderer.flipX=false;
+            spriteRenderer.flipX=false;
             return;
         }
         else if (_currentPatrolDirection == FacingDirection.Right)
         {
             _currentPatrolDirection = FacingDirection.Left;
-            renderer.flipX = true;
+            spriteRenderer.flipX = true;
             return;
         }
     }
