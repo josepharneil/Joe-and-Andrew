@@ -364,7 +364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0a3f3a819c084b16854b357d15c2464, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boxCollider: {fileID: 2092242610}
+  boxCollider: {fileID: 64683677}
   collisionMask:
     serializedVersion: 2
     m_Bits: 2112

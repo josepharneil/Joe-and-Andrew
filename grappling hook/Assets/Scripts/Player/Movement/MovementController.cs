@@ -8,9 +8,9 @@ namespace Entity
         [Header("Components")]
         public Physics.CustomCollider2D customCollider2D;
 
-        public void MoveAtSpeed(Vector2 speed)
+        public void MoveAtSpeed(Vector2 velocity)
         {
-            Move(speed * Time.deltaTime);
+            Move(velocity * Time.deltaTime);
         }
         
         private void Move(Vector2 displacement)
@@ -29,6 +29,7 @@ namespace Entity
                 customCollider2D.ResetCollisionState();
                 customCollider2D.CheckVerticalCollisions(ref displacement);
             }
+
             transform.Translate(displacement);
         }
     }

@@ -21,8 +21,8 @@ namespace AI
 
         private void Start()
         {
-            _startPoint = transform.position;
-            Debug.Assert(_startPoint.x < destinationPoint.position.x, 
+            _startPoint = transform.localPosition;
+            Debug.Assert(_startPoint.x < destinationPoint.localPosition.x, 
                 "This very simple script only allows a patrol destination towards the right of the initial position.", 
                 this);
         }
@@ -36,19 +36,19 @@ namespace AI
         {
             if (_facingDirection == FacingDirection.Right)
             {
-                if (Vector3.Distance(transform.position, destinationPoint.position) < 0.1f)
+                if (Vector3.Distance(transform.localPosition, destinationPoint.localPosition) < 0.1f)
                 {
                     _facingDirection = FacingDirection.Left;
                 }
             }
             else
             {
-                if (Vector3.Distance(transform.position, _startPoint) < 0.1f)
+                if (Vector3.Distance(transform.localPosition, _startPoint) < 0.1f)
                 {
                     _facingDirection = FacingDirection.Right;
                 }
             }
-            movement.MoveAtSpeed(new Vector2(Speed * (float)_facingDirection, 0f));
+            movement.MoveAtSpeed(new Vector2((float)_facingDirection, 0f) * Speed);
         }
     }
 }
