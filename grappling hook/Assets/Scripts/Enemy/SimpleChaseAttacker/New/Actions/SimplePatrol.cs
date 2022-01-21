@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Cinemachine.Utility;
 using UnityEngine;
 
 namespace AI
@@ -23,6 +24,9 @@ namespace AI
         private void Start()
         {
             _startPoint = transform.position;
+            Debug.Assert(_startPoint.x < destinationPoint.position.x, 
+                "This very simple script only allows a patrol destination towards the right of the initial position.", 
+                this);
         }
 
         public override void UpdatePatrol()

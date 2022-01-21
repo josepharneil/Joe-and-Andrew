@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EntityHealth : MonoBehaviour
 {
-    public int maxHealth;
+    public int maxHealth = 100;
     [HideInInspector] public int currentHealth;
 
     private void Start()
@@ -26,5 +26,10 @@ public class EntityHealth : MonoBehaviour
         {
             currentHealth = maxHealth;
         }
+    }
+
+    public bool IsAlive()
+    {
+        return currentHealth > 0;
     }
 }

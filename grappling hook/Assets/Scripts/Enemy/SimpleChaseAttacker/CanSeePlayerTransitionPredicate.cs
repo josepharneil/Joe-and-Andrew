@@ -6,9 +6,9 @@ namespace AI
     [CreateAssetMenu(menuName = "AI/Transition Predicates/Can See Player")]
     public class CanSeePlayerTransitionPredicate : TransitionPredicate
     {
-        public override bool IsPredicateSatisfied(GameObject aiGameObject)
+        public override bool IsPredicateSatisfied(GameObject agent)
         {
-            return aiGameObject.GetComponent<CheckLookForPlayer>().Check(5f);
+            return agent.GetComponent<CheckLookForPlayer>().Check(5f);
         }
     }
 }

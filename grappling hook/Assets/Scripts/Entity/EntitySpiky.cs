@@ -1,37 +1,43 @@
 using UnityEngine;
 
-/// <summary>
-/// If other entities touch this entity, damage them.
-/// </summary>
-[RequireComponent(typeof(Collider2D))]
-[RequireComponent(typeof(Rigidbody2D))]
-public class EntitySpiky : MonoBehaviour
+namespace Entity
 {
-    [SerializeField] private bool isEnabled = true;
-    
-    [Header("Components")]
-    [SerializeField] private LayerMask spikesWhat;
-    
-    [Header("Customisation")]
-    [SerializeField] private int spikeDamage = 5;
-    [SerializeField] private float spikeKnockbackDistance = 2f;
-    [SerializeField] private float spikeKnockbackDuration = 1f;
-    
-    private void OnCollisionEnter2D(Collision2D col)
+    /// <summary>
+    /// If other entities touch this entity, damage them.
+    /// </summary>
+    [RequireComponent(typeof(Collider2D))]
+    [RequireComponent(typeof(Rigidbody2D))]
+    public class EntitySpiky : MonoBehaviour
     {
-        if (!isEnabled)
+        [SerializeField] private bool isEnabled = true;
+        
+        [Header("Components")]
+        [SerializeField] private LayerMask spikesWhat;
+        
+        [Header("Customisation")]
+        [SerializeField] private int spikeDamage = 5;
+        
+        // todo: fix knockback
+        [SerializeField] private float spikeKnockbackDistance = 2f;
+        [SerializeField] private float spikeKnockbackDuration = 1f;
+        
+        private void OnCollisionEnter2D(Collision2D col)
         {
-            return;
-        }
-        GameObject colGameObject = col.gameObject;
-        
-        if ((colGameObject.layer & spikesWhat) != 0) return;
-        
-        colGameObject.GetComponent<EntityHealth>()?.Damage(spikeDamage);
+            if (!isEnabled)
+            {
+                return;
+            }
+            GameObject colGameObject = col.gameObject;
+            
+            if ((colGameObject.layer & spikesWhat) != 0) return;
+            
+            colGameObject.GetComponent<EntityHealth>()?.Damage(spikeDamage);
 
-        colGameObject.GetComponent<EntityKnockback>()?.Knockback(
-             colGameObject.transform.position -  transform.position, 
-            spikeKnockbackDistance, 
-            spikeKnockbackDuration);
+            colGameObject.GetComponent<EntityKnockback>()?.Knockback(
+                 colGameObject.transform.position -  transform.position, 
+                spikeKnockbackDistance, 
+                spikeKnockbackDuration);
+        }
     }
 }
+

@@ -6,9 +6,9 @@ namespace AI
     [CreateAssetMenu(menuName = "AI/Transition Predicates/Player Is In Attack Range")]
     public class PlayerIsInAttackRangeTransitionPredicate : TransitionPredicate
     {
-        public override bool IsPredicateSatisfied(GameObject aiGameObject)
+        public override bool IsPredicateSatisfied(GameObject agent)
         {
-            return aiGameObject.GetComponent<CheckLookForPlayer>().Check(2f);
+            return agent.GetComponent<CheckLookForPlayer>().Check(2f);
         }
     }
 }

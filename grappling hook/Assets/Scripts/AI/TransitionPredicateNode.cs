@@ -31,7 +31,7 @@ namespace AI
                 GameObject gameObject = flow.GetValue<GameObject>(_targetGameObject);
                 if (gameObject == null)
                 {
-                    Debug.LogError("Missing target Game Object");
+                    Debug.LogError("Missing target GameObject");
                     return _outputTriggerFalse;
                 }
                 TransitionPredicate transitionPredicate = flow.GetValue<TransitionPredicate>(_transitionPredicateInputValue);
@@ -40,7 +40,6 @@ namespace AI
                     Debug.LogError("Missing transition predicate", gameObject);
                     return _outputTriggerFalse;
                 }
-
                 return transitionPredicate.IsPredicateSatisfied(gameObject) ? _outputTriggerTrue : _outputTriggerFalse;
             });
             //Making the ControlOutput port visible and setting its key.
@@ -50,7 +49,7 @@ namespace AI
             // TriggerCustomEvent
             _transitionPredicateInputValue = ValueInput<TransitionPredicate>("Transition Predicate", null);
 
-            _targetGameObject = ValueInput("Target", (GameObject)null).NullMeansSelf();
+            _targetGameObject = ValueInput("Target (None is Self)", (GameObject)null).NullMeansSelf();
         }
     }
 }

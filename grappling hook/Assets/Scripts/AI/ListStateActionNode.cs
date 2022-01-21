@@ -52,7 +52,7 @@ namespace AI
             
             _stateActionListInputValue = ValueInput<List<StateAction>>("State Actions", new List<StateAction>());
             
-            _targetGameObject = ValueInput("Target", (GameObject)null).NullMeansSelf();
+            _targetGameObject = ValueInput("Target (None is Self)", (GameObject)null).NullMeansSelf();
         }
     }
 }
