@@ -274,6 +274,7 @@ MonoBehaviour:
   collisionMask:
     serializedVersion: 2
     m_Bits: 576
+  debugDraw: 0
 --- !u!114 &9147847883452652284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -425,14 +426,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c86546bf22606b243bc43e516930e92c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveController: {fileID: 9147847883452652284}
+  movementController: {fileID: 9147847883452652284}
   jumpHeight: 15
   timeToJumpHeight: 1.16
   coyoteTime: 0.5
-  _minFallSpeed: 35
-  _maxFallSpeed: 45
-  _jumpApexThreshold: 10
-  _fallClamp: -40
+  minFallSpeed: 80
+  maxFallSpeed: 120
+  jumpApexThreshold: 10
+  fallClamp: -40
   moveSpeed: 10
   accelerationCurve:
     serializedVersion: 2
@@ -610,6 +611,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fbb600d3206748e0ab9eb971f394754, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementController: {fileID: 9147847883452652284}
 --- !u!114 &9147847883452652276
 MonoBehaviour:
   m_ObjectHideFlags: 0
