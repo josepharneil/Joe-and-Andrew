@@ -1,6 +1,4 @@
-using System;
-using System.Collections.Generic;
-using Cinemachine.Utility;
+using Entity;
 using UnityEngine;
 
 namespace AI
@@ -8,7 +6,7 @@ namespace AI
     public class SimplePatrol : PatrolBase
     {
         [Header("Components")]
-        [SerializeField] private EnemyMovement movement;
+        [SerializeField] private MovementController movement;
 
         // Very simple patrol point
         // between two points, dest point must be to the right.

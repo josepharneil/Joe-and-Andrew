@@ -268,7 +268,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 64683668}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81c355cba3505ad4e952f1f6a7bfd7b9, type: 3}
+  m_Script: {fileID: 11500000, guid: 12f0a2491b5b57940bd30e364ca30ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   customCollider2D: {fileID: 64683679}
@@ -368,6 +368,7 @@ MonoBehaviour:
   collisionMask:
     serializedVersion: 2
     m_Bits: 2112
+  debugDraw: 0
 --- !u!1 &76782473
 GameObject:
   m_ObjectHideFlags: 0
@@ -562,10 +563,10 @@ GameObject:
   - component: {fileID: 462065303}
   - component: {fileID: 462065307}
   - component: {fileID: 462065311}
-  - component: {fileID: 462065304}
   - component: {fileID: 462065309}
   - component: {fileID: 462065308}
   - component: {fileID: 462065310}
+  - component: {fileID: 462065304}
   m_Layer: 0
   m_Name: SimplePatrolChase
   m_TagString: Untagged
@@ -647,10 +648,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 462065301}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81c355cba3505ad4e952f1f6a7bfd7b9, type: 3}
+  m_Script: {fileID: 11500000, guid: 12f0a2491b5b57940bd30e364ca30ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  customCollider2D: {fileID: 462065311}
+  customCollider2D: {fileID: 0}
 --- !u!114 &462065305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -751,6 +752,7 @@ MonoBehaviour:
   collisionMask:
     serializedVersion: 2
     m_Bits: 0
+  debugDraw: 0
 --- !u!114 &462065311
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -767,6 +769,7 @@ MonoBehaviour:
   collisionMask:
     serializedVersion: 2
     m_Bits: 2112
+  debugDraw: 0
 --- !u!4 &474727738 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2256995661825768344, guid: ed5456cd62fd24da08ad66ab296d9d83, type: 3}
@@ -4255,6 +4258,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 9147847883452652258, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
   m_PrefabInstance: {fileID: 2092242609}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1608203358 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9147847883452652284, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+  m_PrefabInstance: {fileID: 2092242609}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1608203345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12f0a2491b5b57940bd30e364ca30ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1608203359 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9147847883452652287, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
@@ -4561,6 +4575,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: movementController
+      value: 
+      objectReference: {fileID: 1608203358}
     - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: cinemachineShake
       value: 

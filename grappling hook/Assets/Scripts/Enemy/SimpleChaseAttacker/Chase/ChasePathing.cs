@@ -1,13 +1,14 @@
+using Entity;
 using UnityEngine;
 
 /// <summary>
 /// Base class for use in the ChaseState.
 /// </summary>
-[RequireComponent(typeof(EnemyMovement))]
+[RequireComponent(typeof(MovementController))]
 public abstract class ChasePathing : MonoBehaviour
 {
     [Header("Components")]
-    [SerializeField] protected EnemyMovement movement;
+    [SerializeField] protected MovementController movement;
     [SerializeField] protected Transform playerTransform;
 
     [Header("Stats")]
@@ -37,7 +38,7 @@ public abstract class ChasePathing : MonoBehaviour
             _lerpCurrent = 0f;
         }
         //ToDo AK: allow for decent vertical movement
-        movement.Move(new Vector2(_currentSpeed * Time.deltaTime,0f));
+        movement.MoveAtSpeed(new Vector2(_currentSpeed, 0f));
     }
 
     private void Accelerate(Vector2 target, float goalSpeed)

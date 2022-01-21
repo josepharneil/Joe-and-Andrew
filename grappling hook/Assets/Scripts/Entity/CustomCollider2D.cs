@@ -6,6 +6,7 @@ namespace Physics
     // ===================================================================
     // Raycast Origins
     // ===================================================================
+    [RequireComponent(typeof(BoxCollider2D))]
     public class CustomCollider2D : MonoBehaviour
     {
         public bool CollisionAbove { get; private set; }

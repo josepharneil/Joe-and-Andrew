@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Entity;
 using UnityEngine;
 
 namespace Enemy
 {
     public class EnemySimplePatrol : MonoBehaviour
     {
-        [SerializeField] private EnemyMovement movement;
+        [SerializeField] private MovementController movementController;
         [SerializeField] private Transform patrolPositionRight;
         [SerializeField] private Transform patrolPositionLeft;
         [SerializeField] private Transform player;
@@ -28,11 +29,11 @@ namespace Enemy
         {
             if (_facingDirection == FacingDirection.Right)
             {
-                movement.MoveAtSpeed(Vector2.right * speed);
+                movementController.MoveAtSpeed(Vector2.right * speed);
             }
             else
             {
-                movement.MoveAtSpeed(Vector2.left * speed);
+                movementController.MoveAtSpeed(Vector2.left * speed);
             }
 
             const float threshold = 0.1f;

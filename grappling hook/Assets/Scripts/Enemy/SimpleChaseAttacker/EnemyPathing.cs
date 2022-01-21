@@ -1,21 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
+using Entity;
 using UnityEngine;
 
-[RequireComponent(typeof(EnemyMovement))]
+[RequireComponent(typeof(MovementController))]
 public class EnemyPathing : MonoBehaviour
 {
     [SerializeField] private Transform playerTransform;
     [SerializeField] private AnimationCurve accelerationCurve;
     [SerializeField] private float accelerationRate;
-    [SerializeField] private EnemyMovement enemyMovement;
+    [SerializeField] private MovementController movementController;
 
     private Vector3 startingPosition;
     private Vector3 goalPosition;
     private float patrolDistance= 2f;
     private float patrolDirection = -1f;
     private float currentPatrolDirection;
-    private EnemyMovement movement;
 
     public float walkSpeed = 2f;
     public float runSpeed = 4f;
@@ -89,7 +87,7 @@ public class EnemyPathing : MonoBehaviour
         {
             lerpCurrent = 0f;
         }
-        enemyMovement.Move(new Vector2(currentSpeed * Time.deltaTime, 0f));
+        movementController.MoveAtSpeed(new Vector2(currentSpeed, 0f));
     }
 
     private void Accelerate(Vector3 target,float goalSpeed)

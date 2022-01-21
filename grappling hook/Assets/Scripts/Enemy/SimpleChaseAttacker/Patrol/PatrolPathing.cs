@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using Entity;
 using UnityEngine;
 
-[RequireComponent(typeof(EnemyMovement))]
+[RequireComponent(typeof(MovementController))]
 public abstract class PatrolPathing : MonoBehaviour
 {
     [Header("Components")]
-    [SerializeField] private EnemyMovement movement;
+    [SerializeField] private MovementController movement;
 
     [Header("Stats")]
     [SerializeField] private AnimationCurve accelerationCurve;
@@ -42,7 +43,7 @@ public abstract class PatrolPathing : MonoBehaviour
         {
             _lerpCurrent = 0f;
         }
-        movement.Move(new Vector2(_currentSpeed * Time.deltaTime, 0f));
+        movement.MoveAtSpeed(new Vector2(_currentSpeed, 0f));
     }
 
     private void Accelerate(Vector2 target, float goalSpeed)

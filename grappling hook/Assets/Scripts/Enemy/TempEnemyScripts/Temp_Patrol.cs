@@ -1,6 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Entity;
+
 /// <summary>
 /// using this to test out some simple enemy animations,
 /// can be deleted once we've got bolt up and runing

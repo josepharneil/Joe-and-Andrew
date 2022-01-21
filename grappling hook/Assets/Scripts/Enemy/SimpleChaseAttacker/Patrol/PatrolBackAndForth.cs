@@ -1,4 +1,5 @@
 using UnityEngine;
+using Entity;
 
 public class PatrolBackAndForth : PatrolPathing
 {
@@ -27,15 +28,7 @@ public class PatrolBackAndForth : PatrolPathing
         {
             _currentPatrolDirection = (FacingDirection)((int)_patrolDirection * -1);
         }
-        
-        
-        if (_currentPatrolDirection == _patrolDirection)
-        {
-            GoTowardsAtSpeed(_goalPosition,moveSpeed);
-        }
-        else
-        {
-            GoTowardsAtSpeed(StartingPosition,moveSpeed);
-        }
+
+        GoTowardsAtSpeed(_currentPatrolDirection == _patrolDirection ? _goalPosition : StartingPosition, moveSpeed);
     }
 }
