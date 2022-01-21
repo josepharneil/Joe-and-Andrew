@@ -16,13 +16,13 @@ public class PlayerInputs : MonoBehaviour
     [SerializeField] private float jumpHeight = 3f;
     [SerializeField] private float timeToJumpHeight = 0.4f;
     [SerializeField] private float coyoteTime;
-    [SerializeField] private float _minFallSpeed = 80f;
-    [SerializeField] private float _maxFallSpeed = 120f;
-    [SerializeField] private float _jumpApexThreshold = 10f;
-    [SerializeField] private float _fallClamp = -40f;
+    [SerializeField] private float minFallSpeed = 80f;
+    [SerializeField] private float maxFallSpeed = 120f;
+    [SerializeField] private float jumpApexThreshold = 10f;
+    [SerializeField] private float fallClamp = -40f;
     private float _apexPoint; //This becomes 1 at the end of the jump
     private float _fallSpeed;
-    private float _jumpVelocity;
+    private float _jumpVelocity; //todo this is only ever assigned?? never used
     private float _gravity;
     //note: gravity is about to be replaced by fall speed
 
@@ -195,8 +195,6 @@ public class PlayerInputs : MonoBehaviour
     }
 
     #region Gravity and Fall calculations
-
-
     //Taken from Tarodevs GitHub: https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/blob/main/Scripts/PlayerController.cs
     private void CalculateGravity()
     {
@@ -212,13 +210,12 @@ public class PlayerInputs : MonoBehaviour
             _velocity.y -= _fallSpeed * Time.deltaTime;
 
             //Clamps the y velocity to a certain value
-            if (_velocity.y < _fallClamp) _velocity.y = _fallClamp;
+            if (_velocity.y < fallClamp) _velocity.y = fallClamp;
         }
     }
 
     #endregion
-
-
+    
     #region Jump Movement
 
     /// <summary>
@@ -252,9 +249,9 @@ public class PlayerInputs : MonoBehaviour
         if (!movementController.customCollider2D.CollisionBelow)
         {
             //sets the apexPoint based on how large the y velocity is
-            _apexPoint = Mathf.InverseLerp(_jumpApexThreshold, 0, Mathf.Abs(_velocity.y));
+            _apexPoint = Mathf.InverseLerp(jumpApexThreshold, 0, Mathf.Abs(_velocity.y));
             //uses the apexPoint to lerp between the min and max fallspeeds (our new gravity replacement)
-            _fallSpeed = Mathf.Lerp(_minFallSpeed, _maxFallSpeed, _apexPoint);
+            _fallSpeed = Mathf.Lerp(minFallSpeed, maxFallSpeed, _apexPoint);
         }
         else
         {
