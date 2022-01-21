@@ -20,7 +20,6 @@ public class AttackingEnemy : MonoBehaviour
     [Tooltip("When this enemy hits, does it knockback the hit entity?")]
     [SerializeField] private bool doesThisEnemyDealKnockback;
     [SerializeField] private float knockbackStrength;
-    [SerializeField] private float knockbackDuration = 1f;
     [Tooltip("When this enemy hits, does it daze the hit entity?")]
     [SerializeField] private bool doesThisEnemyDealDaze;
     [SerializeField] private EntityDaze entityDaze;
@@ -107,7 +106,7 @@ public class AttackingEnemy : MonoBehaviour
             EntityKnockback entityKnockback = coll.gameObject.GetComponent<EntityKnockback>();
             if (entityKnockback && doesThisEnemyDealKnockback)
             {
-                entityKnockback.Knockback(entityHealth.transform.position - transform.position, knockbackStrength, knockbackDuration);
+                entityKnockback.Knockback(entityHealth.transform.position - transform.position, knockbackStrength);
             }
             
             if (doesThisEnemyDealDaze)

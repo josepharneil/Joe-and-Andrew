@@ -285,12 +285,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isEnabled: 1
-  spikesWhat:
+  damagesWhat:
     serializedVersion: 2
     m_Bits: 2048
-  spikeDamage: 5
+  damage: 5
   spikeKnockbackDistance: 2
   spikeKnockbackDuration: 1
+  customCollider2D: {fileID: 64683679}
 --- !u!50 &64683676
 Rigidbody2D:
   serializedVersion: 4
@@ -4583,6 +4584,10 @@ PrefabInstance:
       propertyPath: cinemachineShake
       value: 
       objectReference: {fileID: 82546289}
+    - target: {fileID: 9147847883452652283, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: movementController
+      value: 
+      objectReference: {fileID: 1608203358}
     - target: {fileID: 9147847883452652287, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: m_RootOrder
       value: 1
