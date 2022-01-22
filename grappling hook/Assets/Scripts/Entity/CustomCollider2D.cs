@@ -10,10 +10,10 @@ namespace Physics
     public class CustomCollider2D : MonoBehaviour
     {
         #region CollisionState
-        private bool _collisionAbove = false;
-        private bool _collisionBelow = false;
-        private bool _collisionLeft = false;
-        private bool _collisionRight = false;
+        private bool _collisionAbove;
+        private bool _collisionBelow;
+        private bool _collisionLeft;
+        private bool _collisionRight;
         private void SetCollisionAbove(bool value, GameObject collidedGameObject)
         {
             bool initialState = _collisionAbove;
@@ -76,6 +76,7 @@ namespace Physics
 
         [Header("Debug")] 
         [SerializeField] private bool debugDraw;
+        
         public event Action<GameObject> OnCollisionEnter;
 
         private const float SkinWidth = 0.15f;
@@ -165,8 +166,9 @@ namespace Physics
                     displacement.x = (hit.distance - SkinWidth) * directionX;
                     //this stops the rays from hitting something that is further away than the closest collision
                     rayLength = hit.distance;
-                    SetCollisionLeft(directionX == -1, hit.transform.gameObject);
-                    SetCollisionRight(directionX == 1, hit.transform.gameObject);
+                    GameObject hitGameObject = hit.transform.gameObject;
+                    SetCollisionLeft(directionX == -1, hitGameObject);
+                    SetCollisionRight(directionX == 1, hitGameObject);
                 }
             }
         }
@@ -200,8 +202,9 @@ namespace Physics
                     //this stops the rays from hitting something that is further away than the closest collision
                     rayLength = hit.distance;
                     //checks whether the collision is above or below (or both)
-                    SetCollisionAbove(directionY == 1, hit.transform.gameObject);
-                    SetCollisionBelow(directionY == -1, hit.transform.gameObject);
+                    GameObject hitGameObject = hit.transform.gameObject;
+                    SetCollisionAbove(directionY == 1, hitGameObject);
+                    SetCollisionBelow(directionY == -1, hitGameObject);
                 }
             }
         }

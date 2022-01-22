@@ -430,8 +430,8 @@ MonoBehaviour:
   jumpHeight: 15
   timeToJumpHeight: 1.16
   coyoteTime: 0.5
-  minFallSpeed: 80
-  maxFallSpeed: 120
+  minFallSpeed: 35
+  maxFallSpeed: 45
   jumpApexThreshold: 10
   fallClamp: -40
   moveSpeed: 10
