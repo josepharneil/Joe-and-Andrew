@@ -386,8 +386,8 @@ MonoBehaviour:
   entityBlock: {fileID: 0}
   entityKnockback: {fileID: 0}
   entityDaze: {fileID: 0}
-  hitIFrameDuration: 1
-  spriteRenderer: {fileID: 274396293}
+  hitIFrameDuration: 0
+  spriteRenderer: {fileID: 0}
 --- !u!1 &76782473
 GameObject:
   m_ObjectHideFlags: 0
@@ -4296,10 +4296,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entityHealth: {fileID: 1608203353}
   entityBlock: {fileID: 1608203348}
-  entityKnockback: {fileID: 0}
+  entityKnockback: {fileID: 1608203352}
   entityDaze: {fileID: 1608203351}
   hitIFrameDuration: 1
-  spriteRenderer: {fileID: 0}
+  spriteRenderer: {fileID: 274396293}
 --- !u!114 &1608203348 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9147847883452652278, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
@@ -4320,6 +4320,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: db16258e17211405c8d0b1013cd4996c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1608203352 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9147847883452652283, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+  m_PrefabInstance: {fileID: 2092242609}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1608203345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fbb600d3206748e0ab9eb971f394754, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1608203353 stripped
@@ -4648,6 +4659,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 76782474}
     m_Modifications:
+    - target: {fileID: 9147847883264161609, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652258, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: m_Name
       value: Player
