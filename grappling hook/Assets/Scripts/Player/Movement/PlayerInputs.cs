@@ -11,7 +11,6 @@ public class PlayerInputs : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private MovementController movementController;
-    [SerializeField] private EntityKnockback entityKnockback;
 
     [Header("Jump Stats")]
     [SerializeField] private float jumpHeight = 3f;
@@ -79,6 +78,9 @@ public class PlayerInputs : MonoBehaviour
     [Header("Blocking")] 
     [SerializeField] private EntityBlock entityBlock;
     
+    [Header("Knockback")]
+    [SerializeField] private EntityKnockback entityKnockback;
+
     // Animation parameter IDs.
     private static readonly int SpeedID = Animator.StringToHash("speed");
     private static readonly int AttackTriggerID = Animator.StringToHash("attackTrigger");
@@ -151,9 +153,9 @@ public class PlayerInputs : MonoBehaviour
                 }
             }
         }
-        if (_isBeingKnockedBack)
+        if (entityKnockback && entityKnockback.IsBeingKnockedBack())
         {
-            _isBeingKnockedBack = entityKnockback.UpdateKnockback();
+            entityKnockback.UpdateKnockback();
         }
         // Movement
         // ReadMoveInput();
@@ -433,7 +435,7 @@ public class PlayerInputs : MonoBehaviour
     private void Run()
     {
         float blockMoveSpeedModifier = 1.0f;
-        if (entityBlock && entityBlock.isBlocking)
+        if (entityBlock && entityBlock.IsBlocking())
         {
             blockMoveSpeedModifier = entityBlock.blockSpeedModifier;
         }
@@ -517,9 +519,8 @@ public class PlayerInputs : MonoBehaviour
     [ContextMenu("Knockback Player")]
     private void ApplyKnockback()
     {
-        Vector2 hit = new Vector2(1f, 0f);
-        float strength = 5f;
-        entityKnockback.StartKnockBack(hit,strength);
+        const float strength = 5f;
+        entityKnockback.StartKnockBack(transform.position, strength);
         _isBeingKnockedBack = true;
     }
 
@@ -533,7 +534,7 @@ public class PlayerInputs : MonoBehaviour
     /// <param name="context"></param>
     public void ReadAttackInput(InputAction.CallbackContext context)
     {
-        if (!debugUseAnimations || (!entityBlock || entityBlock.isBlocking) && entityBlock)
+        if (!debugUseAnimations || (!entityBlock || entityBlock.IsBlocking()) && entityBlock)
         {
             return;
         }
@@ -664,12 +665,12 @@ public class PlayerInputs : MonoBehaviour
         if (context.performed && !isAttacking)
         {
             // For now, don't need to worry about whether you're mid parry /attack
-            entityBlock.isBlocking = true;
+            entityBlock.SetBlocking(true);
         }
 
         if (context.canceled)
         {
-            entityBlock.isBlocking = false;
+            entityBlock.SetBlocking(false);
         }
     }
 

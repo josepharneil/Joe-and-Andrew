@@ -129,39 +129,38 @@ public class PlayerCombat : MonoBehaviour
         ContactFilter2D contactFilter2D = new ContactFilter2D
         {
             layerMask = whatIsDamageable,
-            useLayerMask = true
+            useLayerMask = true,
+            useTriggers = true
         };
         List<Collider2D> detectedObjects = new List<Collider2D>();
         Physics2D.OverlapCircle(overlapCirclePosition, currentAttackInfo.radius, contactFilter2D, detectedObjects);
-
+        
         bool enemyHit = false;
         foreach (Collider2D coll in detectedObjects)
         {
-            EntityHealth entityHealth = coll.gameObject.GetComponent<EntityHealth>();
-            if (entityHealth)
-            {
-                int damage = currentAttackInfo.damage;
-                if (playerCombatPrototyping.data.doesAttackingParriedDealBonusDamage)
-                {
-                    damage *= playerCombatPrototyping.data.attackParriedBonusDamageAmount;
-                }
-                entityHealth.Damage(damage);
-                enemyHit = true;
-            }
-
-            EntityKnockback entityKnockback = coll.gameObject.GetComponent<EntityKnockback>();
-            if (entityKnockback && playerCombatPrototyping.data.doesPlayerDealKnockback)
-            {
-                entityKnockback.Knockback(entityHealth.transform.position - transform.position, playerCombatPrototyping.data.knockbackStrength);
-            }
-
-            EntityDaze entityDaze = coll.gameObject.GetComponent<EntityDaze>();
-            if (entityDaze && playerCombatPrototyping.data.doesPlayerDealDaze)
-            {
-                entityDaze.Daze();
-            }
-            
-            // Instantiate a hit particle here if we want
+             coll.gameObject.TryGetComponent<EntityHitbox>(out EntityHitbox entityHitbox);
+             if (entityHitbox)
+             {
+                 int damageDealt = currentAttackInfo.damage;
+                 if (playerCombatPrototyping.data.doesAttackingParriedDealBonusDamage)
+                 {
+                     damageDealt *= playerCombatPrototyping.data.attackParriedBonusDamageAmount;
+                 }
+                 
+                 EntityHitData hitData = new EntityHitData
+                 {
+                     DealsDamage = true,
+                     DamageToHealth = damageDealt,
+                     
+                     DealsKnockback = playerCombatPrototyping.data.doesPlayerDealKnockback,
+                     KnockbackOrigin = transform.position,
+                     KnockbackStrength = playerCombatPrototyping.data.knockbackStrength,
+                     
+                     DealsDaze = playerCombatPrototyping.data.doesPlayerDealDaze,
+                 };
+                 enemyHit = entityHitbox.Hit(hitData);
+             }
+             // Instantiate a hit particle here if we want
         }
 
         if (enemyHit)
@@ -169,6 +168,8 @@ public class PlayerCombat : MonoBehaviour
             cinemachineShake.ShakeCamera(shakeAmplitude, shakeFrequency, shakeDuration);
             Time.timeScale = slowTimeScaleAmount;
             _slowTimeScaleTimer = slowTimeScaleDuration;
+            
+            // Or here! Instantiate a hit particle here if we want
         }
 
         // At the end, we're now post damage.

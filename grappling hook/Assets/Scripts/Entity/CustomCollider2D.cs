@@ -1,4 +1,5 @@
 using System;
+using Bolt;
 using UnityEngine;
 
 namespace Physics
@@ -18,10 +19,7 @@ namespace Physics
         {
             bool initialState = _collisionAbove;
             _collisionAbove = value;
-            if (!initialState && _collisionAbove)
-            {
-                OnCollisionEnter?.Invoke(collidedGameObject);
-            }
+            MaybeTriggerOnCollisionEnter(initialState, value, collidedGameObject);
         }
         public bool GetCollisionAbove()
         {
@@ -31,10 +29,7 @@ namespace Physics
         {
             bool initialState = _collisionBelow;
             _collisionBelow = value;
-            if (!initialState && _collisionBelow)
-            {
-                OnCollisionEnter?.Invoke(collidedGameObject);
-            }
+            MaybeTriggerOnCollisionEnter(initialState, value, collidedGameObject);
         }
         public bool GetCollisionBelow()
         {
@@ -44,10 +39,7 @@ namespace Physics
         {
             bool initialState = _collisionLeft;
             _collisionLeft = value;
-            if (!initialState && _collisionLeft)
-            {
-                OnCollisionEnter?.Invoke(collidedGameObject);
-            }
+            MaybeTriggerOnCollisionEnter(initialState, value, collidedGameObject);
         }
         public bool GetCollisionLeft()
         {
@@ -57,15 +49,31 @@ namespace Physics
         {
             bool initialState = _collisionRight;
             _collisionRight = value;
-            if (!initialState && _collisionRight)
-            {
-                OnCollisionEnter?.Invoke(collidedGameObject);
-            }
+            MaybeTriggerOnCollisionEnter(initialState, value, collidedGameObject);
         }
         public bool GetCollisionRight()
         {
             return _collisionRight;
         }
+
+        private void MaybeTriggerOnCollisionEnter(bool initialState, bool newState, GameObject collidedGameObject)
+        {
+            if (initialState == false && newState == true)
+            {
+                // OnCollisionEnter?.Invoke(collidedGameObject);
+            }
+        }
+
+        private void OnTriggerEnter2D(Collider2D col)
+        {
+            OnTriggerEnter?.Invoke(col);
+        }
+        // private void OnTriggerEnter2D(Collision2D col)
+        // {
+        //     // todo, not sure if this should be an event to be honest
+        //     OnCollisionEnter?.Invoke(col);
+        // }
+
         #endregion
         
         private Vector2 _topLeft, _topRight;
@@ -77,7 +85,7 @@ namespace Physics
         [Header("Debug")] 
         [SerializeField] private bool debugDraw;
         
-        public event Action<GameObject> OnCollisionEnter;
+        public event Action<Collider2D> OnTriggerEnter;
 
         private const float SkinWidth = 0.15f;
         private int _horizontalRayCount = 4;
@@ -92,6 +100,10 @@ namespace Physics
                 "Collision Mask is 0, this implies we're going to fall through everything and this script is doing nothing.",
                 this);
             Debug.Assert(boxCollider != null, "Missing box collider", this);
+            Debug.Assert(boxCollider.isTrigger, "This should be a trigger", this);
+            gameObject.TryGetComponent<Rigidbody2D>(out Rigidbody2D rigidbody2DForTriggers);
+            Debug.Assert(rigidbody2DForTriggers != null, "A rigidbody is required for triggers to active.", this);
+            Debug.Assert(rigidbody2DForTriggers.simulated, "Rigidbody needs to be simulated for Triggers to activate", this);
         }
 
         private void Start()

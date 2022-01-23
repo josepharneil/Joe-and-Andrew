@@ -1,12 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EntityBlock : MonoBehaviour
 {
-    public bool isBlocking = false;
-    public int blockDamageReductionFactor = 2;
+    private bool _isBlocking = false;
+    [SerializeField] private int blockDamageReductionFactor = 2;
 
     public bool blockHasBeenBroken = false;
     [SerializeField] private float blockBreakDuration = 1.0f;
@@ -17,6 +14,21 @@ public class EntityBlock : MonoBehaviour
     {
         blockHasBeenBroken = true;
         _blockTimer = blockBreakDuration;
+    }
+
+    public bool IsBlocking()
+    {
+        return _isBlocking;
+    }
+
+    public void SetBlocking(bool value)
+    {
+        _isBlocking = value;
+    }
+
+    public void ReduceDamage(ref int damage)
+    {
+        damage /= blockDamageReductionFactor;
     }
     
     /// <summary>

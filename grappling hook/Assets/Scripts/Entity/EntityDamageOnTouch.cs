@@ -18,41 +18,43 @@ namespace Entity
         
         [Header("Customisation")]
         [SerializeField] private int damage = 5;
-        [SerializeField] private float knockbackSpeed = 2f;
+        [SerializeField] private float knockbackStrength = 2f;
 
         [SerializeField] private CustomCollider2D customCollider2D;
 
         private void OnEnable()
         {
-            customCollider2D.OnCollisionEnter += OnCustomCollisionEnter;
+            customCollider2D.OnTriggerEnter += OnCustomTriggerEnter;
         }
 
         private void OnDisable()
         {
-            customCollider2D.OnCollisionEnter -= OnCustomCollisionEnter;
+            customCollider2D.OnTriggerEnter -= OnCustomTriggerEnter;
         }
 
-        private void OnCustomCollisionEnter(GameObject collidedGameObject)
+        private void OnCustomTriggerEnter(Collider2D col)
         {
             if (!isEnabled)
             {
                 return;
             }
-            if ((collidedGameObject.layer & damagesWhat) != 0) return;
 
-            collidedGameObject.TryGetComponent<EntityHealth>(out EntityHealth entityHealth);
-            if (entityHealth)
-            {
-                Debug.Log(damage);
-                entityHealth.Damage(damage);
-            }
+            GameObject collidedGameObject = col.gameObject;
+            if ((collidedGameObject.gameObject.layer & damagesWhat) != 0) return;
 
-            collidedGameObject.TryGetComponent<EntityKnockback>(out EntityKnockback entityKnockback);
-            if (entityKnockback)
+            collidedGameObject.gameObject.TryGetComponent<EntityHitbox>(out EntityHitbox entityHitbox);
+            if (entityHitbox)
             {
-                entityKnockback.Knockback(
-                    collidedGameObject.transform.position - transform.position, 
-                    knockbackSpeed);
+                EntityHitData hitData = new EntityHitData
+                {
+                    DealsDamage = true,
+                    DamageToHealth = damage,
+                    
+                    DealsKnockback = true,
+                    KnockbackOrigin = transform.position,
+                    KnockbackStrength = knockbackStrength
+                };
+                entityHitbox.Hit(hitData);
             }
         }
     }

@@ -82,39 +82,25 @@ public class AttackingEnemy : MonoBehaviour
         {
             layerMask = whatIsDamageable,
             useLayerMask = true,
+            useTriggers = true
         };
         List<Collider2D> detectedObjects = new List<Collider2D>();
         Physics2D.OverlapCircle(overlapCirclePosition, 1f, contactFilter2D, detectedObjects);
 
         foreach (Collider2D coll in detectedObjects)
         {
-            int actualDamageDealt = attackDamage;
-            
-            EntityBlock entityBlock = coll.gameObject.GetComponent<EntityBlock>();
-            if (entityBlock && entityBlock.isBlocking)
+            coll.gameObject.TryGetComponent<EntityHitbox>(out EntityHitbox entityHitbox);
+            if (entityHitbox)
             {
-                actualDamageDealt /= entityBlock.blockDamageReductionFactor;
-                entityBlock.BreakBlock();
+                EntityHitData hitData = new EntityHitData
+                {
+                    DamageToHealth = attackDamage,
+                    KnockbackOrigin = transform.position,
+                    KnockbackStrength = knockbackStrength
+                };
+                entityHitbox.Hit(hitData);
             }
             
-            EntityHealth entityHealth = coll.gameObject.GetComponent<EntityHealth>();
-            if (entityHealth)
-            {
-                entityHealth.Damage( actualDamageDealt );
-            }
-            
-            EntityKnockback entityKnockback = coll.gameObject.GetComponent<EntityKnockback>();
-            if (entityKnockback && doesThisEnemyDealKnockback)
-            {
-                entityKnockback.Knockback(entityHealth.transform.position - transform.position, knockbackStrength);
-            }
-            
-            if (doesThisEnemyDealDaze)
-            {
-                coll.gameObject.GetComponent<EntityDaze>()?.Daze();
-            }
-            
-
             // Instantiate a hit particle here if we want
         }
 

@@ -18,17 +18,13 @@ namespace Entity
             //sets the origins for all the raycasts
             customCollider2D.UpdateRaycastOrigins();
 
-            //only have the set to be a bit more efficient, but we could just call them each frame.
-            if (displacement.x != 0)
-            {
-                customCollider2D.ResetCollisionState();
-                customCollider2D.CheckHorizontalCollisions(ref displacement);
-            }
-            if (displacement.y != 0)
-            {
-                customCollider2D.ResetCollisionState();
-                customCollider2D.CheckVerticalCollisions(ref displacement);
-            }
+            // Always update collisions, even if 0 displacement.
+            // Found a problem where if we didn't, and we were on something that moved, once if moved away
+            // the player didn't fall downwards.
+            customCollider2D.ResetCollisionState();
+            customCollider2D.CheckHorizontalCollisions(ref displacement);
+            customCollider2D.ResetCollisionState();
+            customCollider2D.CheckVerticalCollisions(ref displacement);
 
             transform.Translate(displacement);
         }
