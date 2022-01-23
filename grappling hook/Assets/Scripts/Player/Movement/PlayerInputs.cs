@@ -11,6 +11,7 @@ public class PlayerInputs : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private MovementController movementController;
+    [SerializeField] private EntityKnockback entityKnockback;
 
     [Header("Jump Stats")]
     [SerializeField] private float jumpHeight = 3f;
@@ -52,6 +53,7 @@ public class PlayerInputs : MonoBehaviour
     private float _rollCoolDownTimer = 0f;
 
     private bool _isMoveInput;
+    private bool _isBeingKnockedBack;
     private bool _isJumpInput;
     private bool _isGrounded;
     private bool _isRollInput;
@@ -149,7 +151,10 @@ public class PlayerInputs : MonoBehaviour
                 }
             }
         }
-        
+        if (_isBeingKnockedBack)
+        {
+            _isBeingKnockedBack = entityKnockback.UpdateKnockback();
+        }
         // Movement
         // ReadMoveInput();
         SetHorizontalMove();
@@ -302,7 +307,7 @@ public class PlayerInputs : MonoBehaviour
         if (_moveInput.x != 0)
         {
             _isMoveInput = true;
-            if (!isAttacking || isAttacking && playerCombatPrototyping.data.canChangeDirectionsDuringAttack)
+            if (!_isBeingKnockedBack || !isAttacking || isAttacking && playerCombatPrototyping.data.canChangeDirectionsDuringAttack)
             {
                 if (_moveInput.x < 0)
                 {
@@ -508,6 +513,16 @@ public class PlayerInputs : MonoBehaviour
         _rollState = RollState.NotRolling;
         _rollCoolDownTimer = Time.time;
     }
+
+    [ContextMenu("Knockback Player")]
+    private void ApplyKnockback()
+    {
+        Vector2 hit = new Vector2(1f, 0f);
+        float strength = 5f;
+        entityKnockback.StartKnockBack(hit,strength);
+        _isBeingKnockedBack = true;
+    }
+
     #endregion
 
     #region Combat

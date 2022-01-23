@@ -32,6 +32,7 @@ namespace Entity
 
             transform.Translate(displacement);
         }
+
     }
     
     public enum FacingDirection
