@@ -427,6 +427,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementController: {fileID: 9147847883452652284}
+  entityKnockback: {fileID: 9147847883452652283}
   jumpHeight: 15
   timeToJumpHeight: 1.16
   coyoteTime: 0.5
@@ -611,6 +612,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fbb600d3206748e0ab9eb971f394754, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  knockBackDecrementAmount: 0
   movementController: {fileID: 9147847883452652284}
 --- !u!114 &9147847883452652276
 MonoBehaviour:
