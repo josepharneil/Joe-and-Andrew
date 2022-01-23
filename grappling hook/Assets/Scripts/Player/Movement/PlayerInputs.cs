@@ -22,9 +22,6 @@ public class PlayerInputs : MonoBehaviour
     [SerializeField] private float fallClamp = -40f;
     private float _apexPoint; //This becomes 1 at the end of the jump
     private float _fallSpeed;
-    private float _jumpVelocity; //todo this is only ever assigned?? never used
-    private float _gravity;
-    //note: gravity is about to be replaced by fall speed
 
     [Header("Ground Move Stats")]
     [SerializeField] private float moveSpeed = 10f;
@@ -50,7 +47,6 @@ public class PlayerInputs : MonoBehaviour
 
     private float _jumpCalledTime;
     private float _lastGroundedTime;
-    //gravity and jumpVelocity are calculated based on the jump height and time
     private float _rollDirection;
     private float _rollDurationTimer = 0f;
     private float _rollCoolDownTimer = 0f;
@@ -118,9 +114,6 @@ public class PlayerInputs : MonoBehaviour
             spriteRenderer.sprite = defaultSquareSprite;
         }
         
-        //AK 17/1/22 These are going to be altered for a more flexible gravity calculation, don't use for now
-        _gravity = -2 * jumpHeight * Mathf.Pow(timeToJumpHeight, -2);
-        _jumpVelocity = timeToJumpHeight * Mathf.Abs(_gravity);
         moveState = MoveState.Stopped;
         _rollState = RollState.NotRolling;
     }
@@ -131,8 +124,7 @@ public class PlayerInputs : MonoBehaviour
     // NOTE @JA I've never heard of this, but looks perfect for updating values during game time :) 
     private void OnValidate()
     {
-        _gravity = -2 * jumpHeight * Mathf.Pow(timeToJumpHeight, -2);
-        _jumpVelocity = timeToJumpHeight * Mathf.Abs(_gravity);
+
     }
 
     // Update is called once per frame
