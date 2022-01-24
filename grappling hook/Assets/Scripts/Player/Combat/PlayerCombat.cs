@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,19 +9,12 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private LayerMask whatIsDamageable;
     [SerializeField] private PlayerInputs inputs;
     
-    [Serializable] private struct AttackInfo
-    {
-        public Transform hitBoxPosition;
-        public int damage;
-        public float radius;
-    }
-
     [Header("Attack infos")]
-    [SerializeField] private AttackInfo attackSide1;
-    //[SerializeField] private AttackInfo attackSide2;
-
-    [SerializeField] private AttackInfo attackUp;
-    [SerializeField] private AttackInfo attackDown;
+    [SerializeField] private Transform sideAttackHitBoxPosition;
+    [SerializeField] private Transform aboveAttackHitBoxPosition;
+    [SerializeField] private Transform belowAttackHitBoxPosition;
+    [SerializeField] private int attackDamage;
+    [SerializeField] private float attackRadius;
     
     [Header("Swipes")]
     [SerializeField] private float swipeShowTime = 1f;
@@ -70,7 +62,6 @@ public class PlayerCombat : MonoBehaviour
     /// <param name="attackIndex"> Index of the attack </param>
     public void CheckAttackHitBox(int attackIndex)
     {
-        ref AttackInfo currentAttackInfo = ref attackSide1;
         FacingDirection attackDirection = inputs.facingDirection;
 
         // Todo, figure out indexes to make more sense
@@ -93,9 +84,8 @@ public class PlayerCombat : MonoBehaviour
                 break;
             }
         }
-        // todo up, down
         
-        
+        Transform attackPosition = sideAttackHitBoxPosition;
         switch (attackIndex)
         {
             case 0:
@@ -107,24 +97,25 @@ public class PlayerCombat : MonoBehaviour
                 // todo didnt mean to skip this number.. need to figure out numbering
                 break;
             case 3:
-                currentAttackInfo = ref attackUp;
+                attackPosition = aboveAttackHitBoxPosition;
                 break;
             case 4:
-                currentAttackInfo = ref attackDown;
+                attackPosition = belowAttackHitBoxPosition;
                 break;
             default:
                 Debug.LogError("No such attack index");
                 break;
         }
+        
         Vector2 overlapCirclePosition;
         if (attackDirection == FacingDirection.Left)
         {
-            var localPosition = currentAttackInfo.hitBoxPosition.localPosition;
+            var localPosition = attackPosition.localPosition;
             overlapCirclePosition = (Vector2)transform.position + new Vector2(-localPosition.x, localPosition.y );
         }
         else
         {
-            overlapCirclePosition = currentAttackInfo.hitBoxPosition.position;
+            overlapCirclePosition = attackPosition.position;
         }
         ContactFilter2D contactFilter2D = new ContactFilter2D
         {
@@ -133,7 +124,7 @@ public class PlayerCombat : MonoBehaviour
             useTriggers = true
         };
         List<Collider2D> detectedObjects = new List<Collider2D>();
-        Physics2D.OverlapCircle(overlapCirclePosition, currentAttackInfo.radius, contactFilter2D, detectedObjects);
+        Physics2D.OverlapCircle(overlapCirclePosition, attackRadius, contactFilter2D, detectedObjects);
         
         bool enemyHit = false;
         foreach (Collider2D coll in detectedObjects)
@@ -141,7 +132,7 @@ public class PlayerCombat : MonoBehaviour
              coll.gameObject.TryGetComponent<EntityHitbox>(out EntityHitbox entityHitbox);
              if (entityHitbox)
              {
-                 int damageDealt = currentAttackInfo.damage;
+                 int damageDealt = attackDamage;
                  if (playerCombatPrototyping.data.doesAttackingParriedDealBonusDamage)
                  {
                      damageDealt *= playerCombatPrototyping.data.attackParriedBonusDamageAmount;
@@ -192,17 +183,17 @@ public class PlayerCombat : MonoBehaviour
     {
         if (inputs.facingDirection == FacingDirection.Left)
         {
-            var localPosition = attackSide1.hitBoxPosition.localPosition;
+            var localPosition = sideAttackHitBoxPosition.localPosition;
             Vector3 position = transform.position + new Vector3(-localPosition.x, localPosition.y);
-            Gizmos.DrawWireSphere(position, attackSide1.radius);
+            Gizmos.DrawWireSphere(position, attackRadius);
         }
         else
         {
-            Gizmos.DrawWireSphere(attackSide1.hitBoxPosition.position, attackSide1.radius);
+            Gizmos.DrawWireSphere(sideAttackHitBoxPosition.position, attackRadius);
         }
 
-        Gizmos.DrawWireSphere(attackUp.hitBoxPosition.position, attackUp.radius);
-        Gizmos.DrawWireSphere(attackDown.hitBoxPosition.position, attackDown.radius);
+        Gizmos.DrawWireSphere(aboveAttackHitBoxPosition.position, attackRadius);
+        Gizmos.DrawWireSphere(belowAttackHitBoxPosition.position, attackRadius);
     }
 
 

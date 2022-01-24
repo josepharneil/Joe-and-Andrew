@@ -49,12 +49,10 @@ namespace Entity
                 entityHealth.Damage(actualDamageDealt);
             }
 
-            if (entityKnockback && hitData.DealsKnockback)
-            {
-                entityKnockback.StartKnockBack(
-                    hitData.KnockbackOrigin, 
-                    hitData.KnockbackStrength);
-            }
+            // if (entityKnockback && hitData.DealsKnockback && !entityKnockback.IsBeingKnockedBack())
+            // {
+            //     entityKnockback.StartKnockBack(hitData.KnockbackOrigin, hitData.KnockbackStrength);
+            // }
 
             if (entityDaze && hitData.DealsDaze)
             {

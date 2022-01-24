@@ -208,6 +208,8 @@ GameObject:
   - component: {fileID: 9147847883452652278}
   - component: {fileID: 9147847883452652272}
   - component: {fileID: 991290409775798857}
+  - component: {fileID: 2322422641814107867}
+  - component: {fileID: 4928653896513910851}
   m_Layer: 11
   m_Name: Player
   m_TagString: Player
@@ -242,7 +244,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.4}
@@ -427,7 +429,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementController: {fileID: 9147847883452652284}
-  entityKnockback: {fileID: 9147847883452652283}
   jumpHeight: 15
   timeToJumpHeight: 1.16
   coyoteTime: 0.5
@@ -530,6 +531,7 @@ MonoBehaviour:
   isInPreDamageAttackPhase: 1
   entityParry: {fileID: 9147847883452652277}
   entityBlock: {fileID: 9147847883452652278}
+  entityKnockback: {fileID: 9147847883452652283}
   playerCombatPrototyping: {fileID: 9147847883452652286}
   entityDaze: {fileID: 9147847883452652276}
 --- !u!114 &9147847883452652281
@@ -677,7 +679,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2d133189dccd477f8673dd47150f66b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isBlocking: 0
   blockDamageReductionFactor: 2
   blockHasBeenBroken: 0
   blockBreakDuration: 1
@@ -802,6 +803,45 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &2322422641814107867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9147847883452652258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec9dcbd0fc1d4727a3a8d04d66a37f0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityHealth: {fileID: 9147847883452652282}
+  entityBlock: {fileID: 9147847883452652278}
+  entityKnockback: {fileID: 9147847883452652283}
+  entityDaze: {fileID: 9147847883452652276}
+  hitIFrameDuration: 1
+  spriteRenderer: {fileID: 9147847883264161609}
+--- !u!50 &4928653896513910851
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9147847883452652258}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &9147847883458751730
 GameObject:
   m_ObjectHideFlags: 0
