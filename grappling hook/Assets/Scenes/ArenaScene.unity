@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!4 &36811638 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9147847884366698568, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+  m_PrefabInstance: {fileID: 2092242609}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &64683668
 GameObject:
   m_ObjectHideFlags: 0
@@ -420,6 +425,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &82546289 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3517772525075683142, guid: 98a97b9b9c0584c2d8caa8f59ddf14a2, type: 3}
+  m_PrefabInstance: {fileID: 1739732121}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d31244573ec1641468c12f6c93694daf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &191835305
 GameObject:
   m_ObjectHideFlags: 0
@@ -480,6 +496,11 @@ Transform:
   m_Father: {fileID: 2090631318}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &341943397 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9147847884146530742, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+  m_PrefabInstance: {fileID: 2092242609}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &395509921 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3517772525561687561, guid: 98a97b9b9c0584c2d8caa8f59ddf14a2, type: 3}
@@ -4570,9 +4591,37 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: attackDamage
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: attackRadius
+      value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: shakeFrequency
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: cinemachineShake
+      value: 
+      objectReference: {fileID: 82546289}
+    - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: sideAttackHitBoxPosition
+      value: 
+      objectReference: {fileID: 1721556002}
+    - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: aboveAttackHitBoxPosition
+      value: 
+      objectReference: {fileID: 36811638}
+    - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: attackInfo.hitBoxPosition
       value: 
       objectReference: {fileID: 1721556002}
+    - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: belowAttackHitBoxPosition
+      value: 
+      objectReference: {fileID: 341943397}
     - target: {fileID: 9147847883452652287, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: m_RootOrder
       value: 1

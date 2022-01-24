@@ -550,18 +550,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   inputs: {fileID: 9147847883452652259}
-  attackSide1:
-    hitBoxPosition: {fileID: 9147847882922389571}
-    damage: 5
-    radius: 1.25
-  attackUp:
-    hitBoxPosition: {fileID: 9147847884366698568}
-    damage: 5
-    radius: 1.25
-  attackDown:
-    hitBoxPosition: {fileID: 9147847884146530742}
-    damage: 5
-    radius: 1.25
+  sideAttackHitBoxPosition: {fileID: 9147847882922389571}
+  aboveAttackHitBoxPosition: {fileID: 9147847884366698568}
+  belowAttackHitBoxPosition: {fileID: 9147847884146530742}
+  attackDamage: 5
+  attackRadius: 1.25
   swipeShowTime: 0.3
   upSwipe: {fileID: 9147847884125069064}
   downSwipe: {fileID: 9147847883458751628}
