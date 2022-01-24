@@ -48,7 +48,9 @@ namespace AI
                     _facingDirection = FacingDirection.Right;
                 }
             }
-            movement.MoveAtSpeed(new Vector2((float)_facingDirection, 0f) * Speed);
+
+            float fallSpeed = !movement.customCollider2D.GetCollisionBelow() ? Physics2D.gravity.y : 0f;
+            movement.MoveAtSpeed(new Vector2((float)_facingDirection * Speed, fallSpeed));
         }
     }
 }
