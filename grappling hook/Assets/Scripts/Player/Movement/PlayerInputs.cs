@@ -527,8 +527,9 @@ public class PlayerInputs : MonoBehaviour
     [ContextMenu("Knockback Player")]
     private void ApplyKnockback()
     {
-        const float strength = 5f;
-        entityKnockback.StartKnockBack(transform.position, strength);
+        const float strength = 1f;
+        Vector2 knocbackVector = new Vector2(transform.position.x - 1, transform.position.y);
+        entityKnockback.StartKnockBack(knocbackVector, strength);
         _isBeingKnockedBack = true;
     }
 
