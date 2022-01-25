@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Entity;
+using JetBrains.Annotations;
 
 public class PlayerCombat : MonoBehaviour
 {
@@ -39,14 +41,6 @@ public class PlayerCombat : MonoBehaviour
 
     [Header("Prototyping")]
     public PlayerCombatPrototyping playerCombatPrototyping;
-    
-    private enum SwipeDirection
-    {
-        Up,
-        Down,
-        Left,
-        Right
-    }
 
     private void OnEnable()
     {
@@ -56,59 +50,71 @@ public class PlayerCombat : MonoBehaviour
         leftSwipe.enabled = false;
     }
 
+    private enum AttackDirection
+    {
+        Up,
+        Down,
+        Left,
+        Right
+    }
+
     /// <summary>
     /// Called by Animation Events.
     /// </summary>
     /// <param name="attackIndex"> Index of the attack </param>
-    public void CheckAttackHitBox(int attackIndex)
+    [UsedImplicitly] public void CheckAttackHitBox(int attackIndex)
     {
-        FacingDirection attackDirection = inputs.facingDirection;
+        FacingDirection facingDirection = inputs.facingDirection;
 
-        // Todo, figure out indexes to make more sense
+        AttackDirection attackDirection = AttackDirection.Right;
         switch (attackIndex)
         {
-            case 3:
-                StartCoroutine(ShowSwipe(SwipeDirection.Up));
-                break;
-            case 4:
-                StartCoroutine(ShowSwipe(SwipeDirection.Down));
-                break;
-            // 0, 1, 2, left and right, and.. err... something else... nothing...
-            default:
+            // 0, 1 and 2 ... need to look into this
+            case 0:
+            case 1:
+            case 2:
             {
-                // Swipes
-                StartCoroutine(attackDirection == FacingDirection.Left
-                    ? ShowSwipe(SwipeDirection.Left)
-                    : ShowSwipe(SwipeDirection.Right));
-
+                attackDirection = facingDirection == FacingDirection.Left
+                    ? AttackDirection.Left
+                    : AttackDirection.Right;
                 break;
             }
-        }
-        
-        Transform attackPosition = sideAttackHitBoxPosition;
-        switch (attackIndex)
-        {
-            case 0:
-                break;
-            case 1:
-                //attackInfo = ref attackSide2;
-                break;
-            case 2:
-                // todo didnt mean to skip this number.. need to figure out numbering
-                break;
             case 3:
-                attackPosition = aboveAttackHitBoxPosition;
+            {
+                attackDirection = AttackDirection.Up;
                 break;
+            }
             case 4:
-                attackPosition = belowAttackHitBoxPosition;
+            {
+                attackDirection = AttackDirection.Down;
                 break;
+            }
             default:
-                Debug.LogError("No such attack index");
+                Debug.LogError("Unimplemented attack.");
+                break;
+        }
+
+        Transform attackPosition = sideAttackHitBoxPosition;
+        switch (attackDirection)
+        {
+            case AttackDirection.Up:
+                attackPosition = aboveAttackHitBoxPosition;
+                StartCoroutine(ShowSwipe(AttackDirection.Up));
+                break;
+            case AttackDirection.Down:
+                attackPosition = belowAttackHitBoxPosition;
+                StartCoroutine(ShowSwipe(AttackDirection.Down));
+                break;
+            case AttackDirection.Left:
+                StartCoroutine(ShowSwipe(AttackDirection.Left));
+                break;
+            case AttackDirection.Right:
+                StartCoroutine(ShowSwipe(AttackDirection.Right));
                 break;
         }
         
         Vector2 overlapCirclePosition;
-        if (attackDirection == FacingDirection.Left)
+        if (facingDirection == FacingDirection.Left)
         {
             var localPosition = attackPosition.localPosition;
             overlapCirclePosition = (Vector2)transform.position + new Vector2(-localPosition.x, localPosition.y );
@@ -197,20 +203,20 @@ public class PlayerCombat : MonoBehaviour
     }
 
 
-    private IEnumerator ShowSwipe(SwipeDirection index)
+    private IEnumerator ShowSwipe(AttackDirection index)
     {
         SpriteRenderer swipe = upSwipe;
-        if (index != SwipeDirection.Up)
+        if (index != AttackDirection.Up)
         {
             switch (index)
             {
-                case SwipeDirection.Down:
+                case AttackDirection.Down:
                     swipe = downSwipe;
                     break;
-                case SwipeDirection.Left:
+                case AttackDirection.Left:
                     swipe = leftSwipe;
                     break;
-                case SwipeDirection.Right:
+                case AttackDirection.Right:
                     swipe = rightSwipe;
                     break;
                 default:

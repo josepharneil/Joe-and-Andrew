@@ -1,4 +1,5 @@
 using Entity;
+using JetBrains.Annotations;
 using Physics;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -172,15 +173,18 @@ public class PlayerInputs : MonoBehaviour
             //then if the raycasts collide with anything the displacement is altered to be the distance from the player edge to the collider
             //then at the end of controller it uses transform.translate(displacement) with the edited displacement 
             movementController.MoveAtSpeed(_velocity);
-            if (_moveInput.x < 0)
+            if (isAttacking && playerCombatPrototyping.data.canChangeDirectionsDuringAttack)
             {
-                facingDirection = FacingDirection.Left;
-                spriteRenderer.flipX = true;
-            }
-            else if( _moveInput.x > 0)
-            {                    
-                facingDirection = FacingDirection.Right;
-                spriteRenderer.flipX = false;
+                if (_moveInput.x < 0)
+                {
+                    facingDirection = FacingDirection.Left;
+                    spriteRenderer.flipX = true;
+                }
+                else if( _moveInput.x > 0)
+                {                    
+                    facingDirection = FacingDirection.Right;
+                    spriteRenderer.flipX = false;
+                }
             }
         }
 
@@ -220,7 +224,7 @@ public class PlayerInputs : MonoBehaviour
     /// <summary>
     /// Called by PlayerInput Unity Event.
     /// </summary>
-    public void ReadJumpInput(InputAction.CallbackContext context)
+    [UsedImplicitly] public void ReadJumpInput(InputAction.CallbackContext context)
     {
         if (context.started && !(entityDaze && entityDaze.isDazed))
         {
@@ -299,7 +303,11 @@ public class PlayerInputs : MonoBehaviour
     #endregion
 
     #region Horizontal Movement
-    public void ReadMoveInput(InputAction.CallbackContext context)
+    /// <summary>
+    /// called by Unity PlayerInput event
+    /// </summary>
+    /// <param name="context"></param>
+    [UsedImplicitly] public void ReadMoveInput(InputAction.CallbackContext context)
     {
         _moveInput = context.ReadValue<Vector2>();
         if (entityDaze && entityDaze.isDazed)
@@ -473,7 +481,7 @@ public class PlayerInputs : MonoBehaviour
     /// <summary>
     /// Called by PlayerInput Unity Event.
     /// </summary>
-    public void ReadRollInput(InputAction.CallbackContext context)
+    [UsedImplicitly] public void ReadRollInput(InputAction.CallbackContext context)
     {
         // TODO maybe should just directly call here.
         if (context.started && !(entityDaze && entityDaze.isDazed))
@@ -532,7 +540,7 @@ public class PlayerInputs : MonoBehaviour
     /// Called by PlayerInput Unity Event.
     /// </summary>
     /// <param name="context"></param>
-    public void ReadAttackInput(InputAction.CallbackContext context)
+    [UsedImplicitly] public void ReadAttackInput(InputAction.CallbackContext context)
     {
         if (!debugUseAnimations || (!entityBlock || entityBlock.IsBlocking()) && entityBlock)
         {
@@ -558,15 +566,18 @@ public class PlayerInputs : MonoBehaviour
         }
         else
         {
-            if (_moveInput.x < 0)
+            if (playerCombatPrototyping.data.canChangeDirectionsDuringAttack)
             {
-                facingDirection = FacingDirection.Left;
-                spriteRenderer.flipX = true;
-            }
-            else if ( _moveInput.x > 0 )
-            {
-                facingDirection = FacingDirection.Right;
-                spriteRenderer.flipX = false;
+                if (_moveInput.x < 0)
+                {
+                    facingDirection = FacingDirection.Left;
+                    spriteRenderer.flipX = true;
+                }
+                else if ( _moveInput.x > 0 )
+                {
+                    facingDirection = FacingDirection.Right;
+                    spriteRenderer.flipX = false;
+                }
             }
             animator.SetTrigger(AttackTriggerID);
             isAttacking = true;
@@ -635,7 +646,7 @@ public class PlayerInputs : MonoBehaviour
     /// Called by PlayerInput Unity Event.
     /// </summary>
     /// <param name="context"></param>
-    public void ReadParryInput(InputAction.CallbackContext context)
+    [UsedImplicitly] public void ReadParryInput(InputAction.CallbackContext context)
     {
         if (!entityParry || isAttacking)
         {
@@ -655,7 +666,7 @@ public class PlayerInputs : MonoBehaviour
     /// Called by PlayerInput Unity Event.
     /// </summary>
     /// <param name="context"></param>
-    public void ReadBlockInput(InputAction.CallbackContext context)
+    [UsedImplicitly] public void ReadBlockInput(InputAction.CallbackContext context)
     {
         if (!entityBlock)
         {

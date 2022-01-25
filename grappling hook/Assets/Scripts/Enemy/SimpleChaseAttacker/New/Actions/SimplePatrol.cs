@@ -8,7 +8,7 @@ namespace AI
     {
         [Header("Components")]
         [SerializeField] private MovementController movement;
-        private SpriteRenderer renderer;
+        private SpriteRenderer _spriteRenderer;
 
         // Very simple patrol point
         // between two points, dest point must be to the right.
@@ -24,7 +24,7 @@ namespace AI
 
         private void Start()
         {
-            renderer = gameObject.GetComponent<SpriteRenderer>();
+            _spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
             Debug.Assert(patrolPoint0 != null, this);
             Debug.Assert(patrolPoint1 != null, this);
             _currentTargetPatrolPointIndex = 0;
@@ -65,12 +65,12 @@ namespace AI
             if (transform.position.IsRightOf(currentTargetPatrolPoint.position))
             {
                 _facingDirection = FacingDirection.Left;
-                renderer.flipX = true;
+                _spriteRenderer.flipX = true;
             }
             else if (transform.position.IsLeftOf(currentTargetPatrolPoint.position))
             {
                 _facingDirection = FacingDirection.Right;
-                renderer.flipX = false;
+                _spriteRenderer.flipX = false;
             }
         }
 
