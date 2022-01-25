@@ -48,7 +48,7 @@ namespace Entity
         
         public void UpdateKnockback()
         {
-            if (_knockbackStrength <= 0)
+            if (_knockbackStrength <= 0.05f)
             {
                 _isBeingKnockedBack = false;
                 return;
