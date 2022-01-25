@@ -53,7 +53,6 @@ public class PlayerInputs : MonoBehaviour
     private float _rollCoolDownTimer = 0f;
 
     private bool _isMoveInput;
-    private bool _isBeingKnockedBack;
     private bool _isJumpInput;
     private bool _isGrounded;
     private bool _isRollInput;
@@ -154,10 +153,7 @@ public class PlayerInputs : MonoBehaviour
                 }
             }
         }
-        if (entityKnockback && entityKnockback.IsBeingKnockedBack())
-        {
-            entityKnockback.UpdateKnockback();
-        }
+        
         // Movement
         // ReadMoveInput();
         SetHorizontalMove();
@@ -226,15 +222,14 @@ public class PlayerInputs : MonoBehaviour
     /// </summary>
     [UsedImplicitly] public void ReadJumpInput(InputAction.CallbackContext context)
     {
-        if (context.started && !(entityDaze && entityDaze.isDazed))
+        if (!context.started || entityDaze && entityDaze.isDazed) return;
+        
+        if (debugUseAnimations)
         {
-            if (debugUseAnimations)
-            {
-                animator.SetTrigger(JumpTriggerID);
-            }
-            _isJumpInput = true;
-            StartCoyoteTime();
+            animator.SetTrigger(JumpTriggerID);
         }
+        _isJumpInput = true;
+        StartCoyoteTime();
     }
 
     private void Jump()
@@ -317,7 +312,7 @@ public class PlayerInputs : MonoBehaviour
         if (_moveInput.x != 0)
         {
             _isMoveInput = true;
-            if (!_isBeingKnockedBack || !isAttacking || isAttacking && playerCombatPrototyping.data.canChangeDirectionsDuringAttack)
+            if (!entityKnockback.IsBeingKnockedBack() || !isAttacking || isAttacking && playerCombatPrototyping.data.canChangeDirectionsDuringAttack)
             {
                 if (_moveInput.x < 0)
                 {
@@ -522,15 +517,6 @@ public class PlayerInputs : MonoBehaviour
         moveState = MoveState.Decelerating;
         _rollState = RollState.NotRolling;
         _rollCoolDownTimer = Time.time;
-    }
-
-    [ContextMenu("Knockback Player")]
-    private void ApplyKnockback()
-    {
-        const float strength = 1f;
-        Vector2 knocbackVector = new Vector2(transform.position.x - 1, transform.position.y);
-        entityKnockback.StartKnockBack(knocbackVector, strength);
-        _isBeingKnockedBack = true;
     }
 
     #endregion

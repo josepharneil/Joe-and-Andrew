@@ -17,10 +17,10 @@ MonoBehaviour:
   attackSpeed: 2.5
   cancellables: 0
   cancellableAttackPhases: 0
-  doesPlayerDealKnockback: 0
-  knockbackStrength: 2.5
-  knockbackDuration: 0.5
+  doesPlayerDealKnockback: 1
+  knockbackStrength: 15
+  doesPlayerGetKnockedBackByOwnAttacks: 1
+  selfKnockbackStrength: 5
   doesPlayerDealDaze: 0
   doesAttackingParriedDealBonusDamage: 0
   attackParriedBonusDamageAmount: 1
-  prototypeAttackStyle: 0

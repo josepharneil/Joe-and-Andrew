@@ -33,6 +33,9 @@ public class PlayerCombat : MonoBehaviour
 
     [Header("Gamepad Vibration")]
     [SerializeField] private GamepadVibrator gamepadVibrator;
+
+    [Header("Knockback")]
+    [SerializeField] private EntityKnockback entityKnockback;
     
     [Header("Time Scale On Hit")]
     private float _slowTimeScaleTimer = 0f;
@@ -133,29 +136,37 @@ public class PlayerCombat : MonoBehaviour
         Physics2D.OverlapCircle(overlapCirclePosition, attackRadius, contactFilter2D, detectedObjects);
         
         bool enemyHit = false;
+
+        bool firstEnemyHitPositionIsSet = false;
+        Vector2 firstEnemyHitPosition = Vector2.zero;
         foreach (Collider2D coll in detectedObjects)
         {
              coll.gameObject.TryGetComponent<EntityHitbox>(out EntityHitbox entityHitbox);
-             if (entityHitbox)
+             if (!entityHitbox) continue;
+             
+             int damageDealt = attackDamage;
+             if (playerCombatPrototyping.data.doesAttackingParriedDealBonusDamage)
              {
-                 int damageDealt = attackDamage;
-                 if (playerCombatPrototyping.data.doesAttackingParriedDealBonusDamage)
-                 {
-                     damageDealt *= playerCombatPrototyping.data.attackParriedBonusDamageAmount;
-                 }
+                 damageDealt *= playerCombatPrototyping.data.attackParriedBonusDamageAmount;
+             }
                  
-                 EntityHitData hitData = new EntityHitData
-                 {
-                     DealsDamage = true,
-                     DamageToHealth = damageDealt,
+             EntityHitData hitData = new EntityHitData
+             {
+                 DealsDamage = true,
+                 DamageToHealth = damageDealt,
                      
-                     DealsKnockback = playerCombatPrototyping.data.doesPlayerDealKnockback,
-                     KnockbackOrigin = transform.position,
-                     KnockbackStrength = playerCombatPrototyping.data.knockbackStrength,
+                 DealsKnockback = playerCombatPrototyping.data.doesPlayerDealKnockback,
+                 KnockbackOrigin = transform.position,
+                 KnockbackStrength = playerCombatPrototyping.data.knockbackStrength,
                      
-                     DealsDaze = playerCombatPrototyping.data.doesPlayerDealDaze,
-                 };
-                 enemyHit = entityHitbox.Hit(hitData);
+                 DealsDaze = playerCombatPrototyping.data.doesPlayerDealDaze,
+             };
+             enemyHit = entityHitbox.Hit(hitData);
+             
+             if (enemyHit && !firstEnemyHitPositionIsSet)
+             {
+                 firstEnemyHitPosition = entityHitbox.transform.position;
+                 firstEnemyHitPositionIsSet = true;
              }
              // Instantiate a hit particle here if we want
         }
@@ -165,6 +176,12 @@ public class PlayerCombat : MonoBehaviour
             cinemachineShake.ShakeCamera(shakeAmplitude, shakeFrequency, shakeDuration);
             Time.timeScale = slowTimeScaleAmount;
             _slowTimeScaleTimer = slowTimeScaleDuration;
+            
+            // Todo check this logic
+            if (entityKnockback && playerCombatPrototyping.data.doesPlayerGetKnockedBackByOwnAttacks && firstEnemyHitPositionIsSet)
+            {
+                entityKnockback.StartKnockBack(firstEnemyHitPosition, playerCombatPrototyping.data.selfKnockbackStrength);
+            }
             
             // Or here! Instantiate a hit particle here if we want
         }

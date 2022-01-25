@@ -94,7 +94,10 @@ public class AttackingEnemy : MonoBehaviour
             {
                 EntityHitData hitData = new EntityHitData
                 {
+                    DealsDamage = true,
                     DamageToHealth = attackDamage,
+                    
+                    DealsKnockback = true,
                     KnockbackOrigin = transform.position,
                     KnockbackStrength = knockbackStrength
                 };

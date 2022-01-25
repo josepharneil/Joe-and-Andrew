@@ -24,7 +24,8 @@ public class PlayerCombatPrototypeData : ScriptableObject
     [Tooltip("Does player deal knockback?")]
     public bool doesPlayerDealKnockback;
     public float knockbackStrength = 2f;
-    public float knockbackDuration = 0.5f;
+    public bool doesPlayerGetKnockedBackByOwnAttacks = true;
+    public float selfKnockbackStrength = 10f;
     
     [Header("Daze")]
     [Tooltip("Does player deal daze?")]
