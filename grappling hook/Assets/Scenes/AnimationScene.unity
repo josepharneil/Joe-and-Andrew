@@ -138,6 +138,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 0bc5c7a460719bf439d651739d8d1b50, type: 2}
+    - target: {fileID: 9147847883452652283, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: knockBackDecrementAmount
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652287, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -303,7 +307,7 @@ MonoBehaviour:
   playerTransform: {fileID: 1707686023}
   moveSpeed: 1.5
   animator: {fileID: 1706763279}
-  renderer: {fileID: 1706763280}
+  spriteRenderer: {fileID: 0}
 --- !u!4 &1707686023 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9147847883452652287, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
@@ -419,8 +423,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   followTransform: {fileID: 1707686023}
   followSpeed: 10
-  cameraShakeDuration: 0.2
-  cameraShakeAmount: 0.2
 --- !u!81 &1886921946
 AudioListener:
   m_ObjectHideFlags: 0
