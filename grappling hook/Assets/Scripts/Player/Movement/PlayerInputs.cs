@@ -148,20 +148,17 @@ public class PlayerInputs : MonoBehaviour
                         _velocity.x = 0f;
                     }
                     CheckGrounded();
-                    // todo, change this to fall?
-                    ApplyGravity();
+                    CalculateGravity();
                     movementController.MoveAtSpeed(_velocity);
                 }
             }
         }
         
         // Movement
-        // ReadMoveInput();
         SetHorizontalMove();
         CheckGrounded();
         CalculateJumpApex();
         CalculateGravity();
-    //    ApplyGravity();
         Jump();
 
         if (!isAttacking || (isAttacking && !playerCombatPrototyping.data.movementDisabledByAttacks))
