@@ -67,7 +67,7 @@ public class PlayerCombat : MonoBehaviour
     /// <param name="attackIndex"> Index of the attack </param>
     [UsedImplicitly] public void CheckAttackHitBox(int attackIndex)
     {
-        FacingDirection facingDirection = inputs.facingDirection;
+        FacingDirection facingDirection = inputs.FacingDirection;
 
         AttackDirection attackDirection = AttackDirection.Right;
         switch (attackIndex)
@@ -204,7 +204,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (inputs.facingDirection == FacingDirection.Left)
+        if (inputs.FacingDirection == FacingDirection.Left)
         {
             var localPosition = sideAttackHitBoxPosition.localPosition;
             Vector3 position = transform.position + new Vector3(-localPosition.x, localPosition.y);

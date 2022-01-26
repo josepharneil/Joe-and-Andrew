@@ -56,7 +56,7 @@ public class PlayerInputs : MonoBehaviour
     private bool _isJumpInput;
     private bool _isGrounded;
     private bool _isRollInput;
-    [HideInInspector] public FacingDirection facingDirection;
+    public FacingDirection FacingDirection { get; private set; }
     private float _lerpCurrent = 0f;
     [SerializeField] private MoveState moveState;
     private RollState _rollState;
@@ -148,6 +148,7 @@ public class PlayerInputs : MonoBehaviour
                         _velocity.x = 0f;
                     }
                     CheckGrounded();
+                    // todo, change this to fall?
                     ApplyGravity();
                     movementController.MoveAtSpeed(_velocity);
                 }
@@ -169,18 +170,19 @@ public class PlayerInputs : MonoBehaviour
             //then if the raycasts collide with anything the displacement is altered to be the distance from the player edge to the collider
             //then at the end of controller it uses transform.translate(displacement) with the edited displacement 
             movementController.MoveAtSpeed(_velocity);
-            if (isAttacking && playerCombatPrototyping.data.canChangeDirectionsDuringAttack)
+        }
+
+        if (!isAttacking || (isAttacking && playerCombatPrototyping.data.canChangeDirectionsDuringAttack))
+        {
+            if (_moveInput.x < 0)
             {
-                if (_moveInput.x < 0)
-                {
-                    facingDirection = FacingDirection.Left;
-                    spriteRenderer.flipX = true;
-                }
-                else if( _moveInput.x > 0)
-                {                    
-                    facingDirection = FacingDirection.Right;
-                    spriteRenderer.flipX = false;
-                }
+                FacingDirection = FacingDirection.Left;
+                spriteRenderer.flipX = true;
+            }
+            else if( _moveInput.x > 0)
+            {                    
+                FacingDirection = FacingDirection.Right;
+                spriteRenderer.flipX = false;
             }
         }
 
@@ -312,18 +314,20 @@ public class PlayerInputs : MonoBehaviour
         if (_moveInput.x != 0)
         {
             _isMoveInput = true;
-            if (!entityKnockback.IsBeingKnockedBack() || !isAttacking || isAttacking && playerCombatPrototyping.data.canChangeDirectionsDuringAttack)
+            if (entityKnockback.IsBeingKnockedBack() ||
+                (isAttacking && !playerCombatPrototyping.data.canChangeDirectionsDuringAttack))
             {
-                if (_moveInput.x < 0)
-                {
-                    facingDirection = FacingDirection.Left;
-                    spriteRenderer.flipX = true;
-                }
-                else
-                {                    
-                    facingDirection = FacingDirection.Right;
-                    spriteRenderer.flipX = false;
-                }
+                return;
+            }
+            if (_moveInput.x < 0)
+            {
+                FacingDirection = FacingDirection.Left;
+                spriteRenderer.flipX = true;
+            }
+            else if (_moveInput.x > 0)
+            {                    
+                FacingDirection = FacingDirection.Right;
+                spriteRenderer.flipX = false;
             }
         }
         else
@@ -494,7 +498,7 @@ public class PlayerInputs : MonoBehaviour
             moveState = MoveState.Rolling;
             _rollDurationTimer = 0f;
             _rollState = RollState.Rolling;
-            _rollDirection = (float)facingDirection;
+            _rollDirection = (float)FacingDirection;
         }
     }
 
@@ -538,18 +542,17 @@ public class PlayerInputs : MonoBehaviour
         {
             return;
         }
-
+        
+        isAttacking = true;
         const float upwardsInputThreshold = 0.5f;
         const float downwardsInputThreshold = -upwardsInputThreshold;
         if (_moveInput.y > upwardsInputThreshold)
         {
             animator.SetTrigger(AttackUpTriggerID);
-            isAttacking = true;
         }
         else if (!_isGrounded && _moveInput.y < downwardsInputThreshold)
         {
             animator.SetTrigger(AttackDownTriggerID);
-            isAttacking = true;
         }
         else
         {
@@ -557,17 +560,16 @@ public class PlayerInputs : MonoBehaviour
             {
                 if (_moveInput.x < 0)
                 {
-                    facingDirection = FacingDirection.Left;
+                    FacingDirection = FacingDirection.Left;
                     spriteRenderer.flipX = true;
                 }
                 else if ( _moveInput.x > 0 )
                 {
-                    facingDirection = FacingDirection.Right;
+                    FacingDirection = FacingDirection.Right;
                     spriteRenderer.flipX = false;
                 }
             }
             animator.SetTrigger(AttackTriggerID);
-            isAttacking = true;
         }
     }
 

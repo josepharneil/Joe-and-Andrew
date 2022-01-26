@@ -35,7 +35,7 @@ namespace Entity
 
             Debug.Log("Parry!");
             
-            FacingDirection parryDirection = inputs.facingDirection;
+            FacingDirection parryDirection = inputs.FacingDirection;
             
             Vector2 overlapCirclePosition;
             if (parryDirection == FacingDirection.Left)
@@ -70,7 +70,7 @@ namespace Entity
 
         private void OnDrawGizmos()
         {
-            if (inputs.facingDirection == FacingDirection.Left)
+            if (inputs.FacingDirection == FacingDirection.Left)
             {
                 Vector3 position = transform.position + new Vector3(-1, 0);
                 Gizmos.DrawWireSphere(position, parryRadius);
