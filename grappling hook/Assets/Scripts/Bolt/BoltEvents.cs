@@ -8,5 +8,6 @@ namespace Bolt
         public static readonly string CanSeePlayer = "CanSeePlayer";
         public static readonly string CannotSeePlayer = "CannotSeePlayer";
         public static readonly string EnemyIsDead = "EnemyIsDead";
+        public static readonly string EnemyIsDestroy = "EnemyIsDestroy";
     }
 }

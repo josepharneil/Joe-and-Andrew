@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1893448595, guid: a040fb66244a7f54289914d98ea4ef7d, type: 3}
+  m_Name: DestroyState
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"graph":{"variables":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[],"controlOutputDefinitions":[],"valueInputDefinitions":[],"valueOutputDefinitions":[],"title":null,"summary":null,"pan":{"x":-377.1468,"y":23.51875},"zoom":0.85,"elements":[{"defaultValues":{"Target
+      (None is Self)":null},"position":{"x":-330.0,"y":-93.0},"guid":"be5111dc-430d-44e6-96ef-4463fa0ec432","$version":"A","$type":"AI.ListStateActionNode","$id":"9"},{"type":"System.Collections.Generic.List`1[[AI.StateAction,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]","value":{"$content":[0],"$type":"System.Collections.Generic.List`1[[AI.StateAction,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"defaultValues":{},"position":{"x":-479.0,"y":52.0},"guid":"4a9ee10c-5886-45a5-8137-7416adc12368","$version":"A","$type":"Bolt.Literal","$id":"11"},{"coroutine":false,"defaultValues":{},"position":{"x":-544.0,"y":-108.0},"guid":"7d7e4239-cc6c-4d81-b082-87a72d4c705e","$version":"A","$type":"Bolt.OnEnterState","$id":"14"},{"sourceUnit":{"$ref":"14"},"sourceKey":"trigger","destinationUnit":{"$ref":"9"},"destinationKey":"","guid":"e1d20479-59fc-4579-9dae-9700eb0ae8ee","$type":"Bolt.ControlConnection"},{"sourceUnit":{"$ref":"11"},"sourceKey":"output","destinationUnit":{"$ref":"9"},"destinationKey":"State
+      Actions","guid":"d4f97d79-244c-4c83-a02d-83648da14624","$type":"Bolt.ValueConnection"}],"$version":"A"}}'
+    _objectReferences:
+    - {fileID: 11400000, guid: ebb48141f16ab497ea8dbb44ee9a611c, type: 2}
