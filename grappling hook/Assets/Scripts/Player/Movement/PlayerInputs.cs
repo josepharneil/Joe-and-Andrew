@@ -276,7 +276,6 @@ public class PlayerInputs : MonoBehaviour
         {
             _isGrounded = true;
             _lastGroundedTime = Time.time;
-            _jumpCalledTime = 0f;
         }
         else
         {
