@@ -3,8 +3,10 @@ using JetBrains.Annotations;
 using Physics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 
 //thieved shamelessly from https://www.youtube.com/watch?v=MbWK8bCAU2w&list=PLFt_AvWsXl0f0hqURlhyIoAabKPgRsqjz&index=1
+// more shameless thieving https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/blob/main/Scripts/PlayerController.cs
 
 [RequireComponent(typeof(MovementController))]
 [RequireComponent(typeof(CustomCollider2D))]
@@ -15,12 +17,12 @@ public class PlayerInputs : MonoBehaviour
 
     [Header("Jump Stats")]
     [SerializeField] private float jumpHeight = 3f;
-    [SerializeField] private float timeToJumpHeight = 0.4f;
     [SerializeField] private float coyoteTime;
     [SerializeField] private float minFallSpeed = 80f;
     [SerializeField] private float maxFallSpeed = 120f;
     [SerializeField] private float jumpApexThreshold = 10f;
     [SerializeField] private float fallClamp = -40f;
+    [SerializeField] private float earlyJumpMultiplier = 3f;
     private float _apexPoint; //This becomes 1 at the end of the jump
     private float _fallSpeed;
 
@@ -54,6 +56,7 @@ public class PlayerInputs : MonoBehaviour
 
     private bool _isMoveInput;
     private bool _isJumpInput;
+    private bool _isJumpEndedEarly=false;
     private bool _isGrounded;
     private bool _isRollInput;
     public FacingDirection FacingDirection { get; private set; }
@@ -202,10 +205,17 @@ public class PlayerInputs : MonoBehaviour
         }
         else
         {
-            //TODO add in the early jump letgo Code
-
+            //Checks if the player has ended a jump early, and if so increase the gravity
+            if (_isJumpEndedEarly)
+            {
+                _velocity.y -= _fallSpeed * earlyJumpMultiplier *Time.deltaTime;
+            }
+            else
+            {
+                _velocity.y -= _fallSpeed * Time.deltaTime;
+            }
             //Makes the player actually fall
-            _velocity.y -= _fallSpeed * Time.deltaTime;
+
 
             //Clamps the y velocity to a certain value
             if (_velocity.y < fallClamp) _velocity.y = fallClamp;
@@ -221,14 +231,33 @@ public class PlayerInputs : MonoBehaviour
     /// </summary>
     [UsedImplicitly] public void ReadJumpInput(InputAction.CallbackContext context)
     {
+
         if (!context.started || entityDaze && entityDaze.isDazed) return;
-        
         if (debugUseAnimations)
         {
             animator.SetTrigger(JumpTriggerID);
         }
-        _isJumpInput = true;
+        if (context.interaction is TapInteraction)
+        {
+            Debug.Log("tap");
+            _isJumpInput = true;
+            _isJumpEndedEarly = true;
+        }
+        else if (context.interaction is PressInteraction)
+        {
+            _isJumpInput = true;
+            Debug.Log("press");
+        }
+
+        //Todo change this to the jump thing
+        
+
         StartCoyoteTime();
+    }
+
+    private void Action_canceled(InputAction.CallbackContext obj)
+    {
+        throw new System.NotImplementedException();
     }
 
     private void Jump()
@@ -254,20 +283,6 @@ public class PlayerInputs : MonoBehaviour
         {
             _apexPoint = 0f;
         }
-    }
-
-
-    private void ApplyGravity()
-    {
-        //this makes sure that the gravity is always properly applied
-        //if its in an else of this if it really fucks up the jumping
-        //AK 17/1/22: Gravity has now been replaced with fall speed
-
-        if (movementController.customCollider2D.GetCollisionBelow() || movementController.customCollider2D.GetCollisionAbove() || _rollState != RollState.NotRolling)
-        {
-            _velocity.y = 0;
-        }
-        _velocity.y -= _fallSpeed * Time.deltaTime;
     }
 
     private void CheckGrounded()
