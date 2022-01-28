@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class ChaseRunAtPlayer : ChasePathing
 {
     // Same as the patrol state, this gets called in the ChaseAction
