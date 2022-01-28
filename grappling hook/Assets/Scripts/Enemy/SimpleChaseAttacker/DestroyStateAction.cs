@@ -6,9 +6,9 @@ namespace AI
     [CreateAssetMenu(menuName = "AI/State Actions/Destroy")]
     public class DestroyStateAction : StateAction
     {
-        public override void PerformAction(GameObject aiGameObject)
+        public override void PerformAction(GameObject agent)
         {
-            RequestDestruction(aiGameObject);
+            RequestDestruction(agent);
         }
         
         private static void RequestDestruction(GameObject aiGameObject)

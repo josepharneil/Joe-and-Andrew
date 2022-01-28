@@ -9,6 +9,7 @@ namespace AI
         [Header("Components")]
         [SerializeField] private MovementController movement;
         private SpriteRenderer _spriteRenderer;
+        [SerializeField] private float distanceThreshold = 1f;
 
         // Very simple patrol point
         // between two points, dest point must be to the right.
@@ -49,8 +50,9 @@ namespace AI
             Transform targetPatrolPoint = _currentTargetPatrolPointIndex == 0 ? patrolPoint0 : patrolPoint1;
 
             // If we're close enough to our destination point, update the destination
-            const float distanceThreshold = 0.1f;
-            if (Vector2.Distance(transform.position, targetPatrolPoint.position) < distanceThreshold)
+            float targetPatrolPointX = targetPatrolPoint.position.x;
+            float thisPositionX = transform.position.x;
+            if (Mathf.Abs((thisPositionX * thisPositionX) - (targetPatrolPointX * targetPatrolPointX)) < distanceThreshold * distanceThreshold)
             {
                 _currentTargetPatrolPointIndex = (_currentTargetPatrolPointIndex + 1) % 2;
                 targetPatrolPoint = _currentTargetPatrolPointIndex == 0 ? patrolPoint0 : patrolPoint1;
@@ -78,7 +80,8 @@ namespace AI
         {
             // Move
             float fallSpeed = !movement.customCollider2D.GetCollisionBelow() ? Physics2D.gravity.y : 0f;
-            movement.MoveAtSpeed(new Vector2((float)_facingDirection * Speed, fallSpeed));
+            Vector2 moveVector = new Vector2((float)_facingDirection * Speed, fallSpeed);
+            movement.MoveAtSpeed(moveVector);
         }
 
         private void OnDrawGizmosSelected()

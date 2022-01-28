@@ -8,6 +8,6 @@ namespace AI
     /// </summary>
     public abstract class StateAction : ScriptableObject
     {
-        public abstract void PerformAction(GameObject self);
+        public abstract void PerformAction(GameObject agent);
     }
 }

@@ -5,9 +5,9 @@ namespace AI
     [CreateAssetMenu(menuName = "AI/State Actions/Chase Pathing")]
     public class ChasePathingStateAction : StateAction
     {
-        public override void PerformAction(GameObject aiGameObject)
+        public override void PerformAction(GameObject agent)
         {
-            Patrol(aiGameObject);
+            Patrol(agent);
         }
         
         private void Patrol(GameObject aiGameObject)
