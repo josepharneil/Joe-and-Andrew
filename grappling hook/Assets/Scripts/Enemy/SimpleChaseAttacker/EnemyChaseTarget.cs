@@ -16,6 +16,10 @@ namespace Enemy
             {
                 movementController.MoveAtSpeed(new Vector2(chaseSpeed,Physics2D.gravity.y));
             }
+            if (transform.position.IsRightOf(chaseTarget.position))
+            {
+                movementController.MoveAtSpeed(new Vector2(-chaseSpeed,Physics2D.gravity.y));
+            }
         }
 
     }

@@ -64,10 +64,10 @@ namespace Physics
             }
         }
 
-        private void OnTriggerEnter2D(Collider2D col)
-        {
-            OnTriggerEnter?.Invoke(col);
-        }
+        // private void OnTriggerEnter2D(Collider2D col)
+        // {
+        //     OnTriggerEnter?.Invoke(col);
+        // }
         // private void OnTriggerEnter2D(Collision2D col)
         // {
         //     // todo, not sure if this should be an event to be honest
@@ -85,7 +85,7 @@ namespace Physics
         [Header("Debug")] 
         [SerializeField] private bool debugDraw;
         
-        public event Action<Collider2D> OnTriggerEnter;
+        // public event Action<Collider2D> OnTriggerEnter;
 
         private const float SkinWidth = 0.15f;
         private int _horizontalRayCount = 4;

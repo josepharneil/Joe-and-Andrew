@@ -22,17 +22,17 @@ namespace Entity
 
         [SerializeField] private CustomCollider2D customCollider2D;
 
-        private void OnEnable()
-        {
-            customCollider2D.OnTriggerEnter += OnCustomTriggerEnter;
-        }
+        // private void OnEnable()
+        // {
+        //     customCollider2D.OnTriggerEnter += OnCustomTriggerEnter;
+        // }
+        //
+        // private void OnDisable()
+        // {
+        //     customCollider2D.OnTriggerEnter -= OnCustomTriggerEnter;
+        // }
 
-        private void OnDisable()
-        {
-            customCollider2D.OnTriggerEnter -= OnCustomTriggerEnter;
-        }
-
-        private void OnCustomTriggerEnter(Collider2D col)
+        private void OnTriggerStay2D(Collider2D col)
         {
             if (!isEnabled)
             {

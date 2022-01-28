@@ -12,6 +12,14 @@ namespace Enemy
 
         public bool CheckCanSeeTarget()
         {
+            Vector2 thisPosition = (Vector2)transform.position;
+            Vector2 targetPosition = target.position;
+
+            return (targetPosition - thisPosition).sqrMagnitude < maxSightDistance * maxSightDistance;
+        }
+
+        private bool RaycastChecker()
+        {
             Debug.Assert(target != null, "Target shouldn't be null.", this);
             if (target == null)
             {
@@ -38,6 +46,7 @@ namespace Enemy
             print(raycastHits[0].transform.gameObject.layer + targetLayer);
             // If the very first raycast hit is the target, return true!
             return raycastHits[0].transform.gameObject.layer == targetLayer;
+
         }
 
         private void OnDrawGizmosSelected()

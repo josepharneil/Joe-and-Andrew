@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1893448595, guid: a040fb66244a7f54289914d98ea4ef7d, type: 3}
+  m_Name: PiranhaAttackState
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"graph":{"variables":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[],"controlOutputDefinitions":[],"valueInputDefinitions":[],"valueOutputDefinitions":[],"title":null,"summary":null,"pan":{"x":378.9037,"y":94.56061},"zoom":0.9499999,"elements":[{"coroutine":false,"defaultValues":{},"position":{"x":-161.0,"y":-29.0},"guid":"ef918767-e127-49bc-aab2-1c50242a8a01","$version":"A","$type":"Bolt.Update","$id":"9"},{"chainable":false,"member":{"name":"UpdateAttack","parameterTypes":[],"targetType":"Enemy.PiranhaShootProjectile","targetTypeName":"Enemy.PiranhaShootProjectile","$version":"A"},"defaultValues":{"target":null},"position":{"x":18.0,"y":-30.0},"guid":"82ee2b17-1adb-4858-8599-d995cb80a218","$version":"A","$type":"Bolt.InvokeMember","$id":"11"},{"member":{"name":"EnemyIsDead","parameterTypes":null,"targetType":"Bolt.BoltEvents","targetTypeName":"Bolt.BoltEvents","$version":"A"},"defaultValues":{},"position":{"x":479.0,"y":114.0},"guid":"bb982105-4621-43d4-8f1a-c5886b0a2e1a","$version":"A","$type":"Bolt.GetMember","$id":"14"},{"argumentCount":0,"defaultValues":{"name":{"$content":"","$type":"System.String"},"target":null},"position":{"x":658.0,"y":-26.0},"guid":"948ac764-4f36-462a-be63-11f3fb33c6ca","$version":"A","$type":"Bolt.TriggerCustomEvent","$id":"17"},{"defaultValues":{},"position":{"x":449.0,"y":-28.0},"guid":"04b29795-4593-476d-b6ee-cddb4fc7f38f","$version":"A","$type":"Bolt.Branch","$id":"19"},{"chainable":false,"member":{"name":"IsAlive","parameterTypes":[],"targetType":"Entity.EntityHealth","targetTypeName":"Entity.EntityHealth","$version":"A"},"defaultValues":{"target":null},"position":{"x":243.0,"y":-30.0},"guid":"8537e3e0-8980-44b9-a203-8a549544dafa","$version":"A","$type":"Bolt.InvokeMember","$id":"21"},{"sourceUnit":{"$ref":"9"},"sourceKey":"trigger","destinationUnit":{"$ref":"11"},"destinationKey":"enter","guid":"66962cff-b002-441f-99b5-d70525aef844","$type":"Bolt.ControlConnection"},{"sourceUnit":{"$ref":"19"},"sourceKey":"ifFalse","destinationUnit":{"$ref":"17"},"destinationKey":"enter","guid":"fa11e116-32e0-4d59-a133-48e25f9e98e8","$type":"Bolt.ControlConnection"},{"sourceUnit":{"$ref":"21"},"sourceKey":"exit","destinationUnit":{"$ref":"19"},"destinationKey":"enter","guid":"6d7b4aae-ef99-474c-bce5-453691e47d1a","$type":"Bolt.ControlConnection"},{"sourceUnit":{"$ref":"11"},"sourceKey":"exit","destinationUnit":{"$ref":"21"},"destinationKey":"enter","guid":"e03756a1-751e-4896-909a-4ebfe9a174b5","$type":"Bolt.ControlConnection"},{"sourceUnit":{"$ref":"14"},"sourceKey":"value","destinationUnit":{"$ref":"17"},"destinationKey":"name","guid":"564dcf72-edf6-415f-96d8-cfd140d595e2","$type":"Bolt.ValueConnection"},{"sourceUnit":{"$ref":"21"},"sourceKey":"result","destinationUnit":{"$ref":"19"},"destinationKey":"condition","guid":"b1d5dd6a-6f81-484d-ba5a-c1a7424a2974","$type":"Bolt.ValueConnection"}],"$version":"A"}}'
+    _objectReferences: []
