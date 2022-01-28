@@ -38,7 +38,7 @@ namespace AI
                 {
                     if (stateAction)
                     {
-                        stateAction.PerformAction(flow.stack.self);
+                        stateAction.PerformAction(gameObject);
                     }
                     else
                     {

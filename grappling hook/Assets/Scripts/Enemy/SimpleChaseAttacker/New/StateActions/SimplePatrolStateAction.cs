@@ -5,17 +5,20 @@ namespace AI
     [CreateAssetMenu(menuName = "AI/State Actions/Simple Patrol Pathing")]
     public class SimplePatrolStateAction : StateAction
     {
-        private PatrolBase _patrolAction;
-        public override void PerformAction(GameObject self)
+        //private SimplePatrol _patrolAction;
+        public override void PerformAction(GameObject agent)
         {
-            if (_patrolAction)
+            SimplePatrol patrolAction = null;
+            if (!patrolAction)
             {
-                _patrolAction.UpdatePatrol();
+                agent.TryGetComponent<SimplePatrol>(out patrolAction);
+                if (!patrolAction)
+                {
+                    Debug.Assert(patrolAction, "no patrol action", this);
+                    return;
+                }
             }
-            else
-            {
-                _patrolAction = self.GetComponent<PatrolBase>();
-            }
+            patrolAction.UpdatePatrol();
         }
     }
 }
