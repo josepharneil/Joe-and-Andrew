@@ -23,6 +23,7 @@ public class PlayerInputs : MonoBehaviour
     [SerializeField] private float jumpApexThreshold = 10f;
     [SerializeField] private float fallClamp = -40f;
     [SerializeField] private float earlyJumpMultiplier = 3f;
+    [SerializeField] private float earlyJumpCancelTime = 0.2f;
     private float _apexPoint; //This becomes 1 at the end of the jump
     private float _fallSpeed;
 
@@ -57,6 +58,8 @@ public class PlayerInputs : MonoBehaviour
     private bool _isMoveInput;
     private bool _isJumpInput;
     private bool _isJumpEndedEarly=false;
+    private bool _canCoyote;
+    private bool _hasJumped;
     private bool _isGrounded;
     private bool _isRollInput;
     public FacingDirection FacingDirection { get; private set; }
@@ -160,6 +163,7 @@ public class PlayerInputs : MonoBehaviour
         // Movement
         SetHorizontalMove();
         CheckGrounded();
+        CheckCoyote();
         CalculateJumpApex();
         CalculateGravity();
         Jump();
@@ -231,28 +235,24 @@ public class PlayerInputs : MonoBehaviour
     /// </summary>
     [UsedImplicitly] public void ReadJumpInput(InputAction.CallbackContext context)
     {
-
-        if (!context.started || entityDaze && entityDaze.isDazed) return;
+        Debug.Log(context.phase.ToString());
+        if (entityDaze && entityDaze.isDazed) return;
         if (debugUseAnimations)
         {
             animator.SetTrigger(JumpTriggerID);
         }
-        if (context.interaction is TapInteraction)
+        if (context.started)
         {
-            Debug.Log("tap");
             _isJumpInput = true;
+            _isJumpEndedEarly = false;
+            StartCoyoteTime();
+        }
+        if (context.canceled && (Time.time -_jumpCalledTime<earlyJumpCancelTime))
+        {
             _isJumpEndedEarly = true;
         }
-        else if (context.interaction is PressInteraction)
-        {
-            _isJumpInput = true;
-            Debug.Log("press");
-        }
 
-        //Todo change this to the jump thing
-        
-
-        StartCoyoteTime();
+  
     }
 
     private void Action_canceled(InputAction.CallbackContext obj)
@@ -262,11 +262,12 @@ public class PlayerInputs : MonoBehaviour
 
     private void Jump()
     {
-        if (_isJumpInput && (_isGrounded || (_jumpCalledTime - _lastGroundedTime < coyoteTime)))
+        if (_isJumpInput && (_isGrounded || _canCoyote))
         {
             _velocity.y = jumpHeight;
-            _jumpCalledTime = float.MaxValue;
             _isJumpInput = false;
+            _canCoyote = false;
+            _hasJumped = true;
         }
     }
 
@@ -291,6 +292,7 @@ public class PlayerInputs : MonoBehaviour
         {
             _isGrounded = true;
             _lastGroundedTime = Time.time;
+            _hasJumped = false;
         }
         else
         {
@@ -302,9 +304,21 @@ public class PlayerInputs : MonoBehaviour
     {
         // Note for the future, because this is setting an exact value... it should be fine?? Hopefully...
         // This is a little bit of a "magic number" fix though.
-        if (_isJumpInput && _jumpCalledTime != float.MaxValue )
+        if (_isJumpInput)
         {
             _jumpCalledTime = Time.time;
+        }
+    }
+
+    private void CheckCoyote()
+    {
+        if(_isJumpInput && _jumpCalledTime-_lastGroundedTime< coyoteTime &&!_hasJumped)
+        {
+            _canCoyote = true;
+        }
+        else
+        {
+            _canCoyote = false;
         }
     }
 
