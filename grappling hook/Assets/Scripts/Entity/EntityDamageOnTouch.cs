@@ -1,5 +1,4 @@
 using System;
-using Physics;
 using UnityEngine;
 
 namespace Entity
@@ -20,7 +19,29 @@ namespace Entity
         [SerializeField] private int damage = 5;
         [SerializeField] private float knockbackStrength = 2f;
 
-        [SerializeField] private CustomCollider2D customCollider2D;
+        // [SerializeField] private CustomCollider2D customCollider2D;
+
+        [SerializeField] private EntityController entityController;
+
+        private void Awake()
+        {
+            Debug.Assert(entityController, "Must have an entity controller to kill this enemy.", this);
+        }
+
+        private void OnEnable()
+        {
+            entityController.OnEnemyDead += DisableEntityDamageOnTouch;
+        }
+
+        private void OnDisable()
+        {
+            entityController.OnEnemyDead -= DisableEntityDamageOnTouch;
+        }
+
+        private void DisableEntityDamageOnTouch()
+        {
+            isEnabled = false;
+        }
 
         // private void OnEnable()
         // {

@@ -235,27 +235,24 @@ public class PlayerInputs : MonoBehaviour
     /// </summary>
     [UsedImplicitly] public void ReadJumpInput(InputAction.CallbackContext context)
     {
-        Debug.Log(context.phase.ToString());
         if (entityDaze && entityDaze.isDazed) return;
-        if (debugUseAnimations)
-        {
-            animator.SetTrigger(JumpTriggerID);
-        }
         if (context.started)
         {
             _isJumpInput = true;
             _isJumpEndedEarly = false;
             StartCoyoteTime();
+            if (debugUseAnimations)
+            {
+                animator.SetTrigger(JumpTriggerID);
+            }
         }
         if (context.canceled && (Time.time -_jumpCalledTime<earlyJumpCancelTime))
         {
             _isJumpEndedEarly = true;
         }
-
-  
     }
 
-    private void Action_canceled(InputAction.CallbackContext obj)
+    private void ActionCancelled(InputAction.CallbackContext obj)
     {
         throw new System.NotImplementedException();
     }

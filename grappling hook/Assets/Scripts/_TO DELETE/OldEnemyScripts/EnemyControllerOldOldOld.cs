@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 using UnityEditor;
 
-public class EnemyController : MonoBehaviour
+public class EnemyControllerOldOld : MonoBehaviour
 {
     private StateMachine _stateMachine;
 

@@ -56,8 +56,8 @@ GameObject:
   - component: {fileID: 885005564695595217}
   - component: {fileID: 885005564695595216}
   - component: {fileID: 885005564695595219}
-  - component: {fileID: 885005564695595218}
   - component: {fileID: 885005564695595225}
+  - component: {fileID: 6444012343683805615}
   m_Layer: 9
   m_Name: Koopa
   m_TagString: Enemy
@@ -226,7 +226,7 @@ MonoBehaviour:
     m_Bits: 2048
   damage: 5
   knockbackStrength: 20
-  customCollider2D: {fileID: 885005564695595246}
+  entityController: {fileID: 6444012343683805615}
 --- !u!114 &885005564695595246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,6 +325,7 @@ MonoBehaviour:
   entityDaze: {fileID: 0}
   hitIFrameDuration: 0
   spriteRenderer: {fileID: 0}
+  entityController: {fileID: 6444012343683805615}
 --- !u!95 &885005564695595216
 Animator:
   serializedVersion: 3
@@ -382,19 +383,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &885005564695595218
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 885005564695595237}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1efc6393ea3324421ab4c7b3e6718767, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parent: {fileID: 885005564573824740}
 --- !u!114 &885005564695595225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,6 +398,19 @@ MonoBehaviour:
   movementController: {fileID: 885005564695595243}
   chaseTarget: {fileID: 0}
   chaseSpeed: 5
+--- !u!114 &6444012343683805615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885005564695595237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be4afc7778154979957d27c0a59568a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyParentGameObject: {fileID: 885005564573824740}
 --- !u!1 &885005564712840849
 GameObject:
   m_ObjectHideFlags: 0

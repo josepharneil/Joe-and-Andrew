@@ -26,14 +26,36 @@ namespace Entity
         [SerializeField] private EntityBlock entityBlock;
         [SerializeField] private EntityKnockback entityKnockback;
         [SerializeField] private EntityDaze entityDaze;
-        
+
+        private bool _isEnabled = true;
         private bool _isHittable = true;
         [SerializeField] private float hitIFrameDuration = 0f;
         [SerializeField] private SpriteRenderer spriteRenderer;
+        [SerializeField] private EntityController entityController;
 
+        private void Awake()
+        {
+            Debug.Assert(entityController, "Must have an entity controller to kill this enemy.", this);
+        }
+
+        private void OnEnable()
+        {
+            entityController.OnEnemyDead += OnEnemyDead;
+        }
+
+        private void OnDisable()
+        {
+            entityController.OnEnemyDead -= OnEnemyDead;
+        }
+
+        private void OnEnemyDead()
+        {
+            _isEnabled = false;
+        }
+        
         public bool Hit(EntityHitData hitData)
         {
-            if (!_isHittable)
+            if (!_isHittable || !_isEnabled)
             {
                 return false;
             }

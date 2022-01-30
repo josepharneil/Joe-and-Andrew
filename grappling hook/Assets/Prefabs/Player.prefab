@@ -47,7 +47,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.5
   m_LightVolumeOpacity: 0
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
@@ -210,6 +210,7 @@ GameObject:
   - component: {fileID: 991290409775798857}
   - component: {fileID: 2322422641814107867}
   - component: {fileID: 4928653896513910851}
+  - component: {fileID: 447105601662447162}
   m_Layer: 11
   m_Name: Player
   m_TagString: Player
@@ -430,12 +431,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementController: {fileID: 9147847883452652284}
   jumpHeight: 15
-  timeToJumpHeight: 1.16
   coyoteTime: 0.5
   minFallSpeed: 35
   maxFallSpeed: 45
   jumpApexThreshold: 10
   fallClamp: -40
+  earlyJumpMultiplier: 3
+  earlyJumpCancelTime: 0.2
   moveSpeed: 10
   accelerationCurve:
     serializedVersion: 2
@@ -521,7 +523,6 @@ MonoBehaviour:
   rollDistance: 4
   rollDuration: 0.2
   rollCoolDown: 0.8
-  facingDirection: 0
   moveState: 0
   debugUseAnimations: 1
   animator: {fileID: 9147847883452652280}
@@ -565,6 +566,7 @@ MonoBehaviour:
   shakeFrequency: 1
   shakeDuration: 0.1
   gamepadVibrator: {fileID: 9147847883452652272}
+  entityKnockback: {fileID: 9147847883452652283}
   slowTimeScaleDuration: 0.15
   slowTimeScaleAmount: 0.01
   playerCombatPrototyping: {fileID: 9147847883452652286}
@@ -838,6 +840,7 @@ MonoBehaviour:
   entityDaze: {fileID: 9147847883452652276}
   hitIFrameDuration: 1
   spriteRenderer: {fileID: 9147847883264161609}
+  entityController: {fileID: 447105601662447162}
 --- !u!50 &4928653896513910851
 Rigidbody2D:
   serializedVersion: 4
@@ -859,6 +862,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &447105601662447162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9147847883452652258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be4afc7778154979957d27c0a59568a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyParentGameObject: {fileID: 9147847883452652258}
 --- !u!1 &9147847883458751730
 GameObject:
   m_ObjectHideFlags: 0

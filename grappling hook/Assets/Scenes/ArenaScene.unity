@@ -396,7 +396,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6696026843032660182, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6696026843032660182, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -438,7 +438,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6696026842710103779, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
 --- !u!1 &1318115039
 GameObject:
@@ -3798,17 +3799,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1608203354 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9147847883452652283, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-  m_PrefabInstance: {fileID: 2092242609}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fbb600d3206748e0ab9eb971f394754, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1608203359 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9147847883452652287, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
@@ -4080,10 +4070,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: entityKnockback
-      value: 
-      objectReference: {fileID: 1608203354}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: jumpHeight
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: cinemachineShake
       value: 
@@ -4190,7 +4180,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 885005564573824743, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 885005564573824743, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4240,7 +4230,8 @@ PrefabInstance:
       propertyPath: chaseTarget
       value: 
       objectReference: {fileID: 1608203359}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 885005564695595218, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
 --- !u!4 &4117031597792064287 stripped
 Transform:
@@ -4262,10 +4253,6 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: -7.5599995
       objectReference: {fileID: 0}
-    - target: {fileID: 6696026842710103769, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
-      propertyPath: distanceThreshold
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 6696026843032660181, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
       propertyPath: m_Name
       value: GumbaEnemy
@@ -4276,7 +4263,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6696026843032660182, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6696026843032660182, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4318,7 +4305,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6696026842710103779, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
 --- !u!4 &9029616839111194656
 Transform:
@@ -4351,19 +4339,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &9029616840407369237
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9029616840407369250}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1efc6393ea3324421ab4c7b3e6718767, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parent: {fileID: 9029616839111194659}
 --- !u!114 &9029616840407369238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4382,6 +4357,7 @@ MonoBehaviour:
   entityDaze: {fileID: 0}
   hitIFrameDuration: 0
   spriteRenderer: {fileID: 0}
+  entityController: {fileID: 9029616840407369253}
 --- !u!95 &9029616840407369239
 Animator:
   serializedVersion: 3
@@ -4451,8 +4427,8 @@ GameObject:
   - component: {fileID: 9029616840407369256}
   - component: {fileID: 9029616840407369238}
   - component: {fileID: 9029616840407369239}
-  - component: {fileID: 9029616840407369237}
   - component: {fileID: 9029616840407369252}
+  - component: {fileID: 9029616840407369253}
   m_Layer: 9
   m_Name: Piranha Plant
   m_TagString: Enemy
@@ -4493,6 +4469,19 @@ MonoBehaviour:
   fireballDamage: 5
   fireballMoveSpeed: 6
   knockbackStrength: 5
+--- !u!114 &9029616840407369253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9029616840407369250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be4afc7778154979957d27c0a59568a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyParentGameObject: {fileID: 9029616839111194659}
 --- !u!114 &9029616840407369256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4589,7 +4578,7 @@ MonoBehaviour:
     m_Bits: 2048
   damage: 5
   knockbackStrength: 20
-  customCollider2D: {fileID: 9029616840407369257}
+  entityController: {fileID: 9029616840407369253}
 --- !u!212 &9029616840407369262
 SpriteRenderer:
   m_ObjectHideFlags: 0
