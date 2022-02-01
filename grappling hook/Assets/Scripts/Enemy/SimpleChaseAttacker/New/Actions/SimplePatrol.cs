@@ -1,10 +1,13 @@
+using System;
+using System.Collections.Generic;
 using Entity;
 using UnityEngine;
 using Utilities;
 
 namespace AI
 {
-    public class SimplePatrol : PatrolBase
+    
+    public class SimplePatrol : MonoBehaviour
     {
         [Header("Components")]
         [SerializeField] private MovementController movement;
@@ -14,11 +17,18 @@ namespace AI
         // Very simple patrol point
         // between two points, dest point must be to the right.
         // patrols from start point to dest point to right.
-        
-        [SerializeField] private Transform patrolPoint0;
-        [SerializeField] private Transform patrolPoint1;
 
-        private int _currentTargetPatrolPointIndex;
+        [SerializeField] private bool ignorePatrolPointY = true;
+        [SerializeField] private bool isFlyingPath = false;
+        [SerializeField] private bool movesFasterFurtherAway = false;
+        
+        [SerializeField] private PatrolPath patrolPath;
+        
+        // [SerializeField] private Transform patrolPoint0;
+        // [SerializeField] private Transform patrolPoint1;
+        // private int _currentTargetPatrolPointIndex;
+        
+        
         private FacingDirection _facingDirection = FacingDirection.Right;
 
         private const float Speed = 2f;
@@ -26,12 +36,10 @@ namespace AI
         private void Start()
         {
             _spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-            Debug.Assert(patrolPoint0 != null, this);
-            Debug.Assert(patrolPoint1 != null, this);
-            _currentTargetPatrolPointIndex = 0;
+            patrolPath.Validate();
         }
 
-        public override void UpdatePatrol()
+        public void UpdatePatrol()
         {
             MoveTowardsDestination();
         }
@@ -39,23 +47,53 @@ namespace AI
         private void MoveTowardsDestination()
         {
             Transform targetPatrolPoint = UpdateTargetPatrolPoint();
-            
-            UpdateFacingDirection(targetPatrolPoint);
-            
-            MoveInDirection();
+
+            if (isFlyingPath)
+            {
+                Vector2 targetPosition = targetPatrolPoint.position;
+                Vector2 thisPosition = transform.position;
+                Vector2 direction = (targetPosition - thisPosition);
+                Vector2 moveVector = direction * Speed;
+                if (!movesFasterFurtherAway)
+                {
+                    moveVector.Normalize();
+                }
+                movement.MoveAtSpeed(moveVector);
+            }
+            else
+            {
+                UpdateFacingDirection(targetPatrolPoint);
+                MoveInDirection();
+            }
         }
 
         private Transform UpdateTargetPatrolPoint()
         {
-            Transform targetPatrolPoint = _currentTargetPatrolPointIndex == 0 ? patrolPoint0 : patrolPoint1;
+            Transform targetPatrolPoint = patrolPath.GetCurrentPatrolPoint();
 
-            // If we're close enough to our destination point, update the destination
-            float targetPatrolPointX = targetPatrolPoint.position.x;
-            float thisPositionX = transform.position.x;
-            if (Mathf.Abs((thisPositionX * thisPositionX) - (targetPatrolPointX * targetPatrolPointX)) < distanceThreshold * distanceThreshold)
+            bool isAtPatrolPoint = false;
+            if (ignorePatrolPointY)
             {
-                _currentTargetPatrolPointIndex = (_currentTargetPatrolPointIndex + 1) % 2;
-                targetPatrolPoint = _currentTargetPatrolPointIndex == 0 ? patrolPoint0 : patrolPoint1;
+                // If we're close enough to our destination point, update the destination
+                float targetPatrolPointX = targetPatrolPoint.position.x;
+                float thisPositionX = transform.position.x;
+                isAtPatrolPoint =
+                    Mathf.Abs((thisPositionX * thisPositionX) - (targetPatrolPointX * targetPatrolPointX)) <
+                    distanceThreshold * distanceThreshold;
+            }
+            else
+            {
+                Vector2 targetPatrolPointV2 = targetPatrolPoint.position;
+                Vector2 thisPosition = transform.position;
+                float num1 = targetPatrolPointV2.x - thisPosition.x;
+                float num2 = targetPatrolPointV2.y - thisPosition.y;
+                float sqDistance = (float)((double) num1 * (double) num1 + (double) num2 * (double) num2);
+                isAtPatrolPoint = sqDistance < distanceThreshold * distanceThreshold;
+            }
+            
+            if (isAtPatrolPoint)
+            {
+                patrolPath.SetNextPatrolPoint();
             }
 
             return targetPatrolPoint;
@@ -78,7 +116,6 @@ namespace AI
 
         private void MoveInDirection()
         {
-            // Move
             float fallSpeed = !movement.customCollider2D.GetCollisionBelow() ? Physics2D.gravity.y : 0f;
             Vector2 moveVector = new Vector2((float)_facingDirection * Speed, fallSpeed);
             movement.MoveAtSpeed(moveVector);
@@ -86,16 +123,44 @@ namespace AI
 
         private void OnDrawGizmosSelected()
         {
-            if (!patrolPoint0 || !patrolPoint1) return;
-            
-            var patrolPoint0Position = patrolPoint0.position;
-            var patrolPoint1Position = patrolPoint1.position;
-                
             const float wireSphereRadius = 0.5f;
-            Gizmos.DrawWireSphere(patrolPoint0Position, wireSphereRadius);
-            Gizmos.DrawWireSphere(patrolPoint1Position, wireSphereRadius);
-                
-            Gizmos.DrawLine(patrolPoint0Position, patrolPoint1Position);
+            
+            List<Transform> patrolPoints = patrolPath.GetPatrolPoints();
+            if (patrolPoints.Count == 0) return;
+            
+            for (var index = 0; index < patrolPoints.Count - 1; index++)
+            {
+                // Draw current patrol point sphere
+                Transform currPatrolPoint = patrolPoints[index];
+                if (currPatrolPoint == null) continue;
+                Vector3 currPatrolPointPosition = currPatrolPoint.position;
+                Gizmos.DrawWireSphere(currPatrolPointPosition, wireSphereRadius);
+
+                // Draw line to next point
+                Transform nextPatrolPoint = patrolPoints[index + 1];
+                if (nextPatrolPoint == null) continue;
+                Vector3 nextPatrolPointPosition = nextPatrolPoint.position;
+
+                Gizmos.DrawLine(currPatrolPointPosition, nextPatrolPointPosition);
+            }
+            
+            // Draw last sphere
+            Transform lastPatrolPoint = patrolPoints[patrolPoints.Count - 1];
+            if (lastPatrolPoint != null)
+            {
+                Gizmos.DrawWireSphere(patrolPoints[patrolPoints.Count - 1].position, wireSphereRadius);
+
+                // If its a cycle, draw a line from the end to the start
+                if (patrolPath.GetPatrolType() == PatrolPath.PatrolType.Cycle)
+                {
+                    Transform firstPatrolPoint = patrolPoints[0];
+                    if (firstPatrolPoint != null)
+                    {
+                        Gizmos.DrawLine(lastPatrolPoint.position, firstPatrolPoint.position);
+                    }
+                }
+            }
+
         }
     }
 }

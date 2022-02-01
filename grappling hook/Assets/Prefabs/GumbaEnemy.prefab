@@ -296,8 +296,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movement: {fileID: 6696026842710103770}
   distanceThreshold: 0.5
-  patrolPoint0: {fileID: 6696026842417990442}
-  patrolPoint1: {fileID: 6696026842625241249}
+  ignorePatrolPointY: 1
+  isFlyingPath: 0
+  movesFasterFurtherAway: 0
+  patrolPath:
+    patrolPoints:
+    - {fileID: 6696026842417990442}
+    - {fileID: 6696026842625241249}
+    patrolType: 0
+    currentPatrolDirection: 0
+    currentPatrolPoint: 0
 --- !u!114 &6696026842710103774
 MonoBehaviour:
   m_ObjectHideFlags: 0
