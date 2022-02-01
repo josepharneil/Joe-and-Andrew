@@ -43,10 +43,8 @@ namespace Enemy
             {
                 return false;
             }
-            print(raycastHits[0].transform.gameObject.layer + targetLayer);
             // If the very first raycast hit is the target, return true!
-            return raycastHits[0].transform.gameObject.layer == targetLayer;
-
+            return (1 << raycastHits[0].transform.gameObject.layer & (targetLayer)) != 0;
         }
 
         private void OnDrawGizmosSelected()

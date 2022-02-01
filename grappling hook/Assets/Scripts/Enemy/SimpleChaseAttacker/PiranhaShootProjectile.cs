@@ -19,13 +19,16 @@ namespace Enemy
 
         private readonly List<PiranhaFireball> _livePiranhaProjectiles = new List<PiranhaFireball>();
 
-        [UsedImplicitly] public void UpdateAttack()
-        {
-            TryShootProjectile();
-            UpdateProjectiles();
-        }
+        // [UsedImplicitly] public void UpdateAttack()
+        // {
+        //     TryShootProjectile();
+        //     UpdateProjectiles();
+        // }
 
-        private void TryShootProjectile()
+        /// <summary>
+        /// Attempt to shoot a new projectile.
+        /// </summary>
+        [UsedImplicitly] public void TryShootProjectile()
         {
             if (_attackIsOnCooldown)
             {
@@ -43,8 +46,13 @@ namespace Enemy
             }
         }
         
-        public void UpdateProjectiles()
+        /// <summary>
+        /// Updates the state of all projectiles.
+        /// </summary>
+        [UsedImplicitly] public void UpdateProjectiles()
         {
+            if(_livePiranhaProjectiles.Count == 0) return;
+            
             List<int> indexesToDelete = new List<int>
             {
                 Capacity = _livePiranhaProjectiles.Count
@@ -88,7 +96,11 @@ namespace Enemy
             }
         }
 
-        public bool AreAllProjectilesDestroyed()
+        /// <summary>
+        /// Checks if all projectiles have been destroyed.
+        /// </summary>
+        /// <returns></returns>
+        [UsedImplicitly] public bool AreAllProjectilesDestroyed()
         {
             return _livePiranhaProjectiles.Count == 0;
         }
