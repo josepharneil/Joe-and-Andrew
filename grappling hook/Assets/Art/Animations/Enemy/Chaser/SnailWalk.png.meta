@@ -1,0 +1,396 @@
+fileFormatVersion: 2
+guid: 6a353544d86a5ee4ca91cc9408e156b1
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2948560673539047123
+    second: SnailWalk_0
+  - first:
+      213: 5354897135275658284
+    second: SnailWalk_1
+  - first:
+      213: -2372541831941741102
+    second: SnailWalk_2
+  - first:
+      213: -1264141820244690107
+    second: SnailWalk_3
+  - first:
+      213: 4529288814502980291
+    second: SnailWalk_4
+  - first:
+      213: -8131602642996888173
+    second: SnailWalk_5
+  - first:
+      213: 40179292775344977
+    second: SnailWalk_6
+  - first:
+      213: -3258344521386315125
+    second: SnailWalk_7
+  - first:
+      213: -8085108649132874484
+    second: SnailWalk_8
+  - first:
+      213: -2546372992906965030
+    second: SnailWalk_9
+  - first:
+      213: -3044897700304002528
+    second: SnailWalk_10
+  - first:
+      213: -7134715928150122131
+    second: SnailWalk_11
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: SnailWalk_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 17
+        height: 18
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d21c40780bb9417d0800000000000000
+      internalID: -2948560673539047123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SnailWalk_1
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 0
+        width: 18
+        height: 18
+      alignment: 9
+      pivot: {x: 0.5277778, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2cccd4b29a605a40800000000000000
+      internalID: 5354897135275658284
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SnailWalk_2
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 0
+        width: 18
+        height: 18
+      alignment: 9
+      pivot: {x: 0.5833333, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d5ab5c26c9031fd0800000000000000
+      internalID: -2372541831941741102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SnailWalk_3
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 0
+        width: 21
+        height: 18
+      alignment: 9
+      pivot: {x: 0.64285713, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54b799256bdd47ee0800000000000000
+      internalID: -1264141820244690107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SnailWalk_4
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 0
+        width: 24
+        height: 18
+      alignment: 9
+      pivot: {x: 0.6041667, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3caa999fd244bde30800000000000000
+      internalID: 4529288814502980291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SnailWalk_5
+      rect:
+        serializedVersion: 2
+        x: 123
+        y: 0
+        width: 24
+        height: 18
+      alignment: 9
+      pivot: {x: 0.6458333, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39dfa81ba7eb62f80800000000000000
+      internalID: -8131602642996888173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SnailWalk_6
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 0
+        width: 25
+        height: 18
+      alignment: 9
+      pivot: {x: 0.58, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15b63399adebe8000800000000000000
+      internalID: 40179292775344977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SnailWalk_7
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 0
+        width: 24
+        height: 18
+      alignment: 9
+      pivot: {x: 0.5208333, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b82bde6dbe808c2d0800000000000000
+      internalID: -3258344521386315125
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SnailWalk_8
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 0
+        width: 25
+        height: 18
+      alignment: 9
+      pivot: {x: 0.58, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c052ff5358cebcf80800000000000000
+      internalID: -8085108649132874484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SnailWalk_9
+      rect:
+        serializedVersion: 2
+        x: 241
+        y: 0
+        width: 24
+        height: 18
+      alignment: 9
+      pivot: {x: 0.6041667, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: adfc124114779acd0800000000000000
+      internalID: -2546372992906965030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SnailWalk_10
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 0
+        width: 22
+        height: 18
+      alignment: 9
+      pivot: {x: 0.6136364, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 022e9f39ca95eb5d0800000000000000
+      internalID: -3044897700304002528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SnailWalk_11
+      rect:
+        serializedVersion: 2
+        x: 297
+        y: 0
+        width: 22
+        height: 18
+      alignment: 9
+      pivot: {x: 0.5681818, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d616a492aa56cfc90800000000000000
+      internalID: -7134715928150122131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
