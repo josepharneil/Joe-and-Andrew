@@ -61,9 +61,9 @@ namespace Entity
             }
 
             GameObject collidedGameObject = col.gameObject;
-            if ((collidedGameObject.gameObject.layer & damagesWhat) != 0) return;
+            if (((1 << collidedGameObject.layer) & damagesWhat) == 0) return;
 
-            collidedGameObject.gameObject.TryGetComponent<EntityHitbox>(out EntityHitbox entityHitbox);
+            collidedGameObject.TryGetComponent<EntityHitbox>(out EntityHitbox entityHitbox);
             if (entityHitbox)
             {
                 EntityHitData hitData = new EntityHitData
