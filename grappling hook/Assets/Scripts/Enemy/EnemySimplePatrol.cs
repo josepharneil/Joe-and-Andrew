@@ -29,11 +29,11 @@ namespace Enemy
         {
             if (_facingDirection == FacingDirection.Right)
             {
-                movementController.MoveAtSpeed(Vector2.right * speed);
+                movementController.Move(Vector2.right * speed);
             }
             else
             {
-                movementController.MoveAtSpeed(Vector2.left * speed);
+                movementController.Move(Vector2.left * speed);
             }
 
             const float threshold = 0.1f;

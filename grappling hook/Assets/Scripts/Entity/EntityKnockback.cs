@@ -48,7 +48,7 @@ namespace Entity
         {
             _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, decelerationRate*Time.deltaTime);
             _knockbackStrength = Mathf.Lerp(_knockbackStrength, 0f, decelerationCurve.Evaluate(_lerpCurrent));
-            movementController.MoveAtSpeed(_knockbackDirection * _knockbackStrength);
+            movementController.Move(_knockbackDirection * _knockbackStrength);
             
             if (_knockbackStrength <= 0.05f)
             {

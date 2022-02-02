@@ -87,7 +87,7 @@ public class EnemyPathing : MonoBehaviour
         {
             lerpCurrent = 0f;
         }
-        movementController.MoveAtSpeed(new Vector2(currentSpeed, 0f));
+        movementController.Move(new Vector2(currentSpeed, 0f));
     }
 
     private void Accelerate(Vector3 target,float goalSpeed)

@@ -155,7 +155,7 @@ public class PlayerInputs : MonoBehaviour
                     }
                     CheckGrounded();
                     CalculateGravity();
-                    movementController.MoveAtSpeed(_velocity);
+                    movementController.Move(_velocity);
                 }
             }
         }
@@ -173,7 +173,7 @@ public class PlayerInputs : MonoBehaviour
             //move works by taking in a displacement, firing raycasts in the directions of the displacement
             //then if the raycasts collide with anything the displacement is altered to be the distance from the player edge to the collider
             //then at the end of controller it uses transform.translate(displacement) with the edited displacement 
-            movementController.MoveAtSpeed(_velocity);
+            movementController.Move(_velocity);
         }
 
         if (!isAttacking || (isAttacking && playerCombatPrototyping.data.canChangeDirectionsDuringAttack))

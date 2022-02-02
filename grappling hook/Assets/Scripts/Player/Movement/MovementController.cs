@@ -8,12 +8,12 @@ namespace Entity
         [Header("Components")]
         public Physics.CustomCollider2D customCollider2D;
 
-        public void MoveAtSpeed(Vector2 velocity)
+        public void Move(Vector2 velocity)
         {
-            Move(velocity * Time.deltaTime);
+            Translate(velocity * Time.deltaTime);
         }
         
-        private void Move(Vector2 displacement)
+        private void Translate(Vector2 displacement)
         {
             //sets the origins for all the raycasts
             customCollider2D.UpdateRaycastOrigins();

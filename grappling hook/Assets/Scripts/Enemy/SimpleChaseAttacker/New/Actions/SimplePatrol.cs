@@ -50,20 +50,34 @@ namespace AI
 
             if (isFlyingPath)
             {
-                Vector2 targetPosition = targetPatrolPoint.position;
-                Vector2 thisPosition = transform.position;
-                Vector2 direction = (targetPosition - thisPosition);
-                Vector2 moveVector = direction * Speed;
-                if (!movesFasterFurtherAway)
-                {
-                    moveVector.Normalize();
-                }
-                movement.MoveAtSpeed(moveVector);
+                FlyTowardsTarget(targetPatrolPoint);
             }
             else
             {
-                UpdateFacingDirection(targetPatrolPoint);
-                MoveInDirection();
+                WalkTowardsTarget(targetPatrolPoint);
+            }
+            _spriteRenderer.flipX = _facingDirection != FacingDirection.Right;
+        }
+
+        private void FlyTowardsTarget(Transform targetPatrolPoint)
+        {
+            Vector2 targetPosition = targetPatrolPoint.position;
+            Vector2 thisPosition = transform.position;
+            Vector2 direction = (targetPosition - thisPosition);
+            Vector2 moveVector = direction * Speed;
+            if (!movesFasterFurtherAway)
+            {
+                moveVector.Normalize();
+            }
+
+            movement.Move(moveVector);
+            if (moveVector.x > 0)
+            {
+                _facingDirection = FacingDirection.Left;
+            }
+            else if (moveVector.x > 0)
+            {
+                _facingDirection = FacingDirection.Right;
             }
         }
 
@@ -77,9 +91,7 @@ namespace AI
                 // If we're close enough to our destination point, update the destination
                 float targetPatrolPointX = targetPatrolPoint.position.x;
                 float thisPositionX = transform.position.x;
-                isAtPatrolPoint =
-                    Mathf.Abs((thisPositionX * thisPositionX) - (targetPatrolPointX * targetPatrolPointX)) <
-                    distanceThreshold * distanceThreshold;
+                isAtPatrolPoint = Mathf.Abs(thisPositionX - targetPatrolPointX) < distanceThreshold;
             }
             else
             {
@@ -93,32 +105,26 @@ namespace AI
             
             if (isAtPatrolPoint)
             {
-                patrolPath.SetNextPatrolPoint();
+                targetPatrolPoint = patrolPath.SetNextPatrolPoint();
             }
 
             return targetPatrolPoint;
         }
-
-        private void UpdateFacingDirection(Transform currentTargetPatrolPoint)
+        
+        private void WalkTowardsTarget(Transform currentTargetPatrolPoint)
         {
             // Update facing direction
             if (transform.position.IsRightOf(currentTargetPatrolPoint.position))
             {
                 _facingDirection = FacingDirection.Left;
-                _spriteRenderer.flipX = true;
             }
             else if (transform.position.IsLeftOf(currentTargetPatrolPoint.position))
             {
                 _facingDirection = FacingDirection.Right;
-                _spriteRenderer.flipX = false;
             }
-        }
-
-        private void MoveInDirection()
-        {
             float fallSpeed = !movement.customCollider2D.GetCollisionBelow() ? Physics2D.gravity.y : 0f;
             Vector2 moveVector = new Vector2((float)_facingDirection * Speed, fallSpeed);
-            movement.MoveAtSpeed(moveVector);
+            movement.Move(moveVector);
         }
 
         private void OnDrawGizmosSelected()

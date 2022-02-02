@@ -6,12 +6,12 @@ namespace AI
 {
     [Serializable] public class PatrolPath
     {
-        public enum PatrolType : byte
+        public enum PatrolType
         {
             Ladder, // Loops in a single direction, then goes back down, like a ladder.
             Cycle, // Loops around the patrol.
         }
-        public enum PatrolDirection : byte
+        public enum PatrolDirection
         {
             Forwards,
             Backwards
@@ -37,7 +37,7 @@ namespace AI
             return patrolPoints[currentPatrolPoint];
         }
 
-        public void SetNextPatrolPoint()
+        public Transform SetNextPatrolPoint()
         {
             if (currentPatrolDirection == PatrolDirection.Forwards)
             {
@@ -50,21 +50,20 @@ namespace AI
                             // Go back down the ladder.
                             currentPatrolPoint--;
                             currentPatrolDirection = PatrolDirection.Backwards;
-                            return;
+                            break;
                         case PatrolType.Cycle:
                             // Start from the beginning.
                             currentPatrolPoint = 0;
-                            return;
+                            break;
                         default:
                             Debug.LogError("Unimplemented patrol type.");
-                            return;
+                            break;
                     }
                 }
                 // Otherwise keep going
                 else
                 {
                     currentPatrolPoint++;
-                    return;
                 }
             }
             else // Backwards
@@ -78,23 +77,23 @@ namespace AI
                             // Go back down the ladder.
                             currentPatrolPoint++;
                             currentPatrolDirection = PatrolDirection.Forwards;
-                            return;
+                            break;
                         case PatrolType.Cycle:
                             // Start from the beginning.
                             currentPatrolPoint = patrolPoints.Count - 1;
-                            return;
+                            break;
                         default:
                             Debug.LogError("Unimplemented patrol type.");
-                            return;
+                            break;
                     }
                 }
                 // Otherwise keep going
                 else
                 {
                     currentPatrolPoint--;
-                    return;
                 }
             }
+            return patrolPoints[currentPatrolPoint];
         }
 
 

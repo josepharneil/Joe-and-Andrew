@@ -38,7 +38,7 @@ public abstract class ChasePathing : MonoBehaviour
             _lerpCurrent = 0f;
         }
         //ToDo AK: allow for decent vertical movement
-        movement.MoveAtSpeed(new Vector2(_currentSpeed, 0f));
+        movement.Move(new Vector2(_currentSpeed, 0f));
     }
 
     private void Accelerate(Vector2 target, float goalSpeed)
