@@ -16,12 +16,12 @@ namespace Enemy
             if (transform.position.IsLeftOf(chaseTarget.position))
             {
                 movementController.Move(new Vector2(chaseSpeed,Physics2D.gravity.y));
-                spriteRenderer.flipX = true;
+                spriteRenderer.flipX = false;
             }
             if (transform.position.IsRightOf(chaseTarget.position))
             {
                 movementController.Move(new Vector2(-chaseSpeed,Physics2D.gravity.y));
-                spriteRenderer.flipX = false;
+                spriteRenderer.flipX = true;
             }
         }
     }

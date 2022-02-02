@@ -4005,11 +4005,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &1803385323 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 885005564695595241, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
-  m_PrefabInstance: {fileID: 3849040237323798008}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2081749351
 GameObject:
   m_ObjectHideFlags: 0
@@ -4306,14 +4301,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 885005564695595216, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 885005564695595216, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 95e764385dd3b424895e71956da2e165, type: 2}
     - target: {fileID: 885005564695595224, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
       propertyPath: target
       value: 
@@ -4322,44 +4309,7 @@ PrefabInstance:
       propertyPath: chaseTarget
       value: 
       objectReference: {fileID: 1608203359}
-    - target: {fileID: 885005564695595225, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
-      propertyPath: spriteRenderer
-      value: 
-      objectReference: {fileID: 1803385323}
-    - target: {fileID: 885005564695595236, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 885005564695595236, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 885005564695595240, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
-      propertyPath: distanceThreshold
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 885005564695595241, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -2948560673539047123, guid: 6a353544d86a5ee4ca91cc9408e156b1, type: 3}
-    - target: {fileID: 885005564695595241, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
-      propertyPath: m_SpriteSortPoint
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 885005564695595244, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
-      propertyPath: m_SpriteTilingProperty.pivot.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 885005564695595244, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
-      propertyPath: m_SpriteTilingProperty.oldSize.x
-      value: 1.0625
-      objectReference: {fileID: 0}
-    - target: {fileID: 885005564695595244, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
-      propertyPath: m_SpriteTilingProperty.oldSize.y
-      value: 1.125
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 885005564695595218, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
 --- !u!4 &4117031597792064287 stripped
 Transform:
