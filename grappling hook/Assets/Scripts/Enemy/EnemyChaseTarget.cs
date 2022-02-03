@@ -1,4 +1,5 @@
 using Entity;
+using JetBrains.Annotations;
 using UnityEngine;
 using Utilities;
 
@@ -11,7 +12,7 @@ namespace Enemy
         [SerializeField] private float chaseSpeed = 5f;
         [SerializeField] private SpriteRenderer spriteRenderer;
         
-        public void UpdateChaseTarget()
+        [UsedImplicitly] public void UpdateChaseTarget()
         {
             if (transform.position.IsLeftOf(chaseTarget.position))
             {

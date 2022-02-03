@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Enemy
@@ -10,7 +11,7 @@ namespace Enemy
         [SerializeField] private LayerMask targetLayer;
         [SerializeField] private LayerMask groundLayer;
 
-        public bool CheckCanSeeTarget()
+        [UsedImplicitly] public bool CheckCanSeeTarget()
         {
             Vector2 thisPosition = (Vector2)transform.position;
             Vector2 targetPosition = target.position;

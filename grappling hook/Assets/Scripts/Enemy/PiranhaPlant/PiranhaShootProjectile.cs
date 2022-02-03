@@ -19,12 +19,6 @@ namespace Enemy
 
         private readonly List<PiranhaFireball> _livePiranhaProjectiles = new List<PiranhaFireball>();
 
-        // [UsedImplicitly] public void UpdateAttack()
-        // {
-        //     TryShootProjectile();
-        //     UpdateProjectiles();
-        // }
-
         /// <summary>
         /// Attempt to shoot a new projectile.
         /// </summary>
