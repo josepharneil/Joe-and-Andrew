@@ -8,9 +8,9 @@ namespace Enemy
     {
         private readonly List<GameObject> _enemiesToDestroy = new List<GameObject>();
 
-        [UsedImplicitly] public void AddForDestruction(GameObject gameObjectToDestroy)
+        [UsedImplicitly] public static void AddForDestruction(GameObject gameObjectToDestroy)
         {
-            _enemiesToDestroy.Add(gameObjectToDestroy);
+            Instance._enemiesToDestroy.Add(gameObjectToDestroy);
         }
 
         private void Update()
