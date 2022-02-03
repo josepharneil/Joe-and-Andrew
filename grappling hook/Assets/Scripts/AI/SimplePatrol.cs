@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace AI
 {
-    
     public class SimplePatrol : MonoBehaviour
     {
         [Header("Components")]
