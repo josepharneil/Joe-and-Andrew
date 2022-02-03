@@ -4017,12 +4017,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2081749351}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_Father: {fileID: 2082468887}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2082468886
 GameObject:
@@ -4052,6 +4052,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 647232626}
+  - {fileID: 2081749353}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4245,20 +4246,12 @@ PrefabInstance:
     m_TransformParent: {fileID: 1774038816}
     m_Modifications:
     - target: {fileID: 404763605569262415, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
-      propertyPath: target
-      value: 
-      objectReference: {fileID: 1608203359}
-    - target: {fileID: 404763605569262415, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
       propertyPath: chaseTarget
       value: 
       objectReference: {fileID: 1608203359}
     - target: {fileID: 885005564573824740, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
       propertyPath: m_Name
       value: KoopaEnemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 885005564573824740, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 885005564573824743, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
       propertyPath: m_RootOrder
@@ -4302,30 +4295,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 885005564573824743, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 885005564695595224, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
-      propertyPath: target
-      value: 
-      objectReference: {fileID: 1608203359}
-    - target: {fileID: 885005564695595225, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
-      propertyPath: chaseTarget
-      value: 
-      objectReference: {fileID: 1608203359}
-    - target: {fileID: 885005564695595244, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
-      propertyPath: m_Size.x
-      value: 1.0625
-      objectReference: {fileID: 0}
-    - target: {fileID: 885005564695595244, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
-      propertyPath: m_Size.y
-      value: 1.125
-      objectReference: {fileID: 0}
-    - target: {fileID: 885005564695595244, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
-      propertyPath: m_Offset.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 885005564695595244, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
-      propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
