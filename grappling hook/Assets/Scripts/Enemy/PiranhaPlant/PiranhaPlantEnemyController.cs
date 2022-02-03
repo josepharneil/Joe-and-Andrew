@@ -20,6 +20,13 @@ namespace Enemy
         private float _attackTimer = 0f;
         private bool _attackIsOnCooldown = false;
         
+        // TODO
+        // Note to self:
+        // A possible eventual implementation of projectiles could involve a "ProjectileManager"
+        // that stores a bunch of lists of data (ie a struct of lists instead of a list of structs)
+        // That way we can very quickly iterate over ALL projectiles
+        // This could get quite complex, but could be important if we do any bullet hell style levels for efficient
+        // bullet hells.
         private readonly List<PiranhaFireball> _livePiranhaProjectiles = new List<PiranhaFireball>();
 
         #region CanSeeTarget
