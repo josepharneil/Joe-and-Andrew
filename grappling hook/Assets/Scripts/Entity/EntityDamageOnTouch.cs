@@ -51,19 +51,18 @@ namespace Entity
             if (((1 << collidedGameObject.layer) & damagesWhat) == 0) return;
 
             collidedGameObject.TryGetComponent<EntityHitbox>(out EntityHitbox entityHitbox);
-            if (entityHitbox)
+            if (!entityHitbox) return;
+            
+            EntityHitData hitData = new EntityHitData
             {
-                EntityHitData hitData = new EntityHitData
-                {
-                    DealsDamage = true,
-                    DamageToHealth = damage,
+                DealsDamage = true,
+                DamageToHealth = damage,
                     
-                    DealsKnockback = true,
-                    KnockbackOrigin = transform.position,
-                    KnockbackStrength = knockbackStrength
-                };
-                entityHitbox.Hit(hitData);
-            }
+                DealsKnockback = true,
+                KnockbackOrigin = transform.position,
+                KnockbackStrength = knockbackStrength
+            };
+            entityHitbox.Hit(hitData);
         }
     }
 }

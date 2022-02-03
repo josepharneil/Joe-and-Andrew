@@ -392,7 +392,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6696026843032660181, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6696026843032660182, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
       propertyPath: m_RootOrder
@@ -4212,6 +4212,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FlyingGumbaEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 7987739823244987656, guid: 07e19a947cc8e4111a1d3493208e725a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7987739823244987659, guid: 07e19a947cc8e4111a1d3493208e725a, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -4265,6 +4269,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1774038816}
     m_Modifications:
+    - target: {fileID: 404763605569262415, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 1608203359}
     - target: {fileID: 885005564573824740, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
       propertyPath: m_Name
       value: KoopaEnemy
@@ -4354,7 +4362,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6696026843032660181, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6696026843032660182, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
       propertyPath: m_RootOrder
@@ -4420,7 +4428,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 886963155510315076, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 886963155510315079, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
       propertyPath: m_RootOrder

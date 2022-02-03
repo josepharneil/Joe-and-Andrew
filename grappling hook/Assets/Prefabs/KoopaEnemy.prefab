@@ -49,15 +49,13 @@ GameObject:
   - component: {fileID: 885005564695595245}
   - component: {fileID: 885005564695595242}
   - component: {fileID: 885005564695595246}
-  - component: {fileID: 885005564695595224}
   - component: {fileID: 885005564695595243}
-  - component: {fileID: 885005564695595240}
   - component: {fileID: 885005564695595247}
   - component: {fileID: 885005564695595217}
   - component: {fileID: 885005564695595216}
   - component: {fileID: 885005564695595219}
-  - component: {fileID: 885005564695595225}
   - component: {fileID: 6444012343683805615}
+  - component: {fileID: 404763605569262415}
   m_Layer: 9
   m_Name: Koopa
   m_TagString: Enemy
@@ -244,26 +242,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2112
   debugDraw: 0
---- !u!114 &885005564695595224
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 885005564695595237}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd13c62c8bc944aa79d913c3811f0659, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxSightDistance: 20
-  target: {fileID: 0}
-  targetLayer:
-    serializedVersion: 2
-    m_Bits: 2048
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!114 &885005564695595243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,30 +255,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customCollider2D: {fileID: 885005564695595246}
---- !u!114 &885005564695595240
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 885005564695595237}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8a18cff9f9cd4b6ab4b3c3b4d443df8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movement: {fileID: 885005564695595243}
-  distanceThreshold: 2
-  ignorePatrolPointY: 1
-  isFlyingPath: 0
-  movesFasterFurtherAway: 0
-  patrolPath:
-    patrolPoints:
-    - {fileID: 885005564916372763}
-    - {fileID: 885005564712840848}
-    patrolType: 0
-    currentPatrolDirection: 0
-    currentPatrolPoint: 0
 --- !u!114 &885005564695595247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -391,22 +345,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &885005564695595225
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 885005564695595237}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef2467131b2f48ec9af377cf22ba2131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movementController: {fileID: 885005564695595243}
-  chaseTarget: {fileID: 0}
-  chaseSpeed: 5
-  spriteRenderer: {fileID: 885005564695595241}
 --- !u!114 &6444012343683805615
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -420,6 +358,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyParentGameObject: {fileID: 885005564573824740}
+--- !u!114 &404763605569262415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885005564695595237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0366ee929ac44758b36c8dd78f93c8c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementController: {fileID: 885005564695595243}
+  patrolPath:
+    patrolPoints:
+    - {fileID: 885005564916372763}
+    - {fileID: 885005564712840848}
+    patrolType: 0
+    currentPatrolDirection: 0
+    currentPatrolPoint: 0
+  spriteRenderer: {fileID: 885005564695595241}
+  patrolPointDistanceThreshold: 1
+  patrolSpeed: 2
+  chaseSpeed: 5
+  target: {fileID: 0}
+  sightRange: 10
 --- !u!1 &885005564712840849
 GameObject:
   m_ObjectHideFlags: 0

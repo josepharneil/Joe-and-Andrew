@@ -1,3 +1,4 @@
+using System;
 using AI;
 using Entity;
 using JetBrains.Annotations;
@@ -23,7 +24,17 @@ namespace Enemy
             WalkTowardsTarget();
             spriteRenderer.flipX = _facingDirection != FacingDirection.Right;
         }
-        
+
+        private void OnValidate()
+        {
+            patrolPath.Validate();
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            patrolPath.DrawGizmos();
+        }
+
         private void WalkTowardsTarget()
         {
             // Current target patrol point.

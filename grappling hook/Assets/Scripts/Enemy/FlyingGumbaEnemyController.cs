@@ -18,6 +18,16 @@ namespace Enemy
         [SerializeField] private float patrolPointDistanceThreshold = 1f;
         [SerializeField] private float speed = 2f;
         [SerializeField] private bool movesFasterFurtherAway = true;
+
+        private void OnValidate()
+        {
+            patrolPath.Validate();
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            patrolPath.DrawGizmos();
+        }
         
         [UsedImplicitly] public void UpdatePatrol()
         {
