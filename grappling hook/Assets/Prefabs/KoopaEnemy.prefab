@@ -172,10 +172,10 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.5}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
+    pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1.0625, y: 1.125}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
@@ -183,7 +183,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.2, y: 1}
+  m_Size: {x: 1.0625, y: 1.125}
   m_EdgeRadius: 0
 --- !u!50 &885005564695595245
 Rigidbody2D:
@@ -382,7 +382,7 @@ MonoBehaviour:
   patrolPointDistanceThreshold: 1
   patrolSpeed: 2
   chaseSpeed: 5
-  target: {fileID: 0}
+  chaseTarget: {fileID: 0}
   sightRange: 10
 --- !u!1 &885005564712840849
 GameObject:

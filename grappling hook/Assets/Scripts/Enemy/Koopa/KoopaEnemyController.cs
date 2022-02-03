@@ -20,7 +20,7 @@ namespace Enemy
         [SerializeField] private float chaseSpeed = 5f;
 
         [Header("CanSeeTarget")] 
-        [SerializeField] private Transform target;
+        [SerializeField] private Transform chaseTarget;
         [SerializeField] private float sightRange = 10f;
         
         #region UnityEvents
@@ -28,10 +28,9 @@ namespace Enemy
         {
             patrolPath.DrawGizmos();
             
-            if (target == null) return;
-
+            if (chaseTarget == null) return;
             var thisPosition = transform.position;
-            var targetPosition = target.position;
+            var targetPosition = chaseTarget.position;
             Gizmos.DrawRay(thisPosition, (targetPosition - thisPosition).normalized * sightRange);
             Gizmos.DrawWireSphere(thisPosition, sightRange);
         }
@@ -46,20 +45,19 @@ namespace Enemy
         #region Patrol
         [UsedImplicitly] public void UpdatePatrol()
         {
-            MoveTowardsTarget(patrolSpeed);
-        }
-
-        private void MoveTowardsTarget(float moveSpeed)
-        {
             // Current target patrol point.
             Transform targetPatrolPoint = patrolPath.UpdatePatrolPath(transform, patrolPointDistanceThreshold, true);
+            MoveTowardsTarget(targetPatrolPoint, patrolSpeed);
+        }
 
+        private void MoveTowardsTarget(Transform moveTarget, float moveSpeed)
+        {
             // Update facing direction
-            if (transform.position.IsRightOf(targetPatrolPoint.position))
+            if (transform.position.IsRightOf(moveTarget.position))
             {
                 _facingDirection = FacingDirection.Left;
             }
-            else if (transform.position.IsLeftOf(targetPatrolPoint.position))
+            else if (transform.position.IsLeftOf(moveTarget.position))
             {
                 _facingDirection = FacingDirection.Right;
             }
@@ -77,7 +75,7 @@ namespace Enemy
         [UsedImplicitly] public bool CanSeeTarget()
         {
             Vector2 thisPosition = (Vector2)transform.position;
-            Vector2 targetPosition = target.position;
+            Vector2 targetPosition = chaseTarget.position;
 
             return (targetPosition - thisPosition).sqrMagnitude < sightRange * sightRange;
         }
@@ -86,7 +84,7 @@ namespace Enemy
         #region ChaseTarget
         [UsedImplicitly] public void UpdateChase()
         {
-            MoveTowardsTarget(chaseSpeed);
+            MoveTowardsTarget(chaseTarget, chaseSpeed);
         }
         #endregion ChaseTarget
     }

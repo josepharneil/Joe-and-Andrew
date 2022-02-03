@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Entity;
 using JetBrains.Annotations;
@@ -28,6 +29,19 @@ namespace Enemy
         // This could get quite complex, but could be important if we do any bullet hell style levels for efficient
         // bullet hells.
         private readonly List<PiranhaFireball> _livePiranhaProjectiles = new List<PiranhaFireball>();
+
+        #region UnityEvents
+
+        private void OnDrawGizmosSelected()
+        {
+            if (target == null) return;
+            var thisPosition = transform.position;
+            var targetPosition = target.position;
+            Gizmos.DrawRay(thisPosition, (targetPosition - thisPosition).normalized * sightRange);
+            Gizmos.DrawWireSphere(thisPosition, sightRange);
+        }
+
+        #endregion
 
         #region CanSeeTarget
         [UsedImplicitly] public bool CanSeeTarget()

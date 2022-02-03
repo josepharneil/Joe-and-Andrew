@@ -85,8 +85,6 @@ namespace Physics
         [Header("Debug")] 
         [SerializeField] private bool debugDraw;
         
-        // public event Action<Collider2D> OnTriggerEnter;
-
         private const float SkinWidth = 0.15f;
         private int _horizontalRayCount = 4;
         private int _verticalRayCount = 4;
@@ -100,7 +98,7 @@ namespace Physics
                 "Collision Mask is 0, this implies we're going to fall through everything and this script is doing nothing.",
                 this);
             Debug.Assert(boxCollider != null, "Missing box collider", this);
-            Debug.Assert(boxCollider.isTrigger, "This should be a trigger", this);
+            Debug.Assert(boxCollider.isTrigger, "This should be a trigger: " + gameObject.name, this);
             gameObject.TryGetComponent<Rigidbody2D>(out Rigidbody2D rigidbody2DForTriggers);
             Debug.Assert(rigidbody2DForTriggers != null, "A rigidbody is required for triggers to active.", this);
             Debug.Assert(rigidbody2DForTriggers.simulated, "Rigidbody needs to be simulated for Triggers to activate", this);
