@@ -137,12 +137,12 @@ GameObject:
   - component: {fileID: 7987739822083289862}
   - component: {fileID: 7987739822083289858}
   - component: {fileID: 7987739822083289863}
-  - component: {fileID: 7987739822083289860}
   - component: {fileID: 7987739822083289859}
   - component: {fileID: 7987739822083289917}
   - component: {fileID: 7987739822083289916}
   - component: {fileID: 7987739822083289919}
   - component: {fileID: 6029189512764351797}
+  - component: {fileID: 1537483738154367950}
   m_Layer: 9
   m_Name: FlyingGumba
   m_TagString: Enemy
@@ -342,32 +342,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customCollider2D: {fileID: 7987739822083289858}
---- !u!114 &7987739822083289860
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7987739822083289865}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8a18cff9f9cd4b6ab4b3c3b4d443df8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movement: {fileID: 7987739822083289863}
-  distanceThreshold: 0.2
-  ignorePatrolPointY: 0
-  isFlyingPath: 1
-  movesFasterFurtherAway: 1
-  patrolPath:
-    patrolPoints:
-    - {fileID: 7987739821847965431}
-    - {fileID: 7987739822034457980}
-    - {fileID: 3445672886637344601}
-    - {fileID: 3445672887968949967}
-    patrolType: 1
-    currentPatrolDirection: 0
-    currentPatrolPoint: 0
 --- !u!114 &7987739822083289859
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -471,6 +445,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyParentGameObject: {fileID: 7987739823244987656}
+--- !u!114 &1537483738154367950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7987739822083289865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bb7b5496df2481f93632175c4182310, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementController: {fileID: 7987739822083289863}
+  patrolPath:
+    patrolPoints:
+    - {fileID: 7987739821847965431}
+    - {fileID: 7987739822034457980}
+    - {fileID: 3445672886637344601}
+    - {fileID: 3445672887968949967}
+    patrolType: 1
+    currentPatrolDirection: 0
+    currentPatrolPoint: 0
+  spriteRenderer: {fileID: 7987739822083289861}
+  patrolPointDistanceThreshold: 0.2
+  speed: 2
+  movesFasterFurtherAway: 1
 --- !u!1 &7987739823244987656
 GameObject:
   m_ObjectHideFlags: 0

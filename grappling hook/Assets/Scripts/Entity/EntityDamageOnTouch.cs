@@ -18,9 +18,6 @@ namespace Entity
         [Header("Customisation")]
         [SerializeField] private int damage = 5;
         [SerializeField] private float knockbackStrength = 2f;
-
-        // [SerializeField] private CustomCollider2D customCollider2D;
-
         [SerializeField] private EntityController entityController;
 
         private void Awake()
@@ -42,17 +39,7 @@ namespace Entity
         {
             isEnabled = false;
         }
-
-        // private void OnEnable()
-        // {
-        //     customCollider2D.OnTriggerEnter += OnCustomTriggerEnter;
-        // }
-        //
-        // private void OnDisable()
-        // {
-        //     customCollider2D.OnTriggerEnter -= OnCustomTriggerEnter;
-        // }
-
+        
         private void OnTriggerStay2D(Collider2D col)
         {
             if (!isEnabled)

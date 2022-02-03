@@ -37,8 +37,7 @@ namespace AI
 
         private void MoveTowardsDestination()
         {
-            Transform targetPatrolPoint = UpdateTargetPatrolPoint();
-
+            Transform targetPatrolPoint = patrolPath.UpdatePatrolPath(transform, distanceThreshold, ignorePatrolPointY);
             if (isFlyingPath)
             {
                 FlyTowardsTarget(targetPatrolPoint);
@@ -71,36 +70,6 @@ namespace AI
                 _facingDirection = FacingDirection.Right;
             }
         }
-
-        private Transform UpdateTargetPatrolPoint()
-        {
-            Transform targetPatrolPoint = patrolPath.GetCurrentPatrolPoint();
-
-            bool isAtPatrolPoint = false;
-            if (ignorePatrolPointY)
-            {
-                // If we're close enough to our destination point, update the destination
-                float targetPatrolPointX = targetPatrolPoint.position.x;
-                float thisPositionX = transform.position.x;
-                isAtPatrolPoint = Mathf.Abs(thisPositionX - targetPatrolPointX) < distanceThreshold;
-            }
-            else
-            {
-                Vector2 targetPatrolPointV2 = targetPatrolPoint.position;
-                Vector2 thisPosition = transform.position;
-                float num1 = targetPatrolPointV2.x - thisPosition.x;
-                float num2 = targetPatrolPointV2.y - thisPosition.y;
-                float sqDistance = (float)((double) num1 * (double) num1 + (double) num2 * (double) num2);
-                isAtPatrolPoint = sqDistance < distanceThreshold * distanceThreshold;
-            }
-            
-            if (isAtPatrolPoint)
-            {
-                targetPatrolPoint = patrolPath.SetNextPatrolPoint();
-            }
-
-            return targetPatrolPoint;
-        }
         
         private void WalkTowardsTarget(Transform currentTargetPatrolPoint)
         {
@@ -120,44 +89,7 @@ namespace AI
 
         private void OnDrawGizmosSelected()
         {
-            const float wireSphereRadius = 0.5f;
-            
-            List<Transform> patrolPoints = patrolPath.GetPatrolPoints();
-            if (patrolPoints.Count == 0) return;
-            
-            for (var index = 0; index < patrolPoints.Count - 1; index++)
-            {
-                // Draw current patrol point sphere
-                Transform currPatrolPoint = patrolPoints[index];
-                if (currPatrolPoint == null) continue;
-                Vector3 currPatrolPointPosition = currPatrolPoint.position;
-                Gizmos.DrawWireSphere(currPatrolPointPosition, wireSphereRadius);
-
-                // Draw line to next point
-                Transform nextPatrolPoint = patrolPoints[index + 1];
-                if (nextPatrolPoint == null) continue;
-                Vector3 nextPatrolPointPosition = nextPatrolPoint.position;
-
-                Gizmos.DrawLine(currPatrolPointPosition, nextPatrolPointPosition);
-            }
-            
-            // Draw last sphere
-            Transform lastPatrolPoint = patrolPoints[patrolPoints.Count - 1];
-            if (lastPatrolPoint != null)
-            {
-                Gizmos.DrawWireSphere(patrolPoints[patrolPoints.Count - 1].position, wireSphereRadius);
-
-                // If its a cycle, draw a line from the end to the start
-                if (patrolPath.GetPatrolType() == PatrolPath.PatrolType.Cycle)
-                {
-                    Transform firstPatrolPoint = patrolPoints[0];
-                    if (firstPatrolPoint != null)
-                    {
-                        Gizmos.DrawLine(lastPatrolPoint.position, firstPatrolPoint.position);
-                    }
-                }
-            }
-
+            patrolPath.DrawGizmos();
         }
     }
 }

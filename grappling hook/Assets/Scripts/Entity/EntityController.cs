@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Entity
@@ -7,9 +8,9 @@ namespace Entity
     {
         public event Action OnEnemyDead;
 
-        public GameObject enemyParentGameObject;
-
-        public void InvokeEnemyDeadEvent()
+        [UsedImplicitly] public GameObject enemyParentGameObject;
+        
+        [UsedImplicitly] public void InvokeEnemyDeadEvent()
         {
             OnEnemyDead?.Invoke();
         }
