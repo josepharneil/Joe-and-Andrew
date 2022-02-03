@@ -1,7 +1,6 @@
 using Entity;
 using JetBrains.Annotations;
 using UnityEngine;
-using Utilities;
 
 namespace Enemy
 {

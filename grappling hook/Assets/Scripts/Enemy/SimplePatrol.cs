@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Entity;
 using UnityEngine;
-using Utilities;
 
 namespace AI
 {
@@ -14,28 +12,22 @@ namespace AI
         private SpriteRenderer _spriteRenderer;
         [SerializeField] private float distanceThreshold = 1f;
 
-        // Very simple patrol point
-        // between two points, dest point must be to the right.
-        // patrols from start point to dest point to right.
-
         [SerializeField] private bool ignorePatrolPointY = true;
         [SerializeField] private bool isFlyingPath = false;
         [SerializeField] private bool movesFasterFurtherAway = false;
         
         [SerializeField] private PatrolPath patrolPath;
         
-        // [SerializeField] private Transform patrolPoint0;
-        // [SerializeField] private Transform patrolPoint1;
-        // private int _currentTargetPatrolPointIndex;
-        
-        
         private FacingDirection _facingDirection = FacingDirection.Right;
-
         private const float Speed = 2f;
 
         private void Start()
         {
             _spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        }
+
+        private void OnValidate()
+        {
             patrolPath.Validate();
         }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Enemy
@@ -7,7 +8,7 @@ namespace Enemy
     {
         private readonly List<GameObject> _enemiesToDestroy = new List<GameObject>();
 
-        public void AddForDestruction(GameObject gameObjectToDestroy)
+        [UsedImplicitly] public void AddForDestruction(GameObject gameObjectToDestroy)
         {
             _enemiesToDestroy.Add(gameObjectToDestroy);
         }
