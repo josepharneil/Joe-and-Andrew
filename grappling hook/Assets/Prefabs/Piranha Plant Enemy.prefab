@@ -19,8 +19,8 @@ GameObject:
   - component: {fileID: 886963154256082511}
   - component: {fileID: 886963154256082545}
   - component: {fileID: 886963154256082544}
-  - component: {fileID: 886963154256082499}
   - component: {fileID: 886963154256082498}
+  - component: {fileID: 8050905147374126571}
   m_Layer: 9
   m_Name: Piranha Plant
   m_TagString: Enemy
@@ -259,25 +259,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &886963154256082499
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 886963154256082501}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c6486e4f9cc04366b6a294b77822b65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attacksPerSecond: 0.25
-  piranhaProjectile: {fileID: 926203398503133244, guid: 04a0f46192658427f82d464650a6719f, type: 3}
-  target: {fileID: 0}
-  fireballDuration: 4
-  fireballDamage: 5
-  fireballMoveSpeed: 6
-  knockbackStrength: 5
 --- !u!114 &886963154256082498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,6 +272,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyParentGameObject: {fileID: 886963155510315076}
+--- !u!114 &8050905147374126571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 886963154256082501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab8548e426e142afb06940480e251cbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  sightRange: 10
+  attacksPerSecond: 0.25
+  piranhaProjectile: {fileID: 926203398503133244, guid: 04a0f46192658427f82d464650a6719f, type: 3}
+  fireballDuration: 4
+  fireballDamage: 5
+  fireballMoveSpeed: 6
+  knockbackStrength: 5
 --- !u!1 &886963155510315076
 GameObject:
   m_ObjectHideFlags: 0

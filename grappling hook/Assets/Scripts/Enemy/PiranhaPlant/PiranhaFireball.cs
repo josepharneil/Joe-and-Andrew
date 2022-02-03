@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Enemy
 {
+    /// <summary>
+    /// Used on the actual fireball prefabs.
+    /// </summary>
     public class PiranhaFireball : MonoBehaviour
     {
         public LayerMask targetLayerMask;
