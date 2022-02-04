@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using AI;
 using Entity;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -9,7 +9,6 @@ namespace Enemy
     public class PiranhaPlantEnemyController : MonoBehaviour
     {
         [SerializeField] private Transform target;
-        [SerializeField] private float sightRange;
         
         [Header("Attack")]
         [SerializeField] private float attacksPerSecond = 0.25f;
@@ -20,6 +19,8 @@ namespace Enemy
         [SerializeField] private float knockbackStrength = 5f;
         private float _attackTimer = 0f;
         private bool _attackIsOnCooldown = false;
+        
+        [SerializeField] private SightDistanceCheck _sightDistanceCheck;
         
         // TODO
         // Note to self:
@@ -34,11 +35,13 @@ namespace Enemy
 
         private void OnDrawGizmosSelected()
         {
-            if (target == null) return;
-            var thisPosition = transform.position;
-            var targetPosition = target.position;
-            Gizmos.DrawRay(thisPosition, (targetPosition - thisPosition).normalized * sightRange);
-            Gizmos.DrawWireSphere(thisPosition, sightRange);
+            // if (target == null) return;
+            // var thisPosition = transform.position;
+            // var targetPosition = target.position;
+            // Gizmos.DrawRay(thisPosition, (targetPosition - thisPosition).normalized * sightRange);
+            // Gizmos.DrawWireSphere(thisPosition, sightRange);
+
+            _sightDistanceCheck.DrawGizmos();
         }
 
         #endregion
@@ -46,10 +49,12 @@ namespace Enemy
         #region CanSeeTarget
         [UsedImplicitly] public bool CanSeeTarget()
         {
-            Vector2 thisPosition = (Vector2)transform.position;
-            Vector2 targetPosition = target.position;
-
-            return (targetPosition - thisPosition).sqrMagnitude < sightRange * sightRange;
+            return _sightDistanceCheck.CanSeeTarget();
+            //
+            // Vector2 thisPosition = (Vector2)transform.position;
+            // Vector2 targetPosition = target.position;
+            //
+            // return (targetPosition - thisPosition).sqrMagnitude < sightRange * sightRange;
         }
         #endregion CanSeeTarget
 
