@@ -285,13 +285,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  sightRange: 10
   attacksPerSecond: 0.25
   piranhaProjectile: {fileID: 926203398503133244, guid: 04a0f46192658427f82d464650a6719f, type: 3}
   fireballDuration: 4
   fireballDamage: 5
   fireballMoveSpeed: 6
   knockbackStrength: 5
+  _sight:
+    _eyes: {fileID: 886963154256082500}
+    _sightRange: 10
+    _blockingLayer:
+      serializedVersion: 2
+      m_Bits: 64
 --- !u!1 &886963155510315076
 GameObject:
   m_ObjectHideFlags: 0
