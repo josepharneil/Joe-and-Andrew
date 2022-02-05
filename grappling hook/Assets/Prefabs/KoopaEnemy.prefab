@@ -383,7 +383,12 @@ MonoBehaviour:
   patrolSpeed: 2
   chaseSpeed: 5
   chaseTarget: {fileID: 0}
-  sightRange: 10
+  _sight:
+    _eyes: {fileID: 885005564695595236}
+    _sightRange: 10
+    _blockingLayer:
+      serializedVersion: 2
+      m_Bits: 64
 --- !u!1 &885005564712840849
 GameObject:
   m_ObjectHideFlags: 0

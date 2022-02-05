@@ -1,3 +1,4 @@
+using System;
 using AI;
 using Entity;
 using JetBrains.Annotations;
@@ -21,23 +22,24 @@ namespace Enemy
 
         [Header("CanSeeTarget")] 
         [SerializeField] private Transform chaseTarget;
-        [SerializeField] private float sightRange = 10f;
+        [SerializeField] private SightRaycast _sight;
         
         #region UnityEvents
         private void OnDrawGizmosSelected()
         {
             patrolPath.DrawGizmos();
-            
-            if (chaseTarget == null) return;
-            var thisPosition = transform.position;
-            var targetPosition = chaseTarget.position;
-            Gizmos.DrawRay(thisPosition, (targetPosition - thisPosition).normalized * sightRange);
-            Gizmos.DrawWireSphere(thisPosition, sightRange);
+            _sight.DrawGizmos();
         }
-        
+
+        private void Start()
+        {
+            _sight.Setup(transform, chaseTarget);
+        }
+
         private void OnValidate()
         {
             patrolPath.Validate();
+            _sight.Setup(transform, chaseTarget);
         }
         #endregion UnityEvents
         
@@ -74,10 +76,7 @@ namespace Enemy
         #region CanSeeTarget
         [UsedImplicitly] public bool CanSeeTarget()
         {
-            Vector2 thisPosition = (Vector2)transform.position;
-            Vector2 targetPosition = chaseTarget.position;
-
-            return (targetPosition - thisPosition).sqrMagnitude < sightRange * sightRange;
+            return _sight.CanSeeTarget();
         }
         #endregion CanSeeTarget
 

@@ -3804,11 +3804,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9147847883452652287, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
   m_PrefabInstance: {fileID: 2092242609}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1668315225 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 886963154256082500, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
-  m_PrefabInstance: {fileID: 8142654253892563047}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1735607550
 GameObject:
   m_ObjectHideFlags: 0
@@ -4254,6 +4249,10 @@ PrefabInstance:
       propertyPath: chaseTarget
       value: 
       objectReference: {fileID: 1608203359}
+    - target: {fileID: 404763605569262415, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
+      propertyPath: _sight._blockingLayer.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
     - target: {fileID: 885005564573824740, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
       propertyPath: m_Name
       value: KoopaEnemy
@@ -4443,34 +4442,6 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 1608203359}
-    - target: {fileID: 8050905147374126571, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
-      propertyPath: _sight._eyes
-      value: 
-      objectReference: {fileID: 1668315225}
-    - target: {fileID: 8050905147374126571, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
-      propertyPath: _sight._target
-      value: 
-      objectReference: {fileID: 1608203359}
-    - target: {fileID: 8050905147374126571, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
-      propertyPath: _sight._sightRange
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050905147374126571, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
-      propertyPath: _sightDistanceCheck._eyes
-      value: 
-      objectReference: {fileID: 1668315225}
-    - target: {fileID: 8050905147374126571, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
-      propertyPath: _sightDistanceCheck._target
-      value: 
-      objectReference: {fileID: 1608203359}
-    - target: {fileID: 8050905147374126571, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
-      propertyPath: _sight._blockingLayer.m_Bits
-      value: 64
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050905147374126571, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
-      propertyPath: _sightDistanceCheck._sightRange
-      value: 10
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
 --- !u!4 &9029616839111194656 stripped

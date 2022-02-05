@@ -51,7 +51,6 @@ namespace Enemy
 
             movementController.Move(moveVector);
             
-            
             if (moveVector.x > 0)
             {
                 _facingDirection = FacingDirection.Left;
@@ -59,6 +58,7 @@ namespace Enemy
             else if (moveVector.x > 0)
             {
                 _facingDirection = FacingDirection.Right;
-            }        }
+            }        
+        }
     }
 }
