@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using AI;
 using Entity;
 using JetBrains.Annotations;
+using UnityEditor;
 using UnityEngine;
 
 namespace Enemy
@@ -20,7 +23,7 @@ namespace Enemy
         private float _attackTimer = 0f;
         private bool _attackIsOnCooldown = false;
         
-        [SerializeField] private SightDistanceCheck _sightDistanceCheck;
+        [SerializeField] private SightRaycast _sight;
         
         // TODO
         // Note to self:
@@ -33,15 +36,25 @@ namespace Enemy
 
         #region UnityEvents
 
+        private void OnValidate()
+        {
+            Debug.Assert(transform, "Eyes must not be null.", this);
+            _sight.Eyes = transform;
+        }
+
+        private void Start()
+        {
+            Debug.Assert(transform, "Eyes must not be null.", this);
+            _sight.Eyes = transform;
+        }
+
         private void OnDrawGizmosSelected()
         {
-            // if (target == null) return;
-            // var thisPosition = transform.position;
-            // var targetPosition = target.position;
-            // Gizmos.DrawRay(thisPosition, (targetPosition - thisPosition).normalized * sightRange);
-            // Gizmos.DrawWireSphere(thisPosition, sightRange);
-
-            _sightDistanceCheck.DrawGizmos();
+            _sight.DrawGizmos();
+            if (_attackIsOnCooldown)
+            {
+                Handles.Label(transform.position + Vector3.up, ((1f / attacksPerSecond) - _attackTimer).ToString("n2"));
+            }
         }
 
         #endregion
@@ -49,12 +62,7 @@ namespace Enemy
         #region CanSeeTarget
         [UsedImplicitly] public bool CanSeeTarget()
         {
-            return _sightDistanceCheck.CanSeeTarget();
-            //
-            // Vector2 thisPosition = (Vector2)transform.position;
-            // Vector2 targetPosition = target.position;
-            //
-            // return (targetPosition - thisPosition).sqrMagnitude < sightRange * sightRange;
+            return _sight.CanSeeTarget();
         }
         #endregion CanSeeTarget
 
@@ -64,6 +72,18 @@ namespace Enemy
         /// </summary>
         [UsedImplicitly] public void TryShootProjectile()
         {
+            if(!_attackIsOnCooldown)
+            {
+                ShootProjectile();
+                _attackIsOnCooldown = true;
+            }
+        }
+
+        /// <summary>
+        /// Update attack timer.
+        /// </summary>
+        [UsedImplicitly] public void UpdateAttackTimer()
+        {
             if (_attackIsOnCooldown)
             {
                 _attackTimer += Time.deltaTime;
@@ -72,11 +92,6 @@ namespace Enemy
                     _attackIsOnCooldown = false;
                     _attackTimer = 0f;
                 }
-            }
-            else
-            {
-                ShootProjectile();
-                _attackIsOnCooldown = true;
             }
         }
         

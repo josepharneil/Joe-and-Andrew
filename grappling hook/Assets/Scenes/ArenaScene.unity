@@ -4444,6 +4444,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1608203359}
     - target: {fileID: 8050905147374126571, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
+      propertyPath: _sight._target
+      value: 
+      objectReference: {fileID: 1608203359}
+    - target: {fileID: 8050905147374126571, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
+      propertyPath: _sight._sightRange
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8050905147374126571, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
       propertyPath: _sightDistanceCheck._eyes
       value: 
       objectReference: {fileID: 1668315225}
@@ -4451,6 +4459,10 @@ PrefabInstance:
       propertyPath: _sightDistanceCheck._target
       value: 
       objectReference: {fileID: 1608203359}
+    - target: {fileID: 8050905147374126571, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
+      propertyPath: _sight._blockingLayer.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
     - target: {fileID: 8050905147374126571, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
       propertyPath: _sightDistanceCheck._sightRange
       value: 10

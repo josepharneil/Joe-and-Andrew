@@ -5,10 +5,10 @@ namespace AI
 {
     [Serializable] public abstract class Sight
     {
-        [SerializeField] protected Transform _eyes;
+        [NonSerialized] public Transform Eyes;
         [SerializeField] protected Transform _target;
-        [SerializeField] protected float _sightRange;
-
+        [SerializeField] protected float _sightRange = 10;
+        
         protected virtual bool IsValid()
         {
             bool valid = true;
@@ -17,7 +17,7 @@ namespace AI
                 Debug.LogError("Target is null");
                 valid = false;
             }
-            if (!_eyes)
+            if (!Eyes)
             {
                 Debug.LogError("Eyes is null");
                 valid = false;
@@ -41,7 +41,7 @@ namespace AI
             {
                 return false;
             }
-            return ((Vector2)_eyes.position).DistanceToSquared(_target.position) < _sightRange * _sightRange;
+            return ((Vector2)Eyes.position).DistanceToSquared(_target.position) < _sightRange * _sightRange;
         }
 
         public override void DrawGizmos()
@@ -52,7 +52,7 @@ namespace AI
             }
             Gizmos.color = CanSeeTarget() ? Color.green : Color.white;
             
-            var eyesPosition = _eyes.position;
+            var eyesPosition = Eyes.position;
             Gizmos.DrawWireSphere(eyesPosition, _sightRange);
             Gizmos.DrawRay(eyesPosition, (_target.position - eyesPosition).normalized * _sightRange);
             
@@ -64,7 +64,7 @@ namespace AI
     [Serializable] public class SightRaycast : Sight
     {
         [SerializeField] protected LayerMask _blockingLayer;
-
+        
         protected override bool IsValid()
         {
             bool isValid = base.IsValid();
@@ -83,15 +83,20 @@ namespace AI
                 return false;
             }
             
-            int targetLayer = 1 << _target.gameObject.layer;
-            Vector2 eyesPosition = _eyes.position;
+            CastRayToTarget(out RaycastHit2D hit);
+            
+            return hit && (hit.transform.gameObject.layer == _target.gameObject.layer);
+        }
+
+        private void CastRayToTarget(out RaycastHit2D hit)
+        {
+            int targetLayer = _target.gameObject.layer;
+            Vector2 eyesPosition = Eyes.position;
             Vector2 targetPosition = _target.position;
             
-            RaycastHit2D hit = Physics2D.Raycast(eyesPosition, 
-                targetPosition - eyesPosition, _sightRange, 
+            hit = Physics2D.Raycast(eyesPosition, 
+                eyesPosition.DirectionTo(targetPosition), _sightRange, 
                 _blockingLayer.value | 1 << targetLayer);
-
-            return hit && hit.transform.gameObject.layer == targetLayer;
         }
 
         public override void DrawGizmos()
@@ -101,17 +106,27 @@ namespace AI
                 return;
             }
             
-            var eyesPosition = _eyes.position;
-            if (CanSeeTarget())
-            {
-                Gizmos.color = Color.green;
-            }
-            else
+            CastRayToTarget(out RaycastHit2D hit);
+            // no hit: white
+            if (!hit)
             {
                 Gizmos.color = Color.white;
             }
+            // hit the target: green
+            else if (hit.transform.gameObject.layer == _target.gameObject.layer)
+            {
+                Gizmos.color = Color.green;
+            }
+            // Hit that that isn't the target, and target is in range: red
+            else if(Eyes.position.DistanceToSquared(_target.position) < _sightRange * _sightRange)
+            {
+                Gizmos.color = Color.red;
+            }
+            
+            var eyesPosition = Eyes.position;
             Gizmos.DrawWireSphere(eyesPosition, _sightRange);
-            Gizmos.DrawRay(eyesPosition, (_target.position - eyesPosition).normalized * _sightRange);
+            Gizmos.DrawRay(eyesPosition, eyesPosition.DirectionTo(_target.position).normalized * _sightRange);
+            
             Gizmos.color = Color.white;
         }
     }
