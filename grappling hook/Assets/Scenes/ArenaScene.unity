@@ -4444,6 +4444,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1608203359}
     - target: {fileID: 8050905147374126571, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
+      propertyPath: _sight._eyes
+      value: 
+      objectReference: {fileID: 1668315225}
+    - target: {fileID: 8050905147374126571, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
       propertyPath: _sight._target
       value: 
       objectReference: {fileID: 1608203359}

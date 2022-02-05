@@ -5,19 +5,30 @@ namespace AI
 {
     [Serializable] public abstract class Sight
     {
-        [NonSerialized] public Transform Eyes;
-        [SerializeField] protected Transform _target;
+        [SerializeField] protected Transform _eyes;
+        [NonSerialized] protected Transform Target;
         [SerializeField] protected float _sightRange = 10;
-        
+
+        public void Setup(Transform eyes, Transform target)
+        {
+            Debug.Assert(eyes, "Eyes must not be null.");
+            Debug.Assert(target, "Target must not be null.");
+            Target = target;
+            if (_eyes == null)
+            {
+                _eyes = eyes;
+            }
+        }
+
         protected virtual bool IsValid()
         {
             bool valid = true;
-            if (!_target)
+            if (!Target)
             {
                 Debug.LogError("Target is null");
                 valid = false;
             }
-            if (!Eyes)
+            if (!_eyes)
             {
                 Debug.LogError("Eyes is null");
                 valid = false;
@@ -41,7 +52,7 @@ namespace AI
             {
                 return false;
             }
-            return ((Vector2)Eyes.position).DistanceToSquared(_target.position) < _sightRange * _sightRange;
+            return ((Vector2)_eyes.position).DistanceToSquared(Target.position) < _sightRange * _sightRange;
         }
 
         public override void DrawGizmos()
@@ -52,9 +63,9 @@ namespace AI
             }
             Gizmos.color = CanSeeTarget() ? Color.green : Color.white;
             
-            var eyesPosition = Eyes.position;
+            var eyesPosition = _eyes.position;
             Gizmos.DrawWireSphere(eyesPosition, _sightRange);
-            Gizmos.DrawRay(eyesPosition, (_target.position - eyesPosition).normalized * _sightRange);
+            Gizmos.DrawRay(eyesPosition, (Target.position - eyesPosition).normalized * _sightRange);
             
             Gizmos.color = Color.white;
         }
@@ -85,14 +96,14 @@ namespace AI
             
             CastRayToTarget(out RaycastHit2D hit);
             
-            return hit && (hit.transform.gameObject.layer == _target.gameObject.layer);
+            return hit && (hit.transform.gameObject.layer == Target.gameObject.layer);
         }
 
         private void CastRayToTarget(out RaycastHit2D hit)
         {
-            int targetLayer = _target.gameObject.layer;
-            Vector2 eyesPosition = Eyes.position;
-            Vector2 targetPosition = _target.position;
+            int targetLayer = Target.gameObject.layer;
+            Vector2 eyesPosition = _eyes.position;
+            Vector2 targetPosition = Target.position;
             
             hit = Physics2D.Raycast(eyesPosition, 
                 eyesPosition.DirectionTo(targetPosition), _sightRange, 
@@ -113,19 +124,19 @@ namespace AI
                 Gizmos.color = Color.white;
             }
             // hit the target: green
-            else if (hit.transform.gameObject.layer == _target.gameObject.layer)
+            else if (hit.transform.gameObject.layer == Target.gameObject.layer)
             {
                 Gizmos.color = Color.green;
             }
             // Hit that that isn't the target, and target is in range: red
-            else if(Eyes.position.DistanceToSquared(_target.position) < _sightRange * _sightRange)
+            else if(_eyes.position.DistanceToSquared(Target.position) < _sightRange * _sightRange)
             {
                 Gizmos.color = Color.red;
             }
             
-            var eyesPosition = Eyes.position;
+            var eyesPosition = _eyes.position;
             Gizmos.DrawWireSphere(eyesPosition, _sightRange);
-            Gizmos.DrawRay(eyesPosition, eyesPosition.DirectionTo(_target.position).normalized * _sightRange);
+            Gizmos.DrawRay(eyesPosition, eyesPosition.DirectionTo(Target.position).normalized * _sightRange);
             
             Gizmos.color = Color.white;
         }

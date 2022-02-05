@@ -38,14 +38,12 @@ namespace Enemy
 
         private void OnValidate()
         {
-            Debug.Assert(transform, "Eyes must not be null.", this);
-            _sight.Eyes = transform;
+            _sight.Setup(transform, target);
         }
 
         private void Start()
         {
-            Debug.Assert(transform, "Eyes must not be null.", this);
-            _sight.Eyes = transform;
+            _sight.Setup(transform, target);
         }
 
         private void OnDrawGizmosSelected()
