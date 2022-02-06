@@ -9,6 +9,11 @@ namespace AI
         [NonSerialized] protected Transform Target;
         [SerializeField] protected float _sightRange = 10;
 
+        public float GetSightRange()
+        {
+            return _sightRange;
+        }
+
         public void Setup(Transform eyes, Transform target)
         {
             Debug.Assert(eyes, "Eyes must not be null.");

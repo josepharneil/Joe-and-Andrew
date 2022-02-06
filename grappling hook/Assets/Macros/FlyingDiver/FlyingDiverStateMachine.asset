@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1083378141, guid: dcd2196c4e9166f499793f2007fcda35, type: 3}
+  m_Name: FlyingDiverStateMachine
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"graph":{"title":null,"summary":null,"pan":{"x":-227.0,"y":-113.7754},"zoom":1.0,"elements":[{"nest":{"source":"Macro","macro":0,"embed":null},"isStart":true,"position":{"x":-459.0,"y":-156.0},"width":170.0,"guid":"0a584843-94b6-4f9a-8838-9c4bf27cc0e4","$version":"A","$type":"Bolt.FlowState","$id":"3"},{"nest":{"source":"Macro","macro":1,"embed":null},"isStart":false,"position":{"x":-62.0,"y":-362.0},"width":170.0,"guid":"a81f8688-5bdd-431f-9d74-abe526db3d3c","$version":"A","$type":"Bolt.FlowState","$id":"5"},{"nest":{"source":"Macro","macro":2,"embed":null},"isStart":false,"position":{"x":-46.0,"y":-125.0},"width":170.0,"guid":"02b36b2d-df5f-45b1-af89-c0d927fa4068","$version":"A","$type":"Bolt.FlowState","$id":"7"},{"nest":{"source":"Macro","macro":3,"embed":null},"isStart":false,"position":{"x":-448.0,"y":28.0},"width":170.0,"guid":"0755663b-f03c-4329-8088-e638e4ba2ab4","$version":"A","$type":"Bolt.FlowState","$id":"9"},{"nest":{"source":"Macro","macro":4,"embed":null},"isStart":false,"position":{"x":-805.0,"y":-112.0},"width":170.0,"guid":"d645c00d-0657-418c-9d14-ab8165b4b818","$version":"A","$type":"Bolt.FlowState","$id":"11"},{"nest":{"source":"Macro","macro":5,"embed":null},"source":{"$ref":"3"},"destination":{"$ref":"9"},"guid":"6d9d54c5-2641-427c-9048-5c8f17999650","$version":"A","$type":"Bolt.FlowStateTransition"},{"nest":{"source":"Macro","macro":6,"embed":null},"source":{"$ref":"3"},"destination":{"$ref":"5"},"guid":"87ddd10f-4ae9-42b2-ba65-d5a6258f9725","$version":"A","$type":"Bolt.FlowStateTransition"},{"nest":{"source":"Macro","macro":7,"embed":null},"source":{"$ref":"9"},"destination":{"$ref":"3"},"guid":"12f7a59c-8522-4b10-8e69-cff7fa7bc66c","$version":"A","$type":"Bolt.FlowStateTransition"},{"nest":{"source":"Macro","macro":8,"embed":null},"source":{"$ref":"5"},"destination":{"$ref":"7"},"guid":"5fe332a0-abfa-445c-9872-584c35da5f88","$version":"A","$type":"Bolt.FlowStateTransition"},{"nest":{"source":"Macro","macro":9,"embed":null},"source":{"$ref":"9"},"destination":{"$ref":"5"},"guid":"b904ee52-76e4-4527-91c4-e80e3364afda","$version":"A","$type":"Bolt.FlowStateTransition"},{"nest":{"source":"Macro","macro":10,"embed":null},"source":{"$ref":"3"},"destination":{"$ref":"11"},"guid":"4326de74-f4c0-4101-9fd6-3c9ea9d75c1b","$version":"A","$type":"Bolt.FlowStateTransition"},{"nest":{"source":"Macro","macro":11,"embed":null},"source":{"$ref":"11"},"destination":{"$ref":"3"},"guid":"8ce6dc3c-cb72-4e6f-b82c-2a90e00af1fd","$version":"A","$type":"Bolt.FlowStateTransition"},{"nest":{"source":"Macro","macro":12,"embed":null},"source":{"$ref":"11"},"destination":{"$ref":"9"},"guid":"1abbe257-44cd-47fe-a8ca-ad0901bdab02","$version":"A","$type":"Bolt.FlowStateTransition"},{"nest":{"source":"Macro","macro":13,"embed":null},"source":{"$ref":"9"},"destination":{"$ref":"11"},"guid":"b36f0690-78d4-4eba-bfca-2504a43108b0","$version":"A","$type":"Bolt.FlowStateTransition"},{"nest":{"source":"Macro","macro":14,"embed":null},"source":{"$ref":"11"},"destination":{"$ref":"5"},"guid":"def26923-1762-4c83-9d15-755ec2abd6d6","$version":"A","$type":"Bolt.FlowStateTransition"}],"$version":"A"}}'
+    _objectReferences:
+    - {fileID: 11400000, guid: 374298a8aa6674065a5e08e49d5f1ff7, type: 2}
+    - {fileID: 11400000, guid: 225bf7cabb43a4841936924ec7da3177, type: 2}
+    - {fileID: 11400000, guid: 261e6bd4ecd5344db93c7dbf67277759, type: 2}
+    - {fileID: 11400000, guid: 1db0d9acb5b1647f5adc82e2466a9c4d, type: 2}
+    - {fileID: 11400000, guid: 7397f766001f341f3818cf69cdda9d72, type: 2}
+    - {fileID: 11400000, guid: 110a84d6f950141edbc7b1247dc19854, type: 2}
+    - {fileID: 11400000, guid: 456dd1c1eb13c4df696367c3baede495, type: 2}
+    - {fileID: 11400000, guid: d981066e2a32d4eed96e527f3b5153f3, type: 2}
+    - {fileID: 11400000, guid: e440ff602eeb04436b76bbe1e4baa05c, type: 2}
+    - {fileID: 11400000, guid: 456dd1c1eb13c4df696367c3baede495, type: 2}
+    - {fileID: 11400000, guid: 29b5339baa5644817ae9b3a3812c6e80, type: 2}
+    - {fileID: 11400000, guid: bd5ddaf157f85426694e43180daaf455, type: 2}
+    - {fileID: 11400000, guid: bd5ddaf157f85426694e43180daaf455, type: 2}
+    - {fileID: 11400000, guid: 29b5339baa5644817ae9b3a3812c6e80, type: 2}
+    - {fileID: 11400000, guid: 456dd1c1eb13c4df696367c3baede495, type: 2}

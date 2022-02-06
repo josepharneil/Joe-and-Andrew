@@ -58,7 +58,7 @@ namespace Enemy
             else if (moveVector.x > 0)
             {
                 _facingDirection = FacingDirection.Right;
-            }        
+            }
         }
     }
 }
