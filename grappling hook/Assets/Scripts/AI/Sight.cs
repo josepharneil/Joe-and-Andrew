@@ -12,7 +12,6 @@ namespace AI
         public void Setup(Transform eyes, Transform target)
         {
             Debug.Assert(eyes, "Eyes must not be null.");
-            Debug.Assert(target, "Target must not be null.");
             Target = target;
             if (_eyes == null)
             {
