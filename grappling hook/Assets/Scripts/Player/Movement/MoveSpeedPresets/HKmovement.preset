@@ -61,6 +61,10 @@ Preset:
     value: 0.1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
+    propertyPath: _debugRollFall
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
     propertyPath: moveSpeed
     value: 10
     objectReference: {fileID: 0}

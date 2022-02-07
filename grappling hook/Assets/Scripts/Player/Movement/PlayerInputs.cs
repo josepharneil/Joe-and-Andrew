@@ -20,12 +20,20 @@ public class PlayerInputs : MonoBehaviour
     [SerializeField] private float coyoteTime;
     [SerializeField] private float minFallSpeed = 80f;
     [SerializeField] private float maxFallSpeed = 120f;
-    [SerializeField] private float jumpApexThreshold = 10f;
+    [SerializeField] private float jumpApexThreshold = 5f;
     [SerializeField] private float fallClamp = -40f;
     [SerializeField] private float earlyJumpMultiplier = 3f;
-    [SerializeField] private float earlyJumpCancelTime = 0.2f;
+    [SerializeField] private float earlyJumpCancelTime = 0.1f;
+    [SerializeField] private bool _debugRollFall = false;
     private float _apexPoint; //This becomes 1 at the end of the jump
     private float _fallSpeed;
+
+    [Header("Wall Jump Stats")]
+    [SerializeField] private float _verticalWallJump;
+    [SerializeField] private float _horizontalWallJump;
+    [SerializeField] private float _wallSlideFallSpeed;
+    private bool _isWallSliding = false;
+
 
     [Header("Ground Move Stats")]
     [SerializeField] private float moveSpeed = 10f;
@@ -162,11 +170,14 @@ public class PlayerInputs : MonoBehaviour
         
         // Movement
         SetHorizontalMove();
+        CheckWallSlide();
         CheckGrounded();
         CheckCoyote();
         CalculateJumpApex();
         CalculateGravity();
+        WallJump();
         Jump();
+        
 
         if (!isAttacking || (isAttacking && !playerCombatPrototyping.data.movementDisabledByAttacks))
         {
@@ -319,6 +330,38 @@ public class PlayerInputs : MonoBehaviour
         }
     }
 
+    private void WallJump()
+    {
+        if (!_isGrounded && _isJumpInput)
+        {
+            bool collisionLeftRight = FacingDirection == FacingDirection.Left ?
+            movementController.customCollider2D.GetCollisionLeft() : movementController.customCollider2D.GetCollisionRight();
+            if (collisionLeftRight)
+            {
+                _isJumpInput = false;
+                _velocity.y = _verticalWallJump;
+                _velocity.x = _horizontalWallJump * -1f * (int)FacingDirection;
+                FacingDirection = (FacingDirection)((int)FacingDirection * -1f);
+            }
+            else
+            {
+                _isJumpInput = false;
+            }
+        }
+    }
+
+    #endregion
+
+    #region WallSlide
+    public void CheckWallSlide()
+    {
+        bool collisionLeftRight = FacingDirection == FacingDirection.Left ?
+            movementController.customCollider2D.GetCollisionLeft() : movementController.customCollider2D.GetCollisionRight();
+        if (_isMoveInput && !_isGrounded &&collisionLeftRight)
+        {
+             _isWallSliding = true;
+        }
+    }
     #endregion
 
     #region Horizontal Movement
@@ -530,6 +573,10 @@ public class PlayerInputs : MonoBehaviour
         if (_rollDurationTimer <= rollDuration)
         {
             _velocity.x = (int)_rollDirection * (rollDistance / rollDuration);
+            if (_debugRollFall)
+            {
+                _velocity.y = 0;
+            }
             _rollDurationTimer += Time.deltaTime;
         }
         else

@@ -23,7 +23,6 @@ namespace Entity
             // the player didn't fall downwards.
             customCollider2D.ResetCollisionState();
             customCollider2D.CheckHorizontalCollisions(ref displacement);
-            customCollider2D.ResetCollisionState();
             customCollider2D.CheckVerticalCollisions(ref displacement);
 
             transform.Translate(displacement);
