@@ -31,8 +31,8 @@ public class PlayerInputs : MonoBehaviour
     [Header("Wall Jump Stats")]
     [SerializeField] private float _verticalWallJump;
     [SerializeField] private float _horizontalWallJump;
-    [SerializeField] private float _wallSlideFallSpeed;
     private bool _isWallSliding = false;
+    [SerializeField] private float _wallSideGravityMultiplier;
 
 
     [Header("Ground Move Stats")]
@@ -224,6 +224,9 @@ public class PlayerInputs : MonoBehaviour
             if (_isJumpEndedEarly)
             {
                 _velocity.y -= _fallSpeed * earlyJumpMultiplier *Time.deltaTime;
+            }else if (_isWallSliding && _velocity.y<0) 
+            {
+                _velocity.y -= _fallSpeed * _wallSideGravityMultiplier * Time.deltaTime;
             }
             else
             {
@@ -360,6 +363,10 @@ public class PlayerInputs : MonoBehaviour
         if (_isMoveInput && !_isGrounded &&collisionLeftRight)
         {
              _isWallSliding = true;
+        }
+        else
+        {
+            _isWallSliding = false;
         }
     }
     #endregion
