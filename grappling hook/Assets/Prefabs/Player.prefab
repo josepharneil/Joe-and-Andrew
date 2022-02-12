@@ -276,7 +276,7 @@ MonoBehaviour:
   boxCollider: {fileID: 9147847883452652285}
   collisionMask:
     serializedVersion: 2
-    m_Bits: 576
+    m_Bits: 64
   debugDraw: 0
 --- !u!114 &9147847883452652284
 MonoBehaviour:
@@ -438,6 +438,10 @@ MonoBehaviour:
   fallClamp: -40
   earlyJumpMultiplier: 3
   earlyJumpCancelTime: 0.2
+  _debugRollFall: 0
+  _verticalWallJump: 0
+  _horizontalWallJump: 0
+  _wallSideGravityMultiplier: 0
   moveSpeed: 10
   accelerationCurve:
     serializedVersion: 2

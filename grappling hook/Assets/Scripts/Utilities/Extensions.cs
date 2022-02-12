@@ -34,10 +34,19 @@ public static class Extensions
     {
         return v1 - v0;
     }
-    public static Vector2 DirectionFrom(this Vector3 v0, Vector3 v1)
+    public static Vector3 DirectionFrom(this Vector3 v0, Vector3 v1)
     {
         return -DirectionTo(v0, v1);
     }
+    public static Vector3 DirectionToNormalized(this Vector3 v0, Vector3 v1)
+    {
+        return (v1 - v0).normalized;
+    }
+    public static Vector3 DirectionFromNormalized(this Vector3 v0, Vector3 v1)
+    {
+        return -DirectionToNormalized(v0, v1);
+    }
+    
     #endregion
 
     #region Vector2
@@ -74,6 +83,14 @@ public static class Extensions
     public static Vector2 DirectionFrom(this Vector2 v0, Vector2 v1)
     {
         return -DirectionTo(v0, v1);
+    }
+    public static Vector2 DirectionToNormalized(this Vector2 v0, Vector2 v1)
+    {
+        return (v1 - v0).normalized;
+    }
+    public static Vector2 DirectionFromNormalized(this Vector2 v0, Vector2 v1)
+    {
+        return -DirectionToNormalized(v0, v1);
     }
     #endregion
 }

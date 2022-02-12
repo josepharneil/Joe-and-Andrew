@@ -82,6 +82,11 @@ namespace Physics
         [SerializeField] private BoxCollider2D boxCollider;
         [SerializeField] private LayerMask collisionMask;
 
+        public LayerMask GetCollisionMask()
+        {
+            return collisionMask;
+        }
+
         [Header("Debug")] 
         [SerializeField] private bool debugDraw;
         
