@@ -101,6 +101,17 @@
                 },
                 {
                     "name": "",
+                    "id": "cf9ffd6c-4561-465f-ad32-27e2f901ab4c",
+                    "path": "<Keyboard>/m",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "634b98e6-8546-4c3a-a71d-0d85d47b1cdc",
                     "path": "<Keyboard>/leftShift",
                     "interactions": "",
