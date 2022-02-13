@@ -3,7 +3,6 @@ using JetBrains.Annotations;
 using Physics;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Interactions;
 
 namespace Player
 {
