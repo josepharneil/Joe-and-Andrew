@@ -107,13 +107,13 @@ namespace Enemy
             for (int index = 0; index < _livePiranhaProjectiles.Count; index++)
             {
                 PiranhaFireball projectile = _livePiranhaProjectiles[index];
-                projectile.lifespanTimer += Time.deltaTime;
-                if (projectile.lifespanTimer > fireballDuration)
+                projectile.LifespanTimer += Time.deltaTime;
+                if (projectile.LifespanTimer > fireballDuration)
                 {
                     indexesToDelete.Add(index);
                 }
 
-                if (projectile.hasHitPlayer)
+                if (projectile.HasHitTarget())
                 {
                     indexesToDelete.Add(index);
 
@@ -132,7 +132,7 @@ namespace Enemy
                     }
                 }
 
-                projectile.transform.Translate(projectile.direction.normalized * fireballMoveSpeed * Time.deltaTime);
+                projectile.UpdatePath(fireballMoveSpeed);
             }
 
             foreach (int indexToDelete in indexesToDelete)
@@ -157,8 +157,10 @@ namespace Enemy
             var thisPosition = transform.position;
             GameObject projectile = Instantiate(piranhaProjectile, thisPosition, Quaternion.identity);
             PiranhaFireball piranhaFireball = projectile.GetComponent<PiranhaFireball>();
-            piranhaFireball.targetLayerMask = target.gameObject.layer;
-            piranhaFireball.direction = target.position - thisPosition;
+            Debug.Assert(piranhaFireball, "Should be a fireball component", this);
+            if (!piranhaFireball) return;
+            
+            piranhaFireball.Initialise(target.gameObject.layer, thisPosition.DirectionToNormalized(target.position));
             _livePiranhaProjectiles.Add(piranhaFireball);
         }
         #endregion AttackTarget
