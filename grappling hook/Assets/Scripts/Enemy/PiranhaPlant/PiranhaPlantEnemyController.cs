@@ -113,7 +113,7 @@ namespace Enemy
                     indexesToDelete.Add(index);
                 }
 
-                if (projectile.HasHitTarget())
+                if (projectile.HasHitTarget)
                 {
                     indexesToDelete.Add(index);
 
