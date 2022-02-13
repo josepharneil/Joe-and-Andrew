@@ -205,7 +205,7 @@ MonoBehaviour:
   boxCollider: {fileID: 886963154256082508}
   collisionMask:
     serializedVersion: 2
-    m_Bits: 2112
+    m_Bits: 64
   debugDraw: 0
 --- !u!114 &886963154256082511
 MonoBehaviour:

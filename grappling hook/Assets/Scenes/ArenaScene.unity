@@ -4225,6 +4225,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FlyingDiverEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 8691223565349368871, guid: fac12d82708d34124a84dc0331d9b004, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fac12d82708d34124a84dc0331d9b004, type: 3}
 --- !u!1001 &3445672887890573910
@@ -4457,6 +4461,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1774038816}
     m_Modifications:
+    - target: {fileID: 886963154256082501, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 886963155510315076, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
       propertyPath: m_Name
       value: Piranha Plant Enemy
