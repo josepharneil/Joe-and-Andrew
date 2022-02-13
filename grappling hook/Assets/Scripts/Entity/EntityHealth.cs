@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Entity
@@ -8,35 +9,48 @@ namespace Entity
     public class EntityHealth : MonoBehaviour
     {
         // Todo this eventually should be a scriptableobject
-        public int maxHealth = 100;
-        [HideInInspector] public int currentHealth;
+        [SerializeField] private int maxHealth = 100;
+        public int CurrentHealth { get; private set; }
+
+        public float GetMaxHealth()
+        {
+            return maxHealth;
+        }
+
+        public event Action OnEntityDead;
 
         private void Start()
         {
-            currentHealth = maxHealth;
+            CurrentHealth = maxHealth;
         }
 
-        public void Damage( int damage )
+        public void Damage(int damage)
         {
-            currentHealth -= damage;
-            if (currentHealth < 0)
+            CurrentHealth -= damage;
+            if (CurrentHealth <= 0)
             {
-                currentHealth = 0;
+                CurrentHealth = 0;
+                OnEntityDead?.Invoke();
             }
         }
 
-        public void Heal( int heal )
+        public void Heal(int heal)
         {
-            currentHealth += heal;
-            if (currentHealth > maxHealth)
+            CurrentHealth += heal;
+            if (CurrentHealth > maxHealth)
             {
-                currentHealth = maxHealth;
+                CurrentHealth = maxHealth;
             }
+        }
+
+        public void HealToMax()
+        {
+            CurrentHealth = maxHealth;
         }
 
         public bool IsAlive()
         {
-            return currentHealth > 0;
+            return CurrentHealth > 0;
         }
     }
 }

@@ -30,7 +30,7 @@ public class DebugShowEntityHealth : MonoBehaviour
             Vector2 targetPos = _mainCamera.WorldToScreenPoint(entityHealth.transform.position);
             targetPos.y += 1;
             GUI.Box(new Rect(targetPos.x, Screen.height - targetPos.y, 120, 40),
-                entityHealth.currentHealth + "/" + entityHealth.maxHealth);
+                entityHealth.CurrentHealth + "/" + entityHealth.GetMaxHealth());
         }
     }
 }
