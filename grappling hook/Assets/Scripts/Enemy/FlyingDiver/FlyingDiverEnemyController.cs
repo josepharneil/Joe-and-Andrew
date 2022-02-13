@@ -16,6 +16,7 @@ namespace Enemy
         [SerializeField] private float _patrolPointDistanceThreshold = 1f;
         [SerializeField] private float _patrolSpeed = 2f;
         [SerializeField] private float _chaseSpeed = 5f;
+        [SerializeField] private float _chaseHeight = 4f;
 
         [Header("Chasing")] 
         [SerializeField] private Transform _chaseTarget;
@@ -28,11 +29,12 @@ namespace Enemy
         [SerializeField] private float _diveBombCooldownDuration = 2f;
         [SerializeField] private float _diveBombDistance = 10f;
         [SerializeField] private float _diveBombSpeed = 20f;
+        [SerializeField] private float _diveBombHeight = 4f;
         [HideInInspector] public bool DiveBombIsOnCooldown = true; // Used in Bolt
         private float _diveBombCooldownTimer = 0f;
         private Vector2 _attackPosition = Vector2.zero;
         private Vector2 _diveBombDestination;
-
+        private bool _hasReachedAttackHeight = false;
 
         #region UnityEvents
         private void OnDrawGizmosSelected()
@@ -59,15 +61,10 @@ namespace Enemy
 
         private void MoveTowardsTarget(Vector2 moveTarget, float moveSpeed)
         {
-            Vector2 targetPosition = moveTarget;
             Vector2 thisPosition = transform.position;
-            Vector2 direction = thisPosition.DirectionTo(targetPosition).normalized;
+            Vector2 direction = thisPosition.DirectionTo(moveTarget).normalized;
             Vector2 moveVector = direction * moveSpeed;
             _movementController.Move(moveVector);
-        }
-        private void MoveTowardsTarget(Transform moveTarget, float moveSpeed)
-        {
-            MoveTowardsTarget(moveTarget.position, moveSpeed);
         }
         
         public void UpdatePatrol()
@@ -82,7 +79,7 @@ namespace Enemy
         
         public void UpdateChase()
         {
-            Vector2 chasePos = (Vector2)_chaseTarget.position + (Vector2.up * 5);
+            Vector2 chasePos = (Vector2)_chaseTarget.position + (Vector2.up * _chaseHeight);
             MoveTowardsTarget(chasePos, _chaseSpeed);
         }
 
@@ -123,11 +120,14 @@ namespace Enemy
 
         private void UpdateDiveBombCooldownMovement()
         {
-            const float diveBombHeight = 3f;
-            if (transform.position.y < (_chaseTarget.position.y + diveBombHeight))
+            if (transform.position.y < (_chaseTarget.position.y + _diveBombHeight) && (!_hasReachedAttackHeight))
             {
-                Vector2 diveBombPosition = (Vector2)_attackPosition + (Vector2.up * diveBombHeight);
+                Vector2 diveBombPosition = (Vector2)_attackPosition + (Vector2.up * _diveBombHeight);
                 MoveTowardsTarget(diveBombPosition, _chaseSpeed);
+            }
+            else if (transform.position.y > (_chaseTarget.position.y + _diveBombHeight))
+            {
+                _hasReachedAttackHeight = true;
             }
         }
 
@@ -163,6 +163,7 @@ namespace Enemy
             // If we're close to reaching the target, go on cooldown
             if (transform.position.DistanceToSquared(_diveBombDestination) < 0.5f)
             {
+                _hasReachedAttackHeight = false;
                 DiveBombIsOnCooldown = true;
                 _attackPosition = transform.position;
             }
