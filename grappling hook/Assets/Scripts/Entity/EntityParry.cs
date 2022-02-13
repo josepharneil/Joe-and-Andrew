@@ -6,29 +6,31 @@ namespace Entity
 {
     public class EntityParry : MonoBehaviour
     {
-        [SerializeField] private PlayerInputs inputs;
+        // TODO: This should probably use movement controller instead of inputs? for facing direction...
+        // something like that
+        [SerializeField] private Player.PlayerInputs inputs;
         [SerializeField] private LayerMask whatIsParryable;
         [SerializeField] private float parryRadius = 1f;
         [SerializeField] private float timeBetweenParries = 0.8f;
-        private bool canParry = true;
+        private bool _canParry = true;
         
         private float _parryTimer = 0f;
 
         private void Update()
         {
-            if (!canParry)
+            if (!_canParry)
             {
                 _parryTimer -= Time.deltaTime;
                 if (_parryTimer <= 0.0f)
                 {
-                    canParry = true;
+                    _canParry = true;
                 }
             }
         }
 
         public void CheckParry()
         {
-            if (!canParry)
+            if (!_canParry)
             {
                 return;
             }
@@ -64,7 +66,7 @@ namespace Entity
                 // Instantiate a hit particle here if we want
             }
 
-            canParry = false;
+            _canParry = false;
             _parryTimer = timeBetweenParries;
         }
 
