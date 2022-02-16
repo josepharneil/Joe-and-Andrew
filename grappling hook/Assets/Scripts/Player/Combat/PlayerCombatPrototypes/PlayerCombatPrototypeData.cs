@@ -22,11 +22,6 @@ namespace Player
         [Tooltip("In which phases can we cancel an attack?")]
         public PrototypeAttackPhases cancellableAttackPhases;
 
-        [Header("Knockback")]
-        [Tooltip("Does player deal knockback?")]
-        public bool doesPlayerDealKnockback;
-        public float knockbackStrength = 2f;
-        
         [Header("Daze")]
         [Tooltip("Does player deal daze?")]
         public bool doesPlayerDealDaze = true;

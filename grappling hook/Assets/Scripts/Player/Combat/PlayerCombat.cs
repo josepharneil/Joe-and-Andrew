@@ -79,17 +79,75 @@ namespace Player
             };
             _currentMeleeWeapon.DetectAttackableObjects(out List<Collider2D> detectedObjects, contactFilter2D, attackDirection);
 
-            if (_currentMeleeWeapon.TryHitDetectedObjects(detectedObjects, out bool shouldKnockbackPlayer, out Vector2 firstEnemyHitPosition))
+            
+            if (TryHitDetectedObjects(detectedObjects, out Vector2? firstEnemyHitPosition))
             {
                 ShakeCamera();
-                
-                _currentMeleeWeapon.KnockbackPlayer(shouldKnockbackPlayer, firstEnemyHitPosition);
+
+                if (firstEnemyHitPosition.HasValue)
+                {
+                    _currentMeleeWeapon.KnockbackPlayer(firstEnemyHitPosition.Value);
+                }
 
                 // Instantiate a hit particle here if we want only once per attack.
             }
 
             // At the end, we're now post damage.
             inputs.isInPreDamageAttackPhase = false;
+        }
+        
+        private bool TryHitDetectedObjects(List<Collider2D> detectedObjects, out Vector2? knockbackPosition)
+        {
+            bool enemyHit = false;
+            knockbackPosition = null;
+            
+            foreach (Collider2D coll in detectedObjects)
+            {
+                coll.gameObject.TryGetComponent<EntityHitbox>(out EntityHitbox entityHitbox);
+                if (!entityHitbox) continue;
+                
+                enemyHit = HitEntity(entityHitbox);
+                
+                // If an enemy is hit and we haven't already set the knockback position.
+                if (enemyHit && knockbackPosition == null)
+                {
+                    knockbackPosition = entityHitbox.transform.position;
+                }
+                
+                // Instantiate a hit particle here if we want particles for EACH hit enemy
+            }
+
+            return enemyHit;
+        }
+
+        private bool HitEntity(EntityHitbox entityHitbox)
+        {
+            int damageDealt = CalculateDamageDealt();
+            EntityHitData hitData = new EntityHitData
+            {
+                DealsDamage = true,
+                DamageToHealth = damageDealt,
+
+                DealsKnockback = _currentMeleeWeapon.KnockbackAmountToTarget != 0f,
+                KnockbackOrigin = transform.position,
+                KnockbackStrength = _currentMeleeWeapon.KnockbackAmountToTarget,
+
+                DealsDaze = playerCombatPrototyping.data.doesPlayerDealDaze,
+            };
+            return entityHitbox.Hit(hitData);
+        }
+
+        private int CalculateDamageDealt()
+        {
+            // This could also factor in some base player attack value?
+            
+            int damageDealt = _currentMeleeWeapon.WeaponDamage;
+            if (playerCombatPrototyping.data.doesAttackingParriedDealBonusDamage)
+            {
+                damageDealt *= playerCombatPrototyping.data.attackParriedBonusDamageAmount;
+            }
+
+            return damageDealt;
         }
 
         private void ShakeCamera()
