@@ -6089,6 +6089,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 76782474}
     m_Modifications:
+    - target: {fileID: 2184398220724220523, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: KnockbackAmountToTarget
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2184398220724220523, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: _knockbackAmountToPlayer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652258, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: m_Name
       value: Player
