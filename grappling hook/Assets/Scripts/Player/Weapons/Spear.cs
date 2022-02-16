@@ -4,9 +4,10 @@ using UnityEngine;
 
 namespace Player
 {
+    [CreateAssetMenu(fileName = "SpearWeapon", menuName = "Weapons/Melee/Spear")]
     public class Spear : MeleeWeapon
     {
-        public override void DrawGizmos(FacingDirection facingDirection)
+        public override void DrawGizmos(Vector2 attackerPosition, FacingDirection facingDirection, Transform attackHitBoxPosition)
         {
             throw new System.NotImplementedException();
         }
@@ -26,13 +27,8 @@ namespace Player
             throw new System.NotImplementedException();
         }
 
-        public override void DetectAttackableObjects(out List<Collider2D> detectedObjects, ContactFilter2D contactFilter2D,
-            AttackDirection attackDirection)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void KnockbackPlayer(Vector2 firstEnemyHitPosition)
+        public override void DetectAttackableObjects(out List<Collider2D> detectedObjects, ContactFilter2D contactFilter2D, Vector2 attackerPosition,
+            AttackDirection attackDirection, Transform attackHitBoxPosition)
         {
             throw new System.NotImplementedException();
         }

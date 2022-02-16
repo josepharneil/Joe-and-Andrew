@@ -36,8 +36,12 @@ namespace Player
         [Header("Prototyping")]
         public PlayerCombatPrototyping playerCombatPrototyping;
 
+        [Header("Knockback")]
+        [SerializeField] private EntityKnockback _playerKnockback;
+        
         [Header("Weapon")]
-        [SerializeField] private MeleeWeapon _currentMeleeWeapon;
+        [SerializeField] private Transform _attackHitBoxPosition;
+        public MeleeWeapon CurrentMeleeWeapon;
         
         private AttackDirection ConvertAnimationEventInfo()
         {
@@ -58,7 +62,7 @@ namespace Player
         {
             AttackDirection attackDirection = ConvertAnimationEventInfo();
             
-            _currentMeleeWeapon.ShowAttackParticle(attackDirection);
+            CurrentMeleeWeapon.ShowAttackParticle(attackDirection);
             
             ContactFilter2D contactFilter2D = new ContactFilter2D
             {
@@ -66,15 +70,16 @@ namespace Player
                 useLayerMask = true,
                 useTriggers = true
             };
-            _currentMeleeWeapon.DetectAttackableObjects(out List<Collider2D> detectedObjects, contactFilter2D, attackDirection);
+            CurrentMeleeWeapon.DetectAttackableObjects(out List<Collider2D> detectedObjects, contactFilter2D, transform.position, attackDirection, _attackHitBoxPosition);
             
             if (TryHitDetectedObjects(detectedObjects, out Vector2? firstEnemyHitPosition))
             {
                 ShakeCamera();
 
-                if (firstEnemyHitPosition.HasValue)
+                // Knockback player
+                if (_playerKnockback && firstEnemyHitPosition.HasValue && CurrentMeleeWeapon.KnockbackAmountToPlayer != 0f)
                 {
-                    _currentMeleeWeapon.KnockbackPlayer(firstEnemyHitPosition.Value);
+                    _playerKnockback.StartKnockBack(firstEnemyHitPosition.Value, CurrentMeleeWeapon.KnockbackAmountToPlayer);
                 }
 
                 // Instantiate a hit particle here if we want only once per attack.
@@ -116,9 +121,9 @@ namespace Player
                 DealsDamage = true,
                 DamageToHealth = damageDealt,
 
-                DealsKnockback = _currentMeleeWeapon.KnockbackAmountToTarget != 0f,
+                DealsKnockback = CurrentMeleeWeapon.KnockbackAmountToTarget != 0f,
                 KnockbackOrigin = transform.position,
-                KnockbackStrength = _currentMeleeWeapon.KnockbackAmountToTarget,
+                KnockbackStrength = CurrentMeleeWeapon.KnockbackAmountToTarget,
 
                 DealsDaze = playerCombatPrototyping.data.doesPlayerDealDaze,
             };
@@ -127,7 +132,7 @@ namespace Player
 
         private int CalculateDamageDealt()
         {
-            int damageDealt = _currentMeleeWeapon.WeaponDamage;
+            int damageDealt = CurrentMeleeWeapon.WeaponDamage;
             
             // This could also factor in some base player attack value?
             
@@ -160,12 +165,16 @@ namespace Player
  
         public void ForceHideAttackParticles()
         {
-            _currentMeleeWeapon.ForceHideAttackParticles();
+            CurrentMeleeWeapon.ForceHideAttackParticles();
         }
 
         private void OnDrawGizmos()
         {
-            _currentMeleeWeapon.DrawGizmos(inputs.FacingDirection);
+            if (!CurrentMeleeWeapon)
+            {
+                return;
+            }
+            CurrentMeleeWeapon.DrawGizmos(transform.position, inputs.FacingDirection, _attackHitBoxPosition);
         }
     }
 }

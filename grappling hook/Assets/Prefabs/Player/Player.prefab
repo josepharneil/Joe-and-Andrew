@@ -82,7 +82,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9147847882922389571}
   m_Layer: 0
-  m_Name: RightAttackPos
+  m_Name: SwordAttackPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -212,7 +212,6 @@ GameObject:
   - component: {fileID: 4928653896513910851}
   - component: {fileID: 447105601662447162}
   - component: {fileID: 1569212867}
-  - component: {fileID: 2184398220724220523}
   m_Layer: 11
   m_Name: Player
   m_TagString: Player
@@ -565,7 +564,9 @@ MonoBehaviour:
   _slowTimeScaleDuration: 0.15
   _slowTimeScaleAmount: 0.01
   playerCombatPrototyping: {fileID: 9147847883452652286}
-  _currentMeleeWeapon: {fileID: 2184398220724220523}
+  _playerKnockback: {fileID: 9147847883452652283}
+  _attackHitBoxPosition: {fileID: 9147847882922389571}
+  _currentMeleeWeapon: {fileID: 11400000, guid: 22c847e22f5fa4133a4551802c00ff17, type: 2}
 --- !u!114 &9147847883452652286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -654,7 +655,7 @@ Animator:
   m_GameObject: {fileID: 9147847883452652258}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c897fdb21d16149cb9040b56902eafaa, type: 2}
+  m_Controller: {fileID: 9100000, guid: c40b14d92964b4b3ebb89a1ffc827421, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -883,21 +884,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _entityHealth: {fileID: 9147847883452652282}
---- !u!114 &2184398220724220523
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9147847883452652258}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e3ac4beb1fc403190ef19a437188702, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  WeaponDamage: 5
-  _knockbackAmountToPlayer: 5
-  KnockbackAmountToTarget: 5
-  attackHitBoxPosition: {fileID: 9147847882922389571}
-  attackRadius: 2
-  playerKnockbackComponent: {fileID: 9147847883452652283}

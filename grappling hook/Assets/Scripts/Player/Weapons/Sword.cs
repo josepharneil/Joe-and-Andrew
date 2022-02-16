@@ -1,19 +1,14 @@
-using System.Collections;
 using System.Collections.Generic;
-using Bolt;
 using Entity;
 using UnityEngine;
 
 namespace Player
 {
+    [CreateAssetMenu(fileName = "SwordWeapon", menuName = "Weapons/Melee/Sword")]
     public class Sword : MeleeWeapon
     {
         [Header("Attack Position")]
-        [SerializeField] private Transform attackHitBoxPosition;
         [SerializeField] private float attackRadius = 2f;
-        
-        [Header("Knockback")]
-        [SerializeField] private EntityKnockback playerKnockbackComponent;
 
         #region UnityEvents
         private void OnEnable()
@@ -21,11 +16,13 @@ namespace Player
             ForceHideAttackParticles();
         }
         
-        public override void DrawGizmos(FacingDirection facingDirection)
+        public override void DrawGizmos(Vector2 attackerPosition, FacingDirection facingDirection, Transform attackHitBoxPosition)
         {
             if (!attackHitBoxPosition) return;
             
-            Vector3 position = GetCirclePosition(facingDirection == FacingDirection.Left ? AttackDirection.Left : AttackDirection.Right);
+            Vector3 position = GetCirclePosition(attackerPosition, facingDirection == FacingDirection.Left ? 
+                AttackDirection.Left : AttackDirection.Right,
+                attackHitBoxPosition);
             Gizmos.DrawWireSphere(position, attackRadius);
         }
         #endregion
@@ -41,35 +38,27 @@ namespace Player
         #endregion
         
         public override void DetectAttackableObjects(out List<Collider2D> detectedObjects, 
-            ContactFilter2D contactFilter2D, AttackDirection attackDirection)
+            ContactFilter2D contactFilter2D, Vector2 attackerPosition, AttackDirection attackDirection, Transform attackHitBoxPosition)
         {
             detectedObjects = new List<Collider2D>();
             
-            Vector2 overlapCirclePosition = GetCirclePosition(attackDirection);
+            Vector2 overlapCirclePosition = GetCirclePosition(attackerPosition, attackDirection, attackHitBoxPosition);
             Physics2D.OverlapCircle(overlapCirclePosition, attackRadius, contactFilter2D, detectedObjects);
         }
 
-        private Vector2 GetCirclePosition(AttackDirection attackDirection)
+        private Vector2 GetCirclePosition(Vector2 attackerPosition, AttackDirection attackDirection, Transform attackHitBoxPosition)
         {
             Vector2 overlapCirclePosition;
             if (attackDirection == AttackDirection.Left)
             {
                 Vector3 localPosition = attackHitBoxPosition.localPosition;
-                overlapCirclePosition = (Vector2)transform.position + new Vector2(-localPosition.x, localPosition.y);
+                overlapCirclePosition = attackerPosition + new Vector2(-localPosition.x, localPosition.y);
             }
             else
             {
-                overlapCirclePosition = (Vector2)attackHitBoxPosition.position;
+                overlapCirclePosition = attackHitBoxPosition.position;
             }
             return overlapCirclePosition;
-        }
-
-        public override void KnockbackPlayer(Vector2 firstEnemyHitPosition)
-        {
-            if (playerKnockbackComponent)
-            {
-                playerKnockbackComponent.StartKnockBack(firstEnemyHitPosition, _knockbackAmountToPlayer);
-            }
         }
     }
 }

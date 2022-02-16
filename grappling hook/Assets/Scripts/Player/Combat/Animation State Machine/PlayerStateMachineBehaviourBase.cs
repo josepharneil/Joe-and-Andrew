@@ -4,6 +4,8 @@ using Player;
 public class PlayerStateMachineBehaviourBase : StateMachineBehaviour
 {
     private PlayerInputs _playerController;
+    private PlayerCombat _playerCombat;
+    
     protected PlayerInputs GetPlayerController(Animator animator)
     {
         if (_playerController == null)
@@ -13,16 +15,30 @@ public class PlayerStateMachineBehaviourBase : StateMachineBehaviour
         return _playerController;
     }
 
+    protected PlayerCombat GetPlayerCombat(Animator animator)
+    {
+        if (_playerCombat == null)
+        {
+            _playerCombat = animator.GetComponent<PlayerCombat>();
+        }
+        return _playerCombat;
+    }
+    
+    
+
     protected void SetSpeedBasedOnPrototypeCustomisation(Animator animator)
     {
         if (GetPlayerController(animator).playerCombatPrototyping.data.attackSpeed == 0f)
         {
             GetPlayerController(animator).playerCombatPrototyping.data.attackSpeed = 1f;
         }
-        animator.speed = GetPlayerController(animator).playerCombatPrototyping.data.attackSpeed;
+
+        float baseAttackSpeed = GetPlayerController(animator).playerCombatPrototyping.data.attackSpeed;
+        float weaponAttackSpeed = GetPlayerCombat(animator).CurrentMeleeWeapon.WeaponSpeed;
+        animator.speed = baseAttackSpeed * weaponAttackSpeed;
     }
 
-    protected void ResetSpeed(Animator animator)
+    protected static void ResetSpeed(Animator animator)
     {
         animator.speed = 1f;
     }
