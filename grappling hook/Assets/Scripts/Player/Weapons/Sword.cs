@@ -23,16 +23,19 @@ namespace Player
         
         public override void DrawGizmos(FacingDirection facingDirection)
         {
-            // TODO Check this
-            if (facingDirection == FacingDirection.Left)
+            if (attackHitBoxPosition)
             {
-                var localPosition = attackHitBoxPosition.localPosition;
-                Vector3 position = transform.position + new Vector3(-localPosition.x, localPosition.y);
-                Gizmos.DrawWireSphere(position, attackRadius);
-            }
-            else
-            {
-                Gizmos.DrawWireSphere(attackHitBoxPosition.position, attackRadius);
+                // TODO Check this
+                if (facingDirection == FacingDirection.Left)
+                {
+                    var localPosition = attackHitBoxPosition.localPosition;
+                    Vector3 position = transform.position + new Vector3(-localPosition.x, localPosition.y);
+                    Gizmos.DrawWireSphere(position, attackRadius);
+                }
+                else
+                {
+                    Gizmos.DrawWireSphere(attackHitBoxPosition.position, attackRadius);
+                }
             }
         }
         #endregion
