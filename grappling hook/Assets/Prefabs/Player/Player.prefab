@@ -29,7 +29,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9147847883452652287}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9147847882606884628
 MonoBehaviour:
@@ -72,36 +72,6 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
---- !u!1 &9147847882922389570
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 9147847882922389571}
-  m_Layer: 0
-  m_Name: SwordAttackPosition
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &9147847882922389571
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9147847882922389570}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.5, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 9147847883452652287}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9147847883264161615
 GameObject:
   m_ObjectHideFlags: 0
@@ -231,7 +201,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 9147847883264161608}
-  - {fileID: 9147847882922389571}
   - {fileID: 9147847882606884635}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -565,8 +534,7 @@ MonoBehaviour:
   _slowTimeScaleAmount: 0.01
   playerCombatPrototyping: {fileID: 9147847883452652286}
   _playerKnockback: {fileID: 9147847883452652283}
-  _attackHitBoxPosition: {fileID: 9147847882922389571}
-  _currentMeleeWeapon: {fileID: 11400000, guid: 22c847e22f5fa4133a4551802c00ff17, type: 2}
+  CurrentMeleeWeapon: {fileID: 0}
 --- !u!114 &9147847883452652286
 MonoBehaviour:
   m_ObjectHideFlags: 0

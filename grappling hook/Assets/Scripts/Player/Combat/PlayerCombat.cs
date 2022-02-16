@@ -40,11 +40,6 @@ namespace Player
         [SerializeField] private EntityKnockback _playerKnockback;
         
         [Header("Weapon")]
-        // TODO: attack hitbox position isnt perfect, need to figure out a better way of doing this...
-        // Could figure out by sword attack radius or something, not sure...
-        // Yeah I guess we just need the height on the player, and then the distance from the player is dependent on the
-        // sword itself!
-        [SerializeField] private Transform _attackHitBoxPosition;
         public MeleeWeapon CurrentMeleeWeapon;
         
         private AttackDirection ConvertAnimationEventInfo()
@@ -74,7 +69,7 @@ namespace Player
                 useLayerMask = true,
                 useTriggers = true
             };
-            CurrentMeleeWeapon.DetectAttackableObjects(out List<Collider2D> detectedObjects, contactFilter2D, transform.position, attackDirection, _attackHitBoxPosition);
+            CurrentMeleeWeapon.DetectAttackableObjects(out List<Collider2D> detectedObjects, contactFilter2D, transform.position, attackDirection);
             
             if (TryHitDetectedObjects(detectedObjects, out Vector2? firstEnemyHitPosition))
             {
@@ -178,7 +173,7 @@ namespace Player
             {
                 return;
             }
-            CurrentMeleeWeapon.DrawGizmos(transform.position, inputs.FacingDirection, _attackHitBoxPosition);
+            CurrentMeleeWeapon.DrawGizmos(transform.position, inputs.FacingDirection);
         }
     }
 }

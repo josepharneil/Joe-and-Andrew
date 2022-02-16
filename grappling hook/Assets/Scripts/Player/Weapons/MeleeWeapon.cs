@@ -16,6 +16,12 @@ namespace Player
         /// Speed of the weapon.
         /// </summary>
         public float WeaponSpeed = 1f;
+
+        /// <summary>
+        /// Height offset of the weapon.
+        /// </summary>
+        [Header("Weapon Position")]
+        public float WeaponHeightOffset = 0f;
         
         /// <summary>
         /// Amount that this weapon knocks back the player.
@@ -31,7 +37,7 @@ namespace Player
         /// <summary>
         /// Draws gizmos.
         /// </summary>
-        public abstract void DrawGizmos(Vector2 attackerPosition, FacingDirection facingDirection, Transform attackHitBoxPosition);
+        public abstract void DrawGizmos(Vector2 attackerPosition, FacingDirection facingDirection);
 
         #region Particles
         /// <summary>
@@ -56,7 +62,6 @@ namespace Player
         /// </summary>
         public abstract void DetectAttackableObjects(out List<Collider2D> detectedObjects, 
             ContactFilter2D contactFilter2D, 
-            Vector2 attackerPosition, AttackDirection attackDirection,
-            Transform attackHitBoxPosition);
+            Vector2 attackerPosition, AttackDirection attackDirection);
     }
 }

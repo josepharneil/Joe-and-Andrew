@@ -16,13 +16,10 @@ namespace Player
             ForceHideAttackParticles();
         }
         
-        public override void DrawGizmos(Vector2 attackerPosition, FacingDirection facingDirection, Transform attackHitBoxPosition)
+        public override void DrawGizmos(Vector2 attackerPosition, FacingDirection facingDirection)
         {
-            if (!attackHitBoxPosition) return;
-            
             Vector3 position = GetCirclePosition(attackerPosition, facingDirection == FacingDirection.Left ? 
-                AttackDirection.Left : AttackDirection.Right,
-                attackHitBoxPosition);
+                AttackDirection.Left : AttackDirection.Right);
             Gizmos.DrawWireSphere(position, attackRadius);
         }
         #endregion
@@ -38,25 +35,24 @@ namespace Player
         #endregion
         
         public override void DetectAttackableObjects(out List<Collider2D> detectedObjects, 
-            ContactFilter2D contactFilter2D, Vector2 attackerPosition, AttackDirection attackDirection, Transform attackHitBoxPosition)
+            ContactFilter2D contactFilter2D, Vector2 attackerPosition, AttackDirection attackDirection)
         {
             detectedObjects = new List<Collider2D>();
             
-            Vector2 overlapCirclePosition = GetCirclePosition(attackerPosition, attackDirection, attackHitBoxPosition);
+            Vector2 overlapCirclePosition = GetCirclePosition(attackerPosition, attackDirection);
             Physics2D.OverlapCircle(overlapCirclePosition, attackRadius, contactFilter2D, detectedObjects);
         }
 
-        private Vector2 GetCirclePosition(Vector2 attackerPosition, AttackDirection attackDirection, Transform attackHitBoxPosition)
+        private Vector2 GetCirclePosition(Vector2 attackerPosition, AttackDirection attackDirection)
         {
             Vector2 overlapCirclePosition;
             if (attackDirection == AttackDirection.Left)
             {
-                Vector3 localPosition = attackHitBoxPosition.localPosition;
-                overlapCirclePosition = attackerPosition + new Vector2(-localPosition.x, localPosition.y);
+                overlapCirclePosition = attackerPosition + new Vector2(-attackRadius, WeaponHeightOffset);
             }
             else
             {
-                overlapCirclePosition = attackHitBoxPosition.position;
+                overlapCirclePosition = attackerPosition + new Vector2(attackRadius, WeaponHeightOffset);
             }
             return overlapCirclePosition;
         }

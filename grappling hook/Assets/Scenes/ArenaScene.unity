@@ -6089,6 +6089,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 76782474}
     m_Modifications:
+    - target: {fileID: 9147847882922389570, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: m_Name
+      value: SwordAttackPositionY
+      objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652258, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: m_Name
       value: Player

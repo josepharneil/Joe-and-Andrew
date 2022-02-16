@@ -7,7 +7,7 @@ namespace Player
     [CreateAssetMenu(fileName = "SpearWeapon", menuName = "Weapons/Melee/Spear")]
     public class Spear : MeleeWeapon
     {
-        public override void DrawGizmos(Vector2 attackerPosition, FacingDirection facingDirection, Transform attackHitBoxPosition)
+        public override void DrawGizmos(Vector2 attackerPosition, FacingDirection facingDirection)
         {
             throw new System.NotImplementedException();
         }
@@ -28,7 +28,7 @@ namespace Player
         }
 
         public override void DetectAttackableObjects(out List<Collider2D> detectedObjects, ContactFilter2D contactFilter2D, Vector2 attackerPosition,
-            AttackDirection attackDirection, Transform attackHitBoxPosition)
+            AttackDirection attackDirection)
         {
             throw new System.NotImplementedException();
         }
