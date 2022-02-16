@@ -67,7 +67,6 @@ namespace Player
                 useTriggers = true
             };
             _currentMeleeWeapon.DetectAttackableObjects(out List<Collider2D> detectedObjects, contactFilter2D, attackDirection);
-
             
             if (TryHitDetectedObjects(detectedObjects, out Vector2? firstEnemyHitPosition))
             {
@@ -128,9 +127,10 @@ namespace Player
 
         private int CalculateDamageDealt()
         {
+            int damageDealt = _currentMeleeWeapon.WeaponDamage;
+            
             // This could also factor in some base player attack value?
             
-            int damageDealt = _currentMeleeWeapon.WeaponDamage;
             if (playerCombatPrototyping.data.doesAttackingParriedDealBonusDamage)
             {
                 damageDealt *= playerCombatPrototyping.data.attackParriedBonusDamageAmount;
@@ -157,7 +157,7 @@ namespace Player
                 }
             }
         }
-
+ 
         public void ForceHideAttackParticles()
         {
             _currentMeleeWeapon.ForceHideAttackParticles();
