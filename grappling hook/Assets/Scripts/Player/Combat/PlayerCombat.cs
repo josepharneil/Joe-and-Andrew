@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,14 @@ using JetBrains.Annotations;
 
 namespace Player
 {
+    public enum AttackDirection
+    {
+        Up,
+        Down,
+        Left,
+        Right
+    }
+
     public class PlayerCombat : MonoBehaviour
     {
         [Header("Setup")]
@@ -36,7 +45,7 @@ namespace Player
         [SerializeField] private GamepadVibrator gamepadVibrator;
 
         [Header("Knockback")]
-        [SerializeField] private EntityKnockback entityKnockback;
+        [SerializeField] private EntityKnockback playerKnockbackable;
         
         [Header("Time Scale On Hit")]
         [SerializeField] private float slowTimeScaleDuration = 0.2f;
@@ -46,6 +55,7 @@ namespace Player
         [Header("Prototyping")]
         public PlayerCombatPrototyping playerCombatPrototyping;
 
+        
         private void OnEnable()
         {
             upSwipe.enabled = false;
@@ -54,24 +64,11 @@ namespace Player
             leftSwipe.enabled = false;
         }
 
-        private enum AttackDirection
-        {
-            Up,
-            Down,
-            Left,
-            Right
-        }
-
-        /// <summary>
-        /// Called by Animation Events.
-        /// </summary>
-        /// <param name="attackIndex"> Index of the attack </param>
-        [UsedImplicitly] public void CheckAttackHitBox(int attackIndex)
+        private AttackDirection ConvertAnimationEventInfo(int index)
         {
             FacingDirection facingDirection = inputs.FacingDirection;
-
             AttackDirection attackDirection = AttackDirection.Right;
-            switch (attackIndex)
+            switch (index)
             {
                 // 0, 1 and 2 ... need to look into this
                 case 0:
@@ -98,15 +95,99 @@ namespace Player
                     break;
             }
 
+            return attackDirection;
+        }
+
+        /// <summary>
+        /// Called by Animation Events.
+        /// </summary>
+        [UsedImplicitly] public void Attack(int attackIndex)
+        {
+            // Global - could be a static method or something idk
+            AttackDirection attackDirection = ConvertAnimationEventInfo(attackIndex);
+            
+            // Weapon based
+            ShowAttackParticle(attackDirection);
+            
+            // Weapon based
+            DetectAttackableObjects(out List<Collider2D> detectedObjects, attackDirection);
+
+            // Weapon based
+            if (TryHitDetectedObjects(detectedObjects, out bool firstEnemyHitPositionIsSet, out Vector2 firstEnemyHitPosition))
+            {
+                // Player combat based (could be weapon based if we want large weapons to hit big).
+                ShakeCamera();
+                
+                // Weapon based
+                KnockbackPlayer(firstEnemyHitPositionIsSet, firstEnemyHitPosition);
+
+                // Instantiate a hit particle here if we want only once per attack.
+            }
+
+            // At the end, we're now post damage.
+            inputs.isInPreDamageAttackPhase = false;
+        }
+
+        private void KnockbackPlayer(bool firstEnemyHitPositionIsSet, Vector2 firstEnemyHitPosition)
+        {
+            if (playerKnockbackable && playerCombatPrototyping.data.doesPlayerGetKnockedBackByOwnAttacks &&
+                firstEnemyHitPositionIsSet)
+            {
+                playerKnockbackable.StartKnockBack(firstEnemyHitPosition, playerCombatPrototyping.data.selfKnockbackStrength);
+            }
+        }
+
+        private void DetectAttackableObjects(out List<Collider2D> detectedObjects, AttackDirection attackDirection)
+        {
+            detectedObjects = new List<Collider2D>();
+            
             Transform attackPosition = sideAttackHitBoxPosition;
             switch (attackDirection)
             {
                 case AttackDirection.Up:
                     attackPosition = aboveAttackHitBoxPosition;
-                    StartCoroutine(ShowSwipe(AttackDirection.Up));
                     break;
                 case AttackDirection.Down:
                     attackPosition = belowAttackHitBoxPosition;
+                    break;
+                case AttackDirection.Left:
+                    break;
+                case AttackDirection.Right:
+                    break;
+            }
+            
+            FacingDirection facingDirection = inputs.FacingDirection;
+            Vector2 overlapCirclePosition;
+            if (facingDirection == FacingDirection.Left)
+            {
+                var localPosition = attackPosition.localPosition;
+                overlapCirclePosition = (Vector2)transform.position + new Vector2(-localPosition.x, localPosition.y);
+            }
+            else
+            {
+                overlapCirclePosition = attackPosition.position;
+            }
+
+            ContactFilter2D contactFilter2D = new ContactFilter2D
+            {
+                layerMask = whatIsDamageable,
+                useLayerMask = true,
+                useTriggers = true
+            };
+            Physics2D.OverlapCircle(overlapCirclePosition, attackRadius, contactFilter2D, detectedObjects);
+        }
+
+        /// <summary>
+        /// This is the attack particle that is shown whether something is hit or not.
+        /// </summary>
+        private void ShowAttackParticle(AttackDirection attackDirection)
+        {
+            switch (attackDirection)
+            {
+                case AttackDirection.Up:
+                    StartCoroutine(ShowSwipe(AttackDirection.Up));
+                    break;
+                case AttackDirection.Down:
                     StartCoroutine(ShowSwipe(AttackDirection.Down));
                     break;
                 case AttackDirection.Left:
@@ -116,81 +197,58 @@ namespace Player
                     StartCoroutine(ShowSwipe(AttackDirection.Right));
                     break;
             }
-            
-            Vector2 overlapCirclePosition;
-            if (facingDirection == FacingDirection.Left)
-            {
-                var localPosition = attackPosition.localPosition;
-                overlapCirclePosition = (Vector2)transform.position + new Vector2(-localPosition.x, localPosition.y );
-            }
-            else
-            {
-                overlapCirclePosition = attackPosition.position;
-            }
-            ContactFilter2D contactFilter2D = new ContactFilter2D
-            {
-                layerMask = whatIsDamageable,
-                useLayerMask = true,
-                useTriggers = true
-            };
-            List<Collider2D> detectedObjects = new List<Collider2D>();
-            Physics2D.OverlapCircle(overlapCirclePosition, attackRadius, contactFilter2D, detectedObjects);
-            
-            bool enemyHit = false;
-
-            bool firstEnemyHitPositionIsSet = false;
-            Vector2 firstEnemyHitPosition = Vector2.zero;
-            foreach (Collider2D coll in detectedObjects)
-            {
-                 coll.gameObject.TryGetComponent<EntityHitbox>(out EntityHitbox entityHitbox);
-                 if (!entityHitbox) continue;
-                 
-                 int damageDealt = attackDamage;
-                 if (playerCombatPrototyping.data.doesAttackingParriedDealBonusDamage)
-                 {
-                     damageDealt *= playerCombatPrototyping.data.attackParriedBonusDamageAmount;
-                 }
-                     
-                 EntityHitData hitData = new EntityHitData
-                 {
-                     DealsDamage = true,
-                     DamageToHealth = damageDealt,
-                         
-                     DealsKnockback = playerCombatPrototyping.data.doesPlayerDealKnockback,
-                     KnockbackOrigin = transform.position,
-                     KnockbackStrength = playerCombatPrototyping.data.knockbackStrength,
-                         
-                     DealsDaze = playerCombatPrototyping.data.doesPlayerDealDaze,
-                 };
-                 enemyHit = entityHitbox.Hit(hitData);
-                 
-                 if (enemyHit && !firstEnemyHitPositionIsSet)
-                 {
-                     firstEnemyHitPosition = entityHitbox.transform.position;
-                     firstEnemyHitPositionIsSet = true;
-                 }
-                 // Instantiate a hit particle here if we want
-            }
-
-            if (enemyHit)
-            {
-                cinemachineShake.ShakeCamera(shakeAmplitude, shakeFrequency, shakeDuration);
-                Time.timeScale = slowTimeScaleAmount;
-                _slowTimeScaleTimer = slowTimeScaleDuration;
-                
-                // Todo check this logic
-                if (entityKnockback && playerCombatPrototyping.data.doesPlayerGetKnockedBackByOwnAttacks && firstEnemyHitPositionIsSet)
-                {
-                    entityKnockback.StartKnockBack(firstEnemyHitPosition, playerCombatPrototyping.data.selfKnockbackStrength);
-                }
-                
-                // Or here! Instantiate a hit particle here if we want
-            }
-
-            // At the end, we're now post damage.
-            inputs.isInPreDamageAttackPhase = false;
         }
 
+        private bool TryHitDetectedObjects(List<Collider2D> detectedObjects, out bool firstEnemyHitPositionIsSet,
+            out Vector2 firstEnemyHitPosition)
+        {
+            bool enemyHit = false;
+            firstEnemyHitPositionIsSet = false;
+            firstEnemyHitPosition = Vector2.zero;
+            
+            foreach (Collider2D coll in detectedObjects)
+            {
+                coll.gameObject.TryGetComponent<EntityHitbox>(out EntityHitbox entityHitbox);
+                if (!entityHitbox) continue;
+
+                int damageDealt = attackDamage;
+                if (playerCombatPrototyping.data.doesAttackingParriedDealBonusDamage)
+                {
+                    damageDealt *= playerCombatPrototyping.data.attackParriedBonusDamageAmount;
+                }
+
+                EntityHitData hitData = new EntityHitData
+                {
+                    DealsDamage = true,
+                    DamageToHealth = damageDealt,
+
+                    DealsKnockback = playerCombatPrototyping.data.doesPlayerDealKnockback,
+                    KnockbackOrigin = transform.position,
+                    KnockbackStrength = playerCombatPrototyping.data.knockbackStrength,
+
+                    DealsDaze = playerCombatPrototyping.data.doesPlayerDealDaze,
+                };
+                enemyHit = entityHitbox.Hit(hitData);
+
+                if (enemyHit && !firstEnemyHitPositionIsSet)
+                {
+                    firstEnemyHitPosition = entityHitbox.transform.position;
+                    firstEnemyHitPositionIsSet = true;
+                }
+                
+                // Instantiate a hit particle here if we want particles for EACH hit enemy
+            }
+
+            return enemyHit;
+        }
+
+        private void ShakeCamera()
+        {
+            cinemachineShake.ShakeCamera(shakeAmplitude, shakeFrequency, shakeDuration);
+            Time.timeScale = slowTimeScaleAmount;
+            _slowTimeScaleTimer = slowTimeScaleDuration;
+        }
+        
         private void Update()
         {
             if (_slowTimeScaleTimer > 0f)
