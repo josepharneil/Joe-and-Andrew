@@ -6104,7 +6104,7 @@ PrefabInstance:
     - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: CurrentMeleeWeapon
       value: 
-      objectReference: {fileID: 11400000, guid: 22c847e22f5fa4133a4551802c00ff17, type: 2}
+      objectReference: {fileID: 11400000, guid: 5627a537f437c48e992d60552c5546b2, type: 2}
     - target: {fileID: 9147847883452652287, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: m_RootOrder
       value: 1

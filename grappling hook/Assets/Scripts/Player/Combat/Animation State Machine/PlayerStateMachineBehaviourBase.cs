@@ -24,8 +24,6 @@ public class PlayerStateMachineBehaviourBase : StateMachineBehaviour
         return _playerCombat;
     }
     
-    
-
     protected void SetSpeedBasedOnPrototypeCustomisation(Animator animator)
     {
         if (GetPlayerController(animator).playerCombatPrototyping.data.attackSpeed == 0f)

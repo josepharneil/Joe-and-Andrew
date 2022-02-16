@@ -1,3 +1,4 @@
+using System;
 using Entity;
 using JetBrains.Annotations;
 using Physics;
@@ -29,14 +30,13 @@ namespace Player
         private float _apexPoint; //This becomes 1 at the end of the jump
         private float _fallSpeed;
 
-        [Header("Wall Jump Stats")]
+        [Header("Wall Jump Stats")] 
         [SerializeField] private float _verticalWallJump;
         [SerializeField] private float _horizontalWallJump;
         private bool _isWallSliding = false;
         [SerializeField] private float _wallSideGravityMultiplier;
         private float _wallJumpCounter=0f;
-
-
+        
         [Header("Ground Move Stats")]
         [SerializeField] private float moveSpeed = 10f;
         [SerializeField] private AnimationCurve accelerationCurve;
@@ -145,7 +145,10 @@ namespace Player
         // NOTE @JA I've never heard of this, but looks perfect for updating values during game time :) 
         private void OnValidate()
         {
+        }
 
+        private void OnDrawGizmosSelected()
+        {
         }
 
         // Update is called once per frame
@@ -180,7 +183,6 @@ namespace Player
             CalculateGravity();
             WallJump();
             Jump();
-            
 
             if (!isAttacking || (isAttacking && !playerCombatPrototyping.data.movementDisabledByAttacks))
             {
@@ -227,10 +229,10 @@ namespace Player
                 if (_isJumpEndedEarly)
                 {
                     _velocity.y -= _fallSpeed * earlyJumpMultiplier *Time.deltaTime;
-                }else if (_isWallSliding && _velocity.y<0) 
+                }
+                else if (_isWallSliding && _velocity.y<0) 
                 {
                     _velocity.y -= _fallSpeed * _wallSideGravityMultiplier * Time.deltaTime;
-                    
                 }
                 else
                 {
@@ -346,15 +348,14 @@ namespace Player
             //not sure if there is a better way of doing this
             if (!_isGrounded && _isJumpInput)
             {
-                bool collisionLeftRight = FacingDirection == FacingDirection.Left ?
-                movementController.customCollider2D.GetCollisionLeft() : movementController.customCollider2D.GetCollisionRight();
-                if (collisionLeftRight)
+                CustomCollider2D customCollider2D = movementController.customCollider2D;
+                if (customCollider2D.GetCollisionLeft() || customCollider2D.GetCollisionRight())
                 {
                     _isJumpInput = false;
                     _velocity.y = _verticalWallJump;
                     _velocity.x = _horizontalWallJump * -1f * (int)FacingDirection;
                     _hasWallJumped = true;
-                    FacingDirection = FacingDirection == FacingDirection.Left ? FacingDirection.Right : FacingDirection.Right;
+                    FacingDirection = (FacingDirection == FacingDirection.Left) ? FacingDirection.Right : FacingDirection.Left;
                 }
                 else
                 {
@@ -377,7 +378,7 @@ namespace Player
         #endregion
 
         #region WallSlide
-        public void CheckWallSlide()
+        private void CheckWallSlide()
         {
             bool collisionLeftRight = FacingDirection == FacingDirection.Left ?
                 movementController.customCollider2D.GetCollisionLeft() : movementController.customCollider2D.GetCollisionRight();

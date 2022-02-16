@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: BasicSpear
   m_EditorClassIdentifier: 
   WeaponDamage: 5
-  WeaponSpeed: 1
+  WeaponSpeed: 1.5
   WeaponHeightOffset: 0
-  KnockbackAmountToPlayer: 8
-  KnockbackAmountToTarget: 15
-  _attackLength: 2
+  KnockbackAmountToPlayer: 4
+  KnockbackAmountToTarget: 10
+  _attackLength: 3
   _attackWidth: 0.5
