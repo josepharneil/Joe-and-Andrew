@@ -24,6 +24,8 @@ namespace Player
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             ResetSpeed(animator);
+            
+            GetPlayerController(animator).isAttacking = false;
         }
     }
 }
