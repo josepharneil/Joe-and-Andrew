@@ -8,13 +8,6 @@ namespace Player
 {
     public class Sword : MeleeWeapon
     {
-        [Header("Attack Swing Particles")]
-        [SerializeField] private float swipeShowTime = 1f;
-        [SerializeField] private SpriteRenderer upSwipe;
-        [SerializeField] private SpriteRenderer downSwipe;
-        [SerializeField] private SpriteRenderer leftSwipe;
-        [SerializeField] private SpriteRenderer rightSwipe;
-        
         [Header("Attack Position")]
         [SerializeField] private Transform sideAttackHitBoxPosition;
         [SerializeField] private float attackRadius = 2f;
@@ -45,44 +38,10 @@ namespace Player
         #endregion
 
         #region Particles
-        public override void ForceHideAttackParticles()
-        {
-            downSwipe.enabled = false;
-            upSwipe.enabled = false;
-            rightSwipe.enabled = false;
-            leftSwipe.enabled = false;
-        }
 
-        public override void ShowAttackParticle(AttackDirection attackDirection)
-        {
-            IEnumerator ShowSwipeCoroutine()
-            {
-                SpriteRenderer swipe = upSwipe;
-                switch (attackDirection)
-                {
-                    case AttackDirection.Up:
-                        swipe = upSwipe;
-                        break;
-                    case AttackDirection.Down:
-                        swipe = downSwipe;
-                        break;
-                    case AttackDirection.Left:
-                        swipe = leftSwipe;
-                        break;
-                    case AttackDirection.Right:
-                        swipe = rightSwipe;
-                        break;
-                }
-            
-                swipe.enabled = true;
-            
-                yield return new WaitForSeconds(swipeShowTime / GetComponent<PlayerCombat>().playerCombatPrototyping.data.attackSpeed);
+        public override void ForceHideAttackParticles(){}
 
-                swipe.enabled = false;
-            }
-            
-            StartCoroutine(ShowSwipeCoroutine());
-        }
+        public override void ShowAttackParticle(AttackDirection attackDirection){}
         
         public override void ShowAttackHitParticle(){}
         
