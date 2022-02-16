@@ -646,6 +646,8 @@ namespace Player
                 return;
             }
             
+            // Disabling this because we don't have up / down right now.
+#if false
             isAttacking = true;
             const float upwardsInputThreshold = 0.5f;
             const float downwardsInputThreshold = -upwardsInputThreshold;
@@ -674,6 +676,23 @@ namespace Player
                 }
                 animator.SetTrigger(AttackTriggerID);
             }
+#else
+            if (playerCombatPrototyping.data.canChangeDirectionsDuringAttack)
+            {
+                if (_moveInput.x < 0)
+                {
+                    FacingDirection = FacingDirection.Left;
+                    spriteRenderer.flipX = true;
+                }
+                else if ( _moveInput.x > 0 )
+                {
+                    FacingDirection = FacingDirection.Right;
+                    spriteRenderer.flipX = false;
+                }
+            }
+            animator.SetTrigger(AttackTriggerID);
+#endif
+
         }
 
         private void CheckIfAttackIsCancellable()
@@ -709,7 +728,7 @@ namespace Player
                     isAttacking = false;
                     animator.Play("Player_Idle");
                     // todo getting playercombat here is bad.
-                    GetComponent<PlayerCombat>().ForceHideSwipes();
+                    GetComponent<PlayerCombat>().ForceHideAttackParticles();
                 }
             }
 
@@ -719,7 +738,7 @@ namespace Player
                 {
                     isAttacking = false;
                     animator.Play("Player_Jump");
-                    GetComponent<PlayerCombat>().ForceHideSwipes();
+                    GetComponent<PlayerCombat>().ForceHideAttackParticles();
                 }
             }
                 
@@ -729,7 +748,7 @@ namespace Player
                 {
                     isAttacking = false;
                     animator.Play("Player_Idle");
-                    GetComponent<PlayerCombat>().ForceHideSwipes();
+                    GetComponent<PlayerCombat>().ForceHideAttackParticles();
                 }
             }
         }

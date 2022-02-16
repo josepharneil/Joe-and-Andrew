@@ -6093,10 +6093,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652280, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: c40b14d92964b4b3ebb89a1ffc827421, type: 2}
     - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: cinemachineShake
       value: 
       objectReference: {fileID: 82546289}
+    - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: playerKnockbackable
+      value: 
+      objectReference: {fileID: 2092242610}
     - target: {fileID: 9147847883452652287, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -6143,6 +6151,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+--- !u!114 &2092242610 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9147847883452652283, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+  m_PrefabInstance: {fileID: 2092242609}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fbb600d3206748e0ab9eb971f394754, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2093751303
 GameObject:
   m_ObjectHideFlags: 0
