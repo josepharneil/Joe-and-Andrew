@@ -23,20 +23,10 @@ namespace Player
         
         public override void DrawGizmos(FacingDirection facingDirection)
         {
-            if (attackHitBoxPosition)
-            {
-                // TODO Check this
-                if (facingDirection == FacingDirection.Left)
-                {
-                    var localPosition = attackHitBoxPosition.localPosition;
-                    Vector3 position = transform.position + new Vector3(-localPosition.x, localPosition.y);
-                    Gizmos.DrawWireSphere(position, attackRadius);
-                }
-                else
-                {
-                    Gizmos.DrawWireSphere(attackHitBoxPosition.position, attackRadius);
-                }
-            }
+            if (!attackHitBoxPosition) return;
+            
+            Vector3 position = GetCirclePosition(facingDirection == FacingDirection.Left ? AttackDirection.Left : AttackDirection.Right);
+            Gizmos.DrawWireSphere(position, attackRadius);
         }
         #endregion
 
@@ -55,17 +45,23 @@ namespace Player
         {
             detectedObjects = new List<Collider2D>();
             
+            Vector2 overlapCirclePosition = GetCirclePosition(attackDirection);
+            Physics2D.OverlapCircle(overlapCirclePosition, attackRadius, contactFilter2D, detectedObjects);
+        }
+
+        private Vector2 GetCirclePosition(AttackDirection attackDirection)
+        {
             Vector2 overlapCirclePosition;
             if (attackDirection == AttackDirection.Left)
             {
-                var localPosition = attackHitBoxPosition.localPosition;
+                Vector3 localPosition = attackHitBoxPosition.localPosition;
                 overlapCirclePosition = (Vector2)transform.position + new Vector2(-localPosition.x, localPosition.y);
             }
             else
             {
-                overlapCirclePosition = attackHitBoxPosition.position;
+                overlapCirclePosition = (Vector2)attackHitBoxPosition.position;
             }
-            Physics2D.OverlapCircle(overlapCirclePosition, attackRadius, contactFilter2D, detectedObjects);
+            return overlapCirclePosition;
         }
 
         public override void KnockbackPlayer(Vector2 firstEnemyHitPosition)
