@@ -173,7 +173,7 @@ namespace Player
             {
                 return;
             }
-            CurrentMeleeWeapon.DrawGizmos(transform.position, inputs.FacingDirection);
+            CurrentMeleeWeapon.DrawGizmos(transform.position, ConvertAnimationEventInfo());
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Player
         /// <summary>
         /// Draws gizmos.
         /// </summary>
-        public abstract void DrawGizmos(Vector2 attackerPosition, FacingDirection facingDirection);
+        public abstract void DrawGizmos(Vector2 attackerPosition, AttackDirection facingDirection);
 
         #region Particles
         /// <summary>

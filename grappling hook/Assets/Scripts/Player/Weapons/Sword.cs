@@ -7,7 +7,7 @@ namespace Player
     [CreateAssetMenu(fileName = "SwordWeapon", menuName = "Weapons/Melee/Sword")]
     public class Sword : MeleeWeapon
     {
-        [Header("Attack Position")]
+        [Header("Attack Size")]
         [SerializeField] private float attackRadius = 2f;
 
         #region UnityEvents
@@ -16,10 +16,9 @@ namespace Player
             ForceHideAttackParticles();
         }
         
-        public override void DrawGizmos(Vector2 attackerPosition, FacingDirection facingDirection)
+        public override void DrawGizmos(Vector2 attackerPosition, AttackDirection attackDirection)
         {
-            Vector3 position = GetCirclePosition(attackerPosition, facingDirection == FacingDirection.Left ? 
-                AttackDirection.Left : AttackDirection.Right);
+            Vector3 position = GetCirclePosition(attackerPosition, attackDirection);
             Gizmos.DrawWireSphere(position, attackRadius);
         }
         #endregion
