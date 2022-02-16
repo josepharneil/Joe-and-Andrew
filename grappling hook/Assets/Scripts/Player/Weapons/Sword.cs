@@ -9,7 +9,7 @@ namespace Player
     public class Sword : MeleeWeapon
     {
         [Header("Attack Position")]
-        [SerializeField] private Transform sideAttackHitBoxPosition;
+        [SerializeField] private Transform attackHitBoxPosition;
         [SerializeField] private float attackRadius = 2f;
         
         [Header("Knockback")]
@@ -26,13 +26,13 @@ namespace Player
             // TODO Check this
             if (facingDirection == FacingDirection.Left)
             {
-                var localPosition = sideAttackHitBoxPosition.localPosition;
+                var localPosition = attackHitBoxPosition.localPosition;
                 Vector3 position = transform.position + new Vector3(-localPosition.x, localPosition.y);
                 Gizmos.DrawWireSphere(position, attackRadius);
             }
             else
             {
-                Gizmos.DrawWireSphere(sideAttackHitBoxPosition.position, attackRadius);
+                Gizmos.DrawWireSphere(attackHitBoxPosition.position, attackRadius);
             }
         }
         #endregion
@@ -52,17 +52,15 @@ namespace Player
         {
             detectedObjects = new List<Collider2D>();
             
-            Transform attackPosition = sideAttackHitBoxPosition;
-
             Vector2 overlapCirclePosition;
             if (attackDirection == AttackDirection.Left)
             {
-                var localPosition = attackPosition.localPosition;
+                var localPosition = attackHitBoxPosition.localPosition;
                 overlapCirclePosition = (Vector2)transform.position + new Vector2(-localPosition.x, localPosition.y);
             }
             else
             {
-                overlapCirclePosition = attackPosition.position;
+                overlapCirclePosition = attackHitBoxPosition.position;
             }
             Physics2D.OverlapCircle(overlapCirclePosition, attackRadius, contactFilter2D, detectedObjects);
         }

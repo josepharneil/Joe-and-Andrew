@@ -16,6 +16,7 @@ namespace Entity
         // Haze
         public bool DealsDaze = false;
     }
+    
     /// <summary>
     /// Handles all hits to this entity, for example Damage, Knockback, Daze etc.
     /// Sits in between attacks and defense.

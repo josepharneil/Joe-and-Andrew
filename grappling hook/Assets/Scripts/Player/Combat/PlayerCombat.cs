@@ -1,9 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using Entity;
 using JetBrains.Annotations;
+using UnityEngine;
 
 namespace Player
 {
@@ -21,13 +19,6 @@ namespace Player
         [SerializeField] private LayerMask whatIsDamageable;
         [SerializeField] private PlayerInputs inputs;
         
-        [Header("Attack infos")]
-        [SerializeField] private Transform sideAttackHitBoxPosition;
-        [SerializeField] private Transform aboveAttackHitBoxPosition;
-        [SerializeField] private Transform belowAttackHitBoxPosition;
-        [SerializeField] private int attackDamage;
-        [SerializeField] private float attackRadius;
-        
         [Header("Shake")]
         [SerializeField] private CinemachineShake cinemachineShake;
         [SerializeField] private float shakeAmplitude = 3f;
@@ -38,9 +29,9 @@ namespace Player
         [SerializeField] private GamepadVibrator gamepadVibrator;
         
         [Header("Time Scale On Hit")]
-        [SerializeField] private float slowTimeScaleDuration = 0.2f;
-        [SerializeField] private float slowTimeScaleAmount = 1 / 20f;
-        private float _slowTimeScaleTimer = 0f;
+        [SerializeField] private float _slowTimeScaleDuration = 0.15f;
+        [SerializeField] private float _slowTimeScaleAmount = 0.01f;
+        private float _slowTimeScaleTimer;
 
         [Header("Prototyping")]
         public PlayerCombatPrototyping playerCombatPrototyping;
@@ -56,10 +47,8 @@ namespace Player
             {
                 return AttackDirection.Left;
             }
-            else
-            {
-                return AttackDirection.Right;
-            }
+
+            return AttackDirection.Right;
         }
 
         /// <summary>
@@ -103,7 +92,7 @@ namespace Player
             
             foreach (Collider2D coll in detectedObjects)
             {
-                coll.gameObject.TryGetComponent<EntityHitbox>(out EntityHitbox entityHitbox);
+                coll.gameObject.TryGetComponent(out EntityHitbox entityHitbox);
                 if (!entityHitbox) continue;
                 
                 enemyHit = HitEntity(entityHitbox);
@@ -153,8 +142,8 @@ namespace Player
         private void ShakeCamera()
         {
             cinemachineShake.ShakeCamera(shakeAmplitude, shakeFrequency, shakeDuration);
-            Time.timeScale = slowTimeScaleAmount;
-            _slowTimeScaleTimer = slowTimeScaleDuration;
+            Time.timeScale = _slowTimeScaleAmount;
+            _slowTimeScaleTimer = _slowTimeScaleDuration;
         }
         
         private void Update()
