@@ -40,6 +40,10 @@ namespace Player
         [SerializeField] private EntityKnockback _playerKnockback;
         
         [Header("Weapon")]
+        // TODO: attack hitbox position isnt perfect, need to figure out a better way of doing this...
+        // Could figure out by sword attack radius or something, not sure...
+        // Yeah I guess we just need the height on the player, and then the distance from the player is dependent on the
+        // sword itself!
         [SerializeField] private Transform _attackHitBoxPosition;
         public MeleeWeapon CurrentMeleeWeapon;
         
