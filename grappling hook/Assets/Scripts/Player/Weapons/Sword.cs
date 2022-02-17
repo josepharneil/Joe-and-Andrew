@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Entity;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Player
@@ -10,10 +11,12 @@ namespace Player
         [Header("Attack Size")]
         [SerializeField] private float attackRadius = 2f;
 
+        private ParticleSystem _particleOnHit;
+        
         #region UnityEvents
         private void OnEnable()
         {
-            ForceHideAttackParticles();
+            ParticleOnHit.TryGetComponent(out _particleOnHit);
         }
         
         public override void DrawGizmos(Vector2 attackerPosition, AttackDirection attackDirection)
@@ -28,8 +31,15 @@ namespace Player
         public override void ForceHideAttackParticles(){}
 
         public override void ShowAttackParticle(AttackDirection attackDirection){}
-        
-        public override void ShowAttackHitParticle(){}
+
+        public override void ShowAttackHitParticle(Transform hitEntityTransform)
+        {
+            if (_particleOnHit)
+            {
+                ParticleSystem newParticleSystem = Instantiate(_particleOnHit, hitEntityTransform.position, Quaternion.identity, hitEntityTransform);
+                newParticleSystem.Play();
+            }
+        }
         
         #endregion
         

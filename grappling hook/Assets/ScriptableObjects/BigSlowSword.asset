@@ -10,10 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e3ac4beb1fc403190ef19a437188702, type: 3}
-  m_Name: FastSmallSword
+  m_Name: BigSlowSword
   m_EditorClassIdentifier: 
-  WeaponDamage: 3
-  WeaponSpeed: 2
-  KnockbackAmountToPlayer: 4
-  KnockbackAmountToTarget: 10
-  attackRadius: 1.5
+  WeaponDamage: 8
+  WeaponSpeed: 0.5
+  WeaponHeightOffset: 0
+  KnockbackAmountToPlayer: 13
+  KnockbackAmountToTarget: 25
+  ParticleOnHit: {fileID: 7595672073680235062, guid: e44bd1923f9184ef69f14c51d7cd1a52, type: 3}
+  attackRadius: 2.5
