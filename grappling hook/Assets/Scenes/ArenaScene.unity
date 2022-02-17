@@ -15813,10 +15813,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 76782474}
     m_Modifications:
-    - target: {fileID: 9147847882922389570, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: m_Name
-      value: SwordAttackPositionY
-      objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652258, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: m_Name
       value: Player
@@ -15828,11 +15824,7 @@ PrefabInstance:
     - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: CurrentMeleeWeapon
       value: 
-      objectReference: {fileID: 11400000, guid: 22c847e22f5fa4133a4551802c00ff17, type: 2}
-    - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: _slowTimeScaleDuration
-      value: 0.11
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: 04659a8d423d04862b974ea51c739e12, type: 2}
     - target: {fileID: 9147847883452652287, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: m_RootOrder
       value: 1
