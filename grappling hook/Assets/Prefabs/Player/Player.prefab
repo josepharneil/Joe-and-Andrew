@@ -530,11 +530,11 @@ MonoBehaviour:
   shakeFrequency: 1
   shakeDuration: 0.1
   gamepadVibrator: {fileID: 9147847883452652272}
-  _slowTimeScaleDuration: 0.15
+  _slowTimeScaleDuration: 0.11
   _slowTimeScaleAmount: 0.01
   playerCombatPrototyping: {fileID: 9147847883452652286}
   _playerKnockback: {fileID: 9147847883452652283}
-  CurrentMeleeWeapon: {fileID: 0}
+  CurrentMeleeWeapon: {fileID: 11400000, guid: 22c847e22f5fa4133a4551802c00ff17, type: 2}
 --- !u!114 &9147847883452652286
 MonoBehaviour:
   m_ObjectHideFlags: 0
