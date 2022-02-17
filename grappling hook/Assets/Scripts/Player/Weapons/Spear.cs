@@ -16,7 +16,7 @@ namespace Player
 
         public override void ForceHideAttackParticles(){}
 
-        public override void ShowAttackHitParticle(){}
+        public override void ShowAttackHitParticle(Transform hitEntityTransform){}
         #endregion
 
         public override void DetectAttackableObjects(out List<Collider2D> detectedObjects, ContactFilter2D contactFilter2D, Vector2 attackerPosition,

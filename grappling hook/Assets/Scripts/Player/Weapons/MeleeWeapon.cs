@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Entity;
+using Ludiq;
 using UnityEngine;
 
 namespace Player
@@ -28,12 +29,15 @@ namespace Player
         /// </summary>
         [Header("Knockback")]
         public float KnockbackAmountToPlayer = 8f;
-        
+
         /// <summary>
         /// Amount that this weapon knocks back the target hit.
         /// </summary>
         public float KnockbackAmountToTarget = 15f;
-        
+
+        [Header("Particles")] 
+        [SerializeField] protected GameObject ParticleOnHit;
+
         /// <summary>
         /// Draws gizmos.
         /// </summary>
@@ -54,7 +58,7 @@ namespace Player
         /// <summary>
         /// Shows particles of an attack *hit* on an enemy.
         /// </summary>
-        public abstract void ShowAttackHitParticle();
+        public abstract void ShowAttackHitParticle(Transform hitEntityTransform);
         #endregion
 
         /// <summary>

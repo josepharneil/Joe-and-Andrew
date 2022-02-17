@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponDamage: 5
   WeaponSpeed: 1
+  WeaponHeightOffset: 0
   KnockbackAmountToPlayer: 8
   KnockbackAmountToTarget: 15
+  ParticleOnHit: {fileID: 7595672073680235062, guid: e44bd1923f9184ef69f14c51d7cd1a52, type: 3}
   attackRadius: 1.5

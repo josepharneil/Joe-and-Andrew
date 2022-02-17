@@ -88,28 +88,34 @@ namespace Player
             inputs.isInPreDamageAttackPhase = false;
         }
         
-        private bool TryHitDetectedObjects(List<Collider2D> detectedObjects, out Vector2? knockbackPosition)
+        private bool TryHitDetectedObjects(List<Collider2D> detectedObjects, out Vector2? enemyKnockbackPosition)
         {
-            bool enemyHit = false;
-            knockbackPosition = null;
+            bool anyEnemyHit = false;
+            enemyKnockbackPosition = null;
             
             foreach (Collider2D coll in detectedObjects)
             {
                 coll.gameObject.TryGetComponent(out EntityHitbox entityHitbox);
                 if (!entityHitbox) continue;
                 
-                enemyHit = HitEntity(entityHitbox);
+                bool enemyHit = HitEntity(entityHitbox);
+                anyEnemyHit |= enemyHit;
                 
                 // If an enemy is hit and we haven't already set the knockback position.
-                if (enemyHit && knockbackPosition == null)
+                if (enemyHit)
                 {
-                    knockbackPosition = entityHitbox.transform.position;
+                    if (enemyKnockbackPosition == null)
+                    {
+                        enemyKnockbackPosition = entityHitbox.transform.position;
+                    }
+
+                    // Instantiate a hit particle here if we want particles for EACH hit enemy
+                    CurrentMeleeWeapon.ShowAttackHitParticle(entityHitbox.transform);
                 }
                 
-                // Instantiate a hit particle here if we want particles for EACH hit enemy
             }
 
-            return enemyHit;
+            return anyEnemyHit;
         }
 
         private bool HitEntity(EntityHitbox entityHitbox)
