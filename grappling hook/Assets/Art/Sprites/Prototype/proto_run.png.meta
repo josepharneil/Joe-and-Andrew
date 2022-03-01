@@ -1,55 +1,55 @@
 fileFormatVersion: 2
-guid: 9f129e2bee2e6db4d8a22946a8dd32dc
+guid: e0780f6f4ab1cf047b6a572d1e563a3a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5434766808309758158
-    second: ProtoCharacter-Sheet_0
+      213: 2353378687611020614
+    second: proto_run_0
   - first:
-      213: 3123903662437840827
-    second: ProtoCharacter-Sheet_1
+      213: 7206177231342192407
+    second: proto_run_1
   - first:
-      213: 4312259915021647699
-    second: ProtoCharacter-Sheet_2
+      213: 2700783237343226033
+    second: proto_run_2
   - first:
-      213: 8699538902452480613
-    second: ProtoCharacter-Sheet_3
+      213: -5143675360722284979
+    second: proto_run_3
   - first:
-      213: 8831951793030429941
-    second: ProtoCharacter-Sheet_4
+      213: -7958353989515714466
+    second: proto_run_4
   - first:
-      213: 1922210317439629588
-    second: ProtoCharacter-Sheet_5
+      213: 599354116626220783
+    second: proto_run_5
   - first:
-      213: -5894976752361257462
-    second: ProtoCharacter-Sheet_6
+      213: -7516639212792985489
+    second: proto_run_6
   - first:
-      213: -8903240277996635771
-    second: ProtoCharacter-Sheet_7
+      213: 2865725235433641091
+    second: proto_run_7
   - first:
-      213: 4677977488901982152
-    second: ProtoCharacter-Sheet_8
+      213: -5940767670406203189
+    second: proto_run_8
   - first:
-      213: -1103492562992889454
-    second: ProtoCharacter-Sheet_9
+      213: -1831017854590020081
+    second: proto_run_9
   - first:
-      213: -6520539181010966406
-    second: ProtoCharacter-Sheet_10
+      213: 4263516998842176037
+    second: proto_run_10
   - first:
-      213: -5609982944615658375
-    second: ProtoCharacter-Sheet_11
+      213: 1689577175380455218
+    second: proto_run_11
   - first:
-      213: -8830008529249474110
-    second: ProtoCharacter-Sheet_12
+      213: -2973202841240297868
+    second: proto_run_12
   - first:
-      213: 1108653976940516701
-    second: ProtoCharacter-Sheet_13
+      213: -7276410167950613268
+    second: proto_run_13
   - first:
-      213: 8479134836480113696
-    second: ProtoCharacter-Sheet_14
+      213: -1952139035742893523
+    second: proto_run_14
   - first:
-      213: 4989764872832973558
-    second: ProtoCharacter-Sheet_15
+      213: -2254896654928419090
+    second: proto_run_15
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -139,337 +139,337 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ProtoCharacter-Sheet_0
+      name: proto_run_0
       rect:
         serializedVersion: 2
-        x: 10
-        y: 255
-        width: 70
-        height: 74
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2370d99e164d394b0800000000000000
-      internalID: -5434766808309758158
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ProtoCharacter-Sheet_1
-      rect:
-        serializedVersion: 2
-        x: 90
-        y: 254
-        width: 69
-        height: 75
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bb7362074d55a5b20800000000000000
-      internalID: 3123903662437840827
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ProtoCharacter-Sheet_2
-      rect:
-        serializedVersion: 2
-        x: 169
-        y: 258
-        width: 68
-        height: 71
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 35f750e9b8938db30800000000000000
-      internalID: 4312259915021647699
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ProtoCharacter-Sheet_3
-      rect:
-        serializedVersion: 2
-        x: 247
-        y: 254
-        width: 61
-        height: 75
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 56a2f562a88fab870800000000000000
-      internalID: 8699538902452480613
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ProtoCharacter-Sheet_4
-      rect:
-        serializedVersion: 2
-        x: 10
-        y: 170
-        width: 60
-        height: 75
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5fcf3f0bc55619a70800000000000000
-      internalID: 8831951793030429941
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ProtoCharacter-Sheet_5
-      rect:
-        serializedVersion: 2
-        x: 80
-        y: 164
-        width: 55
-        height: 80
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 419749279101daa10800000000000000
-      internalID: 1922210317439629588
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ProtoCharacter-Sheet_6
-      rect:
-        serializedVersion: 2
-        x: 169
-        y: 173
-        width: 61
-        height: 75
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a06425c60e5d03ea0800000000000000
-      internalID: -5894976752361257462
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ProtoCharacter-Sheet_7
-      rect:
-        serializedVersion: 2
-        x: 240
-        y: 172
-        width: 58
-        height: 72
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5897f087326517480800000000000000
-      internalID: -8903240277996635771
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ProtoCharacter-Sheet_8
-      rect:
-        serializedVersion: 2
-        x: 10
-        y: 80
-        width: 47
-        height: 80
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8c7c64dbdb38be040800000000000000
-      internalID: 4677977488901982152
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ProtoCharacter-Sheet_9
-      rect:
-        serializedVersion: 2
-        x: 67
-        y: 75
-        width: 46
-        height: 79
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 291068a4c5b9fa0f0800000000000000
-      internalID: -1103492562992889454
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ProtoCharacter-Sheet_10
-      rect:
-        serializedVersion: 2
-        x: 145
-        y: 89
-        width: 56
-        height: 74
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a7823d389246285a0800000000000000
-      internalID: -6520539181010966406
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ProtoCharacter-Sheet_11
-      rect:
-        serializedVersion: 2
-        x: 211
-        y: 87
-        width: 55
-        height: 75
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 97c0f2e1c365522b0800000000000000
-      internalID: -5609982944615658375
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ProtoCharacter-Sheet_12
-      rect:
-        serializedVersion: 2
-        x: 276
-        y: 85
-        width: 49
-        height: 77
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2c96a6aa602857580800000000000000
-      internalID: -8830008529249474110
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ProtoCharacter-Sheet_13
-      rect:
-        serializedVersion: 2
-        x: 123
+        x: 0
         y: 0
-        width: 43
-        height: 79
+        width: 74
+        height: 82
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d551d5a0beab26f00800000000000000
-      internalID: 1108653976940516701
+      spriteID: 645a7099271e8a020800000000000000
+      internalID: 2353378687611020614
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ProtoCharacter-Sheet_14
+      name: proto_run_1
       rect:
         serializedVersion: 2
-        x: 176
-        y: 2
-        width: 42
-        height: 75
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 02c790b9530fba570800000000000000
-      internalID: 8479134836480113696
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ProtoCharacter-Sheet_15
-      rect:
-        serializedVersion: 2
-        x: 228
+        x: 75
         y: 0
-        width: 37
-        height: 77
+        width: 74
+        height: 82
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6fa7ee507b43f3540800000000000000
-      internalID: 4989764872832973558
+      spriteID: 717c8ae030c710460800000000000000
+      internalID: 7206177231342192407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: proto_run_2
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 0
+        width: 74
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b82c258b0c1b7520800000000000000
+      internalID: 2700783237343226033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: proto_run_3
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 0
+        width: 74
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4e0834038efd98b0800000000000000
+      internalID: -5143675360722284979
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: proto_run_4
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 0
+        width: 74
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e506a12363f3e8190800000000000000
+      internalID: -7958353989515714466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: proto_run_5
+      rect:
+        serializedVersion: 2
+        x: 375
+        y: 0
+        width: 74
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe68c20c465515800800000000000000
+      internalID: 599354116626220783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: proto_run_6
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 0
+        width: 74
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f68c3b8f5788fa790800000000000000
+      internalID: -7516639212792985489
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: proto_run_7
+      rect:
+        serializedVersion: 2
+        x: 525
+        y: 0
+        width: 74
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38415e91be915c720800000000000000
+      internalID: 2865725235433641091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: proto_run_8
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 0
+        width: 74
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc8305087472e8da0800000000000000
+      internalID: -5940767670406203189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: proto_run_9
+      rect:
+        serializedVersion: 2
+        x: 675
+        y: 0
+        width: 74
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0693cf56fae696e0800000000000000
+      internalID: -1831017854590020081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: proto_run_10
+      rect:
+        serializedVersion: 2
+        x: 750
+        y: 0
+        width: 74
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 522d3d11f1e0b2b30800000000000000
+      internalID: 4263516998842176037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: proto_run_11
+      rect:
+        serializedVersion: 2
+        x: 825
+        y: 0
+        width: 74
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 23fe82f3d75927710800000000000000
+      internalID: 1689577175380455218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: proto_run_12
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 0
+        width: 74
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 47e90b2c4cf0db6d0800000000000000
+      internalID: -2973202841240297868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: proto_run_13
+      rect:
+        serializedVersion: 2
+        x: 975
+        y: 0
+        width: 74
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce4634b118ff40b90800000000000000
+      internalID: -7276410167950613268
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: proto_run_14
+      rect:
+        serializedVersion: 2
+        x: 1050
+        y: 0
+        width: 74
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2a0f5ec3eb98e4e0800000000000000
+      internalID: -1952139035742893523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: proto_run_15
+      rect:
+        serializedVersion: 2
+        x: 1125
+        y: 0
+        width: 74
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee666c5707ff4b0e0800000000000000
+      internalID: -2254896654928419090
       vertices: []
       indices: 
       edges: []
