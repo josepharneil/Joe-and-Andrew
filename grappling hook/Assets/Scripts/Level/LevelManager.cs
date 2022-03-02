@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace Level
 {
@@ -7,36 +9,58 @@ namespace Level
     // not sure what this will exactly do yet.
     public class LevelManager : Singleton<LevelManager>
     {
-        // This could end up being a list of "level" or something
-        // This is the list of levels that we will select.
-        [SerializeField] private List<GameObject> _levels;
+        // This potentially could be a scriptable object eventually? Or a scene
+        [SerializeField] private HubArea _hubArea;
 
-        // Hub, could be a class
-        [SerializeField] private GameObject _hub;
+        [SerializeField] private List<RunArea> _allRunAreas;
+        private RunArea _activeRunArea;
         
-        // Boss / exit area, again, could be a class.
-        [SerializeField] private GameObject _bossArea;
+        [SerializeField] private BossArea _bossArea;
+
+        // This might be a bit much for the level to control the player, but fine for now.
+        [SerializeField] private GameObject _player;
 
         private void OnEnable()
         {
-            // Disable all
-            _levels.ForEach(level => level.SetActive(false));
+            ActivateLevel();
+            
+            ConnectAreas();
 
+            SpawnPlayer();
+        }
+
+        private void ActivateLevel()
+        {
+            // Hub
+            _hubArea.Activate();
+            
+            // Disable all
+            _allRunAreas.ForEach(level => level.Deactivate());
             ActivateRandomLevel();
+            
+            _bossArea.Activate();
         }
 
         // This could be called anywhere, eg on button press, when the player exits the hub, or whatever
         private void ActivateRandomLevel()
         {
-            // Get random level
-
-            // Set that level to active
+            // Get random level, set that level to active
+            _activeRunArea = _allRunAreas[Random.Range(0, _allRunAreas.Count)];
+            _activeRunArea.Activate();
         }
 
-        private void LinkAreas()
+        private void ConnectAreas()
         {
-            // This would link together the hub, the run area, and the boss via teleportation zones.
-            // Not sure how yet :D
+            // Connect hub exit to run entrance
+            _hubArea.HubExit.SetExitPosition(_activeRunArea.Entrance);
+            
+            // Connect run exit to hub boss entrance
+            _activeRunArea.RunExit.SetExitPosition(_bossArea.Entrance);
+        }
+
+        private void SpawnPlayer()
+        {
+            _player.transform.position = _hubArea.SpawnPoint.position;
         }
     }
 }
