@@ -1,3 +1,4 @@
+using level;
 using UnityEngine;
 
 namespace Level
@@ -9,6 +10,15 @@ namespace Level
         
         // Exit position is set by the level manager.
         private Transform _exitPosition;
+        public bool _isLocked { get; set; } = false;
+
+        private void Awake()
+        {
+            if (gameObject.GetComponent<GatewayLock>()!=null)
+            {
+                _isLocked = true;
+            }
+        }
 
         public void SetExitPosition(Transform exit)
         {
@@ -29,7 +39,7 @@ namespace Level
             
             // Check bounds
             bool withinBounds = true;//_boxCollider2D.bounds.Contains(playerPosition.position);
-            if (withinBounds)
+            if (withinBounds && !_isLocked)
             {
                 // Teleport player simply by setting the position.
                 playerPosition.position = _exitPosition.position;
