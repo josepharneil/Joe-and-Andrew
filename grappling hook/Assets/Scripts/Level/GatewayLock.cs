@@ -1,16 +1,16 @@
 using Enemy;
-using Level;
-using System.Collections;
-using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
-namespace level
+namespace Level
 {
     [RequireComponent(typeof(Gateway))]
     public class GatewayLock : MonoBehaviour
     {
         [SerializeField] private Animator gateAnimator;
         [SerializeField] private Gateway gateway;
+        private static readonly int IsLocked = Animator.StringToHash("_isLocked");
+
         private void OnEnable()
         {
             EnemyManager.OnAllEnemiesKilled += StartUnlockGate;
@@ -21,16 +21,16 @@ namespace level
             EnemyManager.OnAllEnemiesKilled -= StartUnlockGate;
         }
 
-        public void StartUnlockGate()
+        private void StartUnlockGate()
         {
- 
-            gateAnimator.SetBool("_isLocked", false);
+            gateAnimator.SetBool(IsLocked, false);
         }
 
         //This is called by the animator so it happens at the right time
-        public void SetGetUnlocked()
+        // TODO This function name...
+        [UsedImplicitly] public void Unlock()
         {
-            gateway._isLocked = false;
+            gateway.IsLocked = false;
         }
     }
 }

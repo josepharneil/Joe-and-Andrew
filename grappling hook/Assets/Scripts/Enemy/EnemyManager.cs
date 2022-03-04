@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Entity;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -7,9 +9,14 @@ namespace Enemy
     public class EnemyManager : Singleton<EnemyManager>
     {
         private readonly List<GameObject> _enemiesToDestroy = new List<GameObject>();
+        private GameObject[] _allEnemies;
 
-        public delegate void AllEnemiesKilled(); //AK 4/3/22 Killed is just the enemy having 0 health, not the Game Object destruction
-        public static event AllEnemiesKilled OnAllEnemiesKilled;
+        public static event Action OnAllEnemiesKilled;//AK 4/3/22 Killed is just the enemy having 0 health, not the Game Object destruction
+
+        private void Start()
+        {
+            _allEnemies = GameObject.FindGameObjectsWithTag("Enemy");
+        }
 
         [UsedImplicitly] public static void AddForDestruction(GameObject gameObjectToDestroy)
         {
@@ -18,27 +25,26 @@ namespace Enemy
 
         private bool CheckAllEnemiesDead()
         {
-            bool enemiesDead;
-            GameObject parent = gameObject.transform.parent.gameObject;
-            int enemyCount = parent.transform.childCount;
-            if (enemyCount <= 1) //less than 1 to account for the enemy manager itself
+            foreach (GameObject enemy in _allEnemies)
             {
-                enemiesDead = true;
+                if (enemy == null) continue;
+                enemy.TryGetComponent(out EntityHealth health);
+                if (!health) continue;
+                if (health.IsAlive())
+                {
+                    return false;
+                }
             }
-            else
-            {
-                enemiesDead = false;
-            }
-            return enemiesDead;
+            return true;
         }
 
         private void Update()
         {
-            if (_enemiesToDestroy.Count == 0)
+            if (CheckAllEnemiesDead())
             {
-                if (CheckAllEnemiesDead()) OnAllEnemiesKilled();
-                return;
+                OnAllEnemiesKilled?.Invoke();
             }
+            
             Debug.Assert(!_enemiesToDestroy.Contains(gameObject),
                 "You're destroying the enemy manager itself, don't do this.", this);
             foreach (GameObject gameObjectToDestroy in _enemiesToDestroy)

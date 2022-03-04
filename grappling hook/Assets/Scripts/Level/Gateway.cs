@@ -1,4 +1,4 @@
-using level;
+using Ludiq;
 using UnityEngine;
 
 namespace Level
@@ -10,13 +10,13 @@ namespace Level
         
         // Exit position is set by the level manager.
         private Transform _exitPosition;
-        public bool _isLocked { get; set; } = false;
+        [DoNotSerialize] public bool IsLocked { get; set; } = false;
 
         private void Awake()
         {
-            if (gameObject.GetComponent<GatewayLock>()!=null)
+            if (gameObject.GetComponent<GatewayLock>() != null)
             {
-                _isLocked = true;
+                IsLocked = true;
             }
         }
 
@@ -33,13 +33,13 @@ namespace Level
             }
         }
 
-        public bool TryEnterGateway(Transform playerPosition)
+        private bool TryEnterGateway(Transform playerPosition)
         {
             bool entered = false;
             
             // Check bounds
             bool withinBounds = true;//_boxCollider2D.bounds.Contains(playerPosition.position);
-            if (withinBounds && !_isLocked)
+            if (withinBounds && !IsLocked)
             {
                 // Teleport player simply by setting the position.
                 playerPosition.position = _exitPosition.position;
