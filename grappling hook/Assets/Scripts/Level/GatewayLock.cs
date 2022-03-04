@@ -26,8 +26,7 @@ namespace Level
             gateAnimator.SetBool(IsLocked, false);
         }
 
-        //This is called by the animator so it happens at the right time
-        // TODO This function name...
+        // This is called by the animator so it happens at the right time
         [UsedImplicitly] public void Unlock()
         {
             gateway.IsLocked = false;
