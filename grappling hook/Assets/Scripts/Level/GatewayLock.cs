@@ -9,25 +9,28 @@ namespace level
     [RequireComponent(typeof(Gateway))]
     public class GatewayLock : MonoBehaviour
     {
-        [SerializeField] private SpriteRenderer gateRenderer;
-        private Animator gateAnimator;
+        [SerializeField] private Animator gateAnimator;
         [SerializeField] private Gateway gateway;
         private void OnEnable()
         {
-            EnemyManager.OnAllEnemiesKilled += UnlockGate;
-            gateRenderer.color = Color.red;
+            EnemyManager.OnAllEnemiesKilled += StartUnlockGate;
         }
 
         private void OnDisable()
         {
-            EnemyManager.OnAllEnemiesKilled -= UnlockGate;
+            EnemyManager.OnAllEnemiesKilled -= StartUnlockGate;
         }
 
-        public void UnlockGate()
+        public void StartUnlockGate()
         {
-            gateRenderer.color = Color.green;
+ 
+            gateAnimator.SetBool("_isLocked", false);
+        }
+
+        //This is called by the animator so it happens at the right time
+        public void SetGetUnlocked()
+        {
             gateway._isLocked = false;
-            //gateAnimator.SetBool("_isLocked", false);
         }
     }
 }
