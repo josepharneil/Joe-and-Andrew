@@ -112,8 +112,7 @@ namespace Enemy
                 {
                     indexesToDelete.Add(index);
                 }
-
-                if (projectile.HasHitTarget)
+                else if (projectile.HasHitTarget)
                 {
                     indexesToDelete.Add(index);
 
@@ -130,6 +129,11 @@ namespace Enemy
                             KnockbackOrigin = projectile.gameObject.transform.position
                         });
                     }
+                }
+                // Hit by player for example
+                else if (projectile.Destroyed)
+                {
+                    indexesToDelete.Add(index);
                 }
 
                 projectile.UpdatePath(fireballMoveSpeed);

@@ -12,7 +12,10 @@ GameObject:
   - component: {fileID: 3079471828852817178}
   - component: {fileID: 8975663396717706805}
   - component: {fileID: 6767494346193664908}
-  m_Layer: 0
+  - component: {fileID: 3722854263236862414}
+  - component: {fileID: 3427118993749631815}
+  - component: {fileID: 4489112429757528892}
+  m_Layer: 9
   m_Name: PiranhaPlantProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,9 +125,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5797236a2d7a4393ad22ae25cc3cf8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetLayerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  hasHitPlayer: 0
-  lifespanTimer: 0
-  direction: {x: 0, y: 0}
+  _entityHealth: {fileID: 3722854263236862414}
+--- !u!114 &3722854263236862414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926203398503133244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81bcdf0702639460ca280acb5dee23dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 1
+--- !u!114 &3427118993749631815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926203398503133244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec9dcbd0fc1d4727a3a8d04d66a37f0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityHealth: {fileID: 3722854263236862414}
+  entityBlock: {fileID: 0}
+  entityKnockback: {fileID: 0}
+  entityDaze: {fileID: 0}
+  hitIFrameDuration: 0
+  spriteRenderer: {fileID: 3079471828852817178}
+  entityController: {fileID: 4489112429757528892}
+--- !u!114 &4489112429757528892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926203398503133244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be4afc7778154979957d27c0a59568a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyParentGameObject: {fileID: 0}

@@ -104,13 +104,11 @@ namespace Player
                 // If an enemy is hit and we haven't already set the knockback position.
                 if (enemyHit)
                 {
-                    if (enemyKnockbackPosition == null)
-                    {
-                        enemyKnockbackPosition = entityHitbox.transform.position;
-                    }
+                    var hitboxTransform = entityHitbox.transform;
+                    enemyKnockbackPosition ??= hitboxTransform.position;
 
                     // Instantiate a hit particle here if we want particles for EACH hit enemy
-                    CurrentMeleeWeapon.ShowAttackHitParticle(entityHitbox.transform);
+                    CurrentMeleeWeapon.ShowAttackHitParticle(hitboxTransform);
                 }
                 
             }
