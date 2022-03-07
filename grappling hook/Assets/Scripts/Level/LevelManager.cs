@@ -54,8 +54,9 @@ namespace Level
             // Connect hub exit to run entrance
             _hubArea.HubExit.SetExitPosition(_activeRunArea.Entrance);
             
-            // Connect run exit to hub boss entrance
-            _activeRunArea.RunExit.SetExitPosition(_bossArea.Entrance);
+            //Connect all exits to the hub boss entrance
+            //AK 7/3/22 Could easily make each gate have its own location in future
+            _activeRunArea.RunExits.ForEach(p => p.SetExitPosition(_bossArea.Entrance));
         }
 
         private void SpawnPlayer()

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Level
@@ -6,8 +7,8 @@ namespace Level
     {
         // This could eventually be a list of entrances
         public Transform Entrance;
-
-        public Gateway RunExit;
+        //List of exits
+        public List<Gateway> RunExits;
 
         public void Initialise()
         {
