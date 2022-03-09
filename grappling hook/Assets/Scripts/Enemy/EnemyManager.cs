@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Entity;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -9,13 +10,14 @@ namespace Enemy
     public class EnemyManager : Singleton<EnemyManager>
     {
         private readonly List<GameObject> _enemiesToDestroy = new List<GameObject>();
-        private GameObject[] _allEnemies;
+        private List<GameObject> _allEnemies;
 
         public static event Action OnAllEnemiesKilled;//AK 4/3/22 Killed is just the enemy having 0 health, not the Game Object destruction
 
         private void Start()
         {
-            _allEnemies = GameObject.FindGameObjectsWithTag("Enemy");
+            // Get all active enemy tagged objects.
+            _allEnemies = GameObject.FindGameObjectsWithTag("Enemy").Where( enemy => enemy.activeSelf ).ToList();
         }
 
         [UsedImplicitly] public static void AddForDestruction(GameObject gameObjectToDestroy)
