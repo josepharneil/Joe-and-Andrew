@@ -13,7 +13,10 @@ public class DebugShowEntityHealth : MonoBehaviour
         
         foreach( EntityHealth entityHealth in FindObjectsOfType<EntityHealth>() )
         {
-            _entityHealths.Add(entityHealth);
+            if (entityHealth.gameObject.activeSelf)
+            {
+                _entityHealths.Add(entityHealth);
+            }
         }
     }
 
