@@ -13,6 +13,8 @@ namespace Enemy
         private List<GameObject> _allEnemySpawnerObjects; // This is a list of enemy objects used as reference for spawning actual enemies. 
         private readonly List<GameObject> _allEnemies = new List<GameObject>();
 
+        private bool _enemiesHaveBeenSpawned = false;
+
         public static event Action OnEnemiesSpawnedOrDestroyed;
 
         public static event Action OnAllEnemiesKilled;//AK 4/3/22 Killed is just the enemy having 0 health, not the Game Object destruction
@@ -35,7 +37,8 @@ namespace Enemy
                 _allEnemies.Add(newEnemy);
                 newEnemy.SetActive(true);
             }
-            
+
+            _enemiesHaveBeenSpawned = true;
             OnEnemiesSpawnedOrDestroyed?.Invoke();
         }
 
@@ -46,6 +49,7 @@ namespace Enemy
                 DestroyEnemy(enemy);
             }
             _allEnemies.Clear();
+            _enemiesHaveBeenSpawned = false;
             
             OnEnemiesSpawnedOrDestroyed?.Invoke();
         }
@@ -79,6 +83,10 @@ namespace Enemy
 
         private void Update()
         {
+            if (!_enemiesHaveBeenSpawned)
+            {
+                return;
+            }
             if (CheckAllEnemiesDead())
             {
                 OnAllEnemiesKilled?.Invoke();
