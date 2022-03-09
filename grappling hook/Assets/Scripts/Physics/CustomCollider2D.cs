@@ -176,6 +176,10 @@ namespace Physics
 
                 if (hit)
                 {
+                    if (hit.collider.tag == "OneWayPlatform")
+                    {
+                        return;
+                    }
                     //this is where the real collision detection and movement comes from
                     //it changes the displacement so that it will only be as far as the box can move before hitting a collider
                     displacement.x = (hit.distance - SkinWidth) * directionX;
@@ -211,6 +215,10 @@ namespace Physics
 
                 if (hit)
                 {
+                    if(hit.collider.tag=="OneWayPlatform" && displacement.y > 0f)
+                    {
+                        return;
+                    }
                     //same as horizontal collisions, this sets the amount of displacement to be the max
                     //that we can get to without a collision
                     displacement.y = (hit.distance - SkinWidth) * directionY;
