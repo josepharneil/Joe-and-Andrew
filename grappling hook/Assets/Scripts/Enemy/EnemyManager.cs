@@ -50,7 +50,6 @@ namespace Enemy
             }
             _allEnemies.Clear();
             _enemiesHaveBeenSpawned = false;
-            
             OnEnemiesSpawnedOrDestroyed?.Invoke();
         }
 

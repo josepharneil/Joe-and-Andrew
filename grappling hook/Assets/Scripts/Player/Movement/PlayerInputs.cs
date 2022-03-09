@@ -79,7 +79,7 @@ namespace Player
         private float _lerpCurrent = 0f;
         [SerializeField] private MoveState moveState;
         private RollState _rollState;
-        private Vector3 _velocity;
+        [NonSerialized] public Vector2 Velocity;
         private Vector2 _moveInput;
         
         // Attacks
@@ -156,24 +156,17 @@ namespace Player
         // Update is called once per frame
         private void Update()
         {
-            if (debugUseAnimations)
+            // Attack movement
+            if (debugUseAnimations && isAttacking && playerCombatPrototyping.data.movementDisabledByAttacks)
             {
-                // Attack
-                if (isAttacking)
+                // TODO @JA Not sure what to do here.
+                if (_isGrounded)
                 {
-                    // Does attacking disable movement?
-                    if (playerCombatPrototyping.data.movementDisabledByAttacks)
-                    {
-                        // TODO Not sure what to do here.
-                        if (_isGrounded)
-                        {
-                            _velocity.x = 0f;
-                        }
-                        CheckGrounded();
-                        CalculateGravity();
-                        movementController.Move(_velocity);
-                    }
+                    Velocity.x = 0f;
                 }
+                CheckGrounded();
+                CalculateGravity();
+                movementController.Move(Velocity);
             }
             
             // Movement
@@ -187,13 +180,12 @@ namespace Player
             WallJump();
             Jump();
 
-
             if (!isAttacking || (isAttacking && !playerCombatPrototyping.data.movementDisabledByAttacks))
             {
                 //move works by taking in a displacement, firing raycasts in the directions of the displacement
                 //then if the raycasts collide with anything the displacement is altered to be the distance from the player edge to the collider
                 //then at the end of controller it uses transform.translate(displacement) with the edited displacement 
-                movementController.Move(_velocity);
+                movementController.Move(Velocity);
             }
 
             if (!isAttacking || (isAttacking && playerCombatPrototyping.data.canChangeDirectionsDuringAttack))
@@ -213,7 +205,7 @@ namespace Player
             // Animation
             if (debugUseAnimations)
             {
-                animator.SetFloat(SpeedID, Mathf.Abs(_velocity.x));
+                animator.SetFloat(SpeedID, Mathf.Abs(Velocity.x));
             }
 
             CheckIfAttackIsCancellable();
@@ -225,28 +217,30 @@ namespace Player
         {
             if (movementController.customCollider2D.GetCollisionBelow())
             {
-                if (_velocity.y < 0) _velocity.y = 0;
+                if (Velocity.y < 0)
+                {
+                    Velocity.y = 0;
+                }
             }
             else
             { 
-                //Checks if the player has ended a jump early, and if so increase the gravity
+                // Checks if the player has ended a jump early, and if so increase the gravity
                 if (_isJumpEndedEarly)
                 {
-                    _velocity.y -= _fallSpeed * earlyJumpMultiplier *Time.deltaTime;
+                    Velocity.y -= _fallSpeed * earlyJumpMultiplier * Time.deltaTime;
                 }
-                else if (_isWallSliding && _velocity.y<0) 
+                else if (_isWallSliding && Velocity.y < 0) 
                 {
-                    _velocity.y -= _fallSpeed * _wallSideGravityMultiplier * Time.deltaTime;
+                    Velocity.y -= _fallSpeed * _wallSideGravityMultiplier * Time.deltaTime;
                 }
                 else
                 {
-                    _velocity.y -= _fallSpeed * Time.deltaTime;
+                    Velocity.y -= _fallSpeed * Time.deltaTime;
                 }
-                //Makes the player actually fall
-
-
-                //Clamps the y velocity to a certain value
-                if (_velocity.y < fallClamp) _velocity.y = fallClamp;
+                
+                // Makes the player actually fall
+                // Clamps the y velocity to a certain value
+                if (Velocity.y < fallClamp) Velocity.y = fallClamp;
             }
         }
 
@@ -285,7 +279,7 @@ namespace Player
         {
             if (_isJumpInput && (_isGrounded || _canCoyote))
             {
-                _velocity.y = jumpHeight;
+                Velocity.y = jumpHeight;
                 _isJumpInput = false;
                 _canCoyote = false;
                 _hasJumped = true;
@@ -297,7 +291,7 @@ namespace Player
             if (!movementController.customCollider2D.GetCollisionBelow())
             {
                 //sets the apexPoint based on how large the y velocity is
-                _apexPoint = Mathf.InverseLerp(jumpApexThreshold, 0, Mathf.Abs(_velocity.y));
+                _apexPoint = Mathf.InverseLerp(jumpApexThreshold, 0, Mathf.Abs(Velocity.y));
                 //uses the apexPoint to lerp between the min and max fallspeeds (our new gravity replacement)
                 _fallSpeed = Mathf.Lerp(minFallSpeed, maxFallSpeed, _apexPoint);
             }
@@ -357,8 +351,8 @@ namespace Player
                 if (customCollider2D.GetCollisionLeft() || customCollider2D.GetCollisionRight())
                 {
                     _isJumpInput = false;
-                    _velocity.y = _verticalWallJump;
-                    _velocity.x = _horizontalWallJump * -1f * (int)FacingDirection;
+                    Velocity.y = _verticalWallJump;
+                    Velocity.x = _horizontalWallJump * -1f * (int)FacingDirection;
                     _hasWallJumped = true;
                     FacingDirection = (FacingDirection == FacingDirection.Left) ? FacingDirection.Right : FacingDirection.Left;
                 }
@@ -492,7 +486,7 @@ namespace Player
             // Moving
             if (_isMoveInput)
             {
-                if ((int)Mathf.Sign(_velocity.x) != (int)_moveInput.x && _velocity.x != 0)
+                if ((int)Mathf.Sign(Velocity.x) != (int)_moveInput.x && Velocity.x != 0)
                 {
                     StartDirectionChange();
                 }
@@ -558,11 +552,11 @@ namespace Player
             //checks if there is a collision below the player, and if so use the air timers
             float rate = (movementController.customCollider2D.GetCollisionBelow() ? accelerationRate : airAccelerationRate);
             _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
-            _velocity.x = Mathf.Lerp(_velocity.x, moveSpeed * _moveInput.x, accelerationCurve.Evaluate(_lerpCurrent));
+            Velocity.x = Mathf.Lerp(Velocity.x, moveSpeed * _moveInput.x, accelerationCurve.Evaluate(_lerpCurrent));
             
             // TODO Can input.x just be deleted here? They look like they cancel to me
             // AK: yes its gone now!
-            if (moveSpeed - Mathf.Abs(_velocity.x) <=  accelerationTolerance)
+            if (moveSpeed - Mathf.Abs(Velocity.x) <=  accelerationTolerance)
             {
                 moveState = MoveState.Running;
             }
@@ -575,7 +569,7 @@ namespace Player
             {
                 blockMoveSpeedModifier = entityBlock.blockSpeedModifier;
             }
-            _velocity.x = _moveInput.x * moveSpeed * blockMoveSpeedModifier;
+            Velocity.x = _moveInput.x * moveSpeed * blockMoveSpeedModifier;
         }
 
         private void Decelerate()
@@ -585,10 +579,10 @@ namespace Player
             //(I tried doing if(speed==0) but that was glitchy af
             float rate = movementController.customCollider2D.GetCollisionBelow() ? decelerationRate : airDecelerationRate;
             _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
-            _velocity.x = Mathf.Lerp(_velocity.x, 0f, decelerationCurve.Evaluate(_lerpCurrent));
-            if (Mathf.Abs(_velocity.x) <= decelerationTolerance)
+            Velocity.x = Mathf.Lerp(Velocity.x, 0f, decelerationCurve.Evaluate(_lerpCurrent));
+            if (Mathf.Abs(Velocity.x) <= decelerationTolerance)
             {
-                _velocity.x = 0f;
+                Velocity.x = 0f;
                 moveState = MoveState.Stopped;
             }
         }
@@ -598,9 +592,9 @@ namespace Player
             //same lerp method as accelerate
             float rate = movementController.customCollider2D.GetCollisionBelow() ? changeDirectionRate : airChangeDirectionRate;
             _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
-            _velocity.x = Mathf.Lerp(_velocity.x, moveSpeed * _moveInput.x, changeDirectionCurve.Evaluate(_lerpCurrent));
+            Velocity.x = Mathf.Lerp(Velocity.x, moveSpeed * _moveInput.x, changeDirectionCurve.Evaluate(_lerpCurrent));
 
-            if ((Mathf.Abs(_velocity.x) - moveSpeed) < changeDirectionTolerance) 
+            if ((Mathf.Abs(Velocity.x) - moveSpeed) < changeDirectionTolerance) 
             {
                 moveState = MoveState.Running;
             }
@@ -636,10 +630,10 @@ namespace Player
             //keeps rolling while the timer is on
             if (_rollDurationTimer <= rollDuration)
             {
-                _velocity.x = (int)_rollDirection * (rollDistance / rollDuration);
+                Velocity.x = (int)_rollDirection * (rollDistance / rollDuration);
                 if (_debugRollFall)
                 {
-                    _velocity.y = 0;
+                    Velocity.y = 0;
                 }
                 _rollDurationTimer += Time.deltaTime;
             }

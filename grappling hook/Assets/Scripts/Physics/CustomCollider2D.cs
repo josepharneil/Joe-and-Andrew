@@ -1,5 +1,3 @@
-using System;
-using Bolt;
 using UnityEngine;
 
 namespace Physics
@@ -179,7 +177,7 @@ namespace Physics
                 if (hit)
                 {
                     //checks if the player is going to bonk into a one way platfom
-                    if (hit.collider.tag == "OneWayPlatform" )
+                    if (hit.collider.CompareTag("OneWayPlatform"))
                     {
                         return;
                     }
@@ -219,7 +217,7 @@ namespace Physics
                 if (hit)
                 {
                     //checks if the player is hitting a one way platform, and if the player is jumping up as well
-                    if(hit.collider.tag=="OneWayPlatform" && (displacement.y > 0f || _fallThroughPlatform))
+                    if(hit.collider.CompareTag("OneWayPlatform") && (displacement.y > 0f || _fallThroughPlatform))
                     {
                         return;
                     }
@@ -273,7 +271,7 @@ namespace Physics
                 {
                     Debug.DrawRay(rayOrigin, Vector2.down * rayLength, Color.red);
                 }
-                if (hit && hit.collider.tag =="OneWayPlatform")
+                if (hit && hit.collider.CompareTag("OneWayPlatform"))
                 {
                     oneWay = true;
                 }
