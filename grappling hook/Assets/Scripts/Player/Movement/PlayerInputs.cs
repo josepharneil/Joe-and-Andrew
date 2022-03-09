@@ -64,6 +64,7 @@ namespace Player
         private float _rollDirection;
         private float _rollDurationTimer = 0f;
         private float _rollCoolDownTimer = 0f;
+        private float _fallThroughPlatformTimer = 0f;
 
         private bool _isMoveInput;
         private bool _isJumpInput;
@@ -73,6 +74,7 @@ namespace Player
         private bool _isGrounded;
         private bool _isRollInput;
         private bool _hasWallJumped;
+        private bool _hasFallenThroughPlatform;
         public FacingDirection FacingDirection { get; private set; }
         private float _lerpCurrent = 0f;
         [SerializeField] private MoveState moveState;
@@ -181,8 +183,10 @@ namespace Player
             CheckCoyote();
             CalculateJumpApex();
             CalculateGravity();
+            DropThroughPlatform();
             WallJump();
             Jump();
+
 
             if (!isAttacking || (isAttacking && !playerCombatPrototyping.data.movementDisabledByAttacks))
             {
@@ -310,6 +314,7 @@ namespace Player
                 _isGrounded = true;
                 _lastGroundedTime = Time.time;
                 _hasJumped = false;
+
             }
             else
             {
@@ -373,6 +378,30 @@ namespace Player
                 _hasWallJumped = false;
                 _wallJumpCounter = 0;
             }
+        }
+
+        public void DropThroughPlatform()
+        {
+            CustomCollider2D collider2D = movementController.customCollider2D;
+            if (_hasFallenThroughPlatform &&_fallThroughPlatformTimer<20)
+            {
+                _fallThroughPlatformTimer += 1;
+            }
+            else
+            {
+                _hasFallenThroughPlatform = false;
+                _fallThroughPlatformTimer = 0;
+                collider2D.SetFallThroughPlatform(false);
+            }
+
+
+            if(_isJumpInput && collider2D.CheckIfOneWayPlatform()&& Input.GetAxisRaw("Vertical") < 0f)
+            {
+                _isJumpInput = false;
+                collider2D.SetFallThroughPlatform(true);
+                _hasFallenThroughPlatform = true;
+            }
+
         }
 
         #endregion

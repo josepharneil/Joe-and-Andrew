@@ -15,6 +15,8 @@ namespace Physics
         private bool _collisionBelow;
         private bool _collisionLeft;
         private bool _collisionRight;
+        private bool _fallThroughPlatform = false;
+
         private void SetCollisionAbove(bool value, GameObject collidedGameObject)
         {
             bool initialState = _collisionAbove;
@@ -176,7 +178,8 @@ namespace Physics
 
                 if (hit)
                 {
-                    if (hit.collider.tag == "OneWayPlatform")
+                    //checks if the player is going to bonk into a one way platfom
+                    if (hit.collider.tag == "OneWayPlatform" )
                     {
                         return;
                     }
@@ -215,7 +218,8 @@ namespace Physics
 
                 if (hit)
                 {
-                    if(hit.collider.tag=="OneWayPlatform" && displacement.y > 0f)
+                    //checks if the player is hitting a one way platform, and if the player is jumping up as well
+                    if(hit.collider.tag=="OneWayPlatform" && (displacement.y > 0f || _fallThroughPlatform))
                     {
                         return;
                     }
@@ -254,5 +258,33 @@ namespace Physics
             }
             return grounded;
         }
+        public bool CheckIfOneWayPlatform()
+        {
+            //Basically the same as the CheckIfGrounded code
+            UpdateRaycastOrigins();
+            const float rayLength = SkinWidth + 0.01f;
+            bool oneWay = false;
+            for (int rayIndex = 0; rayIndex < _verticalRayCount; rayIndex++)
+            {
+                Vector2 rayOrigin = _bottomLeft;
+                rayOrigin += Vector2.right * (_verticalRaySpacing * rayIndex);
+                RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.down, rayLength, collisionMask);
+                if (debugDraw)
+                {
+                    Debug.DrawRay(rayOrigin, Vector2.down * rayLength, Color.red);
+                }
+                if (hit && hit.collider.tag =="OneWayPlatform")
+                {
+                    oneWay = true;
+                }
+            }
+            return oneWay;
+        }
+
+        public void SetFallThroughPlatform(bool passThrough)
+        {
+            _fallThroughPlatform = passThrough;
+        }
     }
+
 }
