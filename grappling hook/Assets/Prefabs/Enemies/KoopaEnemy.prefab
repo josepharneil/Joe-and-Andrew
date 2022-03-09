@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 885005564573824743}
   m_Layer: 0
   m_Name: KoopaEnemy
-  m_TagString: Untagged
+  m_TagString: EnemyParent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -268,7 +268,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 10
-  currentHealth: 0
 --- !u!114 &885005564695595217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,7 +384,7 @@ MonoBehaviour:
   chaseTarget: {fileID: 0}
   _sight:
     _eyes: {fileID: 885005564695595236}
-    _sightRange: 10
+    _sightRange: 7
     _blockingLayer:
       serializedVersion: 2
       m_Bits: 64

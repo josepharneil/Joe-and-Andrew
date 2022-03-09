@@ -158,8 +158,9 @@ namespace Enemy
         
         private void ShootProjectile()
         {
-            var thisPosition = transform.position;
-            GameObject projectile = Instantiate(piranhaProjectile, thisPosition, Quaternion.identity);
+            var thisTransform = transform;
+            var thisPosition = thisTransform.position;
+            GameObject projectile = Instantiate(piranhaProjectile, thisPosition, Quaternion.identity, thisTransform);
             PiranhaFireball piranhaFireball = projectile.GetComponent<PiranhaFireball>();
             Debug.Assert(piranhaFireball, "Should be a fireball component", this);
             if (!piranhaFireball) return;

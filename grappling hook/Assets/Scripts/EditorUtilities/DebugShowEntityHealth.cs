@@ -1,39 +1,57 @@
 using System.Collections.Generic;
-using UnityEngine;
+using Enemy;
 using Entity;
+using UnityEngine;
 
-public class DebugShowEntityHealth : MonoBehaviour
+namespace EditorUtilities
 {
-    private readonly List<EntityHealth> _entityHealths = new List<EntityHealth>();
-    private Camera _mainCamera;
-
-    private void Start()
+    public class DebugShowEntityHealth : MonoBehaviour
     {
-        _mainCamera = Camera.main;
-        
-        foreach( EntityHealth entityHealth in FindObjectsOfType<EntityHealth>() )
+        private readonly List<EntityHealth> _entityHealths = new List<EntityHealth>();
+        private Camera _mainCamera;
+
+        private void Start()
         {
-            if (entityHealth.gameObject.activeSelf)
+            _mainCamera = Camera.main;
+        }
+
+        private void OnEnable()
+        {
+            EnemyManager.OnEnemiesSpawnedOrDestroyed += SearchForAllEntityHealths;
+        }
+
+        private void OnDisable()
+        {
+            EnemyManager.OnEnemiesSpawnedOrDestroyed -= SearchForAllEntityHealths;
+        }
+
+        private void SearchForAllEntityHealths()
+        {
+            _entityHealths.Clear();
+            foreach( EntityHealth entityHealth in FindObjectsOfType<EntityHealth>() )
             {
-                _entityHealths.Add(entityHealth);
+                if (entityHealth.gameObject.activeSelf)
+                {
+                    _entityHealths.Add(entityHealth);
+                }
             }
         }
-    }
-
-    private void OnGUI()
-    {
-        GUI.skin.box.fontSize = 24;
-        foreach (EntityHealth entityHealth in _entityHealths)
+    
+        private void OnGUI()
         {
-            if (entityHealth == null)
+            GUI.skin.box.fontSize = 24;
+            foreach (EntityHealth entityHealth in _entityHealths)
             {
-                _entityHealths.Remove(entityHealth);
-                return;
+                if (entityHealth == null)
+                {
+                    _entityHealths.Remove(entityHealth);
+                    return;
+                }
+                Vector2 targetPos = _mainCamera.WorldToScreenPoint(entityHealth.transform.position);
+                targetPos.y += 1;
+                GUI.Box(new Rect(targetPos.x, Screen.height - targetPos.y, 120, 40),
+                    entityHealth.CurrentHealth + "/" + entityHealth.GetMaxHealth());
             }
-            Vector2 targetPos = _mainCamera.WorldToScreenPoint(entityHealth.transform.position);
-            targetPos.y += 1;
-            GUI.Box(new Rect(targetPos.x, Screen.height - targetPos.y, 120, 40),
-                entityHealth.CurrentHealth + "/" + entityHealth.GetMaxHealth());
         }
     }
 }

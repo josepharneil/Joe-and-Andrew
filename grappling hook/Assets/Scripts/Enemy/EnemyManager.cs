@@ -10,16 +10,53 @@ namespace Enemy
     public class EnemyManager : Singleton<EnemyManager>
     {
         private readonly List<GameObject> _enemiesToDestroy = new List<GameObject>();
-        private List<GameObject> _allEnemies;
+        private List<GameObject> _allEnemySpawnerObjects; // This is a list of enemy objects used as reference for spawning actual enemies. 
+        private readonly List<GameObject> _allEnemies = new List<GameObject>();
+
+        public static event Action OnEnemiesSpawnedOrDestroyed;
 
         public static event Action OnAllEnemiesKilled;//AK 4/3/22 Killed is just the enemy having 0 health, not the Game Object destruction
 
         private void Start()
         {
-            // Get all active enemy tagged objects.
-            _allEnemies = GameObject.FindGameObjectsWithTag("Enemy").Where( enemy => enemy.activeSelf ).ToList();
+            // Get all active spawners, and disable them.
+            _allEnemySpawnerObjects = GameObject.FindGameObjectsWithTag("EnemyParent").Where( enemy => enemy.activeSelf ).ToList();
+            _allEnemySpawnerObjects.ForEach(e => e.SetActive(false));
+
+            SpawnAllEnemies();
         }
 
+        private void SpawnAllEnemies()
+        {
+            foreach (GameObject enemySpawner in _allEnemySpawnerObjects)
+            {
+                // Spawn an enemy with this manager as a parent (for tidiness)
+                GameObject newEnemy = Instantiate(enemySpawner, transform, true);
+                _allEnemies.Add(newEnemy);
+                newEnemy.SetActive(true);
+            }
+            
+            OnEnemiesSpawnedOrDestroyed?.Invoke();
+        }
+
+        private void DestroyAllEnemies()
+        {
+            foreach (GameObject enemy in _allEnemies)
+            {
+                DestroyEnemy(enemy);
+            }
+            _allEnemies.Clear();
+            
+            OnEnemiesSpawnedOrDestroyed?.Invoke();
+        }
+
+        public void ResetAllEnemies()
+        {
+            DestroyAllEnemies();
+            SpawnAllEnemies();
+        }
+        
+        // Used in the state graph of each enemy.
         [UsedImplicitly] public static void AddForDestruction(GameObject gameObjectToDestroy)
         {
             Instance._enemiesToDestroy.Add(gameObjectToDestroy);
@@ -49,15 +86,35 @@ namespace Enemy
             
             Debug.Assert(!_enemiesToDestroy.Contains(gameObject),
                 "You're destroying the enemy manager itself, don't do this.", this);
+            
             foreach (GameObject gameObjectToDestroy in _enemiesToDestroy)
             {
-                foreach (Transform child in gameObjectToDestroy.transform)
-                {
-                    Destroy(child.gameObject);
-                }
-                Destroy(gameObjectToDestroy);
+                // Remove this enemy from the all enemies list
+                _allEnemies.Remove(gameObjectToDestroy);
+                
+                DestroyEnemy(gameObjectToDestroy);
             }
-            _enemiesToDestroy.Clear();
+            if (_enemiesToDestroy.Count > 0)
+            {
+                OnEnemiesSpawnedOrDestroyed?.Invoke();
+                _enemiesToDestroy.Clear();
+            }
+        }
+
+        private void DestroyEnemy(GameObject enemyToDestroy)
+        {
+            if (!enemyToDestroy)
+            {
+                Debug.LogError("No enemy to destroy...");
+                return;
+            }
+
+            // Destroy all children, then parent.
+            foreach (Transform child in enemyToDestroy.transform)
+            {
+                Destroy(child.gameObject);
+            }
+            Destroy(enemyToDestroy);
         }
     }
 }

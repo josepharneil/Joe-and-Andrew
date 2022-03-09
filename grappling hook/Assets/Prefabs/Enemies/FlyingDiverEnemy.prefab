@@ -235,7 +235,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 10
-  currentHealth: 0
 --- !u!114 &8691223564396874258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -348,6 +347,7 @@ MonoBehaviour:
   _patrolPointDistanceThreshold: 1
   _patrolSpeed: 2
   _chaseSpeed: 5
+  _chaseHeight: 4
   _chaseTarget: {fileID: 0}
   _sight:
     _eyes: {fileID: 8691223564396874279}
@@ -359,6 +359,7 @@ MonoBehaviour:
   _diveBombCooldownDuration: 1.5
   _diveBombDistance: 10
   _diveBombSpeed: 15
+  _diveBombHeight: 4
   DiveBombIsOnCooldown: 1
 --- !u!1 &8691223564415560786
 GameObject:
@@ -431,7 +432,7 @@ GameObject:
   - component: {fileID: 8691223565349368868}
   m_Layer: 0
   m_Name: FlyingDiverEnemy
-  m_TagString: Untagged
+  m_TagString: EnemyParent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

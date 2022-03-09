@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using Enemy;
+using Entity;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Level
@@ -27,8 +28,36 @@ namespace Level
             ConnectAreas();
 
             SpawnPlayer();
+
+            _player.TryGetComponent(out EntityHealth playerHealth);
+            if (playerHealth)
+            {
+                playerHealth.OnEntityDead += ResetLevel;
+            }
+            else
+            {
+                Debug.LogError("No entity health on player?", this);
+            }
         }
 
+        private void OnDisable()
+        {
+            _player.TryGetComponent(out EntityHealth playerHealth);
+            if (playerHealth)
+            {
+                playerHealth.OnEntityDead -= ResetLevel;
+            }
+            else
+            {
+                Debug.LogError("No entity health on player?", this);
+            }
+        }
+
+        private void ResetLevel()
+        {
+            EnemyManager.Instance.ResetAllEnemies();
+        }
+        
         private void ActivateLevel()
         {
             // Hub

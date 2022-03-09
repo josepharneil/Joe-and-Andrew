@@ -10,6 +10,7 @@ TagManager:
   - EnemyAttack
   - Weapon
   - OneWayPlatform
+  - EnemyParent
   layers:
   - Default
   - TransparentFX

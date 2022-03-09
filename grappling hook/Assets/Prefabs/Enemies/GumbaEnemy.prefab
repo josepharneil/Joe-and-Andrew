@@ -295,7 +295,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 10
-  currentHealth: 0
 --- !u!114 &6696026842710103776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -419,7 +418,7 @@ GameObject:
   - component: {fileID: 6696026843032660182}
   m_Layer: 0
   m_Name: GumbaEnemy
-  m_TagString: Untagged
+  m_TagString: EnemyParent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

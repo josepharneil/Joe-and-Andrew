@@ -220,7 +220,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 10
-  currentHealth: 0
 --- !u!114 &886963154256082545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,7 +307,7 @@ GameObject:
   - component: {fileID: 886963155510315079}
   m_Layer: 0
   m_Name: Piranha Plant Enemy
-  m_TagString: Untagged
+  m_TagString: EnemyParent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
