@@ -104,7 +104,7 @@ namespace Physics
                 this);
             Debug.Assert(boxCollider != null, "Missing box collider", this);
             Debug.Assert(boxCollider.isTrigger, "This should be a trigger: " + gameObject.name, this);
-            gameObject.TryGetComponent<Rigidbody2D>(out Rigidbody2D rigidbody2DForTriggers);
+            gameObject.TryGetComponent(out Rigidbody2D rigidbody2DForTriggers);
             Debug.Assert(rigidbody2DForTriggers != null, "A rigidbody is required for triggers to active.", this);
             Debug.Assert(rigidbody2DForTriggers.simulated, "Rigidbody needs to be simulated for Triggers to activate", this);
         }
@@ -242,20 +242,41 @@ namespace Physics
             bool grounded = false;
             for (int rayIndex = 0; rayIndex < _verticalRayCount; rayIndex++)
             {
-                Vector2 rayOrigin =_bottomLeft;
+                Vector2 rayOrigin = _bottomLeft;
                 rayOrigin += Vector2.right * (_verticalRaySpacing * rayIndex);
-                RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.down , rayLength, collisionMask);
                 if (debugDraw)
                 {
                     Debug.DrawRay(rayOrigin, Vector2.down * rayLength, Color.red);
                 }
-                if (hit)
+                if (Physics2D.Raycast(rayOrigin, Vector2.down, rayLength, collisionMask))
                 { 
                     grounded = true;
                 }
             }
             return grounded;
         }
+
+        public bool CheckIfHittingCeiling()
+        {
+            //works the same as the others
+            UpdateRaycastOrigins();
+            const float rayLength = SkinWidth + 0.01f;
+            bool hittingCeiling = false;
+            for (int rayIndex = 0; rayIndex < _verticalRayCount; rayIndex++)
+            {
+                Vector2 rayOrigin = _topLeft + (Vector2.right * (_verticalRaySpacing * rayIndex));
+                if (debugDraw)
+                {
+                    Debug.DrawRay(rayOrigin, Vector2.up * rayLength, Color.red);
+                }
+                if (Physics2D.Raycast(rayOrigin, Vector2.up, rayLength, collisionMask))
+                { 
+                    hittingCeiling = true;
+                }
+            }
+            return hittingCeiling;
+        }
+        
         public bool CheckIfOneWayPlatform()
         {
             //Basically the same as the CheckIfGrounded code

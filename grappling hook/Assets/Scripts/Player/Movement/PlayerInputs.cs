@@ -70,7 +70,7 @@ namespace Player
 
         private bool _isMoveInput;
         private bool _isJumpInput;
-        private bool _isJumpEndedEarly=false;
+        private bool _isJumpEndedEarly = false;
         private bool _canCoyote;
         private bool _hasJumped;
         private bool _isGrounded;
@@ -231,7 +231,12 @@ namespace Player
                 }
             }
             else
-            { 
+            {
+                if (movementController.customCollider2D.CheckIfHittingCeiling())
+                {
+                    _isJumpEndedEarly = true;
+                }
+                
                 // Checks if the player has ended a jump early, and if so increase the gravity
                 if (_isJumpEndedEarly)
                 {
