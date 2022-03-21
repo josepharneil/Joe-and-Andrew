@@ -15,6 +15,7 @@ namespace Level
 
         [SerializeField] private List<RunArea> _allRunAreas;
         private RunArea _activeRunArea;
+        [SerializeField] private int _overrideRunAreaSelectionIndex = -1;
         
         [SerializeField] private BossArea _bossArea;
 
@@ -65,7 +66,15 @@ namespace Level
             
             // Disable all
             _allRunAreas.ForEach(level => level.Deactivate());
-            ActivateRandomLevel();
+            if (_overrideRunAreaSelectionIndex == -1)
+            {
+                ActivateRandomLevel();
+            }
+            else
+            {
+                _activeRunArea = _allRunAreas[_overrideRunAreaSelectionIndex];
+                _activeRunArea.Activate();
+            }
             
             _bossArea.Activate();
         }

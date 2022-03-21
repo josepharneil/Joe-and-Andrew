@@ -218,7 +218,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.4}
+  m_Offset: {x: 0, y: 0.26288474}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -229,7 +229,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 2.1}
+  m_Size: {x: 1, y: 1.8257699}
   m_EdgeRadius: 0
 --- !u!114 &2302908442463871428
 MonoBehaviour:
@@ -400,7 +400,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementController: {fileID: 9147847883452652284}
-  jumpHeight: 15
+  jumpVelocity: 15
   coyoteTime: 0.5
   minFallSpeed: 35
   maxFallSpeed: 45
@@ -409,6 +409,7 @@ MonoBehaviour:
   earlyJumpMultiplier: 3
   earlyJumpCancelTime: 0.2
   _debugRollFall: 0
+  _debugDisableWallJumpSlide: 0
   _verticalWallJump: 0
   _horizontalWallJump: 0
   _wallSideGravityMultiplier: 0
@@ -720,7 +721,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -1
-  m_Time: 1
+  m_Time: 0.4
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1

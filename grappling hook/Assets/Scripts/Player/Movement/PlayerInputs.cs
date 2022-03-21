@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 using Physics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 //thieved shamelessly from https://www.youtube.com/watch?v=MbWK8bCAU2w&list=PLFt_AvWsXl0f0hqURlhyIoAabKPgRsqjz&index=1
 // more shameless thieving https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/blob/main/Scripts/PlayerController.cs
@@ -18,7 +19,7 @@ namespace Player
         [SerializeField] private MovementController movementController;
 
         [Header("Jump Stats")]
-        [SerializeField] private float jumpHeight = 3f;
+        [SerializeField] private float jumpVelocity = 15f;
         [SerializeField] private float coyoteTime;
         [SerializeField] private float minFallSpeed = 80f;
         [SerializeField] private float maxFallSpeed = 120f;
@@ -30,7 +31,8 @@ namespace Player
         private float _apexPoint; //This becomes 1 at the end of the jump
         private float _fallSpeed;
 
-        [Header("Wall Jump Stats")] 
+        [Header("Wall Jump / Sliding Stats")]
+        [SerializeField] private bool _debugDisableWallJumpSlide = false;
         [SerializeField] private float _verticalWallJump;
         [SerializeField] private float _horizontalWallJump;
         private bool _isWallSliding = false;
@@ -171,13 +173,19 @@ namespace Player
             
             // Movement
             SetHorizontalMove();
-            CheckWallSlide();
+            if (!_debugDisableWallJumpSlide)
+            {
+                CheckWallSlide();
+            }
             CheckGrounded();
             CheckCoyote();
             CalculateJumpApex();
             CalculateGravity();
             DropThroughPlatform();
-            WallJump();
+            if (!_debugDisableWallJumpSlide)
+            {
+                WallJump();
+            }
             Jump();
 
             if (!isAttacking || (isAttacking && !playerCombatPrototyping.data.movementDisabledByAttacks))
@@ -279,7 +287,7 @@ namespace Player
         {
             if (_isJumpInput && (_isGrounded || _canCoyote))
             {
-                Velocity.y = jumpHeight;
+                Velocity.y = jumpVelocity;
                 _isJumpInput = false;
                 _canCoyote = false;
                 _hasJumped = true;
@@ -374,9 +382,9 @@ namespace Player
             }
         }
 
-        public void DropThroughPlatform()
+        private void DropThroughPlatform()
         {
-            CustomCollider2D collider2D = movementController.customCollider2D;
+            CustomCollider2D customCollider2D = movementController.customCollider2D;
             if (_hasFallenThroughPlatform &&_fallThroughPlatformTimer<20)
             {
                 _fallThroughPlatformTimer += 1;
@@ -385,17 +393,16 @@ namespace Player
             {
                 _hasFallenThroughPlatform = false;
                 _fallThroughPlatformTimer = 0;
-                collider2D.SetFallThroughPlatform(false);
+                customCollider2D.SetFallThroughPlatform(false);
             }
 
-
-            if(_isJumpInput && collider2D.CheckIfOneWayPlatform()&& Input.GetAxisRaw("Vertical") < 0f)
+            // TODO This should be called within some kind of read input function if we're reading the axis... I think
+            if (_isJumpInput && customCollider2D.CheckIfOneWayPlatform() && Input.GetAxisRaw("Vertical") < 0f)
             {
                 _isJumpInput = false;
-                collider2D.SetFallThroughPlatform(true);
+                customCollider2D.SetFallThroughPlatform(true);
                 _hasFallenThroughPlatform = true;
             }
-
         }
 
         #endregion
