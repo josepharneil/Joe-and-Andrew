@@ -245,7 +245,7 @@ MonoBehaviour:
   _data:
     _json: '{"nest":{"source":"Macro","macro":0,"embed":null}}'
     _objectReferences:
-    - {fileID: 11400000, guid: 361bfc15f339346cf99e4154de0c3aac, type: 2}
+    - {fileID: 11400000, guid: 1fa820ab945944400829e9238b68b6ed, type: 2}
 --- !u!61 &7987739822083289856
 BoxCollider2D:
   m_ObjectHideFlags: 0
