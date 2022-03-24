@@ -380,7 +380,7 @@ namespace Player
                 Debug.Log(_wallJumpCounter);
             }
             //AK:9/2/21 this number (150) is too high atm, uaing it for testing  
-            if (_wallJumpCounter >= 150)
+            if (_wallJumpCounter >= 15)
             {
                 _hasWallJumped = false;
                 _wallJumpCounter = 0;
