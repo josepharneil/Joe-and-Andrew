@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Player
 {
@@ -25,6 +26,10 @@ namespace Player
         [Header("Daze")]
         [Tooltip("Does player deal daze?")]
         public bool doesPlayerDealDaze = true;
+
+        [Header("Knockback")]
+        [Tooltip("Does player get knocked back when hitting an entity?")]
+        public bool doesPlayerGetKnockedBackByOwnAttack = true;
 
         [Header("Parry")]
         [Tooltip("Does attacking a parried enemy deal bonus damage?")]

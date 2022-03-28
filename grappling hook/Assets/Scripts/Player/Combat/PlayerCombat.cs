@@ -76,7 +76,7 @@ namespace Player
                 ShakeCamera();
 
                 // Knockback player
-                if (_playerKnockback && firstEnemyHitPosition.HasValue && CurrentMeleeWeapon.KnockbackAmountToPlayer != 0f)
+                if (_playerKnockback && playerCombatPrototyping.data.doesPlayerGetKnockedBackByOwnAttack && firstEnemyHitPosition.HasValue && CurrentMeleeWeapon.KnockbackAmountToPlayer != 0f)
                 {
                     _playerKnockback.StartKnockBack(firstEnemyHitPosition.Value, CurrentMeleeWeapon.KnockbackAmountToPlayer);
                 }
