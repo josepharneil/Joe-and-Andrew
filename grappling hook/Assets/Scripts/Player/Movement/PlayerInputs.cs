@@ -58,7 +58,7 @@ namespace Player
 
         [Header("Roll Stats")]
         [SerializeField] private float rollDistance;
-        [SerializeField] private float rollDuration;
+        [SerializeField] private float rollSpeed = 20f;
         [SerializeField] private float rollCoolDown;
 
         private float _jumpCalledTime;
@@ -639,10 +639,11 @@ namespace Player
 
         private void Roll()
         {
-            //keeps rolling while the timer is on
+            // Keeps rolling while the timer is on
+            float rollDuration = rollDistance / rollSpeed;
             if (_rollDurationTimer <= rollDuration)
             {
-                Velocity.x = (int)_rollDirection * (rollDistance / rollDuration);
+                Velocity.x = (int)_rollDirection * rollSpeed;
                 if (_debugRollFall)
                 {
                     Velocity.y = 0;
