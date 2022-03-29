@@ -36,9 +36,9 @@ namespace Player
         [SerializeField] private bool _debugDisableWallJumpSlide = false;
         [SerializeField] private float _verticalWallJump;
         [SerializeField] private float _horizontalWallJump;
+        [SerializeField] private float _wallJumpInputDisableTime;
         private bool _isWallSliding = false;
         [SerializeField] private float _wallSideGravityMultiplier;
-        private float _wallJumpCounter=0f;
         
         [Header("Ground Move Stats")]
         [SerializeField] private float moveSpeed = 10f;
@@ -277,10 +277,6 @@ namespace Player
                 // Note for the future, because this is setting an exact value... it should be fine?? Hopefully...
                 // This is a little bit of a "magic number" fix though.
                 _jumpCalledTime = Time.time;
-                if (debugUseAnimations)
-                {
-                    animator.SetTrigger(JumpTriggerID);
-                }
             }
 
             if (context.canceled && (Time.time - _jumpCalledTime < earlyJumpCancelTime))
@@ -307,6 +303,11 @@ namespace Player
                 _isInCoyoteTime = false;
                 
                 _hasJumped = true;
+                
+                if (debugUseAnimations)
+                {
+                    animator.SetTrigger(JumpTriggerID);
+                }
             }
         }
 
@@ -332,7 +333,6 @@ namespace Player
                 _isGrounded = true;
                 _lastGroundedTime = Time.time;
                 _hasJumped = false;
-
             }
             else
             {
@@ -370,44 +370,71 @@ namespace Player
         
         private void WallJump()
         {
-            //checks if grounded and jumpinput
-            //then checks if there are any collisions to the left and right
-            //if so, applies the wall jump vectors in the correct direction
-            //currently this also disables movement inputs for a short time with a counter
-            //not sure if there is a better way of doing this
+            // Checks if grounded and jumpinput (and not in coyote).
+            // Then checks if there are any collisions to the left and right.
+            // If so, applies the wall jump vectors in the correct direction.
+            // Currently this also disables movement inputs for a short time with a counter.
+            // Not sure if there is a better way of doing this.
             if (!_isGrounded && _isJumpInput && !_isInCoyoteTime)
             {
                 CustomCollider2D customCollider2D = movementController.customCollider2D;
-                if (customCollider2D.GetCollisionLeft() || customCollider2D.GetCollisionRight())
+                bool wallIsToLeft = customCollider2D.GetCollisionLeft();
+                bool wallIsToRight = customCollider2D.GetCollisionRight();
+                if (wallIsToLeft || wallIsToRight)
                 {
-                    _isJumpInput = false;
+                    if(wallIsToLeft && wallIsToRight)
+                    {
+                        Debug.LogError("This implies bad level design?");
+                    }
                     Velocity.y = _verticalWallJump;
-                    Velocity.x = _horizontalWallJump * -1f * (int)FacingDirection;
+                    
+                    if (wallIsToRight)
+                    {
+                        // Jump to left
+                        Velocity.x = _horizontalWallJump * -1f;
+                        FacingDirection = FacingDirection.Left;
+                    }
+                    else
+                    {
+                        // Jump to right
+                        Velocity.x = _horizontalWallJump;
+                        FacingDirection = FacingDirection.Right;
+                    }
+                    
+                    _isJumpBuffered = false;
+                    _isJumpInput = false;
+                    _isInCoyoteTime = false;
+
                     _hasWallJumped = true;
-                    FacingDirection = (FacingDirection == FacingDirection.Left) ? FacingDirection.Right : FacingDirection.Left;
+                    _hasJumped = true;
+
+                    _moveInput.x = 0f;
+                    
+                    if (debugUseAnimations)
+                    {
+                        animator.SetTrigger(JumpTriggerID);
+                    }
                 }
                 else
                 {
                     _isJumpInput = false;
                 }
             }
-            if (_hasWallJumped)
+            if (_hasWallJumped && (Time.time - _jumpCalledTime) > _wallJumpInputDisableTime)
             {
-                _wallJumpCounter++;
-                Debug.Log(_wallJumpCounter);
-            }
-            //AK:9/2/21 this number (150) is too high atm, uaing it for testing  
-            if (_wallJumpCounter >= 15)
-            {
+                // JA:29/03/22 Not sure if this is a good idea, but it fixes the instance where
+                // you wall jump, and maintain the exact same input, thus no input read up
+                _moveInput.x = Input.GetAxisRaw("Horizontal");
+                _moveInput.y = Input.GetAxisRaw("Vertical");
                 _hasWallJumped = false;
-                _wallJumpCounter = 0;
             }
         }
-
+        
         private void DropThroughPlatform()
         {
             CustomCollider2D customCollider2D = movementController.customCollider2D;
-            if (_hasFallenThroughPlatform &&_fallThroughPlatformTimer<20)
+            // JA:29/03/22 Not sure if you should use frame counting for this instead of a timer...???
+            if (_hasFallenThroughPlatform && _fallThroughPlatformTimer < 20)
             {
                 _fallThroughPlatformTimer += 1;
             }
