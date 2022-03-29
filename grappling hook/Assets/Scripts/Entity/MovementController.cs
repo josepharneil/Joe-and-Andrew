@@ -18,12 +18,21 @@ namespace Entity
             //sets the origins for all the raycasts
             customCollider2D.UpdateRaycastOrigins();
 
+            bool travellingUp = displacement.y > 0;
+            bool travellingLeft = displacement.x < 0;
+            bool travellingRight = !travellingLeft;
+
             // Always update collisions, even if 0 displacement.
             // Found a problem where if we didn't, and we were on something that moved, once if moved away
             // the player didn't fall downwards.
             customCollider2D.ResetCollisionState();
-            customCollider2D.CheckHorizontalCollisions(ref displacement, displacement.y > 0);
-            customCollider2D.CheckVerticalCollisions(ref displacement);
+            customCollider2D.CheckHorizontalCollisions(ref displacement, travellingUp);
+
+            bool ignoreTopLeftClip = travellingUp && travellingRight;
+            bool ignoreTopRightClip = travellingUp && travellingLeft;
+            customCollider2D.CheckVerticalCollisions(ref displacement, 
+                ignoreTopLeftClip, 
+                ignoreTopRightClip);
 
             transform.Translate(displacement);
         }

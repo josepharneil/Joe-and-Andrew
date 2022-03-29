@@ -22,6 +22,8 @@ namespace Level
         // This might be a bit much for the level to control the player, but fine for now.
         [SerializeField] private GameObject _player;
 
+        [SerializeField] private bool _enableEnemies = true;
+
         private void OnEnable()
         {
             ActivateLevel();
@@ -38,6 +40,12 @@ namespace Level
             else
             {
                 Debug.LogError("No entity health on player?", this);
+            }
+
+            EnemyManager.Instance.InitEnemies();
+            if (_enableEnemies)
+            {
+                EnemyManager.Instance.SpawnAllEnemies();
             }
         }
 
@@ -56,7 +64,14 @@ namespace Level
 
         private void ResetLevel()
         {
-            EnemyManager.Instance.ResetAllEnemies();
+            if (_enableEnemies)
+            {
+                EnemyManager.Instance.ResetAllEnemies();
+            }
+            else
+            {
+                EnemyManager.Instance.DestroyAllEnemies();
+            }
         }
         
         private void ActivateLevel()

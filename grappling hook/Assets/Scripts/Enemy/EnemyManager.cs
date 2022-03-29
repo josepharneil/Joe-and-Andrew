@@ -19,16 +19,14 @@ namespace Enemy
 
         public static event Action OnAllEnemiesKilled;//AK 4/3/22 Killed is just the enemy having 0 health, not the Game Object destruction
 
-        private void Start()
+        public void InitEnemies()
         {
             // Get all active spawners, and disable them.
             _allEnemySpawnerObjects = GameObject.FindGameObjectsWithTag("EnemyParent").Where( enemy => enemy.activeSelf ).ToList();
             _allEnemySpawnerObjects.ForEach(e => e.SetActive(false));
-
-            SpawnAllEnemies();
         }
 
-        private void SpawnAllEnemies()
+        public void SpawnAllEnemies()
         {
             foreach (GameObject enemySpawner in _allEnemySpawnerObjects)
             {
@@ -42,7 +40,7 @@ namespace Enemy
             OnEnemiesSpawnedOrDestroyed?.Invoke();
         }
 
-        private void DestroyAllEnemies()
+        public void DestroyAllEnemies()
         {
             foreach (GameObject enemy in _allEnemies)
             {

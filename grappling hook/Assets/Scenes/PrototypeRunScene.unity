@@ -15970,6 +15970,7 @@ MonoBehaviour:
   _overrideRunAreaSelectionIndex: 1
   _bossArea: {fileID: 1734297159}
   _player: {fileID: 408722809}
+  _enableEnemies: 1
 --- !u!4 &1060563207
 Transform:
   m_ObjectHideFlags: 0
