@@ -21,6 +21,7 @@ namespace Player
         [Header("Jump Stats")]
         [SerializeField] private float jumpVelocity = 15f;
         [SerializeField] private float coyoteTime;
+        [SerializeField] [Tooltip("How long the jump buffer will last")] private float _jumpBufferTime;
         [SerializeField] private float minFallSpeed = 80f;
         [SerializeField] private float maxFallSpeed = 120f;
         [SerializeField] private float jumpApexThreshold = 5f;
@@ -72,6 +73,7 @@ namespace Player
         private bool _isJumpInput;
         private bool _isJumpEndedEarly = false;
         private bool _isInCoyoteTime;
+        private bool _isJumpBuffered;
         private bool _hasJumped;
         private bool _isGrounded;
         private bool _isRollInput;
@@ -179,6 +181,7 @@ namespace Player
             }
             CheckGrounded();
             CheckCoyote();
+            CheckJumpBuffer();
             CalculateJumpApex();
             CalculateGravity();
             DropThroughPlatform();
@@ -271,13 +274,16 @@ namespace Player
             {
                 _isJumpInput = true;
                 _isJumpEndedEarly = false;
-                StartCoyoteTime();
+                // Note for the future, because this is setting an exact value... it should be fine?? Hopefully...
+                // This is a little bit of a "magic number" fix though.
+                _jumpCalledTime = Time.time;
                 if (debugUseAnimations)
                 {
                     animator.SetTrigger(JumpTriggerID);
                 }
             }
-            if (context.canceled && (Time.time -_jumpCalledTime<earlyJumpCancelTime))
+
+            if (context.canceled && (Time.time - _jumpCalledTime < earlyJumpCancelTime))
             {
                 _isJumpEndedEarly = true;
             }
@@ -290,12 +296,17 @@ namespace Player
 
         private void Jump()
         {
-            if (_isJumpInput && (_isGrounded || _isInCoyoteTime))
+            bool isJumpFromGroundOrCoyote = _isJumpInput && (_isGrounded || _isInCoyoteTime);
+            bool isBufferedJumpFromGround = _isJumpBuffered && _isGrounded;
+            if (isJumpFromGroundOrCoyote || isBufferedJumpFromGround)
             {
-                if(!_isGrounded && _isInCoyoteTime) Debug.Log("Coyote jump");
+                if(isBufferedJumpFromGround) Debug.Log("Buffered jump " + (Time.time - _jumpCalledTime));
                 Velocity.y = jumpVelocity;
+
+                _isJumpBuffered = false;
                 _isJumpInput = false;
                 _isInCoyoteTime = false;
+                
                 _hasJumped = true;
             }
         }
@@ -329,17 +340,7 @@ namespace Player
                 _isGrounded = false;
             }
         }
-
-        private void StartCoyoteTime()
-        {
-            // Note for the future, because this is setting an exact value... it should be fine?? Hopefully...
-            // This is a little bit of a "magic number" fix though.
-            if (_isJumpInput)
-            {
-                _jumpCalledTime = Time.time;
-            }
-        }
-
+        
         private void CheckCoyote()
         {
             if (_isJumpInput && !_isGrounded && !_hasJumped && (_jumpCalledTime - _lastGroundedTime) < coyoteTime )
@@ -352,6 +353,22 @@ namespace Player
             }
         }
 
+        private void CheckJumpBuffer()
+        {
+            // "When the character is already in the air pressing jump moments before the ground will trigger jump as soon as they land"
+            // http://www.davetech.co.uk/gamedevplatformer
+            if (_isJumpInput && !_isGrounded)
+            {
+                _isJumpBuffered = true;
+            }
+            
+            // Remove buffered jump if it has been too long.
+            if (_isJumpBuffered && (Time.time - _jumpCalledTime) > _jumpBufferTime)
+            {
+                _isJumpBuffered = false;
+            }
+        }
+        
         private void WallJump()
         {
             //checks if grounded and jumpinput

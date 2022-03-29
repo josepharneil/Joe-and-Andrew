@@ -402,6 +402,7 @@ MonoBehaviour:
   movementController: {fileID: 9147847883452652284}
   jumpVelocity: 15
   coyoteTime: 0.1
+  _jumpBufferTime: 0.2
   minFallSpeed: 35
   maxFallSpeed: 40
   jumpApexThreshold: 10
@@ -548,7 +549,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99eca67b715954c598626d10823444e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: da0ef0e9cf5bc4773971a7538dd0f6c7, type: 2}
+  data: {fileID: 11400000, guid: 5cf080898044e4b48963a335b61b41a5, type: 2}
 --- !u!114 &9147847883452652282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -561,7 +562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81bcdf0702639460ca280acb5dee23dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 15
+  maxHealth: 25
 --- !u!114 &9147847883452652283
 MonoBehaviour:
   m_ObjectHideFlags: 0

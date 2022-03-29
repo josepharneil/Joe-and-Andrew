@@ -30594,70 +30594,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: fallClamp
-      value: -35
-      objectReference: {fileID: 0}
-    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: coyoteTime
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: maxFallSpeed
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: rollDistance
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: rollDuration
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: _verticalWallJump
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: _horizontalWallJump
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: earlyJumpCancelTime
-      value: 0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: earlyJumpMultiplier
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: _debugEnableWallJumpSlide
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: _debugDisableWallJumpSlide
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: _wallSideGravityMultiplier
-      value: 0.3
-      objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: cinemachineShake
       value: 
       objectReference: {fileID: 1446264448}
-    - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: CurrentMeleeWeapon
-      value: 
-      objectReference: {fileID: 11400000, guid: 22c847e22f5fa4133a4551802c00ff17, type: 2}
-    - target: {fileID: 9147847883452652282, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: maxHealth
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 9147847883452652286, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: data
-      value: 
-      objectReference: {fileID: 11400000, guid: 5cf080898044e4b48963a335b61b41a5, type: 2}
     - target: {fileID: 9147847883452652287, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: m_RootOrder
       value: 1
