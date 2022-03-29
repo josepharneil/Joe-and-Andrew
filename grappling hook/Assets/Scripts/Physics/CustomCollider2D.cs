@@ -90,6 +90,7 @@ namespace Physics
         [Header("Debug")] 
         [SerializeField] private bool debugDraw;
         [SerializeField] private bool _jumpCornerClippingEnabled = true;
+        [SerializeField] private bool _ignoreHeadClippingEnabled = true;
         
         private const float SkinWidth = 0.15f;
         private int _horizontalRayCount = 4;
@@ -203,13 +204,27 @@ namespace Physics
         /// Checks collisions above and below.
         /// </summary>
         /// <param name="displacement"></param>
-        public void CheckVerticalCollisions(ref Vector2 displacement)
+        /// <param name="ignoreLeftHeadClips"></param>
+        /// <param name="ignoreRightHeadClips"></param>
+        public void CheckVerticalCollisions(ref Vector2 displacement, bool ignoreLeftHeadClips = false, bool ignoreRightHeadClips = false)
         {
             //gets the direction and values of the y displacement
             int directionY = (int)Mathf.Sign(displacement.y);
             float rayLength = Mathf.Abs(displacement.y) + SkinWidth;
             for (int rayIndex = 0; rayIndex < _verticalRayCount; rayIndex++)
             {
+                if (_ignoreHeadClippingEnabled)
+                {
+                    if (ignoreLeftHeadClips && rayIndex == 0)
+                    {
+                        continue;
+                    }
+                    if (ignoreRightHeadClips && rayIndex == _verticalRayCount - 1)
+                    {
+                        continue;
+                    }
+                }
+                
                 Vector2 rayOrigin = (directionY == -1) ? _bottomLeft : _topLeft;
                 rayOrigin += Vector2.right * (_verticalRaySpacing * rayIndex + displacement.x);
                 //adding the displacement x means that the ray is cast from the point where the object will be after the x displacement
