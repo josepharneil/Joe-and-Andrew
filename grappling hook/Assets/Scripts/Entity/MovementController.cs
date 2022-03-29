@@ -22,7 +22,7 @@ namespace Entity
             // Found a problem where if we didn't, and we were on something that moved, once if moved away
             // the player didn't fall downwards.
             customCollider2D.ResetCollisionState();
-            customCollider2D.CheckHorizontalCollisions(ref displacement);
+            customCollider2D.CheckHorizontalCollisions(ref displacement, displacement.y > 0);
             customCollider2D.CheckVerticalCollisions(ref displacement);
 
             transform.Translate(displacement);

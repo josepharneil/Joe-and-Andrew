@@ -89,6 +89,7 @@ namespace Physics
 
         [Header("Debug")] 
         [SerializeField] private bool debugDraw;
+        [SerializeField] private bool _jumpCornerClippingEnabled = true;
         
         private const float SkinWidth = 0.15f;
         private int _horizontalRayCount = 4;
@@ -144,17 +145,18 @@ namespace Physics
             Bounds bounds = boxCollider.bounds;
             //fires the raycasts from a bit inside the collider
             bounds.Expand(SkinWidth * -2);
-            _bottomLeft = new Vector2(bounds.min.x, bounds.min.y);
-            _topLeft = new Vector2(bounds.min.x, bounds.max.y);
+            _bottomLeft  = new Vector2(bounds.min.x, bounds.min.y);
+            _topLeft     = new Vector2(bounds.min.x, bounds.max.y);
             _bottomRight = new Vector2(bounds.max.x, bounds.min.y);
-            _topRight = new Vector2(bounds.max.x, bounds.max.y);
+            _topRight    = new Vector2(bounds.max.x, bounds.max.y);
         }
-        
+
         /// <summary>
         /// Checks collisions to the left and right.
         /// </summary>
         /// <param name="displacement"></param>
-        public void CheckHorizontalCollisions(ref Vector2 displacement)
+        /// <param name="ignoreBottomHorizontalRays"></param>
+        public void CheckHorizontalCollisions(ref Vector2 displacement, bool ignoreBottomHorizontalRays = false)
         {
             //gets the direction and values of the x displacement, this is effectively the move direction
             int directionX = (int)Mathf.Sign(displacement.x);
@@ -163,6 +165,10 @@ namespace Physics
             //fires each of the rays
             for (int rayIndex = 0; rayIndex < _horizontalRayCount; rayIndex++)
             {
+                if(_jumpCornerClippingEnabled && ignoreBottomHorizontalRays && rayIndex == 0)
+                {
+                    continue;
+                }
                 //checks which way the ray should be fired, based on the displacement direction
                 Vector2 rayOrigin = (directionX == -1) ? _bottomLeft : _bottomRight;
                 //moves the ray origin along for each ray
