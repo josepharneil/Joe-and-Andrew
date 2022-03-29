@@ -71,7 +71,7 @@ namespace Player
         private bool _isMoveInput;
         private bool _isJumpInput;
         private bool _isJumpEndedEarly = false;
-        private bool _canCoyote;
+        private bool _isInCoyoteTime;
         private bool _hasJumped;
         private bool _isGrounded;
         private bool _isRollInput;
@@ -290,11 +290,12 @@ namespace Player
 
         private void Jump()
         {
-            if (_isJumpInput && (_isGrounded || _canCoyote))
+            if (_isJumpInput && (_isGrounded || _isInCoyoteTime))
             {
+                if(!_isGrounded && _isInCoyoteTime) Debug.Log("Coyote jump");
                 Velocity.y = jumpVelocity;
                 _isJumpInput = false;
-                _canCoyote = false;
+                _isInCoyoteTime = false;
                 _hasJumped = true;
             }
         }
@@ -341,13 +342,13 @@ namespace Player
 
         private void CheckCoyote()
         {
-            if(_isJumpInput && _jumpCalledTime-_lastGroundedTime< coyoteTime &&!_hasJumped)
+            if (_isJumpInput && !_isGrounded && !_hasJumped && (_jumpCalledTime - _lastGroundedTime) < coyoteTime )
             {
-                _canCoyote = true;
+                _isInCoyoteTime = true;
             }
             else
             {
-                _canCoyote = false;
+                _isInCoyoteTime = false;
             }
         }
 
@@ -358,7 +359,7 @@ namespace Player
             //if so, applies the wall jump vectors in the correct direction
             //currently this also disables movement inputs for a short time with a counter
             //not sure if there is a better way of doing this
-            if (!_isGrounded && _isJumpInput)
+            if (!_isGrounded && _isJumpInput && !_isInCoyoteTime)
             {
                 CustomCollider2D customCollider2D = movementController.customCollider2D;
                 if (customCollider2D.GetCollisionLeft() || customCollider2D.GetCollisionRight())

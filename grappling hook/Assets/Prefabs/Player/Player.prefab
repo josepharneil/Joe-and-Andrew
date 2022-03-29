@@ -401,18 +401,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementController: {fileID: 9147847883452652284}
   jumpVelocity: 15
-  coyoteTime: 0.5
+  coyoteTime: 0.1
   minFallSpeed: 35
-  maxFallSpeed: 45
+  maxFallSpeed: 40
   jumpApexThreshold: 10
-  fallClamp: -40
-  earlyJumpMultiplier: 3
-  earlyJumpCancelTime: 0.2
+  fallClamp: -35
+  earlyJumpMultiplier: 2
+  earlyJumpCancelTime: 0.15
   _debugRollFall: 0
   _debugDisableWallJumpSlide: 0
-  _verticalWallJump: 0
-  _horizontalWallJump: 0
-  _wallSideGravityMultiplier: 0
+  _verticalWallJump: 15
+  _horizontalWallJump: 15
+  _wallSideGravityMultiplier: 0.3
   moveSpeed: 10
   accelerationCurve:
     serializedVersion: 2
@@ -495,8 +495,8 @@ MonoBehaviour:
   airAccelerationRate: 0.282
   airDecelerationRate: 0.194
   airChangeDirectionRate: 0.736
-  rollDistance: 4
-  rollDuration: 0.2
+  rollDistance: 2
+  rollSpeed: 20
   rollCoolDown: 0.8
   moveState: 0
   debugUseAnimations: 1
