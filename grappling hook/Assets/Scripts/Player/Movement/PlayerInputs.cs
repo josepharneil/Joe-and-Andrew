@@ -300,7 +300,6 @@ namespace Player
             bool isBufferedJumpFromGround = _isJumpBuffered && _isGrounded;
             if (isJumpFromGroundOrCoyote || isBufferedJumpFromGround)
             {
-                if(isBufferedJumpFromGround) Debug.Log("Buffered jump " + (Time.time - _jumpCalledTime));
                 Velocity.y = jumpVelocity;
 
                 _isJumpBuffered = false;
