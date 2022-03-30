@@ -248,6 +248,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   debugDraw: 0
+  _jumpCornerClippingEnabled: 1
+  _ignoreHeadClippingEnabled: 1
 --- !u!114 &9147847883452652284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,7 +404,7 @@ MonoBehaviour:
   movementController: {fileID: 9147847883452652284}
   jumpVelocity: 15
   coyoteTime: 0.1
-  _jumpBufferTime: 0.2
+  _jumpBufferTime: 0.1
   minFallSpeed: 35
   maxFallSpeed: 40
   jumpApexThreshold: 10
@@ -413,6 +415,7 @@ MonoBehaviour:
   _debugDisableWallJumpSlide: 0
   _verticalWallJump: 15
   _horizontalWallJump: 15
+  _wallJumpInputDisableTime: 1
   _wallSideGravityMultiplier: 0.3
   moveSpeed: 10
   accelerationCurve:

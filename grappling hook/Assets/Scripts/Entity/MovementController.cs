@@ -20,7 +20,7 @@ namespace Entity
 
             bool travellingUp = displacement.y > 0;
             bool travellingLeft = displacement.x < 0;
-            bool travellingRight = !travellingLeft;
+            bool travellingRight = displacement.x > 0;
 
             // Always update collisions, even if 0 displacement.
             // Found a problem where if we didn't, and we were on something that moved, once if moved away
