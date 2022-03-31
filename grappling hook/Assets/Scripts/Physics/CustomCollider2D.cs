@@ -9,70 +9,12 @@ namespace Physics
     public class CustomCollider2D : MonoBehaviour
     {
         #region CollisionState
-        private bool _collisionAbove;
-        private bool _collisionBelow;
-        private bool _collisionLeft;
-        private bool _collisionRight;
-        private bool _fallThroughPlatform = false;
 
-        private void SetCollisionAbove(bool value, GameObject collidedGameObject)
-        {
-            bool initialState = _collisionAbove;
-            _collisionAbove = value;
-            MaybeTriggerOnCollisionEnter(initialState, value, collidedGameObject);
-        }
-        public bool GetCollisionAbove()
-        {
-            return _collisionAbove;
-        }
-        private void SetCollisionBelow(bool value, GameObject collidedGameObject)
-        {
-            bool initialState = _collisionBelow;
-            _collisionBelow = value;
-            MaybeTriggerOnCollisionEnter(initialState, value, collidedGameObject);
-        }
-        public bool GetCollisionBelow()
-        {
-            return _collisionBelow;
-        }
-        private void SetCollisionLeft(bool value, GameObject collidedGameObject)
-        {
-            bool initialState = _collisionLeft;
-            _collisionLeft = value;
-            MaybeTriggerOnCollisionEnter(initialState, value, collidedGameObject);
-        }
-        public bool GetCollisionLeft()
-        {
-            return _collisionLeft;
-        }
-        private void SetCollisionRight(bool value, GameObject collidedGameObject)
-        {
-            bool initialState = _collisionRight;
-            _collisionRight = value;
-            MaybeTriggerOnCollisionEnter(initialState, value, collidedGameObject);
-        }
-        public bool GetCollisionRight()
-        {
-            return _collisionRight;
-        }
-
-        private void MaybeTriggerOnCollisionEnter(bool initialState, bool newState, GameObject collidedGameObject)
-        {
-            if (initialState == false && newState == true)
-            {
-                // OnCollisionEnter?.Invoke(collidedGameObject);
-            }
-        }
-
-        // private void OnTriggerEnter2D(Collider2D col)
-        // {
-        //     OnTriggerEnter?.Invoke(col);
-        // }
-        // private void OnTriggerEnter2D(Collision2D col)
-        // {
-        //     // todo, not sure if this should be an event to be honest
-        //     OnCollisionEnter?.Invoke(col);
-        // }
+        public bool CollisionAbove{ private set; get; }
+        public bool CollisionBelow{ private set; get; }
+        public bool CollisionLeft{ private set; get; }
+        public bool CollisionRight{ private set; get; }
+        private bool _fallThroughPlatform;
 
         #endregion
         
@@ -88,9 +30,9 @@ namespace Physics
         }
 
         [Header("Debug")] 
-        [SerializeField] private bool debugDraw;
-        [SerializeField] private bool _jumpCornerClippingEnabled = true;
-        [SerializeField] private bool _ignoreHeadClippingEnabled = true;
+        [SerializeField] private bool _debugDraw;
+        [SerializeField] private bool _debugJumpCornerClippingEnabled = true;
+        [SerializeField] private bool _debugIgnoreHeadClippingEnabled = true;
         
         private const float SkinWidth = 0.15f;
         private int _horizontalRayCount = 4;
@@ -134,10 +76,10 @@ namespace Physics
         
         public void ResetCollisionState()
         {
-            _collisionAbove = false;
-            _collisionBelow = false;
-            _collisionLeft = false;
-            _collisionRight = false;
+            CollisionAbove = false;
+            CollisionBelow = false;
+            CollisionLeft = false;
+            CollisionRight = false;
         }
         
         //gets the positions of bounds of the rays, which is used for each move
@@ -152,32 +94,27 @@ namespace Physics
             _topRight    = new Vector2(bounds.max.x, bounds.max.y);
         }
 
-        public int CheckHorizontalCollisions(float customSkinWidth = SkinWidth)
+        public void CheckHorizontalCollisions(out bool left, out bool right)
         {
-            // todo need to be careful with this function, could be collision on both side sand the function prioritises left???
-            float rayLength = customSkinWidth;
+            right = left = false;
             for (int rayIndex = 0; rayIndex < _horizontalRayCount; rayIndex++)
             {
-                // TODO Can refactor the vector to be outside of loop (same for all collision checkers)
                 Vector2 rayOrigin = _bottomLeft + Vector2.up * (_horizontalRaySpacing * rayIndex);
-                RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.left, rayLength, collisionMask);
-                if (hit)
-                {
-                    return -1;
-                }
+                RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.left, SkinWidth, collisionMask);
+                if (!hit) continue;
+                
+                left = true;
+                break;
             }
-
             for (int rayIndex = 0; rayIndex < _horizontalRayCount; rayIndex++)
             {
                 Vector2 rayOrigin = _bottomRight + (Vector2.up * (_horizontalRaySpacing * rayIndex));
-                RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right, rayLength, collisionMask);
-                if (hit)
-                {
-                    return 1;
-                }
+                RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right, SkinWidth, collisionMask);
+                if (!hit) continue;
+                
+                right = true;
+                break;
             }
-            
-            return 0;
         }
 
         /// <summary>
@@ -191,43 +128,35 @@ namespace Physics
             int directionX = (int)Mathf.Sign(displacement.x);
             //ensures the ray length is fired properly with the skin width
             float rayLength = Mathf.Abs(displacement.x) + SkinWidth;
-            //fires each of the rays
-            for (int rayIndex = 0; rayIndex < _horizontalRayCount; rayIndex++)
-            {
-                if(_jumpCornerClippingEnabled && ignoreBottomHorizontalRays && rayIndex == 0)
-                {
-                    continue;
-                }
-                // TODO Need to take a look at this, pretty sure the Vector2 can be moved above the for loop.
-                //checks which way the ray should be fired, based on the displacement direction
-                Vector2 rayOrigin = (directionX == -1) ? _bottomLeft : _bottomRight;
-                //moves the ray origin along for each ray
-                rayOrigin += Vector2.up * (_horizontalRaySpacing * rayIndex);
-                //adding the displacement x means that the ray is cast from the point where the object will be once it has moved
-                RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right * directionX, rayLength, collisionMask);
-                if (debugDraw)
-                {
-                    Debug.DrawRay(rayOrigin, Vector2.right * directionX * rayLength, Color.red);
-                }
 
-                if (hit)
+            int lowerBoundRayIndex = 0;
+            if(_debugJumpCornerClippingEnabled && ignoreBottomHorizontalRays)
+            {
+                lowerBoundRayIndex++;
+            }
+            Vector2 bottomRightOrLeft = (directionX == -1) ? _bottomLeft : _bottomRight;
+            for (int rayIndex = lowerBoundRayIndex; rayIndex < _horizontalRayCount; rayIndex++)
+            {
+                // Checks which way the ray should be fired, based on the displacement direction
+                // Moves the ray origin along for each ray
+                Vector2 rayOrigin = bottomRightOrLeft + Vector2.up * (_horizontalRaySpacing * rayIndex);
+                // Adding the displacement x means that the ray is cast from the point where the object will be once it has moved
+                RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right * directionX, rayLength, collisionMask);
+                DebugDrawCollisionRay(rayOrigin, Vector2.right * (directionX * rayLength));
+
+                if (!hit) continue;
+                
+                if (hit.collider.CompareTag("OneWayPlatform")) 
                 {
-                    //checks if the player is going to bonk into a one way platform
-                    if (hit.collider.CompareTag("OneWayPlatform"))
-                    {
-                        return;
-                    }
-                    //this is where the real collision detection and movement comes from
-                    //it changes the displacement so that it will only be as far as the box can move before hitting a collider
-                    displacement.x = (hit.distance - SkinWidth) * directionX;
-                    //this stops the rays from hitting something that is further away than the closest collision
-                    rayLength = hit.distance;
-                    GameObject hitGameObject = hit.transform.gameObject;
-                    // todo check logic here... is it correct to set collisions for every hit?
-                    // eg does that mean if the last ray doesnt collide then its no collision, 
-                    SetCollisionLeft(directionX == -1, hitGameObject);
-                    SetCollisionRight(directionX == 1, hitGameObject);
+                    return;
                 }
+                // This is where the real collision detection and movement comes from
+                // it changes the displacement so that it will only be as far as the box can move before hitting a collider
+                displacement.x = (hit.distance - SkinWidth) * directionX;
+                // This stops the rays from hitting something that is further away than the closest collision
+                rayLength = hit.distance;
+                CollisionLeft = directionX == -1;
+                CollisionRight = directionX == 1;
             }
         }
 
@@ -242,47 +171,45 @@ namespace Physics
             //gets the direction and values of the y displacement
             int directionY = (int)Mathf.Sign(displacement.y);
             float rayLength = Mathf.Abs(displacement.y) + SkinWidth;
-            for (int rayIndex = 0; rayIndex < _verticalRayCount; rayIndex++)
-            {
-                if (_ignoreHeadClippingEnabled)
-                {
-                    if (ignoreLeftHeadClips && rayIndex == 0)
-                    {
-                        continue;
-                    }
-                    if (ignoreRightHeadClips && rayIndex == _verticalRayCount - 1)
-                    {
-                        continue;
-                    }
-                }
-                
-                Vector2 rayOrigin = (directionY == -1) ? _bottomLeft : _topLeft;
-                rayOrigin += Vector2.right * (_verticalRaySpacing * rayIndex + displacement.x);
-                //adding the displacement x means that the ray is cast from the point where the object will be after the x displacement
-                //do this because we call the y displacement after x
-                RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up * directionY, rayLength, collisionMask);
-                if (debugDraw)
-                {
-                    Debug.DrawRay(rayOrigin,Vector2.up * (directionY * rayLength), Color.red);
-                }
 
-                if (hit)
+            int lowerBoundRayIndex = 0;
+            int upperBoundRayIndex = _verticalRayCount;
+            if (_debugIgnoreHeadClippingEnabled)
+            {
+                if (ignoreLeftHeadClips)
                 {
-                    //checks if the player is hitting a one way platform, and if the player is jumping up as well
-                    if(hit.collider.CompareTag("OneWayPlatform") && (displacement.y > 0f || _fallThroughPlatform))
-                    {
-                        return;
-                    }
-                    //same as horizontal collisions, this sets the amount of displacement to be the max
-                    //that we can get to without a collision
-                    displacement.y = (hit.distance - SkinWidth) * directionY;
-                    //this stops the rays from hitting something that is further away than the closest collision
-                    rayLength = hit.distance;
-                    //checks whether the collision is above or below (or both)
-                    GameObject hitGameObject = hit.transform.gameObject;
-                    SetCollisionAbove(directionY == 1, hitGameObject);
-                    SetCollisionBelow(directionY == -1, hitGameObject);
+                    lowerBoundRayIndex++;
                 }
+                if (ignoreRightHeadClips)
+                {
+                    upperBoundRayIndex--;
+                }
+            }
+
+            Vector2 topOrBottomLeft = ((directionY == -1) ? _bottomLeft : _topLeft);
+            for (int rayIndex = lowerBoundRayIndex; rayIndex < upperBoundRayIndex; rayIndex++)
+            {
+                Vector2 rayOrigin = topOrBottomLeft + Vector2.right * (_verticalRaySpacing * rayIndex + displacement.x);
+                // Adding the displacement x means that the ray is cast from the point where the object will be after the x displacement
+                // Do this because we call the y displacement after x
+                RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up * directionY, rayLength, collisionMask);
+                DebugDrawCollisionRay(rayOrigin, Vector2.up * (directionY * rayLength));
+
+                if (!hit) continue;
+                
+                // Checks if the player is hitting a one way platform, and if the player is jumping up as well
+                if(hit.collider.CompareTag("OneWayPlatform") && (displacement.y > 0f || _fallThroughPlatform))
+                {
+                    return;
+                }
+                // Same as horizontal collisions, this sets the amount of displacement to be the max
+                // That we can get to without a collision
+                displacement.y = (hit.distance - SkinWidth) * directionY;
+                // This stops the rays from hitting something that is further away than the closest collision
+                rayLength = hit.distance;
+                // Checks whether the collision is above or below (or both)
+                CollisionAbove = directionY == 1;
+                CollisionBelow = directionY == -1;
             }
         }
         
@@ -291,21 +218,16 @@ namespace Physics
             //works the same as the other two
             UpdateRaycastOrigins();
             const float rayLength = SkinWidth + 0.01f;
-            bool grounded = false;
             for (int rayIndex = 0; rayIndex < _verticalRayCount; rayIndex++)
             {
-                Vector2 rayOrigin = _bottomLeft;
-                rayOrigin += Vector2.right * (_verticalRaySpacing * rayIndex);
-                if (debugDraw)
-                {
-                    Debug.DrawRay(rayOrigin, Vector2.down * rayLength, Color.red);
-                }
+                Vector2 rayOrigin = _bottomLeft + Vector2.right * (_verticalRaySpacing * rayIndex);
+                DebugDrawCollisionRay(rayOrigin, Vector2.down * rayLength);
                 if (Physics2D.Raycast(rayOrigin, Vector2.down, rayLength, collisionMask))
                 { 
-                    grounded = true;
+                    return true;
                 }
             }
-            return grounded;
+            return false;
         }
 
         public bool CheckIfHittingCeiling()
@@ -313,20 +235,16 @@ namespace Physics
             //works the same as the others
             UpdateRaycastOrigins();
             const float rayLength = SkinWidth + 0.01f;
-            bool hittingCeiling = false;
             for (int rayIndex = 0; rayIndex < _verticalRayCount; rayIndex++)
             {
                 Vector2 rayOrigin = _topLeft + (Vector2.right * (_verticalRaySpacing * rayIndex));
-                if (debugDraw)
-                {
-                    Debug.DrawRay(rayOrigin, Vector2.up * rayLength, Color.red);
-                }
+                DebugDrawCollisionRay(rayOrigin, Vector2.up * rayLength);
                 if (Physics2D.Raycast(rayOrigin, Vector2.up, rayLength, collisionMask))
                 { 
-                    hittingCeiling = true;
+                    return true;
                 }
             }
-            return hittingCeiling;
+            return false;
         }
         
         public bool CheckIfOneWayPlatform()
@@ -334,27 +252,32 @@ namespace Physics
             //Basically the same as the CheckIfGrounded code
             UpdateRaycastOrigins();
             const float rayLength = SkinWidth + 0.01f;
-            bool oneWay = false;
             for (int rayIndex = 0; rayIndex < _verticalRayCount; rayIndex++)
             {
-                Vector2 rayOrigin = _bottomLeft;
-                rayOrigin += Vector2.right * (_verticalRaySpacing * rayIndex);
+                Vector2 rayOrigin = _bottomLeft + (Vector2.right * (_verticalRaySpacing * rayIndex));
                 RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.down, rayLength, collisionMask);
-                if (debugDraw)
-                {
-                    Debug.DrawRay(rayOrigin, Vector2.down * rayLength, Color.red);
-                }
+                DebugDrawCollisionRay(rayOrigin, Vector2.down * rayLength);
                 if (hit && hit.collider.CompareTag("OneWayPlatform"))
                 {
-                    oneWay = true;
+                    return true;
                 }
             }
-            return oneWay;
+            return false;
         }
 
         public void SetFallThroughPlatform(bool passThrough)
         {
             _fallThroughPlatform = passThrough;
+        }
+
+        private void DebugDrawCollisionRay(Vector2 rayOrigin, Vector2 direction)
+        {
+#if DEBUG
+            if (_debugDraw)
+            {
+                Debug.DrawRay(rayOrigin, direction, Color.red);
+            }
+#endif
         }
     }
 

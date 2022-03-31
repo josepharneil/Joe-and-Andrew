@@ -226,7 +226,7 @@ namespace Player
         //Taken from Tarodevs GitHub: https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/blob/main/Scripts/PlayerController.cs
         private void CalculateGravity()
         {
-            if (movementController.customCollider2D.GetCollisionBelow())
+            if (movementController.customCollider2D.CollisionBelow)
             {
                 if (Velocity.y < 0)
                 {
@@ -313,7 +313,7 @@ namespace Player
 
         private void CalculateJumpApex()
         {
-            if (!movementController.customCollider2D.GetCollisionBelow())
+            if (!movementController.customCollider2D.CollisionBelow)
             {
                 //sets the apexPoint based on how large the y velocity is
                 _apexPoint = Mathf.InverseLerp(jumpApexThreshold, 0, Mathf.Abs(Velocity.y));
@@ -370,40 +370,15 @@ namespace Player
         
         private void WallJump()
         {
-            // Checks if grounded and jumpinput (and not in coyote).
-            // Then checks if there are any collisions to the left and right.
-            // If so, applies the wall jump vectors in the correct direction.
-            // Currently this also disables movement inputs for a short time with a counter.
-            // Not sure if there is a better way of doing this.
-            
-            // var displacement = Vector2.right * (movementController.customCollider2D.boxCollider.bounds.size.x / 2f);
-            // movementController.customCollider2D.CheckHorizontalCollisions(ref displacement);
-            // displacement = Vector2.left * (movementController.customCollider2D.boxCollider.bounds.size.x / 2f);
-            // movementController.customCollider2D.CheckHorizontalCollisions(ref displacement);
-            // if(movementController.customCollider2D.GetCollisionLeft()) print("Wall is to left");
-            // if(movementController.customCollider2D.GetCollisionRight()) print("Wall is to right");
-            
-            // todo JA This might well work, might not need skin width??
-            // Just need to add it to below and that could fix the "no wall jump when not pressing left / right" problem
-
             if (!_isGrounded && _isJumpInput && !_isInCoyoteTime)
             {
                 CustomCollider2D customCollider2D = movementController.customCollider2D;
-                // todo need to be careful with this function, could be collision on both side sand the function prioritises left???
-                int horizontalCollision = customCollider2D.CheckHorizontalCollisions(0.15f);
-                bool wallIsToLeft = horizontalCollision == -1;
-                bool wallIsToRight = horizontalCollision == 1;
-                // if(wallIsToLeft) print("Wall is to left");
-                // if(wallIsToRight) print("Wall is to right");
-                // bool wallIsToLeft = customCollider2D.GetCollisionLeft();
-                // bool wallIsToRight = customCollider2D.GetCollisionRight();
+                customCollider2D.CheckHorizontalCollisions(out bool wallIsToLeft, out bool wallIsToRight);
                 if (wallIsToLeft || wallIsToRight)
                 {
-                    // if(wallIsToLeft) print("Wall is to left");
-                    // if(wallIsToRight) print("Wall is to right");
                     if(wallIsToLeft && wallIsToRight)
                     {
-                        Debug.LogError("This implies bad level design?");
+                        Debug.LogError("This implies bad level design? Not sure what to do here.");
                     }
                     Velocity.y = _verticalWallJump;
                     
@@ -481,7 +456,7 @@ namespace Player
         private void CheckWallSlide()
         {
             bool collisionLeftRight = FacingDirection == FacingDirection.Left ?
-                movementController.customCollider2D.GetCollisionLeft() : movementController.customCollider2D.GetCollisionRight();
+                movementController.customCollider2D.CollisionLeft : movementController.customCollider2D.CollisionRight;
             if (_isMoveInput && !_isGrounded &&collisionLeftRight)
             {
                  _isWallSliding = true;
@@ -627,7 +602,7 @@ namespace Player
             //uses a lerp which is then used to evaluate along an animation curve for the acceleration
             //once we get to the max speed change to running
             //checks if there is a collision below the player, and if so use the air timers
-            float rate = (movementController.customCollider2D.GetCollisionBelow() ? accelerationRate : airAccelerationRate);
+            float rate = (movementController.customCollider2D.CollisionBelow ? accelerationRate : airAccelerationRate);
             _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
             Velocity.x = Mathf.Lerp(Velocity.x, moveSpeed * _moveInput.x, accelerationCurve.Evaluate(_lerpCurrent));
             
@@ -654,7 +629,7 @@ namespace Player
             //same lerp method as accelerate
             //this time changes to stopped after getting low enough 
             //(I tried doing if(speed==0) but that was glitchy af
-            float rate = movementController.customCollider2D.GetCollisionBelow() ? decelerationRate : airDecelerationRate;
+            float rate = movementController.customCollider2D.CollisionBelow ? decelerationRate : airDecelerationRate;
             _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
             Velocity.x = Mathf.Lerp(Velocity.x, 0f, decelerationCurve.Evaluate(_lerpCurrent));
             if (Mathf.Abs(Velocity.x) <= decelerationTolerance)
@@ -667,7 +642,7 @@ namespace Player
         private void ChangeDirection()
         {
             //same lerp method as accelerate
-            float rate = movementController.customCollider2D.GetCollisionBelow() ? changeDirectionRate : airChangeDirectionRate;
+            float rate = movementController.customCollider2D.CollisionBelow ? changeDirectionRate : airChangeDirectionRate;
             _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
             Velocity.x = Mathf.Lerp(Velocity.x, moveSpeed * _moveInput.x, changeDirectionCurve.Evaluate(_lerpCurrent));
 
