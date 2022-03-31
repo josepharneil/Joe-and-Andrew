@@ -412,10 +412,12 @@ MonoBehaviour:
   earlyJumpMultiplier: 2
   earlyJumpCancelTime: 0.15
   _debugRollFall: 0
+  _maxNumAerialJumps: 0
   _debugDisableWallJumpSlide: 0
-  _verticalWallJump: 15
-  _horizontalWallJump: 15
+  _verticalWallJump: 13
+  _horizontalWallJump: 13
   _wallJumpInputDisableTime: 0.2
+  _maxNumberOfWallJumpsBeforeGrounding: 1
   _wallSideGravityMultiplier: 0.3
   moveSpeed: 10
   accelerationCurve:
