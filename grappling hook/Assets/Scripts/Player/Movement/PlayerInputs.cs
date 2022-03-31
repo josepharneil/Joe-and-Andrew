@@ -30,6 +30,8 @@ namespace Player
         [SerializeField] private bool _debugRollFall = false;
         private float _apexPoint; //This becomes 1 at the end of the jump
         private float _fallSpeed;
+        [SerializeField] private int _maxNumAerialJumps = 1; 
+        private int _currentNumAerialJumps = 0;
 
         [Header("Wall Jump / Sliding Stats")]
         [SerializeField] private bool _debugDisableWallJumpSlide = false;
@@ -74,7 +76,7 @@ namespace Player
         private bool _isJumpInput;
         private bool _isJumpEndedEarly = false;
         private bool _isInCoyoteTime;
-        private bool _isJumpBuffered;
+        private bool _isBufferedJumpInput;
         private bool _hasJumped;
         private bool _isGrounded;
         private bool _isRollInput;
@@ -293,15 +295,22 @@ namespace Player
 
         private void Jump()
         {
-            bool isJumpFromGroundOrCoyote = _isJumpInput && (_isGrounded || _isInCoyoteTime);
-            bool isBufferedJumpFromGround = _isJumpBuffered && _isGrounded;
-            if (isJumpFromGroundOrCoyote || isBufferedJumpFromGround)
+            bool isAerialJump = !_isGrounded && (_currentNumAerialJumps < _maxNumAerialJumps);
+            bool isGroundAerialOrCoyoteJump = _isJumpInput && (_isGrounded || _isInCoyoteTime || isAerialJump);
+            bool isBufferedJumpFromGround = _isBufferedJumpInput && _isGrounded;
+            
+            if (isGroundAerialOrCoyoteJump || isBufferedJumpFromGround)
             {
                 Velocity.y = jumpVelocity;
 
-                _isJumpBuffered = false;
+                _isBufferedJumpInput = false;
                 _isJumpInput = false;
                 _isInCoyoteTime = false;
+
+                if (isAerialJump)
+                {
+                    _currentNumAerialJumps++;
+                }
                 
                 _hasJumped = true;
                 
@@ -335,6 +344,7 @@ namespace Player
                 _lastGroundedTime = Time.time;
                 _hasJumped = false;
                 _currentNumberOfWallJumps = 0;
+                _currentNumAerialJumps = 0;
                 
                 // Cancel wall jump blocking move inputs
                 if (_hasWallJumped)
@@ -371,19 +381,20 @@ namespace Player
             // http://www.davetech.co.uk/gamedevplatformer
             if (_isJumpInput && !_isGrounded)
             {
-                _isJumpBuffered = true;
+                _isBufferedJumpInput = true;
             }
             
             // Remove buffered jump if it has been too long.
-            if (_isJumpBuffered && (Time.time - _jumpCalledTime) > _jumpBufferTime)
+            if (_isBufferedJumpInput && (Time.time - _jumpCalledTime) > _jumpBufferTime)
             {
-                _isJumpBuffered = false;
+                _isBufferedJumpInput = false;
             }
         }
         
         private void WallJump()
         {
-            if (!_isGrounded && _isJumpInput && !_isInCoyoteTime && _currentNumberOfWallJumps < _maxNumberOfWallJumpsBeforeGrounding)
+            if (_isJumpInput && !_isGrounded && !_isInCoyoteTime &&
+                (_currentNumberOfWallJumps < _maxNumberOfWallJumpsBeforeGrounding))
             {
                 CustomCollider2D customCollider2D = movementController.customCollider2D;
                 customCollider2D.CheckHorizontalCollisions(out bool wallIsToLeft, out bool wallIsToRight);
@@ -391,7 +402,7 @@ namespace Player
                 {
                     if(wallIsToLeft && wallIsToRight)
                     {
-                        Debug.LogError("This implies bad level design? Not sure what to do here.");
+                        Debug.LogError("Wall to the left AND to the right: This implies bad level design? Not sure what to do here.");
                     }
                     Velocity.y = _verticalWallJump;
                     
@@ -408,7 +419,7 @@ namespace Player
                         FacingDirection = FacingDirection.Right;
                     }
                     
-                    _isJumpBuffered = false;
+                    _isBufferedJumpInput = false;
                     _isJumpInput = false;
                     _isInCoyoteTime = false;
                     _isMoveInput = false;
@@ -424,10 +435,6 @@ namespace Player
                     {
                         animator.SetTrigger(JumpTriggerID);
                     }
-                }
-                else
-                {
-                    _isJumpInput = false;
                 }
             }
 
