@@ -4,7 +4,6 @@ using JetBrains.Annotations;
 using Physics;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 //thieved shamelessly from https://www.youtube.com/watch?v=MbWK8bCAU2w&list=PLFt_AvWsXl0f0hqURlhyIoAabKPgRsqjz&index=1
 // more shameless thieving https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/blob/main/Scripts/PlayerController.cs
@@ -36,7 +35,9 @@ namespace Player
         [SerializeField] private bool _debugDisableWallJumpSlide = false;
         [SerializeField] private float _verticalWallJump;
         [SerializeField] private float _horizontalWallJump;
-        [SerializeField] private float _wallJumpInputDisableTime;
+        [SerializeField] private float _wallJumpInputDisableTime = 0.2f;
+        [SerializeField] private int _maxNumberOfWallJumpsBeforeGrounding = 2;
+        private int _currentNumberOfWallJumps = 0;
         private bool _isWallSliding = false;
         [SerializeField] private float _wallSideGravityMultiplier;
         
@@ -333,6 +334,7 @@ namespace Player
                 _isGrounded = true;
                 _lastGroundedTime = Time.time;
                 _hasJumped = false;
+                _currentNumberOfWallJumps = 0;
             }
             else
             {
@@ -370,7 +372,7 @@ namespace Player
         
         private void WallJump()
         {
-            if (!_isGrounded && _isJumpInput && !_isInCoyoteTime)
+            if (!_isGrounded && _isJumpInput && !_isInCoyoteTime && _currentNumberOfWallJumps < _maxNumberOfWallJumpsBeforeGrounding)
             {
                 CustomCollider2D customCollider2D = movementController.customCollider2D;
                 customCollider2D.CheckHorizontalCollisions(out bool wallIsToLeft, out bool wallIsToRight);
@@ -405,6 +407,8 @@ namespace Player
                     _hasWallJumped = true;
                     _hasJumped = true;
 
+                    _currentNumberOfWallJumps++;
+
                     if (debugUseAnimations)
                     {
                         animator.SetTrigger(JumpTriggerID);
@@ -415,6 +419,7 @@ namespace Player
                     _isJumpInput = false;
                 }
             }
+
             if (_hasWallJumped && (Time.time - _jumpCalledTime) > _wallJumpInputDisableTime)
             {
                 // JA:29/03/22 Not sure if this is a good idea, but it fixes the instance where
