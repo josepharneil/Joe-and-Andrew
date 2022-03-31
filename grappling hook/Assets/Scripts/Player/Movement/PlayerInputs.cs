@@ -335,6 +335,17 @@ namespace Player
                 _lastGroundedTime = Time.time;
                 _hasJumped = false;
                 _currentNumberOfWallJumps = 0;
+                
+                // Cancel wall jump blocking move inputs
+                if (_hasWallJumped)
+                {
+                    // JA:29/03/22 Not sure if this is a good idea, but it fixes the instance where
+                    // you wall jump, and maintain the exact same input, thus no input read up
+                    _moveInput.x = Input.GetAxisRaw("Horizontal");
+                    _moveInput.y = Input.GetAxisRaw("Vertical");
+                    _isMoveInput = true;
+                    _hasWallJumped = false;
+                }
             }
             else
             {
