@@ -152,6 +152,34 @@ namespace Physics
             _topRight    = new Vector2(bounds.max.x, bounds.max.y);
         }
 
+        public int CheckHorizontalCollisions(float customSkinWidth = SkinWidth)
+        {
+            // todo need to be careful with this function, could be collision on both side sand the function prioritises left???
+            float rayLength = customSkinWidth;
+            for (int rayIndex = 0; rayIndex < _horizontalRayCount; rayIndex++)
+            {
+                // TODO Can refactor the vector to be outside of loop (same for all collision checkers)
+                Vector2 rayOrigin = _bottomLeft + Vector2.up * (_horizontalRaySpacing * rayIndex);
+                RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.left, rayLength, collisionMask);
+                if (hit)
+                {
+                    return -1;
+                }
+            }
+
+            for (int rayIndex = 0; rayIndex < _horizontalRayCount; rayIndex++)
+            {
+                Vector2 rayOrigin = _bottomRight + (Vector2.up * (_horizontalRaySpacing * rayIndex));
+                RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right, rayLength, collisionMask);
+                if (hit)
+                {
+                    return 1;
+                }
+            }
+            
+            return 0;
+        }
+
         /// <summary>
         /// Checks collisions to the left and right.
         /// </summary>
@@ -170,6 +198,7 @@ namespace Physics
                 {
                     continue;
                 }
+                // TODO Need to take a look at this, pretty sure the Vector2 can be moved above the for loop.
                 //checks which way the ray should be fired, based on the displacement direction
                 Vector2 rayOrigin = (directionX == -1) ? _bottomLeft : _bottomRight;
                 //moves the ray origin along for each ray
@@ -183,7 +212,7 @@ namespace Physics
 
                 if (hit)
                 {
-                    //checks if the player is going to bonk into a one way platfom
+                    //checks if the player is going to bonk into a one way platform
                     if (hit.collider.CompareTag("OneWayPlatform"))
                     {
                         return;
@@ -194,6 +223,8 @@ namespace Physics
                     //this stops the rays from hitting something that is further away than the closest collision
                     rayLength = hit.distance;
                     GameObject hitGameObject = hit.transform.gameObject;
+                    // todo check logic here... is it correct to set collisions for every hit?
+                    // eg does that mean if the last ray doesnt collide then its no collision, 
                     SetCollisionLeft(directionX == -1, hitGameObject);
                     SetCollisionRight(directionX == 1, hitGameObject);
                 }

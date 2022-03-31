@@ -375,13 +375,32 @@ namespace Player
             // If so, applies the wall jump vectors in the correct direction.
             // Currently this also disables movement inputs for a short time with a counter.
             // Not sure if there is a better way of doing this.
+            
+            // var displacement = Vector2.right * (movementController.customCollider2D.boxCollider.bounds.size.x / 2f);
+            // movementController.customCollider2D.CheckHorizontalCollisions(ref displacement);
+            // displacement = Vector2.left * (movementController.customCollider2D.boxCollider.bounds.size.x / 2f);
+            // movementController.customCollider2D.CheckHorizontalCollisions(ref displacement);
+            // if(movementController.customCollider2D.GetCollisionLeft()) print("Wall is to left");
+            // if(movementController.customCollider2D.GetCollisionRight()) print("Wall is to right");
+            
+            // todo JA This might well work, might not need skin width??
+            // Just need to add it to below and that could fix the "no wall jump when not pressing left / right" problem
+
             if (!_isGrounded && _isJumpInput && !_isInCoyoteTime)
             {
                 CustomCollider2D customCollider2D = movementController.customCollider2D;
-                bool wallIsToLeft = customCollider2D.GetCollisionLeft();
-                bool wallIsToRight = customCollider2D.GetCollisionRight();
+                // todo need to be careful with this function, could be collision on both side sand the function prioritises left???
+                int horizontalCollision = customCollider2D.CheckHorizontalCollisions(0.15f);
+                bool wallIsToLeft = horizontalCollision == -1;
+                bool wallIsToRight = horizontalCollision == 1;
+                // if(wallIsToLeft) print("Wall is to left");
+                // if(wallIsToRight) print("Wall is to right");
+                // bool wallIsToLeft = customCollider2D.GetCollisionLeft();
+                // bool wallIsToRight = customCollider2D.GetCollisionRight();
                 if (wallIsToLeft || wallIsToRight)
                 {
+                    // if(wallIsToLeft) print("Wall is to left");
+                    // if(wallIsToRight) print("Wall is to right");
                     if(wallIsToLeft && wallIsToRight)
                     {
                         Debug.LogError("This implies bad level design?");
@@ -404,12 +423,13 @@ namespace Player
                     _isJumpBuffered = false;
                     _isJumpInput = false;
                     _isInCoyoteTime = false;
+                    _isMoveInput = false;
+                    
+                    _moveInput.x = 0f;
 
                     _hasWallJumped = true;
                     _hasJumped = true;
 
-                    _moveInput.x = 0f;
-                    
                     if (debugUseAnimations)
                     {
                         animator.SetTrigger(JumpTriggerID);
@@ -426,6 +446,7 @@ namespace Player
                 // you wall jump, and maintain the exact same input, thus no input read up
                 _moveInput.x = Input.GetAxisRaw("Horizontal");
                 _moveInput.y = Input.GetAxisRaw("Vertical");
+                _isMoveInput = true;
                 _hasWallJumped = false;
             }
         }
