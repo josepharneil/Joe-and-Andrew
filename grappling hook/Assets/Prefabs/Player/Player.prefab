@@ -247,9 +247,9 @@ MonoBehaviour:
   collisionMask:
     serializedVersion: 2
     m_Bits: 64
-  debugDraw: 0
-  _jumpCornerClippingEnabled: 1
-  _ignoreHeadClippingEnabled: 1
+  _debugDraw: 0
+  _debugJumpCornerClippingEnabled: 1
+  _debugIgnoreHeadClippingEnabled: 1
 --- !u!114 &9147847883452652284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -415,7 +415,7 @@ MonoBehaviour:
   _debugDisableWallJumpSlide: 0
   _verticalWallJump: 15
   _horizontalWallJump: 15
-  _wallJumpInputDisableTime: 1
+  _wallJumpInputDisableTime: 0.2
   _wallSideGravityMultiplier: 0.3
   moveSpeed: 10
   accelerationCurve:
