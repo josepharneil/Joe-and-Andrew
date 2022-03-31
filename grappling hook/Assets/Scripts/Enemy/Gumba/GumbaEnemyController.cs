@@ -51,7 +51,7 @@ namespace Enemy
             }
             
             // Movement
-            float fallSpeed = !movementController.customCollider2D.GetCollisionBelow() ? Physics2D.gravity.y : 0f;
+            float fallSpeed = !movementController.customCollider2D.CollisionBelow ? Physics2D.gravity.y : 0f;
             Vector2 moveVector = new Vector2((float)_facingDirection * speed, fallSpeed);
             movementController.Move(moveVector);
         }
