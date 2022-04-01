@@ -308,8 +308,6 @@ namespace Player
 
             if (isGroundAerialOrCoyoteJump || isBufferedJumpFromGround)
             {
-                if (isGroundAerialOrCoyoteJump) print(isGroundAerialOrCoyoteJump);
-                
                 Velocity.y = jumpVelocity;
 
                 _isBufferedJumpInput = false;
