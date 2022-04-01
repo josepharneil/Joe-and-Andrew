@@ -37,12 +37,14 @@ namespace Enemy
         private bool _hasReachedAttackHeight = false;
 
         #region UnityEvents
+#if UNITY_EDITOR
         private void OnDrawGizmosSelected()
         {
             _patrolPath.DrawGizmos();
             // _sight.DrawGizmos();
             DrawAttackGizmos();
         }
+#endif
 
         private void Start()
         {
@@ -169,6 +171,7 @@ namespace Enemy
             }
         }
         
+#if UNITY_EDITOR
         private void DrawAttackGizmos()
         {
             if (DiveBombIsOnCooldown)
@@ -198,6 +201,8 @@ namespace Enemy
                 Gizmos.DrawLine(transform.position, _diveBombDestination);
             }
         }
+#endif
+
         #endregion
     }
 }

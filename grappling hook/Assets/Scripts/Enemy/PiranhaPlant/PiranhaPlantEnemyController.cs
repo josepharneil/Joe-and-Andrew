@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Globalization;
 using AI;
 using Entity;
 using JetBrains.Annotations;
@@ -46,6 +44,7 @@ namespace Enemy
             _sight.Setup(transform, target);
         }
 
+#if UNITY_EDITOR
         private void OnDrawGizmosSelected()
         {
             _sight.DrawGizmos();
@@ -54,6 +53,7 @@ namespace Enemy
                 Handles.Label(transform.position + Vector3.up, ((1f / attacksPerSecond) - _attackTimer).ToString("n2"));
             }
         }
+#endif
 
         #endregion
 
