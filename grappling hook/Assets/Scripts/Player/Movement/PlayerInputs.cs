@@ -1,4 +1,5 @@
 using System;
+using Audio;
 using Entity;
 using JetBrains.Annotations;
 using Physics;
@@ -117,6 +118,10 @@ namespace Player
         [Header("Prototyping")]
         public PlayerCombatPrototyping playerCombatPrototyping;
         [SerializeField] private EntityDaze entityDaze;
+
+        [Header("Player Sounds")] 
+        [SerializeField] private PlayerSounds _playerSounds;
+        [SerializeField] private bool _debugUseSounds = true;
 
         private enum MoveState
         {
@@ -304,8 +309,7 @@ namespace Player
             bool isAerialJump = !_isGrounded && (_currentNumAerialJumps < _maxNumAerialJumps);
             bool isGroundAerialOrCoyoteJump = _isJumpInput && (_isGrounded || _isInCoyoteTime || isAerialJump);
             bool isBufferedJumpFromGround = _isBufferedJumpInput && _isGrounded;
-
-
+            
             if (isGroundAerialOrCoyoteJump || isBufferedJumpFromGround)
             {
                 Velocity.y = jumpVelocity;
@@ -324,6 +328,11 @@ namespace Player
                 if (debugUseAnimations)
                 {
                     animator.SetTrigger(JumpTriggerID);
+                }
+
+                if (_debugUseSounds)
+                {
+                    _playerSounds.PlayJumpSound();
                 }
             }
         }
@@ -441,6 +450,11 @@ namespace Player
                     if (debugUseAnimations)
                     {
                         animator.SetTrigger(JumpTriggerID);
+                    }
+                    
+                    if (_debugUseSounds)
+                    {
+                        _playerSounds.PlayWallJumpSound();
                     }
                 }
             }
