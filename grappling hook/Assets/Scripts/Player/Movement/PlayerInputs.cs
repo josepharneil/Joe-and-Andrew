@@ -295,12 +295,21 @@ namespace Player
 
         private void Jump()
         {
+            // If we get a jump input, and we're in the air but we've reached our max aerial jumps, turn off the jump input
+            if (_isJumpInput && !_isGrounded && _currentNumAerialJumps >= _maxNumAerialJumps)
+            {
+                _isJumpInput = false;
+            }
+            
             bool isAerialJump = !_isGrounded && (_currentNumAerialJumps < _maxNumAerialJumps);
             bool isGroundAerialOrCoyoteJump = _isJumpInput && (_isGrounded || _isInCoyoteTime || isAerialJump);
             bool isBufferedJumpFromGround = _isBufferedJumpInput && _isGrounded;
-            
+
+
             if (isGroundAerialOrCoyoteJump || isBufferedJumpFromGround)
             {
+                if (isGroundAerialOrCoyoteJump) print(isGroundAerialOrCoyoteJump);
+                
                 Velocity.y = jumpVelocity;
 
                 _isBufferedJumpInput = false;
