@@ -403,7 +403,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementController: {fileID: 9147847883452652284}
   jumpVelocity: 15
-  coyoteTime: 0.1
+  coyoteTime: 0.12
   _jumpBufferTime: 0.1
   minFallSpeed: 35
   maxFallSpeed: 40
@@ -516,6 +516,8 @@ MonoBehaviour:
   entityKnockback: {fileID: 9147847883452652283}
   playerCombatPrototyping: {fileID: 9147847883452652286}
   entityDaze: {fileID: 9147847883452652276}
+  _playerSounds: {fileID: 11400000, guid: 154070f64511041ebae35fa35bf3f9c7, type: 2}
+  _debugUseSounds: 1
 --- !u!114 &9147847883452652281
 MonoBehaviour:
   m_ObjectHideFlags: 0

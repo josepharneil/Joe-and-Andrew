@@ -301,7 +301,7 @@ namespace Player
         private void Jump()
         {
             // If we get a jump input, and we're in the air but we've reached our max aerial jumps, turn off the jump input
-            if (_isJumpInput && !_isGrounded && _currentNumAerialJumps >= _maxNumAerialJumps)
+            if (_isJumpInput && !_isGrounded && !_isInCoyoteTime && _currentNumAerialJumps >= _maxNumAerialJumps)
             {
                 _isJumpInput = false;
             }
