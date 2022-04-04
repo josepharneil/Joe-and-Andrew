@@ -330,6 +330,7 @@ namespace Player
                 if (debugUseAnimations)
                 {
                     animator.SetTrigger(JumpTriggerID);
+                    animator.SetBool("grounded", false);
                 }
 
                 if (_debugUseSounds)
@@ -358,6 +359,9 @@ namespace Player
         {
             if(movementController.customCollider2D.CheckIfGrounded())
             {
+
+              
+                animator.SetBool("grounded", true);
                 _isGrounded = true;
                 _lastGroundedTime = Time.time;
                 _hasJumped = false;
