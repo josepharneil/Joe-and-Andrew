@@ -109,7 +109,8 @@ namespace Player
         [SerializeField] private EntityKnockback entityKnockback;
 
         // Animation parameter IDs.
-        private static readonly int SpeedID = Animator.StringToHash("speed");
+        private static readonly int HorizontalSpeedID = Animator.StringToHash("horizontalSpeed");
+        private static readonly int VerticalSpeedID = Animator.StringToHash("verticalSpeed");
         private static readonly int AttackTriggerID = Animator.StringToHash("attackTrigger");
         private static readonly int JumpTriggerID = Animator.StringToHash("jumpTrigger");
         private static readonly int AttackUpTriggerID = Animator.StringToHash("attackUpTrigger");
@@ -224,7 +225,8 @@ namespace Player
             // Animation
             if (debugUseAnimations)
             {
-                animator.SetFloat(SpeedID, Mathf.Abs(Velocity.x));
+                animator.SetFloat(HorizontalSpeedID, Mathf.Abs(Velocity.x));
+                animator.SetFloat(VerticalSpeedID,Velocity.y);
             }
 
             CheckIfAttackIsCancellable();
