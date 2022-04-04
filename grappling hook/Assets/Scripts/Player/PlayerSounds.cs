@@ -7,6 +7,11 @@ namespace Player
     public class PlayerSounds : ScriptableObject
     {
         [SerializeField] private AudioClip _jumpSound;
+        
+        private void Awake()
+        {
+            Debug.Assert(AudioManager.Instance != null, "No audio manager", this);
+        }
 
         public void PlayJumpSound()
         {
