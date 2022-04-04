@@ -31,6 +31,7 @@ namespace Physics
 
         [Header("Debug")] 
         [SerializeField] private bool _debugDraw;
+        [SerializeField] private bool _debugDrawWallJumpRays;
         [SerializeField] private bool _debugJumpCornerClippingEnabled = true;
         [SerializeField] private bool _debugIgnoreHeadClippingEnabled = true;
         
@@ -94,13 +95,19 @@ namespace Physics
             _topRight    = new Vector2(bounds.max.x, bounds.max.y);
         }
 
-        public void CheckHorizontalCollisions(out bool left, out bool right)
+        public void CheckHorizontalCollisions(out bool left, out bool right, float overrideSize = SkinWidth)
         {
             right = left = false;
             for (int rayIndex = 0; rayIndex < _horizontalRayCount; rayIndex++)
             {
                 Vector2 rayOrigin = _bottomLeft + Vector2.up * (_horizontalRaySpacing * rayIndex);
-                RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.left, SkinWidth, collisionMask);
+                RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.left, overrideSize, collisionMask);
+#if UNITY_EDITOR
+                if (_debugDrawWallJumpRays)
+                {
+                    Debug.DrawRay(rayOrigin, Vector2.left * overrideSize, Color.red);
+                }
+#endif
                 if (!hit) continue;
                 
                 left = true;
@@ -109,7 +116,13 @@ namespace Physics
             for (int rayIndex = 0; rayIndex < _horizontalRayCount; rayIndex++)
             {
                 Vector2 rayOrigin = _bottomRight + (Vector2.up * (_horizontalRaySpacing * rayIndex));
-                RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right, SkinWidth, collisionMask);
+                RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right, overrideSize, collisionMask);
+#if UNITY_EDITOR
+                if (_debugDrawWallJumpRays)
+                {
+                    Debug.DrawRay(rayOrigin, Vector2.right * overrideSize, Color.red);
+                }
+#endif
                 if (!hit) continue;
                 
                 right = true;
@@ -272,7 +285,7 @@ namespace Physics
 
         private void DebugDrawCollisionRay(Vector2 rayOrigin, Vector2 direction)
         {
-#if DEBUG
+#if UNITY_EDITOR
             if (_debugDraw)
             {
                 Debug.DrawRay(rayOrigin, direction, Color.red);

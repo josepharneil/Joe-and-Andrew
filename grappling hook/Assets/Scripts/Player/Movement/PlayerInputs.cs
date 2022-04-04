@@ -39,7 +39,10 @@ namespace Player
         [SerializeField] private float _verticalWallJump;
         [SerializeField] private float _horizontalWallJump;
         [SerializeField] private float _wallJumpInputDisableTime = 0.2f;
+        [SerializeField] private float _wallJumpCoyoteDuration = 0.15f;
+        private float _lastWalledTime;
         [SerializeField] private int _maxNumberOfWallJumpsBeforeGrounding = 2;
+        [SerializeField] private float _wallJumpSkinWidth = 0.25f;
         private int _currentNumberOfWallJumps = 0;
         private bool _isWallSliding = false;
         [SerializeField] private float _wallSideGravityMultiplier;
@@ -115,6 +118,7 @@ namespace Player
         private static readonly int JumpTriggerID = Animator.StringToHash("jumpTrigger");
         private static readonly int AttackUpTriggerID = Animator.StringToHash("attackUpTrigger");
         private static readonly int AttackDownTriggerID = Animator.StringToHash("attackDownTrigger");
+        private static readonly int GroundedTriggerID = Animator.StringToHash("grounded");
         
         [Header("Prototyping")]
         public PlayerCombatPrototyping playerCombatPrototyping;
@@ -359,9 +363,7 @@ namespace Player
         {
             if(movementController.customCollider2D.CheckIfGrounded())
             {
-
-              
-                animator.SetBool("grounded", true);
+                animator.SetBool(GroundedTriggerID, true);
                 _isGrounded = true;
                 _lastGroundedTime = Time.time;
                 _hasJumped = false;
@@ -415,17 +417,27 @@ namespace Player
         
         private void WallJump()
         {
-            if (_isJumpInput && !_isGrounded && !_isInCoyoteTime &&
+            if (!_isGrounded && !_isInCoyoteTime &&
                 (_currentNumberOfWallJumps < _maxNumberOfWallJumpsBeforeGrounding))
             {
+                // Check for wall to right / left OR check for wall jump coyote
                 CustomCollider2D customCollider2D = movementController.customCollider2D;
-                customCollider2D.CheckHorizontalCollisions(out bool wallIsToLeft, out bool wallIsToRight);
-                if (wallIsToLeft || wallIsToRight)
+                customCollider2D.CheckHorizontalCollisions(out bool wallIsToLeft, out bool wallIsToRight, _wallJumpSkinWidth);
+
+                bool isAgainstWall = wallIsToLeft || wallIsToRight;
+                if(wallIsToLeft && wallIsToRight)
                 {
-                    if(wallIsToLeft && wallIsToRight)
-                    {
-                        Debug.LogError("Wall to the left AND to the right: This implies bad level design? Not sure what to do here.");
-                    }
+                    Debug.LogError("Wall to the left AND to the right: This implies bad level design? Not sure what to do here.");
+                }
+                if (isAgainstWall)
+                {
+                    _lastWalledTime = Time.time;
+                }
+                bool isInWallJumpCoyote = (Time.time - _lastWalledTime) < _wallJumpCoyoteDuration;
+                
+                bool jumpFromWall = _isJumpInput && (isAgainstWall || isInWallJumpCoyote);
+                if (jumpFromWall)
+                {
                     Velocity.y = _verticalWallJump;
                     
                     if (wallIsToRight)
