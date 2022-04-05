@@ -7,6 +7,7 @@ namespace EditorUtilities
 {
     public class DebugShowEntityHealth : MonoBehaviour
     {
+#if UNITY_EDITOR
         private readonly List<EntityHealth> _entityHealths = new List<EntityHealth>();
         private Camera _mainCamera;
 
@@ -53,5 +54,6 @@ namespace EditorUtilities
                     entityHealth.CurrentHealth + "/" + entityHealth.GetMaxHealth());
             }
         }
+#endif
     }
 }

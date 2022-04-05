@@ -79,7 +79,7 @@ namespace Player
         private bool _isMoveInput;
         private bool _isJumpInput;
         private bool _isJumpEndedEarly = false;
-        private bool _isInCoyoteTime;
+        private bool _isInCoyoteTime; // do we need this? TODO check
         private bool _isBufferedJumpInput;
         private bool _hasJumped;
         private bool _isGrounded;

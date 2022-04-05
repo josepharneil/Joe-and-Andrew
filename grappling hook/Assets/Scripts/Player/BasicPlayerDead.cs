@@ -29,5 +29,13 @@ namespace Player
             transform.position = _initialSpawnPosition;
             _entityHealth.HealToMax();
         }
+
+        private void Update()
+        {
+            if(Input.GetKeyDown(KeyCode.P))
+            {
+                _entityHealth.Damage(9999);
+            }
+        }
     }
 }
