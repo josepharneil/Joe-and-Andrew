@@ -1,0 +1,588 @@
+fileFormatVersion: 2
+guid: 45660e7fa54e2f34b969431386a3ad3f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1853278049779939771
+    second: ProtoBigSlash_0
+  - first:
+      213: 470455620076867156
+    second: ProtoBigSlash_1
+  - first:
+      213: 6841966815234301858
+    second: ProtoBigSlash_2
+  - first:
+      213: 8325782401295181140
+    second: ProtoBigSlash_3
+  - first:
+      213: -644017278336877362
+    second: ProtoBigSlash_4
+  - first:
+      213: -5027319989663869638
+    second: ProtoBigSlash_5
+  - first:
+      213: -883973019307419874
+    second: ProtoBigSlash_6
+  - first:
+      213: -4894626847160501905
+    second: ProtoBigSlash_7
+  - first:
+      213: -1822275313048925256
+    second: ProtoBigSlash_8
+  - first:
+      213: -1138431794570056123
+    second: ProtoBigSlash_9
+  - first:
+      213: -9119602867128651696
+    second: ProtoBigSlash_10
+  - first:
+      213: -895836951633178694
+    second: ProtoBigSlash_11
+  - first:
+      213: 1406929353236334608
+    second: ProtoBigSlash_12
+  - first:
+      213: 7366168789330825417
+    second: ProtoBigSlash_13
+  - first:
+      213: 931914994982726313
+    second: ProtoBigSlash_14
+  - first:
+      213: -8807921771303694577
+    second: ProtoBigSlash_15
+  - first:
+      213: -4254467509104905482
+    second: ProtoBigSlash_16
+  - first:
+      213: -6169455331489292446
+    second: ProtoBigSlash_17
+  - first:
+      213: 2841752731288573156
+    second: ProtoBigSlash_18
+  - first:
+      213: 4596360922028666320
+    second: ProtoBigSlash_19
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 8
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ProtoBigSlash_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 110
+        height: 102
+      alignment: 9
+      pivot: {x: 0.3272727, y: 0.3823529}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54686dcce65d746e0800000000000000
+      internalID: -1853278049779939771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ProtoBigSlash_1
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 0
+        width: 110
+        height: 102
+      alignment: 9
+      pivot: {x: 0.3272727, y: 0.3823529}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45e8445d4e4678600800000000000000
+      internalID: 470455620076867156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ProtoBigSlash_2
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 0
+        width: 110
+        height: 102
+      alignment: 9
+      pivot: {x: 0.3272727, y: 0.3823529}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2af1d03719c83fe50800000000000000
+      internalID: 6841966815234301858
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ProtoBigSlash_3
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 0
+        width: 110
+        height: 102
+      alignment: 9
+      pivot: {x: 0.3272727, y: 0.3823529}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 455e56a6bfe1b8370800000000000000
+      internalID: 8325782401295181140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ProtoBigSlash_4
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 0
+        width: 110
+        height: 102
+      alignment: 9
+      pivot: {x: 0.3272727, y: 0.3823529}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ecc348f82bdff07f0800000000000000
+      internalID: -644017278336877362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ProtoBigSlash_5
+      rect:
+        serializedVersion: 2
+        x: 550
+        y: 0
+        width: 110
+        height: 102
+      alignment: 9
+      pivot: {x: 0.3272727, y: 0.3823529}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a355dd3fa1f5b3ab0800000000000000
+      internalID: -5027319989663869638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ProtoBigSlash_6
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 0
+        width: 110
+        height: 102
+      alignment: 9
+      pivot: {x: 0.3272727, y: 0.3823529}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e17d621f83f7bb3f0800000000000000
+      internalID: -883973019307419874
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ProtoBigSlash_7
+      rect:
+        serializedVersion: 2
+        x: 770
+        y: 0
+        width: 110
+        height: 102
+      alignment: 9
+      pivot: {x: 0.3272727, y: 0.3823529}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6978eab0dac21cb0800000000000000
+      internalID: -4894626847160501905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ProtoBigSlash_8
+      rect:
+        serializedVersion: 2
+        x: 880
+        y: 0
+        width: 110
+        height: 102
+      alignment: 9
+      pivot: {x: 0.3272727, y: 0.3823529}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8bb41c2f14af5b6e0800000000000000
+      internalID: -1822275313048925256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ProtoBigSlash_9
+      rect:
+        serializedVersion: 2
+        x: 990
+        y: 0
+        width: 110
+        height: 102
+      alignment: 9
+      pivot: {x: 0.3272727, y: 0.3823529}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54e24a3805a7330f0800000000000000
+      internalID: -1138431794570056123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ProtoBigSlash_10
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 0
+        width: 110
+        height: 102
+      alignment: 9
+      pivot: {x: 0.3272727, y: 0.3823529}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 050b9249289a07180800000000000000
+      internalID: -9119602867128651696
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ProtoBigSlash_11
+      rect:
+        serializedVersion: 2
+        x: 1210
+        y: 0
+        width: 110
+        height: 102
+      alignment: 9
+      pivot: {x: 0.3272727, y: 0.3823529}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: abf4c31f9095193f0800000000000000
+      internalID: -895836951633178694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ProtoBigSlash_12
+      rect:
+        serializedVersion: 2
+        x: 1320
+        y: 0
+        width: 110
+        height: 102
+      alignment: 9
+      pivot: {x: 0.3272727, y: 0.3823529}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 018c8b3eaca668310800000000000000
+      internalID: 1406929353236334608
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ProtoBigSlash_13
+      rect:
+        serializedVersion: 2
+        x: 1430
+        y: 0
+        width: 110
+        height: 102
+      alignment: 9
+      pivot: {x: 0.3272727, y: 0.3823529}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9c012ab7c73e93660800000000000000
+      internalID: 7366168789330825417
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ProtoBigSlash_14
+      rect:
+        serializedVersion: 2
+        x: 1540
+        y: 0
+        width: 110
+        height: 102
+      alignment: 9
+      pivot: {x: 0.3272727, y: 0.3823529}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9aa2ecc10c3deec00800000000000000
+      internalID: 931914994982726313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ProtoBigSlash_15
+      rect:
+        serializedVersion: 2
+        x: 1650
+        y: 0
+        width: 110
+        height: 102
+      alignment: 9
+      pivot: {x: 0.3272727, y: 0.3823529}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0f830cb0d9f3c580800000000000000
+      internalID: -8807921771303694577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ProtoBigSlash_16
+      rect:
+        serializedVersion: 2
+        x: 1760
+        y: 0
+        width: 110
+        height: 102
+      alignment: 9
+      pivot: {x: 0.3272727, y: 0.3823529}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f27c53775815f4c0800000000000000
+      internalID: -4254467509104905482
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ProtoBigSlash_17
+      rect:
+        serializedVersion: 2
+        x: 1870
+        y: 0
+        width: 110
+        height: 102
+      alignment: 9
+      pivot: {x: 0.3272727, y: 0.3823529}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26fd0fc2011b16aa0800000000000000
+      internalID: -6169455331489292446
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ProtoBigSlash_18
+      rect:
+        serializedVersion: 2
+        x: 1980
+        y: 0
+        width: 110
+        height: 102
+      alignment: 9
+      pivot: {x: 0.3272727, y: 0.3823529}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4e493f78d0fef6720800000000000000
+      internalID: 2841752731288573156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ProtoBigSlash_19
+      rect:
+        serializedVersion: 2
+        x: 2090
+        y: 0
+        width: 110
+        height: 102
+      alignment: 9
+      pivot: {x: 0.3272727, y: 0.3823529}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0dd6101f7ed89cf30800000000000000
+      internalID: 4596360922028666320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
