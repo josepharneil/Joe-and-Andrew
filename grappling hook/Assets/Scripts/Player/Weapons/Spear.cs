@@ -9,13 +9,30 @@ namespace Player
         [Header("Attack Size")]
         [SerializeField] private float _attackLength = 2f;
         [SerializeField] private float _attackWidth = 0.5f;
+        private ParticleSystem _particleOnHit;
+
+        #region UnityEvents
+
+        private void OnEnable()
+        {
+            ParticleOnHit.TryGetComponent(out _particleOnHit);
+        }
+
+        #endregion
         
         #region Particles
         public override void ShowAttackParticle(AttackDirection attackDirection){}
 
         public override void ForceHideAttackParticles(){}
 
-        public override void ShowAttackHitParticle(Transform hitEntityTransform){}
+        public override void ShowAttackHitParticle(Transform hitEntityTransform)
+        {
+            if (_particleOnHit)
+            {
+                ParticleSystem newParticleSystem = Instantiate(_particleOnHit, hitEntityTransform.position, Quaternion.identity, hitEntityTransform);
+                newParticleSystem.Play();
+            }
+        }
         #endregion
 
         public override void DetectAttackableObjects(out List<Collider2D> detectedObjects, ContactFilter2D contactFilter2D, Vector2 attackerPosition,
