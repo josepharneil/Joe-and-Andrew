@@ -173,10 +173,8 @@ namespace Player
 
         private void OnDrawGizmos()
         {
-            if (!CurrentPlayerEquipment.CurrentMeleeWeapon)
-            {
-                return;
-            }
+            if (!CurrentPlayerEquipment) return;
+            if (!CurrentPlayerEquipment.CurrentMeleeWeapon) return;
             CurrentPlayerEquipment.CurrentMeleeWeapon.DrawGizmos(transform.position, ConvertAnimationEventInfo());
         }
     }
