@@ -335,7 +335,7 @@ namespace Player
                 if (debugUseAnimations)
                 {
                     animator.SetTrigger(JumpTriggerID);
-                    animator.SetBool("grounded", false);
+                    animator.SetBool(GroundedTriggerID, false);
                 }
 
                 if (_debugUseSounds)
