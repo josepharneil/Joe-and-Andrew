@@ -267,6 +267,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: KoopaZombieEnemy (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 1159990852397506183, guid: a8f7aa8eb019e4aa98458994e2c791a4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1859762402514959148, guid: a8f7aa8eb019e4aa98458994e2c791a4, type: 3}
       propertyPath: chaseTarget
       value: 
@@ -6230,6 +6234,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: KoopaZombieEnemy (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1159990852397506183, guid: a8f7aa8eb019e4aa98458994e2c791a4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1859762402514959148, guid: a8f7aa8eb019e4aa98458994e2c791a4, type: 3}
       propertyPath: chaseTarget
       value: 
@@ -6426,6 +6434,7 @@ Transform:
   - {fileID: 406289951}
   - {fileID: 21971625}
   - {fileID: 1539895250}
+  - {fileID: 760477071}
   m_Father: {fileID: 1313351307}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -10135,6 +10144,55 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 6696026842710103779, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
+--- !u!1 &760477070
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 760477071}
+  - component: {fileID: 760477072}
+  m_Layer: 0
+  m_Name: Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &760477071
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 760477070}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -24.064, y: -1.689, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1993930246}
+  m_Father: {fileID: 594635196}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &760477072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 760477070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f5374174098c46d99254f6c92ffb27c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyToSpawn: {fileID: 1812726279}
+  _spawnPosition: {fileID: 1993930245}
+  _spawnerEnabled: 1
+  _maxNumberOfSpawnsAtOnce: 5
+  _spawnEveryXSeconds: 10
 --- !u!1001 &762901272
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16328,6 +16386,10 @@ PrefabInstance:
     - target: {fileID: 1159990852397506183, guid: a8f7aa8eb019e4aa98458994e2c791a4, type: 3}
       propertyPath: m_Name
       value: KoopaZombieEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 1159990852397506183, guid: a8f7aa8eb019e4aa98458994e2c791a4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1859762402514959148, guid: a8f7aa8eb019e4aa98458994e2c791a4, type: 3}
       propertyPath: chaseTarget
@@ -22845,6 +22907,10 @@ PrefabInstance:
     - target: {fileID: 1159990852397506183, guid: a8f7aa8eb019e4aa98458994e2c791a4, type: 3}
       propertyPath: m_Name
       value: KoopaZombieEnemy (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1159990852397506183, guid: a8f7aa8eb019e4aa98458994e2c791a4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1859762402514959148, guid: a8f7aa8eb019e4aa98458994e2c791a4, type: 3}
       propertyPath: chaseTarget
@@ -32773,6 +32839,11 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!1 &1812726279 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1159990852397506183, guid: a8f7aa8eb019e4aa98458994e2c791a4, type: 3}
+  m_PrefabInstance: {fileID: 1058661693}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1830728618
 GameObject:
   m_ObjectHideFlags: 0
@@ -33154,6 +33225,36 @@ Transform:
   - {fileID: 523124971}
   m_Father: {fileID: 729353122}
   m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1993930245
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1993930246}
+  m_Layer: 0
+  m_Name: SpawnPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1993930246
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1993930245}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.77, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 760477071}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &2001542555 stripped
 Transform:
