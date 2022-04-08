@@ -501,6 +501,7 @@ MonoBehaviour:
   _verticalWallJump: 13
   _horizontalWallJump: 13
   _wallJumpInputDisableTime: 0.2
+  _wallJumpCoyoteDuration: 0.12
   _maxNumberOfWallJumpsBeforeGrounding: 2
   _wallJumpSkinWidth: 0.25
   _wallSideGravityMultiplier: 0.3
@@ -589,20 +590,21 @@ MonoBehaviour:
   rollDistance: 2
   rollSpeed: 20
   rollCoolDown: 0.8
-  moveState: 0
+  _moveState: 0
   debugUseAnimations: 1
   animator: {fileID: 9147847883452652280}
   spriteRenderer: {fileID: 9147847883264161609}
   defaultSquareSprite: {fileID: 7482667652216324306, guid: 5205f3571171146c886d386aeaa65929, type: 3}
   isAttacking: 0
   isInPreDamageAttackPhase: 1
+  CurrentPlayerEquipment: {fileID: 11400000, guid: 4042d4a8e76c840fc8b043436b9ebe73, type: 2}
   entityParry: {fileID: 9147847883452652277}
   entityBlock: {fileID: 9147847883452652278}
   entityKnockback: {fileID: 9147847883452652283}
   playerCombatPrototyping: {fileID: 9147847883452652286}
   entityDaze: {fileID: 9147847883452652276}
   _playerSounds: {fileID: 11400000, guid: 154070f64511041ebae35fa35bf3f9c7, type: 2}
-  _debugUseSounds: 1
+  _debugUseSounds: 0
 --- !u!114 &9147847883452652281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -628,7 +630,7 @@ MonoBehaviour:
   _slowTimeScaleAmount: 0.01
   playerCombatPrototyping: {fileID: 9147847883452652286}
   _playerKnockback: {fileID: 9147847883452652283}
-  CurrentMeleeWeapon: {fileID: 11400000, guid: 22c847e22f5fa4133a4551802c00ff17, type: 2}
+  CurrentPlayerEquipment: {fileID: 11400000, guid: 4042d4a8e76c840fc8b043436b9ebe73, type: 2}
 --- !u!114 &9147847883452652286
 MonoBehaviour:
   m_ObjectHideFlags: 0
