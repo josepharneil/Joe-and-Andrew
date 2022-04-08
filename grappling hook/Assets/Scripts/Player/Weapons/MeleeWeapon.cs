@@ -1,12 +1,30 @@
+using System;
 using System.Collections.Generic;
 using Entity;
 using Ludiq;
+using UnityEditor.Animations;
 using UnityEngine;
 
 namespace Player
 {
+    /// <summary>
+    /// Each enum must match EXACTLY to the name of the state it corresponds to.
+    /// </summary>
+    public enum AnimationWeaponStateName
+    {
+        None, // This is invalid.
+        SpearAttack,
+        QuickAttack,
+        BigAttack,
+    }
+
     public abstract class MeleeWeapon : ScriptableObject
     {
+        /// <summary>
+        /// State Name of the animation that this weapon corresponds to.
+        /// </summary>
+        public AnimationWeaponStateName AnimationWeaponStateName;
+        
         /// <summary>
         /// Damage that this weapon deals.
         /// </summary>

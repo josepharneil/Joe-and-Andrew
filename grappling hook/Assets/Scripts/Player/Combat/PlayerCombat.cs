@@ -40,7 +40,7 @@ namespace Player
         [SerializeField] private EntityKnockback _playerKnockback;
         
         [Header("Weapon")]
-        public MeleeWeapon CurrentMeleeWeapon;
+        public PlayerEquipment CurrentPlayerEquipment;
         
         private AttackDirection ConvertAnimationEventInfo()
         {
@@ -61,7 +61,7 @@ namespace Player
         {
             AttackDirection attackDirection = ConvertAnimationEventInfo();
             
-            CurrentMeleeWeapon.ShowAttackParticle(attackDirection);
+            CurrentPlayerEquipment.CurrentMeleeWeapon.ShowAttackParticle(attackDirection);
             
             ContactFilter2D contactFilter2D = new ContactFilter2D
             {
@@ -69,16 +69,16 @@ namespace Player
                 useLayerMask = true,
                 useTriggers = true
             };
-            CurrentMeleeWeapon.DetectAttackableObjects(out List<Collider2D> detectedObjects, contactFilter2D, transform.position, attackDirection);
+            CurrentPlayerEquipment.CurrentMeleeWeapon.DetectAttackableObjects(out List<Collider2D> detectedObjects, contactFilter2D, transform.position, attackDirection);
             
             if (TryHitDetectedObjects(detectedObjects, out Vector2? firstEnemyHitPosition))
             {
                 ShakeCamera();
 
                 // Knockback player
-                if (_playerKnockback && playerCombatPrototyping.data.doesPlayerGetKnockedBackByOwnAttack && firstEnemyHitPosition.HasValue && CurrentMeleeWeapon.KnockbackAmountToPlayer != 0f)
+                if (_playerKnockback && playerCombatPrototyping.data.doesPlayerGetKnockedBackByOwnAttack && firstEnemyHitPosition.HasValue && CurrentPlayerEquipment.CurrentMeleeWeapon.KnockbackAmountToPlayer != 0f)
                 {
-                    _playerKnockback.StartKnockBack(firstEnemyHitPosition.Value, CurrentMeleeWeapon.KnockbackAmountToPlayer);
+                    _playerKnockback.StartKnockBack(firstEnemyHitPosition.Value, CurrentPlayerEquipment.CurrentMeleeWeapon.KnockbackAmountToPlayer);
                 }
 
                 // Instantiate a hit particle here if we want only once per attack.
@@ -108,7 +108,7 @@ namespace Player
                     enemyKnockbackPosition ??= hitboxTransform.position;
 
                     // Instantiate a hit particle here if we want particles for EACH hit enemy
-                    CurrentMeleeWeapon.ShowAttackHitParticle(hitboxTransform);
+                    CurrentPlayerEquipment.CurrentMeleeWeapon.ShowAttackHitParticle(hitboxTransform);
                 }
                 
             }
@@ -124,9 +124,9 @@ namespace Player
                 DealsDamage = true,
                 DamageToHealth = damageDealt,
 
-                DealsKnockback = CurrentMeleeWeapon.KnockbackAmountToTarget != 0f,
+                DealsKnockback = CurrentPlayerEquipment.CurrentMeleeWeapon.KnockbackAmountToTarget != 0f,
                 KnockbackOrigin = transform.position,
-                KnockbackStrength = CurrentMeleeWeapon.KnockbackAmountToTarget,
+                KnockbackStrength = CurrentPlayerEquipment.CurrentMeleeWeapon.KnockbackAmountToTarget,
 
                 DealsDaze = playerCombatPrototyping.data.doesPlayerDealDaze,
             };
@@ -135,7 +135,7 @@ namespace Player
 
         private int CalculateDamageDealt()
         {
-            int damageDealt = CurrentMeleeWeapon.WeaponDamage;
+            int damageDealt = CurrentPlayerEquipment.CurrentMeleeWeapon.WeaponDamage;
             
             // This could also factor in some base player attack value?
             
@@ -168,16 +168,16 @@ namespace Player
  
         public void ForceHideAttackParticles()
         {
-            CurrentMeleeWeapon.ForceHideAttackParticles();
+            CurrentPlayerEquipment.CurrentMeleeWeapon.ForceHideAttackParticles();
         }
 
         private void OnDrawGizmos()
         {
-            if (!CurrentMeleeWeapon)
+            if (!CurrentPlayerEquipment.CurrentMeleeWeapon)
             {
                 return;
             }
-            CurrentMeleeWeapon.DrawGizmos(transform.position, ConvertAnimationEventInfo());
+            CurrentPlayerEquipment.CurrentMeleeWeapon.DrawGizmos(transform.position, ConvertAnimationEventInfo());
         }
     }
 }

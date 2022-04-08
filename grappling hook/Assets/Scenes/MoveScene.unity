@@ -497,6 +497,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 180031837}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: _debugUseSounds
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: entityKnockback
       value: 
       objectReference: {fileID: 1957564666}
@@ -533,6 +537,14 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: CurrentPlayerEquipment
+      value: 
+      objectReference: {fileID: 11400000, guid: 4042d4a8e76c840fc8b043436b9ebe73, type: 2}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: _currentPlayerEquipment
+      value: 
+      objectReference: {fileID: 11400000, guid: 4042d4a8e76c840fc8b043436b9ebe73, type: 2}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: playerCombatPrototyping
       value: 
       objectReference: {fileID: 1957564668}
@@ -552,6 +564,10 @@ PrefabInstance:
       propertyPath: CurrentMeleeWeapon
       value: 
       objectReference: {fileID: 11400000, guid: 04659a8d423d04862b974ea51c739e12, type: 2}
+    - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: CurrentPlayerEquipment
+      value: 
+      objectReference: {fileID: 11400000, guid: 4042d4a8e76c840fc8b043436b9ebe73, type: 2}
     - target: {fileID: 9147847883452652285, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: m_Size.x
       value: 3

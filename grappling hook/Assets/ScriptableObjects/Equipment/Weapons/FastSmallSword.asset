@@ -9,13 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c616022f896748b4bfbc9b504c02b93b, type: 3}
-  m_Name: BasicSpear
+  m_Script: {fileID: 11500000, guid: 0e3ac4beb1fc403190ef19a437188702, type: 3}
+  m_Name: FastSmallSword
   m_EditorClassIdentifier: 
-  WeaponDamage: 5
-  WeaponSpeed: 1.5
+  AnimationWeaponStateName: 2
+  WeaponDamage: 3
+  WeaponSpeed: 2
   WeaponHeightOffset: 0
   KnockbackAmountToPlayer: 4
   KnockbackAmountToTarget: 10
-  _attackLength: 3
-  _attackWidth: 0.5
+  ParticleOnHit: {fileID: 7595672073680235062, guid: e44bd1923f9184ef69f14c51d7cd1a52, type: 3}
+  attackRadius: 1.5

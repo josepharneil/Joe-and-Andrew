@@ -3,36 +3,27 @@ using Player;
 
 public class PlayerStateMachineBehaviourBase : StateMachineBehaviour
 {
-    private PlayerInputs _playerController;
-    private PlayerCombat _playerCombat;
+    private PlayerInputs _playerInputs; // TODO this should probably just be a more general "PlayerController"
     
     protected PlayerInputs GetPlayerController(Animator animator)
     {
-        if (_playerController == null)
+        if (_playerInputs == null)
         {
-            _playerController = animator.GetComponent<PlayerInputs>();
+            _playerInputs = animator.GetComponent<PlayerInputs>();
         }
-        return _playerController;
+        return _playerInputs;
     }
 
-    protected PlayerCombat GetPlayerCombat(Animator animator)
-    {
-        if (_playerCombat == null)
-        {
-            _playerCombat = animator.GetComponent<PlayerCombat>();
-        }
-        return _playerCombat;
-    }
-    
     protected void SetSpeedBasedOnPrototypeCustomisation(Animator animator)
     {
-        if (GetPlayerController(animator).playerCombatPrototyping.data.attackSpeed == 0f)
+        PlayerInputs playerInputs = GetPlayerController(animator);
+        if (playerInputs.playerCombatPrototyping.data.attackSpeed == 0f)
         {
-            GetPlayerController(animator).playerCombatPrototyping.data.attackSpeed = 1f;
+            playerInputs.playerCombatPrototyping.data.attackSpeed = 1f;
         }
 
-        float baseAttackSpeed = GetPlayerController(animator).playerCombatPrototyping.data.attackSpeed;
-        float weaponAttackSpeed = GetPlayerCombat(animator).CurrentMeleeWeapon.WeaponSpeed;
+        float baseAttackSpeed = playerInputs.playerCombatPrototyping.data.attackSpeed;
+        float weaponAttackSpeed = playerInputs.CurrentPlayerEquipment.CurrentMeleeWeapon.WeaponSpeed;
         animator.speed = baseAttackSpeed * weaponAttackSpeed;
     }
 

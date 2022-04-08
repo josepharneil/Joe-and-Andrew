@@ -1,3 +1,4 @@
+using Player;
 using UnityEngine;
 
 public static class Extensions
@@ -92,5 +93,15 @@ public static class Extensions
     {
         return -DirectionToNormalized(v0, v1);
     }
+    #endregion
+
+    #region MeleeWeaponsAnimation
+
+    public static int ToAnimatorStateHash(this AnimationWeaponStateName animationWeaponStateName)
+    {
+        Debug.Assert(animationWeaponStateName != AnimationWeaponStateName.None, "Invalid state");
+        return Animator.StringToHash(animationWeaponStateName.ToString());
+    }
+
     #endregion
 }

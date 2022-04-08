@@ -88,7 +88,7 @@ namespace Player
         private bool _hasFallenThroughPlatform;
         public FacingDirection FacingDirection { get; private set; }
         private float _lerpCurrent = 0f;
-        [SerializeField] private MoveState moveState;
+        [SerializeField] private MoveState _moveState = MoveState.Stopped;
         private RollState _rollState;
         [NonSerialized] public Vector2 Velocity;
         private Vector2 _moveInput;
@@ -101,10 +101,7 @@ namespace Player
         [SerializeField] private Sprite defaultSquareSprite;
         [HideInInspector] public bool isAttacking;
         [HideInInspector] public bool isInPreDamageAttackPhase = true;
-        //using this to set the animation that will play based on the selected weapon
-        //as of 8/4/22 this is bad practice duplicating the object from the player combat, will be changed once animations are working
-        [SerializeField] private MeleeWeapon _currentWeapon;
-        private int _weaponInt;
+        public PlayerEquipment CurrentPlayerEquipment;
 
         [Header("Parrying")]
         [SerializeField] private EntityParry entityParry;
@@ -158,10 +155,9 @@ namespace Player
                 spriteRenderer.sprite = defaultSquareSprite;
             }
             
-            moveState = MoveState.Stopped;
+            _moveState = MoveState.Stopped;
             _rollState = RollState.NotRolling;
-            //_currentWeapon = gameObject.get
-            SetAnimationWeapon(_currentWeapon);
+            SetAnimationWeapon();
         }
 
         // https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnValidate.html
@@ -610,7 +606,7 @@ namespace Player
                 {
                     StartDirectionChange();
                 }
-                switch (moveState)
+                switch (_moveState)
                 {
                     case MoveState.Stopped:
                         //begins the movement, calls sets to accelerating
@@ -638,7 +634,7 @@ namespace Player
             }
             else
             {
-                if (moveState != MoveState.Stopped)
+                if (_moveState != MoveState.Stopped)
                 {
                     StopMoving();
                     Decelerate();
@@ -649,20 +645,20 @@ namespace Player
         private void StartMoving()
         {
             _lerpCurrent = 0f;
-            moveState = MoveState.Accelerating;
+            _moveState = MoveState.Accelerating;
         }
 
         private void StopMoving()
         {
             _lerpCurrent = 0f;
-            moveState = MoveState.Decelerating;
+            _moveState = MoveState.Decelerating;
         }
 
         private void StartDirectionChange()
         {
             //resets the lerp to 0 each time we change direction
             _lerpCurrent = 0f;
-            moveState = MoveState.ChangingDirection;
+            _moveState = MoveState.ChangingDirection;
         }
 
         private void Accelerate()
@@ -678,7 +674,7 @@ namespace Player
             // AK: yes its gone now!
             if (moveSpeed - Mathf.Abs(Velocity.x) <=  accelerationTolerance)
             {
-                moveState = MoveState.Running;
+                _moveState = MoveState.Running;
             }
         }
 
@@ -703,7 +699,7 @@ namespace Player
             if (Mathf.Abs(Velocity.x) <= decelerationTolerance)
             {
                 Velocity.x = 0f;
-                moveState = MoveState.Stopped;
+                _moveState = MoveState.Stopped;
             }
         }
 
@@ -716,7 +712,7 @@ namespace Player
 
             if ((Mathf.Abs(Velocity.x) - moveSpeed) < changeDirectionTolerance) 
             {
-                moveState = MoveState.Running;
+                _moveState = MoveState.Running;
             }
         }
 
@@ -738,7 +734,7 @@ namespace Player
             //roll overrides other movement
             if (_isRollInput && (Time.time - _rollCoolDownTimer > rollCoolDown)&&_rollState!=RollState.Rolling) 
             {
-                moveState = MoveState.Rolling;
+                _moveState = MoveState.Rolling;
                 _rollDurationTimer = 0f;
                 _rollState = RollState.Rolling;
                 _rollDirection = (float)FacingDirection;
@@ -766,7 +762,7 @@ namespace Player
 
         private void StopRoll()
         {
-            moveState = MoveState.Decelerating;
+            _moveState = MoveState.Decelerating;
             _rollState = RollState.NotRolling;
             _rollCoolDownTimer = Time.time;
         }
@@ -836,7 +832,6 @@ namespace Player
                 }
             }
             //sets the animator to use the currently selected weapon when attacking
-            animator.SetInteger("weapon",_weaponInt);
             animator.SetTrigger(AttackTriggerID);
 #endif
 
@@ -940,24 +935,6 @@ namespace Player
             if (context.canceled)
             {
                 entityBlock.SetBlocking(false);
-            }
-        }
-
-        private void SetAnimationWeapon(MeleeWeapon currentWeapon)
-        {
-            currentWeapon = _currentWeapon;
-            switch (currentWeapon.name)
-            {
-                case "BasicSpear":
-                    _weaponInt = 0;
-                        return;
-                case "BasicSword":
-                    _weaponInt = 1;
-                    return;
-                case "BigSlowSword":
-                    _weaponInt = 2;
-                    return;
-                   
             }
         }
 
