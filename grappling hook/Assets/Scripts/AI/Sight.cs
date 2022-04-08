@@ -83,11 +83,11 @@ namespace AI
         protected override bool IsValid()
         {
             bool isValid = base.IsValid();
-            if (_blockingLayer <= 0)
-            {
-                Debug.LogError("Blocking layer is less than or 0");
-                isValid = false;
-            }
+            // if (_blockingLayer <= 0)
+            // {
+                // Debug.LogError("Blocking layer is less than or 0");
+                // isValid = false;
+            // }
             return isValid;
         }
 

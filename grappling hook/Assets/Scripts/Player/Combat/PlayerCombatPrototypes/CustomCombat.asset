@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: CustomCombat
   m_EditorClassIdentifier: 
   movementDisabledByAttacks: 0
-  canChangeDirectionsDuringAttack: 0
-  attackSpeed: 2.5
+  canChangeDirectionsDuringAttack: 1
+  attackSpeed: 1
   cancellables: 0
   cancellableAttackPhases: 0
   doesPlayerDealDaze: 1

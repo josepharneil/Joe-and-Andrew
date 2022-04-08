@@ -174,19 +174,6 @@ namespace Player
         // Update is called once per frame
         private void Update()
         {
-            // Attack movement
-            if (debugUseAnimations && isAttacking && playerCombatPrototyping.data.movementDisabledByAttacks)
-            {
-                // TODO @JA Not sure what to do here.
-                if (_isGrounded)
-                {
-                    Velocity.x = 0f;
-                }
-                CheckGrounded();
-                CalculateGravity();
-                movementController.Move(Velocity);
-            }
-            
             // Movement
             SetHorizontalMove();
             if (!_debugDisableWallJumpSlide)
@@ -205,6 +192,18 @@ namespace Player
             }
             Jump();
 
+            // Attack movement
+            if (debugUseAnimations && isAttacking && playerCombatPrototyping.data.movementDisabledByAttacks)
+            {
+                // TODO @JA Not sure what to do here.
+                if (_isGrounded)
+                {
+                    Velocity.x = 0f;
+                }
+                CheckGrounded();
+                CalculateGravity();
+                movementController.Move(Velocity);
+            }
             if (!isAttacking || (isAttacking && !playerCombatPrototyping.data.movementDisabledByAttacks))
             {
                 //move works by taking in a displacement, firing raycasts in the directions of the displacement

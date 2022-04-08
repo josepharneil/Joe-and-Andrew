@@ -1,5 +1,3 @@
-using System;
-using Bolt;
 using UnityEngine;
 
 namespace Level

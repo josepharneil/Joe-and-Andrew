@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AnimationWeaponStateName: 3
   WeaponDamage: 8
-  WeaponSpeed: 0.5
+  WeaponSpeed: 1
   WeaponHeightOffset: 0
   KnockbackAmountToPlayer: 13
   KnockbackAmountToTarget: 25

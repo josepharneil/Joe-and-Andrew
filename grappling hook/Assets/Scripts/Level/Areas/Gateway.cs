@@ -9,7 +9,7 @@ namespace Level
         // [SerializeField] private BoxCollider2D _boxCollider2D;
         
         // Exit position is set by the level manager.
-        private Transform _exitPosition;
+        [SerializeField] private Transform _exitPosition;
         [DoNotSerialize] public bool IsLocked { get; set; } = false;
 
         private void Awake()

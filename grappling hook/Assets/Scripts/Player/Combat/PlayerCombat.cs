@@ -110,7 +110,6 @@ namespace Player
                     // Instantiate a hit particle here if we want particles for EACH hit enemy
                     CurrentPlayerEquipment.CurrentMeleeWeapon.ShowAttackHitParticle(hitboxTransform);
                 }
-                
             }
 
             return anyEnemyHit;
