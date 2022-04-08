@@ -119,7 +119,7 @@ namespace Player
         private static readonly int JumpTriggerID = Animator.StringToHash("jumpTrigger");
         private static readonly int AttackUpTriggerID = Animator.StringToHash("attackUpTrigger");
         private static readonly int AttackDownTriggerID = Animator.StringToHash("attackDownTrigger");
-        private static readonly int GroundedTriggerID = Animator.StringToHash("grounded");
+        private static readonly int GroundedTriggerID = Animator.StringToHash("groundedTrigger");
         
         [Header("Prototyping")]
         public PlayerCombatPrototyping playerCombatPrototyping;
