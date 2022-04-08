@@ -23,6 +23,7 @@ namespace Player
         /// <summary>
         /// State Name of the animation that this weapon corresponds to.
         /// </summary>
+        [Header("Animation State Name")]
         public AnimationWeaponStateName AnimationWeaponStateName;
         
         /// <summary>
