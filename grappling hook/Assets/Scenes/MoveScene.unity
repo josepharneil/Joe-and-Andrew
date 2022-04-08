@@ -485,6 +485,10 @@ PrefabInstance:
       value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: _currentWeapon
+      value: 
+      objectReference: {fileID: 11400000, guid: 04659a8d423d04862b974ea51c739e12, type: 2}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: _debugRollFall
       value: 1
       objectReference: {fileID: 0}
@@ -547,7 +551,7 @@ PrefabInstance:
     - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: CurrentMeleeWeapon
       value: 
-      objectReference: {fileID: 11400000, guid: 4b57fd4d34beb4a0fb611e05b98099fc, type: 2}
+      objectReference: {fileID: 11400000, guid: 04659a8d423d04862b974ea51c739e12, type: 2}
     - target: {fileID: 9147847883452652285, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: m_Size.x
       value: 3

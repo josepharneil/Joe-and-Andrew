@@ -101,6 +101,10 @@ namespace Player
         [SerializeField] private Sprite defaultSquareSprite;
         [HideInInspector] public bool isAttacking;
         [HideInInspector] public bool isInPreDamageAttackPhase = true;
+        //using this to set the animation that will play based on the selected weapon
+        //as of 8/4/22 this is bad practice duplicating the object from the player combat, will be changed once animations are working
+        [SerializeField] private MeleeWeapon _currentWeapon;
+        private int _weaponInt;
 
         [Header("Parrying")]
         [SerializeField] private EntityParry entityParry;
@@ -156,6 +160,8 @@ namespace Player
             
             moveState = MoveState.Stopped;
             _rollState = RollState.NotRolling;
+            //_currentWeapon = gameObject.get
+            SetAnimationWeapon(_currentWeapon);
         }
 
         // https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnValidate.html
@@ -829,6 +835,8 @@ namespace Player
                     spriteRenderer.flipX = false;
                 }
             }
+            //sets the animator to use the currently selected weapon when attacking
+            animator.SetInteger("weapon",_weaponInt);
             animator.SetTrigger(AttackTriggerID);
 #endif
 
@@ -932,6 +940,24 @@ namespace Player
             if (context.canceled)
             {
                 entityBlock.SetBlocking(false);
+            }
+        }
+
+        private void SetAnimationWeapon(MeleeWeapon currentWeapon)
+        {
+            currentWeapon = _currentWeapon;
+            switch (currentWeapon.name)
+            {
+                case "BasicSpear":
+                    _weaponInt = 0;
+                        return;
+                case "BasicSword":
+                    _weaponInt = 1;
+                    return;
+                case "BigSlowSword":
+                    _weaponInt = 2;
+                    return;
+                   
             }
         }
 
