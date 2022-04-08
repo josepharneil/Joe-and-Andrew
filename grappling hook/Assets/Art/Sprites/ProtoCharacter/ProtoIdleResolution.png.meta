@@ -1,28 +1,28 @@
 fileFormatVersion: 2
-guid: db2d9af3a8d2eac46aefb906fee42881
+guid: a889816e015e2934b96c5e3409473111
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6182162518965766400
-    second: ProtoIdle_0
+      213: -428785670226298977
+    second: ProtoIdleResolution_0
   - first:
-      213: -4674327602749876418
-    second: ProtoIdle_1
+      213: -7004691677501110861
+    second: ProtoIdleResolution_1
   - first:
-      213: -5909256005708682356
-    second: ProtoIdle_2
+      213: -8443821961680617934
+    second: ProtoIdleResolution_2
   - first:
-      213: 2587563317551883615
-    second: ProtoIdle_3
+      213: 7805978999670015336
+    second: ProtoIdleResolution_3
   - first:
-      213: -7311719782949384605
-    second: ProtoIdle_4
+      213: -1136356562126622184
+    second: ProtoIdleResolution_4
   - first:
-      213: -3837356833042555518
-    second: ProtoIdle_5
+      213: 5452913309589048955
+    second: ProtoIdleResolution_5
   - first:
-      213: -5222580588900843907
-    second: ProtoIdle_6
+      213: 4597835024702813100
+    second: ProtoIdleResolution_6
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -112,148 +112,148 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ProtoIdle_0
+      name: ProtoIdleResolution_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
+        y: 32
         width: 34
         height: 76
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 00940b67e047bc550800000000000000
-      internalID: 6182162518965766400
+      spriteID: f97326964b5ac0af0800000000000000
+      internalID: -428785670226298977
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ProtoIdle_1
+      name: ProtoIdleResolution_1
       rect:
         serializedVersion: 2
-        x: 34
-        y: 0
+        x: 64
+        y: 32
         width: 34
         height: 76
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e375a4a9fc3712fb0800000000000000
-      internalID: -4674327602749876418
+      spriteID: 3b5496128065ace90800000000000000
+      internalID: -7004691677501110861
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ProtoIdle_2
+      name: ProtoIdleResolution_2
       rect:
         serializedVersion: 2
-        x: 68
-        y: 0
+        x: 128
+        y: 32
         width: 34
-        height: 76
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        height: 75
+      alignment: 9
+      pivot: {x: 0.5, y: 0.50666666}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c8be3eca8fa1efda0800000000000000
-      internalID: -5909256005708682356
+      spriteID: 23e7263c9a481da80800000000000000
+      internalID: -8443821961680617934
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ProtoIdle_3
+      name: ProtoIdleResolution_3
       rect:
         serializedVersion: 2
-        x: 102
-        y: 0
+        x: 192
+        y: 32
         width: 34
-        height: 76
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        height: 74
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5135135}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f55e288b02fd8e320800000000000000
-      internalID: 2587563317551883615
+      spriteID: 8658d77da88645c60800000000000000
+      internalID: 7805978999670015336
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ProtoIdle_4
+      name: ProtoIdleResolution_4
       rect:
         serializedVersion: 2
-        x: 136
-        y: 0
+        x: 256
+        y: 32
         width: 34
-        height: 76
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        height: 74
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5135135}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 36e0b18b89d878a90800000000000000
-      internalID: -7311719782949384605
+      spriteID: 81232483ab9da30f0800000000000000
+      internalID: -1136356562126622184
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ProtoIdle_5
+      name: ProtoIdleResolution_5
       rect:
         serializedVersion: 2
-        x: 170
-        y: 0
+        x: 320
+        y: 32
         width: 34
-        height: 76
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        height: 74
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5135135}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 28d9412aa48febac0800000000000000
-      internalID: -3837356833042555518
+      spriteID: b7e0e09a3c3acab40800000000000000
+      internalID: 5452913309589048955
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ProtoIdle_6
+      name: ProtoIdleResolution_6
       rect:
         serializedVersion: 2
-        x: 204
-        y: 0
+        x: 384
+        y: 32
         width: 34
-        height: 76
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        height: 74
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5135135}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d7ef6b3ff9aa587b0800000000000000
-      internalID: -5222580588900843907
+      spriteID: ca3b247389acecf30800000000000000
+      internalID: 4597835024702813100
       vertices: []
       indices: 
       edges: []
