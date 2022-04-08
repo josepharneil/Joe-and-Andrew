@@ -20,4 +20,4 @@ MonoBehaviour:
   KnockbackAmountToTarget: 10
   ParticleOnHit: {fileID: 0}
   _attackLength: 3
-  _attackWidth: 0.5
+  _attackWidth: 1.2

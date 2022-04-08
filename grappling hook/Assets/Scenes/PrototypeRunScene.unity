@@ -16108,7 +16108,7 @@ MonoBehaviour:
   _overrideRunAreaSelectionIndex: 1
   _bossArea: {fileID: 1734297159}
   _player: {fileID: 408722809}
-  _enableEnemies: 0
+  _enableEnemies: 1
 --- !u!4 &1060563207
 Transform:
   m_ObjectHideFlags: 0
@@ -21374,7 +21374,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3517772524151264736, guid: 98a97b9b9c0584c2d8caa8f59ddf14a2, type: 3}
       propertyPath: orthographic size
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3517772524151264736, guid: 98a97b9b9c0584c2d8caa8f59ddf14a2, type: 3}
       propertyPath: m_BackGroundColor.b
@@ -21406,7 +21406,7 @@ PrefabInstance:
       objectReference: {fileID: 2115476011}
     - target: {fileID: 3517772525075683140, guid: 98a97b9b9c0584c2d8caa8f59ddf14a2, type: 3}
       propertyPath: m_Lens.OrthographicSize
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3517772525075683141, guid: 98a97b9b9c0584c2d8caa8f59ddf14a2, type: 3}
       propertyPath: m_LocalPosition.x

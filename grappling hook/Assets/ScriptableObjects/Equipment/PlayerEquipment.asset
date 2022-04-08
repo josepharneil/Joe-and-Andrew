@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8151241a57d84814900447e6087c4f60, type: 3}
   m_Name: PlayerEquipment
   m_EditorClassIdentifier: 
-  CurrentMeleeWeapon: {fileID: 11400000, guid: 4b57fd4d34beb4a0fb611e05b98099fc, type: 2}
+  CurrentMeleeWeapon: {fileID: 11400000, guid: 5627a537f437c48e992d60552c5546b2, type: 2}
