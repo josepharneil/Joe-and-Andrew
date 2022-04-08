@@ -12,12 +12,10 @@ namespace Player
         private ParticleSystem _particleOnHit;
 
         #region UnityEvents
-
         private void OnEnable()
         {
             ParticleOnHit.TryGetComponent(out _particleOnHit);
         }
-
         #endregion
         
         #region Particles
