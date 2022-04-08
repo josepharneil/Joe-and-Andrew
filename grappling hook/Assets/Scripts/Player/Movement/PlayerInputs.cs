@@ -157,7 +157,6 @@ namespace Player
             
             _moveState = MoveState.Stopped;
             _rollState = RollState.NotRolling;
-            SetAnimationWeapon();
         }
 
         // https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnValidate.html
