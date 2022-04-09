@@ -422,10 +422,27 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3517772525075683142, guid: 98a97b9b9c0584c2d8caa8f59ddf14a2, type: 3}
   m_PrefabInstance: {fileID: 1712871137}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 698631445}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d31244573ec1641468c12f6c93694daf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &698631445 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3517772525075683139, guid: 98a97b9b9c0584c2d8caa8f59ddf14a2, type: 3}
+  m_PrefabInstance: {fileID: 1712871137}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &698631448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 698631445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a8a05de0ac134f4f9d01bef6b9da077, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1115313895
@@ -678,6 +695,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 132588821}
     m_Modifications:
+    - target: {fileID: 3517772524151264736, guid: 98a97b9b9c0584c2d8caa8f59ddf14a2, type: 3}
+      propertyPath: far clip plane
+      value: 5000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3517772524151264736, guid: 98a97b9b9c0584c2d8caa8f59ddf14a2, type: 3}
+      propertyPath: near clip plane
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3517772524151264736, guid: 98a97b9b9c0584c2d8caa8f59ddf14a2, type: 3}
+      propertyPath: orthographic size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3517772524151264737, guid: 98a97b9b9c0584c2d8caa8f59ddf14a2, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3517772524151264737, guid: 98a97b9b9c0584c2d8caa8f59ddf14a2, type: 3}
+      propertyPath: m_AssetsPPU
+      value: 32
+      objectReference: {fileID: 0}
     - target: {fileID: 3517772524151264739, guid: 98a97b9b9c0584c2d8caa8f59ddf14a2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -690,6 +727,18 @@ PrefabInstance:
       propertyPath: m_Follow
       value: 
       objectReference: {fileID: 1670287279}
+    - target: {fileID: 3517772525075683140, guid: 98a97b9b9c0584c2d8caa8f59ddf14a2, type: 3}
+      propertyPath: m_Lens.FarClipPlane
+      value: 5000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3517772525075683140, guid: 98a97b9b9c0584c2d8caa8f59ddf14a2, type: 3}
+      propertyPath: m_Lens.NearClipPlane
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3517772525075683140, guid: 98a97b9b9c0584c2d8caa8f59ddf14a2, type: 3}
+      propertyPath: m_Lens.OrthographicSize
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3517772525075683141, guid: 98a97b9b9c0584c2d8caa8f59ddf14a2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
