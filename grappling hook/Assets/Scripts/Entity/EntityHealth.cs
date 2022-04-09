@@ -12,7 +12,7 @@ namespace Entity
         [SerializeField] private int maxHealth = 100;
         public int CurrentHealth { get; private set; }
 
-        public float GetMaxHealth()
+        public int GetMaxHealth()
         {
             return maxHealth;
         }

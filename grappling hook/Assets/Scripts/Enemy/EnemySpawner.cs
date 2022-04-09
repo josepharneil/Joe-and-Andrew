@@ -10,11 +10,20 @@ namespace Enemy
 
         [SerializeField] private bool _spawnerEnabled = false;
         [SerializeField] private int _maxNumberOfSpawnsAtOnce = 5;
-        
+
+        [SerializeField] private bool _spawnOnStart = false;
         [SerializeField] private float _spawnEveryXSeconds = 10f;
         private float _spawnTimer = 0f;
 
-        private List<GameObject> _allSpawnedEnemies = new List<GameObject>();
+        private readonly List<GameObject> _allSpawnedEnemies = new List<GameObject>();
+
+        private void Start()
+        {
+            if (_spawnOnStart)
+            {
+                SpawnEnemy();
+            }
+        }
 
         private void SpawnEnemy()
         {

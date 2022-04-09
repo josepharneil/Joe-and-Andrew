@@ -53,6 +53,26 @@ namespace Entity
         {
             _isEnabled = false;
         }
+
+        public bool Kill(EntityHitData hitData)
+        {
+            if (!_isHittable || !_isEnabled)
+            {
+                return false;
+            }
+
+            if (entityHealth && hitData.DealsDamage)
+            {
+                entityHealth.Damage(entityHealth.GetMaxHealth());
+            }
+            
+            if (entityKnockback && hitData.DealsKnockback && !entityKnockback.IsBeingKnockedBack())
+            {
+                entityKnockback.StartKnockBack(hitData.KnockbackOrigin, hitData.KnockbackStrength);
+            }
+
+            return true;
+        }
         
         public bool Hit(EntityHitData hitData)
         {
@@ -86,7 +106,7 @@ namespace Entity
             
             return true;
         }
-        
+
         private async void ActivateIFrames()
         {
             // Debug

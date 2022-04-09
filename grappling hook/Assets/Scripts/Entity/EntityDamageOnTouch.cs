@@ -14,25 +14,35 @@ namespace Entity
         
         [Header("Components")]
         [SerializeField] private LayerMask damagesWhat;
-        
-        [Header("Customisation")]
+
+        [Header("Customisation")] 
+        [SerializeField] private bool _instantDeath = false;
         [SerializeField] private int damage = 5;
         [SerializeField] private float knockbackStrength = 2f;
         [SerializeField] private EntityController entityController;
 
         private void Awake()
         {
-            Debug.Assert(entityController, "Must have an entity controller to kill this enemy.", this);
+            if (gameObject.GetComponent<EntityHealth>())
+            {
+                Debug.Assert(entityController, "Must have an entity controller to kill this enemy.", this);
+            }
         }
 
         private void OnEnable()
         {
-            entityController.OnEnemyDead += DisableEntityDamageOnTouch;
+            if (gameObject.GetComponent<EntityHealth>())
+            {
+                entityController.OnEnemyDead += DisableEntityDamageOnTouch;
+            }
         }
 
         private void OnDisable()
         {
-            entityController.OnEnemyDead -= DisableEntityDamageOnTouch;
+            if (gameObject.GetComponent<EntityHealth>())
+            {
+                entityController.OnEnemyDead -= DisableEntityDamageOnTouch;
+            }
         }
 
         private void DisableEntityDamageOnTouch()
@@ -62,7 +72,15 @@ namespace Entity
                 KnockbackOrigin = transform.position,
                 KnockbackStrength = knockbackStrength
             };
-            entityHitbox.Hit(hitData);
+
+            if (_instantDeath)
+            {
+                entityHitbox.Kill(hitData);
+            }
+            else
+            {
+               entityHitbox.Hit(hitData);
+            }
         }
     }
 }

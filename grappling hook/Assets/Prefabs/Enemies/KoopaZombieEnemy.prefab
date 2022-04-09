@@ -11,6 +11,18 @@ PrefabInstance:
       propertyPath: chaseSpeed
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 404763605569262415, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
+      propertyPath: chaseTarget
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 404763605569262415, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
+      propertyPath: _sight._sightRange
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 404763605569262415, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
+      propertyPath: _sight._blockingLayer.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 885005564573824740, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
       propertyPath: m_Name
       value: KoopaZombieEnemy
@@ -94,6 +106,10 @@ PrefabInstance:
     - target: {fileID: 885005564695595244, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 885005564695595246, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
+      propertyPath: collisionMask.m_Bits
+      value: 64
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
