@@ -22993,8 +22993,12 @@ MonoBehaviour:
   MovementController: {fileID: 0}
   arenaBox: {fileID: 80585507}
   target: {fileID: 408722809}
-  _agentActions:
-  - {fileID: 1253348379}
+  _chargeAttackState:
+    _windUpDuration: 2
+    _chargeSpeed: 5
+    _chargeDuration: 2
+    _recoveryDuration: 2
+  _agentActions: []
 --- !u!114 &1278221057
 MonoBehaviour:
   m_ObjectHideFlags: 0
