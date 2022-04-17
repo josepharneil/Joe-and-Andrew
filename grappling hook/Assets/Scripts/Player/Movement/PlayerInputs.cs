@@ -427,7 +427,7 @@ namespace Player
                 bool isAgainstWall = wallIsToLeft || wallIsToRight;
                 if(wallIsToLeft && wallIsToRight)
                 {
-                    Debug.LogError("Wall to the left AND to the right: This implies bad level design? Not sure what to do here.");
+                    Debug.LogError("WALL JUMPING: Wall to the left AND to the right: This implies bad level design? Not sure what to do here.", this);
                 }
                 if (isAgainstWall)
                 {
