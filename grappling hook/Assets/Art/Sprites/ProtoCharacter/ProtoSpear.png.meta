@@ -48,6 +48,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -292,6 +293,15 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      ProtoSpear_1: 5300151526712631953
+      ProtoSpear_6: 7467178744182618244
+      ProtoSpear_4: 8490607571175930308
+      ProtoSpear_3: 8576429319703783199
+      ProtoSpear_2: -3977304106253041275
+      ProtoSpear_5: -670827117515592002
+      ProtoSpear_7: -8436856563685250759
+      ProtoSpear_0: 8333296044710951109
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

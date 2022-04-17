@@ -51,6 +51,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -316,6 +317,16 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      ProtoFist_6: -7300140632401406767
+      ProtoFist_7: 5033548572400236696
+      ProtoFist_3: -5785413096180190056
+      ProtoFist_4: 422366196760163393
+      ProtoFist_5: -7091110280016656872
+      ProtoFist_8: 6276369510688707618
+      ProtoFist_1: -2983022354159931817
+      ProtoFist_2: 986721682071770435
+      ProtoFist_0: -6910950095233793146
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

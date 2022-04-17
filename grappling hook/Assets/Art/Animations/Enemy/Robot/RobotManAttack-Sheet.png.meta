@@ -45,6 +45,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -268,6 +269,14 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      RobotManAttack-Sheet_2: 700866393373224632
+      RobotManAttack-Sheet_0: -4093148072592107207
+      RobotManAttack-Sheet_3: -250197367040634637
+      RobotManAttack-Sheet_6: -3399477161345315190
+      RobotManAttack-Sheet_4: 1993430867225971267
+      RobotManAttack-Sheet_5: 244127779002161780
+      RobotManAttack-Sheet_1: -16115976675089453
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

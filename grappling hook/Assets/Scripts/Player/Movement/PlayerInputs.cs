@@ -12,7 +12,7 @@ using UnityEngine.InputSystem;
 namespace Player
 {
     [RequireComponent(typeof(MovementController))]
-    [RequireComponent(typeof(CustomCollider2D))]
+    [RequireComponent(typeof(BoxRayCollider2D))]
     public class PlayerInputs : MonoBehaviour
     {
         [Header("Components")]
@@ -421,7 +421,7 @@ namespace Player
                 (_currentNumberOfWallJumps < _maxNumberOfWallJumpsBeforeGrounding))
             {
                 // Check for wall to right / left OR check for wall jump coyote
-                CustomCollider2D customCollider2D = movementController.customCollider2D;
+                BoxRayCollider2D customCollider2D = movementController.customCollider2D;
                 customCollider2D.CheckHorizontalCollisions(out bool wallIsToLeft, out bool wallIsToRight, _wallJumpSkinWidth);
 
                 bool isAgainstWall = wallIsToLeft || wallIsToRight;
@@ -490,7 +490,7 @@ namespace Player
         
         private void DropThroughPlatform()
         {
-            CustomCollider2D customCollider2D = movementController.customCollider2D;
+            BoxRayCollider2D customCollider2D = movementController.customCollider2D;
             // JA:29/03/22 Not sure if you should use frame counting for this instead of a timer...???
             if (_hasFallenThroughPlatform && _fallThroughPlatformTimer < 20)
             {

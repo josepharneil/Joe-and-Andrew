@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace Entity
 {
-    [RequireComponent(typeof(Physics.CustomCollider2D))]
+    [RequireComponent(typeof(Physics.BoxRayCollider2D))]
     public class MovementController : MonoBehaviour
     {
         [Header("Components")]
-        public Physics.CustomCollider2D customCollider2D;
+        public Physics.BoxRayCollider2D customCollider2D;
 
         public void Move(Vector2 velocity)
         {

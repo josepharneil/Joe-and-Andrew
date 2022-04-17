@@ -48,6 +48,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -292,6 +293,15 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      WalkClycle-Sheet_1: 7035353566231128470
+      WalkClycle-Sheet_4: 6707204526845024092
+      WalkClycle-Sheet_6: -4928727817057527507
+      WalkClycle-Sheet_3: -7091615924816278453
+      WalkClycle-Sheet_5: 231419833462421947
+      WalkClycle-Sheet_0: 8624985163318387585
+      WalkClycle-Sheet_7: -6763005407145792693
+      WalkClycle-Sheet_2: 3161263647765420958
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
