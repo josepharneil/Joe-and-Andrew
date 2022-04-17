@@ -1,4 +1,3 @@
-using Ludiq;
 using UnityEngine;
 
 namespace Level
@@ -10,7 +9,7 @@ namespace Level
         
         // Exit position is set by the level manager.
         [SerializeField] private Transform _exitPosition;
-        [DoNotSerialize] public bool IsLocked { get; set; } = false;
+        [HideInInspector] public bool IsLocked { get; set; } = false;
 
         private void Awake()
         {
