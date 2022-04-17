@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1083378141, guid: dcd2196c4e9166f499793f2007fcda35, type: 3}
+  m_Name: CombatStateMachine
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"graph":{"title":"CombatStateMachine","summary":null,"pan":{"x":2.0,"y":20.75},"zoom":1.0,"elements":[{"nest":{"source":"Macro","macro":0,"embed":null},"isStart":false,"position":{"x":-332.0,"y":-85.0},"width":170.0,"guid":"189b8470-5d5f-4e97-8e71-287a43eeb26b","$version":"A","$type":"Bolt.FlowState","$id":"3"},{"nest":{"source":"Macro","macro":1,"embed":null},"isStart":false,"position":{"x":0.0,"y":-84.0},"width":170.0,"guid":"2762ecaa-b7a3-42c3-835a-82ae6cefb91f","$type":"Bolt.SuperState","$id":"5"},{"nest":{"source":"Macro","macro":2,"embed":null},"source":{"$ref":"3"},"destination":{"$ref":"5"},"guid":"31fddd96-a246-45e6-9fb0-464a9972bb4a","$version":"A","$type":"Bolt.FlowStateTransition"}],"$version":"A"}}'
+    _objectReferences:
+    - {fileID: 11400000, guid: 2ce38ae7f7b0e4ff48fe5ad72b409f2e, type: 2}
+    - {fileID: 11400000, guid: 3156a17a23d57481e991c8089fd105a3, type: 2}
+    - {fileID: 11400000, guid: 0b13bc11821414bf890bb52c39b8ecb4, type: 2}
