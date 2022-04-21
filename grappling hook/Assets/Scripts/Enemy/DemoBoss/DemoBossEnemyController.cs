@@ -13,16 +13,20 @@ namespace Enemy
         [SerializeField] private BoxCollider2D _arenaBox;
         [SerializeField] private GameObject _target;
 
-        // [] charging
-        private Vector2 _chargeDestination;
+        [Header("Charging")]
         [SerializeField] private float _chargeWindUpDuration = 1f;
         [SerializeField] private float _chargeSpeed = 10f;
-        [SerializeField] private float _chargeDistance = 5f;
+        // [SerializeField] private float _chargeDistance = 5f;
         [SerializeField] private float _chargeRecoveryDuration = 0.5f;
+        [SerializeField] private Transform _chargeDestinationLeft;
+        [SerializeField] private Transform _chargeDestinationRight;
+        [SerializeField] private bool _chargingLeft = false;
+        private Vector2 _chargeDestination;
+        
 
         private void Update()
         {
-            _movementController.Move(Vector2.down * 9.81f);
+            // _movementController.Move(Vector2.down * 9.81f);
         }
 
         public float GetChargeWindUpDuration()
@@ -42,22 +46,41 @@ namespace Enemy
 
         public void SetChargeDestination()
         {
-            Vector2 thisPosition = transform.position;
-            Vector2 directionNormToTarget = thisPosition.DirectionToNormalized(_target.transform.position);
-            RaycastHit2D hit = Physics2D.Raycast(thisPosition, directionNormToTarget, _chargeDistance, _movementController.customCollider2D.GetCollisionMask().value);
-            if (hit)
-            {
-                _chargeDestination = hit.point - (directionNormToTarget * 3f);
-            }
-            else
-            {
-                _chargeDestination = thisPosition + (directionNormToTarget * _chargeDistance);
-            }
+            // Vector2 thisPosition = transform.position;
+            _chargeDestination = (_chargingLeft ? _chargeDestinationLeft : _chargeDestinationRight).position;
+
+
+            // Vector2 directionNormToTarget = thisPosition.DirectionToNormalized(_target.transform.position);
+            // RaycastHit2D hit = Physics2D.Raycast(thisPosition, directionNormToTarget, _chargeDistance, _movementController.customCollider2D.GetCollisionMask().value);
+            // if (hit)
+            // {
+            // _chargeDestination = hit.point - (directionNormToTarget * 3f);
+            // }
+            // else
+            // {
+            // _chargeDestination = thisPosition + (directionNormToTarget * _chargeDistance);
+            // }
         }
 
         public bool IsChargeAttackDone()
         {
-            return transform.position.DistanceToSquared(_chargeDestination) < Mathf.Pow(1f, 2);
+            // Vector2 onlyXThisPosition = new Vector2(transform.position.x, 0f);
+            // Vector2 onlyXDestination = new Vector2(_chargeDestination.x, 0f);
+            // const float distanceThreshold = 2f;
+            // return Mathf.Pow(transform.position.x - _chargeDestination.x, 2) < Mathf.Pow(distanceThreshold, 2);
+
+            // return onlyXThisPosition.DistanceToSquared(onlyXDestination) < Mathf.Pow(distanceThreshold, 2);
+
+            float sqDistBetweenThisAndDestination = Mathf.Pow(transform.position.x - _chargeDestination.x, 2);
+            const float tolerance = 0.25f;
+            float sqHalfScalePlusTolerance = Mathf.Pow((transform.localScale.x / 2f) + tolerance, 2);
+            if (sqDistBetweenThisAndDestination < sqHalfScalePlusTolerance)
+            {
+                _chargingLeft = !_chargingLeft;
+                return true;
+            }
+
+            return false;
         }
 
         public void ChargeAttack()
