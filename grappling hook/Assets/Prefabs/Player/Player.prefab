@@ -677,7 +677,7 @@ MonoBehaviour:
   earlyJumpMultiplier: 2
   earlyJumpCancelTime: 0.15
   _debugRollFall: 0
-  _maxNumAerialJumps: 0
+  _maxNumAerialJumps: 1
   _debugDisableWallJumpSlide: 0
   _verticalWallJump: 13
   _horizontalWallJump: 13

@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95e66c6366d904e98bc83428217d4fd7, type: 3}
+  m_Name: ProjectileActionState
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"graph":{"variables":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[],"controlOutputDefinitions":[],"valueInputDefinitions":[],"valueOutputDefinitions":[],"title":"ProjectileActionState","summary":null,"pan":{"x":-15.26115,"y":130.9343},"zoom":1.0,"elements":[{"coroutine":false,"defaultValues":{},"position":{"x":-670.0,"y":-164.0},"guid":"9c72433e-3fdf-46a6-8166-c4aac9bfbf08","$version":"A","$type":"Unity.VisualScripting.OnEnterState"},{"argumentCount":0,"defaultValues":{"name":{"$content":"ChargeDone","$type":"System.String"},"target":null},"position":{"x":-92.0,"y":32.0},"guid":"deff983c-3a5b-41d5-8a44-e955ffea5893","$version":"A","$type":"Unity.VisualScripting.TriggerCustomEvent","$id":"11"},{"coroutine":false,"defaultValues":{},"position":{"x":-534.0,"y":44.0},"guid":"ec9eec90-635d-42d7-8243-91d36bd24c91","$version":"A","$type":"Unity.VisualScripting.Update","$id":"13"},{"chainable":false,"member":{"name":"ShootProjectile","parameterTypes":[],"targetType":"Enemy.DemoBossEnemyController","targetTypeName":"Enemy.DemoBossEnemyController","$version":"A"},"defaultValues":{"target":null},"position":{"x":-360.0,"y":44.0},"guid":"b7311090-72b6-4301-81d0-0b2b75021b73","$version":"A","$type":"Unity.VisualScripting.InvokeMember","$id":"15"},{"sourceUnit":{"$ref":"13"},"sourceKey":"trigger","destinationUnit":{"$ref":"15"},"destinationKey":"enter","guid":"6d846843-04aa-4531-b481-d514b296d061","$type":"Unity.VisualScripting.ControlConnection"},{"sourceUnit":{"$ref":"15"},"sourceKey":"exit","destinationUnit":{"$ref":"11"},"destinationKey":"enter","guid":"33282756-5037-459c-b022-9e0f80b50765","$type":"Unity.VisualScripting.ControlConnection"}],"$version":"A"}}'
+    _objectReferences: []

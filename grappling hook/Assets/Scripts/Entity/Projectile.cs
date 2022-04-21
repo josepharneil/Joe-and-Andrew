@@ -23,7 +23,12 @@ namespace Entity
 
         private void OnTriggerStay2D(Collider2D col)
         {
-            if (col.gameObject.layer == _targetLayerMask)
+            TriggerStay2D(col);
+        }
+
+        protected virtual void TriggerStay2D(Collider2D col)
+        {
+            if (col.gameObject.layer == _targetLayerMask.value)
             {
                 HasHitTarget = true;
             }

@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95e66c6366d904e98bc83428217d4fd7, type: 3}
+  m_Name: ProjectileBarrageWindUpState
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"graph":{"variables":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[],"controlOutputDefinitions":[],"valueInputDefinitions":[],"valueOutputDefinitions":[],"title":"ProjectileBarrageWindUpState","summary":null,"pan":{"x":65.66663,"y":-86.0},"zoom":0.9,"elements":[{"coroutine":false,"defaultValues":{},"position":{"x":-455.0,"y":-216.0},"guid":"9bbc33fd-1f7f-4305-b2ba-79e38f1fc519","$version":"A","$type":"Unity.VisualScripting.OnEnterState","$id":"9"},{"defaultValues":{"duration":{"$content":1.0,"$type":"System.Single"},"unscaledTime":{"$content":false,"$type":"System.Boolean"}},"position":{"x":8.0,"y":-219.0},"guid":"3b955882-2489-4391-a578-95cda0d622cb","$version":"A","$type":"Unity.VisualScripting.Timer","$id":"11"},{"argumentCount":0,"defaultValues":{"name":{"$content":"WindUpDone","$type":"System.String"},"target":null},"position":{"x":325.0,"y":-196.0},"guid":"b43cbcc1-dd66-4b39-9394-a080d94c4244","$version":"A","$type":"Unity.VisualScripting.TriggerCustomEvent","$id":"13"},{"member":{"name":"WindUpDone","parameterTypes":null,"targetType":"Bolt.BoltEvents","targetTypeName":"Bolt.BoltEvents","$version":"A"},"defaultValues":{},"position":{"x":311.0,"y":-19.0},"guid":"38743764-93c6-43c6-9ea1-2e681b7d7b2b","$version":"A","$type":"Unity.VisualScripting.GetMember","$id":"15"},{"chainable":false,"member":{"name":"InitialiseProjectileBarrage","parameterTypes":[],"targetType":"Enemy.DemoBossEnemyController","targetTypeName":"Enemy.DemoBossEnemyController","$version":"A"},"defaultValues":{"target":null},"position":{"x":-277.0,"y":-220.0},"guid":"3b2ddee1-4d3e-400f-99b3-2948dea7ece5","$version":"A","$type":"Unity.VisualScripting.InvokeMember","$id":"18"},{"sourceUnit":{"$ref":"11"},"sourceKey":"completed","destinationUnit":{"$ref":"13"},"destinationKey":"enter","guid":"8c978fad-ff25-4d00-94e9-d448bf518811","$type":"Unity.VisualScripting.ControlConnection"},{"sourceUnit":{"$ref":"9"},"sourceKey":"trigger","destinationUnit":{"$ref":"18"},"destinationKey":"enter","guid":"22e1b9ab-3b8b-4094-becc-a4578d119931","$type":"Unity.VisualScripting.ControlConnection"},{"sourceUnit":{"$ref":"18"},"sourceKey":"exit","destinationUnit":{"$ref":"11"},"destinationKey":"start","guid":"90b9cc36-c40d-4a92-bfa6-756e0e5a784e","$type":"Unity.VisualScripting.ControlConnection"},{"sourceUnit":{"$ref":"15"},"sourceKey":"value","destinationUnit":{"$ref":"13"},"destinationKey":"name","guid":"713ec478-6d1d-4a3d-a8c4-8d69e0cb7deb","$type":"Unity.VisualScripting.ValueConnection"}],"$version":"A"}}'
+    _objectReferences: []

@@ -30,7 +30,7 @@ namespace Enemy
         // That way we can very quickly iterate over ALL projectiles
         // This could get quite complex, but could be important if we do any bullet hell style levels for efficient
         // bullet hells.
-        private readonly List<PiranhaFireball> _livePiranhaProjectiles = new List<PiranhaFireball>();
+        private readonly List<PiranhaFireball> _livePiranhaProjectiles = new();
 
         #region UnityEvents
 
@@ -70,11 +70,10 @@ namespace Enemy
         /// </summary>
         [UsedImplicitly] public void TryShootProjectile()
         {
-            if(!_attackIsOnCooldown)
-            {
-                ShootProjectile();
-                _attackIsOnCooldown = true;
-            }
+            if (_attackIsOnCooldown) return;
+            
+            ShootProjectile();
+            _attackIsOnCooldown = true;
         }
 
         /// <summary>
@@ -116,10 +115,10 @@ namespace Enemy
                 {
                     indexesToDelete.Add(index);
 
-                    target.TryGetComponent<EntityHitbox>(out EntityHitbox entityHitbox);
+                    target.TryGetComponent(out EntityHitbox entityHitbox);
                     if (entityHitbox)
                     {
-                        entityHitbox.Hit(new EntityHitData()
+                        entityHitbox.Hit(new EntityHitData
                         {
                             DealsDamage = true,
                             DamageToHealth = fireballDamage,
@@ -158,8 +157,8 @@ namespace Enemy
         
         private void ShootProjectile()
         {
-            var thisTransform = transform;
-            var thisPosition = thisTransform.position;
+            Transform thisTransform = transform;
+            Vector3 thisPosition = thisTransform.position;
             GameObject projectile = Instantiate(piranhaProjectile, thisPosition, Quaternion.identity, thisTransform);
             PiranhaFireball piranhaFireball = projectile.GetComponent<PiranhaFireball>();
             Debug.Assert(piranhaFireball, "Should be a fireball component", this);

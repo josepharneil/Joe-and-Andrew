@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 530e556d4407947dcae7102ff497587d, type: 3}
+  m_Name: ProjectileBarrageState
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"graph":{"title":null,"summary":null,"pan":{"x":-17.0,"y":55.0},"zoom":1.0,"elements":[{"nest":{"source":"Macro","macro":0,"embed":null},"isStart":true,"position":{"x":-426.0,"y":-43.0},"width":170.0,"guid":"e1aaec07-cae8-4cc7-a748-99ac4c8629c4","$version":"A","$type":"Unity.VisualScripting.FlowState","$id":"3"},{"nest":{"source":"Macro","macro":1,"embed":null},"isStart":false,"position":{"x":192.0,"y":-51.0},"width":170.0,"guid":"d733b10a-bdaf-4198-8430-38581979fcb6","$version":"A","$type":"Unity.VisualScripting.FlowState","$id":"5"},{"nest":{"source":"Macro","macro":2,"embed":null},"isStart":false,"position":{"x":-114.0,"y":-31.0},"width":170.0,"guid":"326a42a8-dc2d-4d93-a34b-58ab7311a7a7","$type":"Unity.VisualScripting.SuperState","$id":"7"},{"nest":{"source":"Macro","macro":3,"embed":null},"source":{"$ref":"3"},"destination":{"$ref":"7"},"guid":"6484e7b3-e10a-4b9c-af1f-8090a482abee","$version":"A","$type":"Unity.VisualScripting.FlowStateTransition"},{"nest":{"source":"Macro","macro":4,"embed":null},"source":{"$ref":"7"},"destination":{"$ref":"5"},"guid":"ef662c3c-6fe8-4dc0-b29e-6fea9fa62877","$version":"A","$type":"Unity.VisualScripting.FlowStateTransition"}],"$version":"A"}}'
+    _objectReferences:
+    - {fileID: 11400000, guid: a37c8db26fad64f549e721392f5f2494, type: 2}
+    - {fileID: 11400000, guid: ab002c90697b848fd841cfc450afd1e0, type: 2}
+    - {fileID: 11400000, guid: 5ba6fff2c2b9e4cb5983f375ef018b7e, type: 2}
+    - {fileID: 11400000, guid: 8bf8d895a0ed040c9b2e29eafa778313, type: 2}
+    - {fileID: 11400000, guid: ef6528ed5f1554d2fa20efc783a8eaff, type: 2}
