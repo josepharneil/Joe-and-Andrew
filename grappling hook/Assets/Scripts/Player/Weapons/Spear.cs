@@ -42,7 +42,7 @@ namespace Player
             Physics2D.OverlapBox(overlapBoxCentre, new Vector2(_attackLength, _attackWidth), 0f, contactFilter2D, detectedObjects);
         }
 
-        public override void DrawLineRenderer(LineRenderer lineRenderer, Vector2 attackerPosition, AttackDirection attackDirection)
+        public override void DrawLineRenderer(LineRenderer lineRenderer, AttackDirection attackDirection)
         {
             float rectHeight = _attackWidth;
             float rectWidth = _attackLength;

@@ -106,7 +106,7 @@ namespace Player
 
             IEnumerator CoShowLineRendererForSeconds()
             {
-                CurrentPlayerEquipment.CurrentMeleeWeapon.DrawLineRenderer(_lineRenderer, transform.position, attackDirection);
+                CurrentPlayerEquipment.CurrentMeleeWeapon.DrawLineRenderer(_lineRenderer, attackDirection);
                 
                 yield return new WaitForSeconds(seconds);
 

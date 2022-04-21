@@ -812,10 +812,10 @@ MonoBehaviour:
   playerCombatPrototyping: {fileID: 9147847883452652286}
   _playerKnockback: {fileID: 9147847883452652283}
   CurrentPlayerEquipment: {fileID: 11400000, guid: 4042d4a8e76c840fc8b043436b9ebe73, type: 2}
-  _lineRenderer: {fileID: 0}
-  _lineRenderDuration: 0.3
-  _showGizmos: 0
-  _showLineRenderer: 0
+  _lineRenderer: {fileID: 4008834346478642906}
+  _lineRenderDuration: 0.1
+  _showGizmos: 1
+  _showLineRenderer: 1
 --- !u!114 &9147847883452652286
 MonoBehaviour:
   m_ObjectHideFlags: 0

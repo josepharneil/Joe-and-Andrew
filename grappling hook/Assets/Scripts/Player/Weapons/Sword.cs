@@ -50,9 +50,14 @@ namespace Player
             Physics2D.OverlapCircle(overlapCirclePosition, attackRadius, contactFilter2D, detectedObjects);
         }
 
-        public override void DrawLineRenderer(LineRenderer lineRenderer, Vector2 attackerPosition, AttackDirection attackDirection)
+        public override void DrawLineRenderer(LineRenderer lineRenderer, AttackDirection attackDirection)
         {
-            lineRenderer.DrawCircle(attackRadius, GetCirclePosition(attackerPosition, attackDirection));
+            Vector3 circleOrigin = new Vector2(attackRadius, WeaponHeightOffset);
+            if (attackDirection == AttackDirection.Left)
+            {
+                circleOrigin = new Vector3(-attackRadius, WeaponHeightOffset);
+            }
+            lineRenderer.DrawCircle(attackRadius, circleOrigin);
         }
 
         private Vector2 GetCirclePosition(Vector2 attackerPosition, AttackDirection attackDirection)

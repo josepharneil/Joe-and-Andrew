@@ -92,7 +92,7 @@ namespace Player
         /// <param name="lineRenderer"></param>
         /// <param name="attackerPosition"></param>
         /// <param name="attackDirection"></param>
-        public abstract void DrawLineRenderer(LineRenderer lineRenderer, Vector2 attackerPosition, AttackDirection attackDirection);
+        public abstract void DrawLineRenderer(LineRenderer lineRenderer, AttackDirection attackDirection);
 
         public void HideLineRenderer(LineRenderer lineRenderer)
         {
