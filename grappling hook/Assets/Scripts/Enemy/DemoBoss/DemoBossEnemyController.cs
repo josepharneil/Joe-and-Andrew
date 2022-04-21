@@ -20,13 +20,34 @@ namespace Enemy
         [SerializeField] private float _chargeRecoveryDuration = 0.5f;
         [SerializeField] private Transform _chargeDestinationLeft;
         [SerializeField] private Transform _chargeDestinationRight;
-        [SerializeField] private bool _chargingLeft = false;
+        [SerializeField] private CameraShakeData _cameraShakeData;
+        private bool _chargingLeft = false;
+        private int _chargeCounter = 0;
+        [SerializeField] private int _chargeMaxNumber = 4;
         private Vector2 _chargeDestination;
         
 
         private void Update()
         {
             // _movementController.Move(Vector2.down * 9.81f);
+        }
+
+        #region ActionSelection
+        
+        #endregion
+
+
+        public bool TargetIsInBossArea()
+        {
+            return _arenaBox.bounds.Contains(_target.transform.position);
+        }
+
+        #region ChargeAttack
+
+        public void InitialiseChargeBarrageAttack()
+        {
+            _chargeCounter = 0;
+            _chargingLeft = transform.position.IsRightOf(_target.transform.position);
         }
 
         public float GetChargeWindUpDuration()
@@ -39,54 +60,39 @@ namespace Enemy
             return _chargeRecoveryDuration;
         }
 
-        public bool TargetIsInBossArea()
-        {
-            return _arenaBox.bounds.Contains(_target.transform.position);
-        }
-
         public void SetChargeDestination()
         {
-            // Vector2 thisPosition = transform.position;
             _chargeDestination = (_chargingLeft ? _chargeDestinationLeft : _chargeDestinationRight).position;
+        }
 
+        public bool HasChargeAttackReachedDestination()
+        {
+            float sqDistBetweenThisAndDestination = Mathf.Abs(transform.position.x - _chargeDestination.x);
+            const float tolerance = 0f;//0.25f;
+            float sqHalfScalePlusTolerance = Mathf.Abs((transform.localScale.x / 2f) + tolerance);
 
-            // Vector2 directionNormToTarget = thisPosition.DirectionToNormalized(_target.transform.position);
-            // RaycastHit2D hit = Physics2D.Raycast(thisPosition, directionNormToTarget, _chargeDistance, _movementController.customCollider2D.GetCollisionMask().value);
-            // if (hit)
-            // {
-            // _chargeDestination = hit.point - (directionNormToTarget * 3f);
-            // }
-            // else
-            // {
-            // _chargeDestination = thisPosition + (directionNormToTarget * _chargeDistance);
-            // }
+            bool destinationReached = sqDistBetweenThisAndDestination < sqHalfScalePlusTolerance;
+            if (destinationReached)
+            {
+                // Switch direction here for now...
+                _chargingLeft = !_chargingLeft;
+                CameraManager.Instance.Shake.ShakeCamera(_cameraShakeData);
+                _chargeCounter++;
+            }
+
+            return destinationReached;
         }
 
         public bool IsChargeAttackDone()
         {
-            // Vector2 onlyXThisPosition = new Vector2(transform.position.x, 0f);
-            // Vector2 onlyXDestination = new Vector2(_chargeDestination.x, 0f);
-            // const float distanceThreshold = 2f;
-            // return Mathf.Pow(transform.position.x - _chargeDestination.x, 2) < Mathf.Pow(distanceThreshold, 2);
-
-            // return onlyXThisPosition.DistanceToSquared(onlyXDestination) < Mathf.Pow(distanceThreshold, 2);
-
-            float sqDistBetweenThisAndDestination = Mathf.Pow(transform.position.x - _chargeDestination.x, 2);
-            const float tolerance = 0.25f;
-            float sqHalfScalePlusTolerance = Mathf.Pow((transform.localScale.x / 2f) + tolerance, 2);
-            if (sqDistBetweenThisAndDestination < sqHalfScalePlusTolerance)
-            {
-                _chargingLeft = !_chargingLeft;
-                return true;
-            }
-
-            return false;
+            return _chargeCounter >= _chargeMaxNumber;
         }
-
+        
         public void ChargeAttack()
         {
             _movementController.Move(transform.position.DirectionToNormalized(_chargeDestination) * _chargeSpeed);
         }
+        #endregion
 
 #if UNITY_EDITOR
         private void OnDrawGizmosSelected()

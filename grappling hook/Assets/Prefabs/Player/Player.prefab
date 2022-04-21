@@ -237,7 +237,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5950517639213704522}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.75, z: 0}
+  m_LocalPosition: {x: 0, y: 2.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -802,10 +802,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   inputs: {fileID: 9147847883452652259}
-  cinemachineShake: {fileID: 0}
-  shakeAmplitude: 3
-  shakeFrequency: 1
-  shakeDuration: 0.1
+  _cameraShakeData:
+    Amplitude: 1.75
+    Frequency: 0.1
+    Duration: 1
   gamepadVibrator: {fileID: 9147847883452652272}
   _slowTimeScaleDuration: 0.11
   _slowTimeScaleAmount: 0.01
@@ -1089,6 +1089,7 @@ MonoBehaviour:
   hitIFrameDuration: 1
   spriteRenderer: {fileID: 9147847883264161609}
   entityController: {fileID: 447105601662447162}
+  _isImmortal: 1
 --- !u!50 &4928653896513910851
 Rigidbody2D:
   serializedVersion: 4

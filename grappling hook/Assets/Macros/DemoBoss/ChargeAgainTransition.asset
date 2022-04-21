@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95e66c6366d904e98bc83428217d4fd7, type: 3}
+  m_Name: ChargeAgainTransition
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"graph":{"variables":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[],"controlOutputDefinitions":[],"valueInputDefinitions":[],"valueOutputDefinitions":[],"title":null,"summary":null,"pan":{"x":146.0,"y":16.0},"zoom":1.0,"elements":[{"defaultValues":{},"position":{"x":233.0,"y":-66.0},"guid":"be11ba9c-4673-4ae6-8173-d9065e88184c","$version":"A","$type":"Unity.VisualScripting.TriggerStateTransition","$id":"9"},{"argumentCount":0,"coroutine":false,"defaultValues":{"target":null,"name":{"$content":"ChargeAgain","$type":"System.String"}},"position":{"x":-157.0,"y":-38.0},"guid":"77e271b1-1b15-47c8-8bde-3ed1e7374b13","$version":"A","$type":"Unity.VisualScripting.CustomEvent","$id":"11"},{"sourceUnit":{"$ref":"11"},"sourceKey":"trigger","destinationUnit":{"$ref":"9"},"destinationKey":"trigger","guid":"0d444325-4402-40f8-b327-e803f6b1f9dc","$type":"Unity.VisualScripting.ControlConnection"}],"$version":"A"}}'
+    _objectReferences: []

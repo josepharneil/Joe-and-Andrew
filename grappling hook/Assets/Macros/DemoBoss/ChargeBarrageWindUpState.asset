@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95e66c6366d904e98bc83428217d4fd7, type: 3}
+  m_Name: ChargeBarrageWindUpState
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"graph":{"variables":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[],"controlOutputDefinitions":[],"valueInputDefinitions":[{"hasDefaultValue":true,"defaultValue":{"$content":1,"$type":"System.Int32"},"_type":"System.Int32","key":"WindUpDuration","label":null,"summary":null,"hideLabel":false}],"valueOutputDefinitions":[],"title":null,"summary":null,"pan":{"x":587.1855,"y":-493.0366},"zoom":0.9500002,"elements":[{"defaultValues":{"duration":{"$content":2.0,"$type":"System.Single"},"unscaledTime":{"$content":false,"$type":"System.Boolean"}},"position":{"x":403.0,"y":-530.0},"guid":"846b3bef-4bbf-4664-8e38-b1cb6ad6a627","$version":"A","$type":"Unity.VisualScripting.Timer","$id":"10"},{"argumentCount":0,"defaultValues":{"name":{"$content":"WindUpDone","$type":"System.String"},"target":null},"position":{"x":742.0,"y":-505.0},"guid":"567b3465-3f56-4fc9-906c-edfd1e62aa31","$version":"A","$type":"Unity.VisualScripting.TriggerCustomEvent","$id":"12"},{"coroutine":false,"defaultValues":{},"position":{"x":68.0,"y":-501.0},"guid":"1cbe7024-33f7-4078-97e5-2bb02510678c","$version":"A","$type":"Unity.VisualScripting.OnEnterState","$id":"14"},{"member":{"name":"WindUpDone","parameterTypes":null,"targetType":"Bolt.BoltEvents","targetTypeName":"Bolt.BoltEvents","$version":"A"},"defaultValues":{},"position":{"x":584.0,"y":-277.0},"guid":"00f00b4a-2986-4270-bdd3-59806da0b14e","$version":"A","$type":"Unity.VisualScripting.GetMember","$id":"16"},{"chainable":false,"member":{"name":"InitialiseChargeBarrageAttack","parameterTypes":[],"targetType":"Enemy.DemoBossEnemyController","targetTypeName":"Enemy.DemoBossEnemyController","$version":"A"},"defaultValues":{"target":null},"position":{"x":242.0,"y":-651.0},"guid":"32124cae-7e66-494d-8588-88c20590079f","$version":"A","$type":"Unity.VisualScripting.InvokeMember","$id":"19"},{"sourceUnit":{"$ref":"10"},"sourceKey":"completed","destinationUnit":{"$ref":"12"},"destinationKey":"enter","guid":"909c229d-8eba-40aa-b5bc-b58917e92fde","$type":"Unity.VisualScripting.ControlConnection"},{"sourceUnit":{"$ref":"14"},"sourceKey":"trigger","destinationUnit":{"$ref":"19"},"destinationKey":"enter","guid":"0ea538f1-2f47-4655-bd7d-a8c9568a8238","$type":"Unity.VisualScripting.ControlConnection"},{"sourceUnit":{"$ref":"19"},"sourceKey":"exit","destinationUnit":{"$ref":"10"},"destinationKey":"start","guid":"53769286-e0a1-4b19-ba38-f5e8867d3367","$type":"Unity.VisualScripting.ControlConnection"},{"sourceUnit":{"$ref":"16"},"sourceKey":"value","destinationUnit":{"$ref":"12"},"destinationKey":"name","guid":"a2a7d51f-4004-4706-8b8a-13380a0a271c","$type":"Unity.VisualScripting.ValueConnection"}],"$version":"A"}}'
+    _objectReferences: []

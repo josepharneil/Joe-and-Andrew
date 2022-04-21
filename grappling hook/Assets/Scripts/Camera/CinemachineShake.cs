@@ -1,26 +1,33 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
+
+
+[Serializable] public class CameraShakeData
+{
+    public float Amplitude = 3f;
+    public float Frequency = 0.1f;
+    public float Duration = 1f;
+}
 
 public class CinemachineShake : MonoBehaviour
 {
     [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
 
-    public void ShakeCamera(float amplitude, float frequency, float duration)
+    public void ShakeCamera(CameraShakeData cameraShakeData)
     {
-        StartCoroutine(Shake(amplitude, frequency, duration));
+        StartCoroutine(ShakeCoroutine(cameraShakeData));
     }
 
-    private IEnumerator Shake(float amplitude, float frequency, float duration)
+    private IEnumerator ShakeCoroutine(CameraShakeData cameraShakeData)
     {
         CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin
             = cinemachineVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-        cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = amplitude;
-        cinemachineBasicMultiChannelPerlin.m_FrequencyGain = frequency;
+        cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = cameraShakeData.Amplitude;
+        cinemachineBasicMultiChannelPerlin.m_FrequencyGain = cameraShakeData.Frequency;
 
-        yield return new WaitForSeconds(duration);
+        yield return new WaitForSeconds(cameraShakeData.Duration);
         
         // todo
         // https://www.youtube.com/watch?v=ACf1I27I6Tk

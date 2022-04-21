@@ -19,12 +19,12 @@ namespace Player
         [Header("Setup")]
         [SerializeField] private LayerMask whatIsDamageable;
         [SerializeField] private PlayerInputs inputs;
-        
-        [Header("Shake")]
-        [SerializeField] private CinemachineShake cinemachineShake;
-        [SerializeField] private float shakeAmplitude = 3f;
-        [SerializeField] private float shakeFrequency = 1f;
-        [SerializeField] private float shakeDuration = 0.1f;
+
+        // [Header("Shake")] 
+        [SerializeField] private CameraShakeData _cameraShakeData; 
+        // [SerializeField] private float shakeAmplitude = 3f;
+        // [SerializeField] private float shakeFrequency = 1f;
+        // [SerializeField] private float shakeDuration = 0.1f;
 
         [Header("Gamepad Vibration")]
         [SerializeField] private GamepadVibrator gamepadVibrator;
@@ -176,7 +176,7 @@ namespace Player
 
         private void ShakeCamera()
         {
-            cinemachineShake.ShakeCamera(shakeAmplitude, shakeFrequency, shakeDuration);
+            CameraManager.Instance.Shake.ShakeCamera(_cameraShakeData);
             Time.timeScale = _slowTimeScaleAmount;
             _slowTimeScaleTimer = _slowTimeScaleDuration;
         }

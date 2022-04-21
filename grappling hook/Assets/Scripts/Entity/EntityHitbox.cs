@@ -34,6 +34,9 @@ namespace Entity
         [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] private EntityController entityController;
 
+        [Header("Debug")]
+        [SerializeField] private bool _isImmortal = false; 
+
         private void Awake()
         {
             Debug.Assert(entityController, "Must have an entity controller to kill this enemy.", this);
@@ -76,7 +79,7 @@ namespace Entity
         
         public bool Hit(EntityHitData hitData)
         {
-            if (!_isHittable || !_isEnabled)
+            if (!_isHittable || !_isEnabled || _isImmortal)
             {
                 return false;
             }
