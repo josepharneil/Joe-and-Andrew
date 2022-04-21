@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using Entity;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace Player
@@ -50,6 +48,11 @@ namespace Player
             
             Vector2 overlapCirclePosition = GetCirclePosition(attackerPosition, attackDirection);
             Physics2D.OverlapCircle(overlapCirclePosition, attackRadius, contactFilter2D, detectedObjects);
+        }
+
+        public override void DrawLineRenderer(LineRenderer lineRenderer, Vector2 attackerPosition, AttackDirection attackDirection)
+        {
+            lineRenderer.DrawCircle(attackRadius, GetCirclePosition(attackerPosition, attackDirection));
         }
 
         private Vector2 GetCirclePosition(Vector2 attackerPosition, AttackDirection attackDirection)

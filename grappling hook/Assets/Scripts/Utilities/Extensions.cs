@@ -1,4 +1,5 @@
 using Player;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 public static class Extensions
@@ -101,6 +102,42 @@ public static class Extensions
     {
         Debug.Assert(animationWeaponStateName != AnimationWeaponStateName.None, "Invalid state");
         return Animator.StringToHash(animationWeaponStateName.ToString());
+    }
+
+    #endregion
+
+    #region LineRenderer
+
+    public static void DrawCircle(this LineRenderer lineRenderer, float radius, Vector3 origin = default, int steps = 100)
+    {
+        lineRenderer.loop = true;
+        lineRenderer.positionCount = steps;
+
+        for (int currentStep = 0; currentStep < steps; currentStep++)
+        {
+            float circumferenceProgress = (float)currentStep / steps;
+            float currentRadian = circumferenceProgress * 2 * Mathf.PI;
+                
+            float xScaled = Mathf.Cos(currentRadian);
+            float yScaled = Mathf.Sin(currentRadian);
+
+            float x = xScaled * radius;
+            float y = yScaled * radius;
+
+            Vector3 currentPosition = new Vector3(x, y, 0) + origin;
+            lineRenderer.SetPosition(currentStep, currentPosition);
+        }
+    }
+
+    public static void DrawRectangle(this LineRenderer lineRenderer, float width, float height, Vector3 origin = default)
+    {
+        lineRenderer.loop = true;
+        lineRenderer.positionCount = 4;
+        float halfHeight = (height / 2f);
+        lineRenderer.SetPosition(0, new Vector3(0f, halfHeight, 0f) + origin);
+        lineRenderer.SetPosition(1, new Vector3(0f, -halfHeight, 0f) + origin);
+        lineRenderer.SetPosition(2, new Vector3(width, -halfHeight, 0f) + origin);
+        lineRenderer.SetPosition(3, new Vector3(width, halfHeight, 0f) + origin);  
     }
 
     #endregion

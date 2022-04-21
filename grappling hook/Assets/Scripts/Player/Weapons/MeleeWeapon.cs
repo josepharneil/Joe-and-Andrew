@@ -85,5 +85,18 @@ namespace Player
         public abstract void DetectAttackableObjects(out List<Collider2D> detectedObjects, 
             ContactFilter2D contactFilter2D, 
             Vector2 attackerPosition, AttackDirection attackDirection);
+
+        /// <summary>
+        /// Draws a line renderer of the attack shape.
+        /// </summary>
+        /// <param name="lineRenderer"></param>
+        /// <param name="attackerPosition"></param>
+        /// <param name="attackDirection"></param>
+        public abstract void DrawLineRenderer(LineRenderer lineRenderer, Vector2 attackerPosition, AttackDirection attackDirection);
+
+        public void HideLineRenderer(LineRenderer lineRenderer)
+        {
+            lineRenderer.positionCount = 0;
+        }
     }
 }

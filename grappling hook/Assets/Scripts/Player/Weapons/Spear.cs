@@ -41,7 +41,19 @@ namespace Player
             Vector2 overlapBoxCentre = GetRectCentre(attackerPosition, attackDirection);
             Physics2D.OverlapBox(overlapBoxCentre, new Vector2(_attackLength, _attackWidth), 0f, contactFilter2D, detectedObjects);
         }
-        
+
+        public override void DrawLineRenderer(LineRenderer lineRenderer, Vector2 attackerPosition, AttackDirection attackDirection)
+        {
+            float rectHeight = _attackWidth;
+            float rectWidth = _attackLength;
+            if (attackDirection == AttackDirection.Left)
+            {
+                rectWidth = -rectWidth;
+            }
+
+            lineRenderer.DrawRectangle(rectWidth, rectHeight, new Vector3(0, WeaponHeightOffset, 0));
+        }
+
         public override void DrawGizmos(Vector2 attackerPosition, AttackDirection attackDirection)
         {
             Vector2 overlapBoxCentre = GetRectCentre(attackerPosition, attackDirection);
@@ -50,16 +62,16 @@ namespace Player
         
         private Vector2 GetRectCentre(Vector2 attackerPosition, AttackDirection attackDirection)
         {
-            Vector2 overlapCirclePosition;
+            Vector2 overlapRectPosition;
             if (attackDirection == AttackDirection.Left)
             {
-                overlapCirclePosition = attackerPosition + new Vector2(-_attackLength / 2f, WeaponHeightOffset);
+                overlapRectPosition = attackerPosition + new Vector2(-_attackLength / 2f, WeaponHeightOffset);
             }
             else
             {
-                overlapCirclePosition = attackerPosition + new Vector2(_attackLength / 2f, WeaponHeightOffset);
+                overlapRectPosition = attackerPosition + new Vector2(_attackLength / 2f, WeaponHeightOffset);
             }
-            return overlapCirclePosition;
+            return overlapRectPosition;
         }
     }
 }

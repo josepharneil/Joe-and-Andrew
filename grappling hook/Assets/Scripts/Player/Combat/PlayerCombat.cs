@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Entity;
 using JetBrains.Annotations;
@@ -41,6 +42,12 @@ namespace Player
         
         [Header("Weapon")]
         public PlayerEquipment CurrentPlayerEquipment;
+        [SerializeField] private LineRenderer _lineRenderer;
+        [SerializeField] private float _lineRenderDuration = 0.2f;
+
+        [Header("Debug")]
+        [SerializeField] private bool _showGizmos = false;
+        [SerializeField] private bool _showLineRenderer = false;
         
         private AttackDirection ConvertAnimationEventInfo()
         {
@@ -70,6 +77,8 @@ namespace Player
                 useTriggers = true
             };
             CurrentPlayerEquipment.CurrentMeleeWeapon.DetectAttackableObjects(out List<Collider2D> detectedObjects, contactFilter2D, transform.position, attackDirection);
+
+            ShowLineRendererForSeconds(_lineRenderDuration, attackDirection);
             
             if (TryHitDetectedObjects(detectedObjects, out Vector2? firstEnemyHitPosition))
             {
@@ -86,6 +95,25 @@ namespace Player
 
             // At the end, we're now post damage.
             inputs.isInPreDamageAttackPhase = false;
+        }
+
+        private void ShowLineRendererForSeconds(float seconds, AttackDirection attackDirection)
+        {
+            if (!_showLineRenderer) return;
+            if (!_lineRenderer) return;
+            if (!CurrentPlayerEquipment) return;
+            if (!CurrentPlayerEquipment.CurrentMeleeWeapon) return;
+
+            IEnumerator CoShowLineRendererForSeconds()
+            {
+                CurrentPlayerEquipment.CurrentMeleeWeapon.DrawLineRenderer(_lineRenderer, transform.position, attackDirection);
+                
+                yield return new WaitForSeconds(seconds);
+
+                CurrentPlayerEquipment.CurrentMeleeWeapon.HideLineRenderer(_lineRenderer);
+            }
+
+            StartCoroutine(CoShowLineRendererForSeconds());
         }
         
         private bool TryHitDetectedObjects(List<Collider2D> detectedObjects, out Vector2? enemyKnockbackPosition)
@@ -170,11 +198,14 @@ namespace Player
             CurrentPlayerEquipment.CurrentMeleeWeapon.ForceHideAttackParticles();
         }
 
-        private void OnDrawGizmos()
+#if UNITY_EDITOR
+        private void OnDrawGizmosSelected()
         {
+            if (!_showGizmos) return;
             if (!CurrentPlayerEquipment) return;
             if (!CurrentPlayerEquipment.CurrentMeleeWeapon) return;
             CurrentPlayerEquipment.CurrentMeleeWeapon.DrawGizmos(transform.position, ConvertAnimationEventInfo());
         }
+#endif
     }
 }

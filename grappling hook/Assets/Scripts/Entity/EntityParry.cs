@@ -13,6 +13,9 @@ namespace Entity
         [SerializeField] private float parryRadius = 1f;
         [SerializeField] private float timeBetweenParries = 0.8f;
         private bool _canParry = true;
+
+        [Header("Debug")]
+        [SerializeField] private bool _showGizmos = false; 
         
         private float _parryTimer = 0f;
 
@@ -70,8 +73,10 @@ namespace Entity
             _parryTimer = timeBetweenParries;
         }
 
-        private void OnDrawGizmos()
+#if UNITY_EDITOR
+        private void OnDrawGizmosSelected()
         {
+            if (!_showGizmos) return;
             if (inputs.FacingDirection == FacingDirection.Left)
             {
                 Vector3 position = transform.position + new Vector3(-1, 0);
@@ -83,6 +88,7 @@ namespace Entity
                 Gizmos.DrawWireSphere(position, parryRadius);
             }
         }
+#endif
     }
 }
 
