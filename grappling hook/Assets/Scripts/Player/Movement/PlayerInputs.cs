@@ -102,6 +102,8 @@ namespace Player
         [HideInInspector] public bool isAttacking;
         [HideInInspector] public bool isInPreDamageAttackPhase = true;
         public PlayerEquipment CurrentPlayerEquipment;
+        [SerializeField] private bool _attacksDrivenByAnimations = true;
+        [SerializeField] private PlayerAttackDriver _playerAttackDriver;
 
         [Header("Parrying")]
         [SerializeField] private EntityParry entityParry;
@@ -112,6 +114,9 @@ namespace Player
         [Header("Knockback")]
         [SerializeField] private EntityKnockback entityKnockback;
 
+        [Header("Daze")]
+        [SerializeField] private EntityDaze entityDaze;
+        
         // Animation parameter IDs.
         private static readonly int HorizontalSpeedID = Animator.StringToHash("horizontalSpeed");
         private static readonly int VerticalSpeedID = Animator.StringToHash("verticalSpeed");
@@ -120,10 +125,9 @@ namespace Player
         private static readonly int AttackUpTriggerID = Animator.StringToHash("attackUpTrigger");
         private static readonly int AttackDownTriggerID = Animator.StringToHash("attackDownTrigger");
         private static readonly int GroundedTriggerID = Animator.StringToHash("groundedTrigger");
-        
+
         [Header("Prototyping")]
         public PlayerCombatPrototyping playerCombatPrototyping;
-        [SerializeField] private EntityDaze entityDaze;
 
         [Header("Player Sounds")] 
         [SerializeField] private PlayerSounds _playerSounds;
@@ -169,6 +173,11 @@ namespace Player
 
         private void OnDrawGizmosSelected()
         {
+        }
+
+        private void OnGUI()
+        {
+            _playerAttackDriver.ShowDebugGUI();
         }
 
         // Update is called once per frame
@@ -231,6 +240,11 @@ namespace Player
             {
                 animator.SetFloat(HorizontalSpeedID, Mathf.Abs(Velocity.x));
                 animator.SetFloat(VerticalSpeedID,Velocity.y);
+            }
+            
+            if (!_attacksDrivenByAnimations)
+            {
+                _playerAttackDriver.UpdateAttack();
             }
 
             CheckIfAttackIsCancellable();
@@ -829,8 +843,15 @@ namespace Player
                     spriteRenderer.flipX = false;
                 }
             }
-            //sets the animator to use the currently selected weapon when attacking
-            animator.SetTrigger(AttackTriggerID);
+            if (_attacksDrivenByAnimations)
+            {
+                //sets the animator to use the currently selected weapon when attacking
+                animator.SetTrigger(AttackTriggerID);
+            }
+            else
+            {
+                _playerAttackDriver.StartAttack();
+            }
 #endif
 
         }
