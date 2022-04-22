@@ -6,18 +6,19 @@ namespace Player
 {
     [Serializable] public class PlayerAttackDriver
     {
+        [Header("Components")]
+        [SerializeField] private PlayerCombat _combat;
+
+        [Header("Attack Timing")]
         // Start attack, windup for this amount of time
         [Range(0f,5f)] [SerializeField] private float _windUpDuration = 0.5f;
-        
-        // Attack frame
-        
+        // Attack frame <- no timer here
         // End attack, recovery for this amount of time
         [Range(0f,5f)] [SerializeField] private float _recoveryDuration = 0.5f;
         
         private float _timer = 0f;
 
-        [SerializeField] private PlayerCombat _combat;
-
+        [Header("Debug")]
         [SerializeField] private bool _showDebugGUI = false;
 
         private enum AttackState
@@ -112,10 +113,15 @@ namespace Player
             Vector2 targetPos = CameraManager.GetActiveCamera().WorldToScreenPoint(_combat.transform.position);
             targetPos.y += 50;
 
-            StringBuilder guiTextBuilder = new StringBuilder("Recovery: 0.00/0.00 (100%)".Length);
+            StringBuilder guiTextBuilder = new StringBuilder(26);//"Recovery: 0.00/0.00 (100%)".Length
 
             void BuildString()
             {
+                if(_attackState == AttackState.AttackFrame)
+                {
+                    guiTextBuilder.Append(_attackState);
+                    return;
+                }
                 float durationToUse = _attackState == AttackState.Recovery ? _recoveryDuration : _windUpDuration;
                 
                 guiTextBuilder.Append(_attackState);
@@ -129,7 +135,7 @@ namespace Player
             }
             BuildString();
             
-            GUI.Box(new Rect(targetPos.x, Screen.height - targetPos.y, 120, 40),
+            GUI.Box(new Rect(targetPos.x, Screen.height - targetPos.y, 400, 40),
                 guiTextBuilder.ToString());
         }
     }
