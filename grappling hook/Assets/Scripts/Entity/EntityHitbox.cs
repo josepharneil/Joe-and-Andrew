@@ -35,7 +35,7 @@ namespace Entity
         [SerializeField] private EntityController entityController;
 
         [Header("Debug")]
-        [SerializeField] private bool _isImmortal = false; 
+        [SerializeField] private bool _isImmortal = false;
 
         private void Awake()
         {

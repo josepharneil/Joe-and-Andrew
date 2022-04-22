@@ -779,11 +779,12 @@ MonoBehaviour:
   isAttacking: 0
   isInPreDamageAttackPhase: 1
   CurrentPlayerEquipment: {fileID: 11400000, guid: 4042d4a8e76c840fc8b043436b9ebe73, type: 2}
-  _attacksDrivenByAnimations: 1
+  _attacksDrivenByAnimations: 0
   _playerAttackDriver:
-    _windUpDuration: 0.5
-    _recoveryDuration: 0.5
-    _combat: {fileID: 0}
+    _combat: {fileID: 9147847883452652281}
+    _windUpDuration: 0.1
+    _recoveryDuration: 0.2
+    _showDebugGUI: 0
   entityParry: {fileID: 9147847883452652277}
   entityBlock: {fileID: 9147847883452652278}
   entityKnockback: {fileID: 9147847883452652283}
@@ -1094,7 +1095,7 @@ MonoBehaviour:
   hitIFrameDuration: 1
   spriteRenderer: {fileID: 9147847883264161609}
   entityController: {fileID: 447105601662447162}
-  _isImmortal: 1
+  _isImmortal: 0
 --- !u!50 &4928653896513910851
 Rigidbody2D:
   serializedVersion: 4
