@@ -48,6 +48,9 @@ namespace Player
         [Header("Debug")]
         [SerializeField] private bool _showGizmos = false;
         [SerializeField] private bool _showLineRenderer = false;
+
+        [Header("Components")]
+        [SerializeField] private PlayerFlow flow;
         
         private AttackDirection ConvertAnimationEventInfo()
         {
@@ -82,6 +85,7 @@ namespace Player
             
             if (TryHitDetectedObjects(detectedObjects, out Vector2? firstEnemyHitPosition))
             {
+                flow.BeginFlow();
                 ShakeCamera();
 
                 // Knockback player
