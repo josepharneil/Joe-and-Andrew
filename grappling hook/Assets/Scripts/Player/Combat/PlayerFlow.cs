@@ -4,36 +4,59 @@ using UnityEngine;
 
 public class PlayerFlow : MonoBehaviour
 {
-    private bool _inFlow=false;
-    [SerializeField] private int _maxFlowDuration = 100;
-    private int _flowTimer=0;
+    private bool _inFlow = false;
+    [SerializeField] private float _maxFlow = 1f;
+    [SerializeField] private float _flowDecayRate;
+    [SerializeField] private float _flowAddedPerHit;
     [SerializeField] private RectTransform _uiTransform;
+    private float _currentFlow;
 
-    //Called in the PlayerCombatAttackCode
+    //Called in the PlayerCombat Attack() method
     public void BeginFlow()
     {
-        _flowTimer = 0;
+        //check if in flow, if so add the extra flow,otherwise start the flow
+        if (_inFlow)
+        {
+            AddFlow();
+        }
+        _currentFlow = _flowAddedPerHit;
         _inFlow = true;
     }
     void ContinueFlow()
     {
+        //scales the UI bar based on how much flow there is compared to the maximum
         Vector3 scaleVector = _uiTransform.localScale;
-        float xScale = 1-(float)_flowTimer / (float)_maxFlowDuration;
+        float xScale = _currentFlow / _maxFlow;
         scaleVector.x = xScale;
         _uiTransform.localScale = scaleVector;
-        _flowTimer++;
+        //reduce the flow by the decay rate
+        _currentFlow -= _flowDecayRate * Time.deltaTime;
     }
     void EndFlow()
     {
+        _currentFlow = 0f;
         _inFlow = false;
-        _flowTimer = _maxFlowDuration;
+    }
+
+    void AddFlow()
+    {
+        //check if adding the flow would tip it over the maximum
+        //if it would, just go to the max, otherwise add the flow
+        if (_currentFlow + _flowAddedPerHit >= _maxFlow)
+        {
+            _currentFlow = _maxFlow;
+        }
+        else
+        {
+            _currentFlow += _flowAddedPerHit;
+        }
     }
     void Update()
     {
         if (_inFlow)
         {
             ContinueFlow();
-            if (_flowTimer >= _maxFlowDuration)
+            if (_currentFlow<=0f)
             {
                 EndFlow();
             }
