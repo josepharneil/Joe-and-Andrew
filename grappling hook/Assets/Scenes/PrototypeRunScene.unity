@@ -18285,7 +18285,7 @@ Canvas:
   m_GameObject: {fileID: 1184970753}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 1416293040}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -35019,8 +35019,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 527fffa8d757b0b4fb3195be265ac6a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxFlowDuration: 100
+  _playerInputs: {fileID: 2115476027}
+  _maxFlow: 100
+  _flowDecayRate: 10
+  _flowAddedPerHit: 70
   _uiTransform: {fileID: 1212286187}
+  _increaseMoveSpeed: 1
+  _moveSpeedIncrease: 1.5
+  _increaseAttackDamage: 0
+  _incraseAttackSpeed: 0
+  _setIncreasesProportionalToAmountOfFlow: 0
+  _buldFlowBeforeActivating: 0
+--- !u!114 &2115476027 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+  m_PrefabInstance: {fileID: 2115476010}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 408722809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c86546bf22606b243bc43e516930e92c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2116562643
 GameObject:
   m_ObjectHideFlags: 0
