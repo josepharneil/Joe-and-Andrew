@@ -35,7 +35,8 @@ namespace Entity
         [SerializeField] private EntityController entityController;
 
         [Header("Debug")]
-        [SerializeField] private bool _isImmortal = false;
+        // [SerializeField] private bool _isImmortal = false;
+        [SerializeField] private bool _isImmortal_fixed = false; // fixed because old one broke due to serialization problems
 
         private void Awake()
         {
@@ -79,7 +80,7 @@ namespace Entity
         
         public bool Hit(EntityHitData hitData)
         {
-            if (!_isHittable || !_isEnabled || _isImmortal)
+            if (!_isHittable || !_isEnabled || _isImmortal_fixed)
             {
                 return false;
             }
