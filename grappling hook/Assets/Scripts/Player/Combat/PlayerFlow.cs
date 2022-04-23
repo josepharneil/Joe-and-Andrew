@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerFlow : MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class PlayerFlow : MonoBehaviour
     [Header("Components")]
     [SerializeField] private Player.PlayerInputs _playerInputs;
     [SerializeField] private RectTransform _uiTransform;
+    [SerializeField] private RectTransform _bgTransform;
+    [SerializeField] private Image _barImage;
+   
 
     [Header("Stats")]
     [SerializeField] private float _maxFlow = 1f;
@@ -20,6 +24,7 @@ public class PlayerFlow : MonoBehaviour
     [Header("Testing")]
     [SerializeField] private bool _increaseMoveSpeed;
     [SerializeField] private float _moveSpeedIncrease;
+    //TODO implement
     [SerializeField] private bool _increaseAttackDamage;
     [SerializeField] private bool _incraseAttackSpeed;
     [SerializeField] private float _attackSpeedIncrease;
@@ -27,6 +32,28 @@ public class PlayerFlow : MonoBehaviour
     [SerializeField] private bool _setIncreasesProportionalToAmountOfFlow;
     //this one only turns on the effects of flow if the player gets it to a certain level, then keeps it on until it drops
     [SerializeField] private bool _buldFlowBeforeActivating;
+
+    [SerializeField] private bool _bigFlowBar;
+
+    private void Start()
+    {
+        if (_bigFlowBar)
+        {
+            //makes the transform of the bar bigger, as well as increasing the actual flow the player can generate
+            _uiTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 700f);
+            _bgTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 750f);
+            Vector3 scaleVector = _uiTransform.localScale;
+            scaleVector.x = 0f;
+            _uiTransform.localScale = scaleVector;
+            _maxFlow = 1000;
+            _flowDecayRate = 10;
+            _flowAddedPerHit = 50;
+        }
+        if (_buldFlowBeforeActivating)
+        {
+            _barImage.color = Color.gray;
+        }
+    }
 
     //Called in the PlayerCombat Attack() method
     public void BeginFlow()
@@ -41,14 +68,18 @@ public class PlayerFlow : MonoBehaviour
             _currentFlow = _flowAddedPerHit;
             _inFlow = true;
             //checks the conditions and applies the selected testing parameters
-            if (_increaseMoveSpeed)
+            if (!_buldFlowBeforeActivating)
             {
-                _playerInputs.MultiplyMoveSpeed(_moveSpeedIncrease);
+                if (_increaseMoveSpeed)
+                {
+                    _playerInputs.MultiplyMoveSpeed(_moveSpeedIncrease);
+                }
+                if (_incraseAttackSpeed)
+                {
+                    _playerInputs.GetPlayerAttackDriver().AttackSpeed = _playerInputs.GetPlayerAttackDriver().AttackSpeed * _attackSpeedIncrease;
+                }
             }
-            if (_incraseAttackSpeed)
-            {
-                _playerInputs.GetPlayerAttackDriver().AttackSpeed = _playerInputs.GetPlayerAttackDriver().AttackSpeed * _attackSpeedIncrease;
-            }
+
 
         }
     }
@@ -83,6 +114,18 @@ public class PlayerFlow : MonoBehaviour
         if (_currentFlow + _flowAddedPerHit >= _maxFlow)
         {
             _currentFlow = _maxFlow;
+            if (_buldFlowBeforeActivating)
+            {
+                _barImage.color = Color.green;
+                if (_increaseMoveSpeed)
+                {
+                    _playerInputs.MultiplyMoveSpeed(_moveSpeedIncrease);
+                }
+                if (_incraseAttackSpeed)
+                {
+                    _playerInputs.GetPlayerAttackDriver().AttackSpeed = _playerInputs.GetPlayerAttackDriver().AttackSpeed * _attackSpeedIncrease;
+                }
+            }
         }
         else
         {
