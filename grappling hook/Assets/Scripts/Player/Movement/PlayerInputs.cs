@@ -91,6 +91,7 @@ namespace Player
         private bool _hasWallJumped;
         private bool _hasFallenThroughPlatform;
         public FacingDirection FacingDirection { get; private set; }
+        public AttackDirection AttackDirection { get; private set; } 
         private float _lerpCurrent = 0f;
         [SerializeField] private MoveState _moveState = MoveState.Stopped;
         private RollState _rollState;
@@ -108,6 +109,7 @@ namespace Player
         public PlayerEquipment CurrentPlayerEquipment;
         [SerializeField] private bool _attacksDrivenByAnimations = true;
         [SerializeField] private PlayerAttackDriver _playerAttackDriver;
+        [SerializeField] private float _downAttackJumpVelocity = 15f;
 
         [Header("Parrying")]
         [SerializeField] private EntityParry entityParry;
@@ -331,6 +333,11 @@ namespace Player
         private void ActionCancelled(InputAction.CallbackContext obj)
         {
             throw new System.NotImplementedException();
+        }
+
+        public void DownAttackJump()
+        {
+            Velocity.y = _downAttackJumpVelocity;
         }
 
         private void Jump()
@@ -815,17 +822,16 @@ namespace Player
             }
             
             // Disabling this because we don't have up / down right now.
-#if false
-            isAttacking = true;
-            const float upwardsInputThreshold = 0.5f;
-            const float downwardsInputThreshold = -upwardsInputThreshold;
-            if (_moveInput.y > upwardsInputThreshold)
+
+            const float verticalInputThreshold = 0.5f;
+
+            if (_moveInput.y > verticalInputThreshold)
             {
-                animator.SetTrigger(AttackUpTriggerID);
+                AttackDirection = AttackDirection.Up;
             }
-            else if (!_isGrounded && _moveInput.y < downwardsInputThreshold)
+            else if (!_isGrounded && (_moveInput.y < -verticalInputThreshold))
             {
-                animator.SetTrigger(AttackDownTriggerID);
+                AttackDirection = AttackDirection.Down;
             }
             else
             {
@@ -842,32 +848,17 @@ namespace Player
                         spriteRenderer.flipX = false;
                     }
                 }
-                animator.SetTrigger(AttackTriggerID);
+                AttackDirection = FacingDirection == FacingDirection.Left ? AttackDirection.Left : AttackDirection.Right;
             }
-#else
-            if (playerCombatPrototyping.data.canChangeDirectionsDuringAttack)
-            {
-                if (_moveInput.x < 0)
-                {
-                    FacingDirection = FacingDirection.Left;
-                    spriteRenderer.flipX = true;
-                }
-                else if ( _moveInput.x > 0 )
-                {
-                    FacingDirection = FacingDirection.Right;
-                    spriteRenderer.flipX = false;
-                }
-            }
+            
             if (_attacksDrivenByAnimations)
             {
-                //sets the animator to use the currently selected weapon when attacking
                 animator.SetTrigger(AttackTriggerID);
             }
             else
             {
                 _playerAttackDriver.StartAttack();
             }
-#endif
 
         }
 

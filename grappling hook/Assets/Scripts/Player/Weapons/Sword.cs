@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -63,13 +64,22 @@ namespace Player
         private Vector2 GetCirclePosition(Vector2 attackerPosition, AttackDirection attackDirection)
         {
             Vector2 overlapCirclePosition;
-            if (attackDirection == AttackDirection.Left)
+            switch (attackDirection)
             {
-                overlapCirclePosition = attackerPosition + new Vector2(-attackRadius, WeaponHeightOffset);
-            }
-            else
-            {
-                overlapCirclePosition = attackerPosition + new Vector2(attackRadius, WeaponHeightOffset);
+                case AttackDirection.Up:
+                    overlapCirclePosition = attackerPosition + new Vector2(0f, attackRadius);
+                    break;
+                case AttackDirection.Down:
+                    overlapCirclePosition = attackerPosition + new Vector2(0f, -attackRadius);
+                    break;
+                case AttackDirection.Left:
+                    overlapCirclePosition = attackerPosition + new Vector2(-attackRadius, WeaponHeightOffset);
+                    break;
+                case AttackDirection.Right:
+                    overlapCirclePosition = attackerPosition + new Vector2(attackRadius, WeaponHeightOffset);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(attackDirection), attackDirection, null);
             }
             return overlapCirclePosition;
         }

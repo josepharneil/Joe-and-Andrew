@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Entity;
 using JetBrains.Annotations;
+using TMPro;
 using UnityEngine;
 
 namespace Player
@@ -51,25 +52,13 @@ namespace Player
 
         [Header("Components")]
         [SerializeField] private PlayerFlow flow;
-        
-        private AttackDirection ConvertAnimationEventInfo()
-        {
-            // No up or down right now.
-            FacingDirection facingDirection = inputs.FacingDirection;
-            if (facingDirection == FacingDirection.Left)
-            {
-                return AttackDirection.Left;
-            }
-
-            return AttackDirection.Right;
-        }
 
         /// <summary>
         /// Called by Animation Events.
         /// </summary>
         [UsedImplicitly] public void Attack(int attackIndex)//Number is unused right now.
         {
-            AttackDirection attackDirection = ConvertAnimationEventInfo();
+            AttackDirection attackDirection = inputs.AttackDirection;
             
             CurrentPlayerEquipment.CurrentMeleeWeapon.ShowAttackParticle(attackDirection);
             
@@ -82,16 +71,24 @@ namespace Player
             CurrentPlayerEquipment.CurrentMeleeWeapon.DetectAttackableObjects(out List<Collider2D> detectedObjects, contactFilter2D, transform.position, attackDirection);
 
             ShowLineRendererForSeconds(_lineRenderDuration, attackDirection);
-            
-            if (TryHitDetectedObjects(detectedObjects, out Vector2? firstEnemyHitPosition))
+
+            bool objectHit = TryHitDetectedObjects(detectedObjects, out Vector2? firstEnemyHitPosition);
+            if (objectHit)
             {
                 flow.BeginFlow();
                 ShakeCamera();
 
                 // Knockback player
-                if (_playerKnockback && playerCombatPrototyping.data.doesPlayerGetKnockedBackByOwnAttack && firstEnemyHitPosition.HasValue && CurrentPlayerEquipment.CurrentMeleeWeapon.KnockbackAmountToPlayer != 0f)
+                if (attackDirection == AttackDirection.Down)
                 {
-                    _playerKnockback.StartKnockBack(firstEnemyHitPosition.Value, CurrentPlayerEquipment.CurrentMeleeWeapon.KnockbackAmountToPlayer);
+                    inputs.DownAttackJump();
+                }
+                else
+                {
+                    if (_playerKnockback && playerCombatPrototyping.data.doesPlayerGetKnockedBackByOwnAttack && firstEnemyHitPosition.HasValue && CurrentPlayerEquipment.CurrentMeleeWeapon.KnockbackAmountToPlayer != 0f)
+                    {
+                        _playerKnockback.StartKnockBack(firstEnemyHitPosition.Value, CurrentPlayerEquipment.CurrentMeleeWeapon.KnockbackAmountToPlayer);
+                    }
                 }
 
                 // Instantiate a hit particle here if we want only once per attack.
@@ -136,7 +133,7 @@ namespace Player
                 // If an enemy is hit and we haven't already set the knockback position.
                 if (enemyHit)
                 {
-                    var hitboxTransform = entityHitbox.transform;
+                    Transform hitboxTransform = entityHitbox.transform;
                     enemyKnockbackPosition ??= hitboxTransform.position;
 
                     // Instantiate a hit particle here if we want particles for EACH hit enemy
@@ -208,7 +205,7 @@ namespace Player
             if (!_showGizmos) return;
             if (!CurrentPlayerEquipment) return;
             if (!CurrentPlayerEquipment.CurrentMeleeWeapon) return;
-            CurrentPlayerEquipment.CurrentMeleeWeapon.DrawGizmos(transform.position, ConvertAnimationEventInfo());
+            CurrentPlayerEquipment.CurrentMeleeWeapon.DrawGizmos(transform.position, inputs.AttackDirection);
         }
 #endif
     }
