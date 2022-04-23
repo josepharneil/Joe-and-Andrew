@@ -356,13 +356,37 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0
   m_Vertices:
-  - position: {x: 0, y: 0, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
+  - position: {x: 0.9985302, y: 0.9985302, z: 0}
+    color: {r: 0.70710677, g: 0.70710677, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  m_Triangles: 0000
+  - position: {x: 0.9985302, y: 0.9985302, z: 0}
+    color: {r: 0, g: 0, b: 0, a: 1}
+    uv: {x: 0, y: 0}
+  - position: {x: -0.9985302, y: 0.9985302, z: 0}
+    color: {r: -0.70710677, g: 0.70710677, b: 0, a: 0}
+    uv: {x: 0, y: 0}
+  - position: {x: -0.9985302, y: 0.9985302, z: 0}
+    color: {r: 0, g: 0, b: 0, a: 1}
+    uv: {x: 0, y: 0}
+  - position: {x: -0.99853003, y: -0.9985304, z: 0}
+    color: {r: -0.70710665, g: -0.7071069, b: 0, a: 0}
+    uv: {x: 0, y: 0}
+  - position: {x: -0.99853003, y: -0.9985304, z: 0}
+    color: {r: 0, g: 0, b: 0, a: 1}
+    uv: {x: 0, y: 0}
+  - position: {x: 0.99853003, y: -0.9985304, z: 0}
+    color: {r: 0.70710665, g: -0.7071069, b: 0, a: 0}
+    uv: {x: 0, y: 0}
+  - position: {x: 0.99853003, y: -0.9985304, z: 0}
+    color: {r: 0, g: 0, b: 0, a: 1}
+    uv: {x: 0, y: 0}
+  - position: {x: 0, y: 0, z: 0}
+    color: {r: 0, g: 0, b: 0, a: 1}
+    uv: {x: 0, y: 0}
+  m_Triangles: 030001000800020000000100030002000100050003000800040002000300050004000300070005000800060004000500070006000500010007000800000006000700010000000700
   m_LocalBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
+    m_Center: {x: 0, y: -0.00000011920929, z: 0}
+    m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 2
@@ -4370,6 +4394,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GumbaEnemy (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 6696026843032660181, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6696026843032660182, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
       propertyPath: m_RootOrder
       value: 15
@@ -4551,6 +4579,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: KoopaEnemy (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 885005564573824740, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 885005564573824743, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -4623,6 +4655,10 @@ PrefabInstance:
     - target: {fileID: 6696026843032660181, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
       propertyPath: m_Name
       value: GumbaEnemy (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6696026843032660181, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6696026843032660182, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
       propertyPath: m_RootOrder
@@ -7259,6 +7295,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 885005564695595217, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
+      propertyPath: _isImmortal
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 885005564712840848, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.9
@@ -7284,6 +7324,10 @@ PrefabInstance:
     - target: {fileID: 886963155510315076, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
       propertyPath: m_Name
       value: Piranha Plant Enemy (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 886963155510315076, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 886963155510315079, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
       propertyPath: m_RootOrder
@@ -7366,6 +7410,10 @@ PrefabInstance:
     - target: {fileID: 885005564573824740, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
       propertyPath: m_Name
       value: KoopaEnemy (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 885005564573824740, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 885005564573824743, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
       propertyPath: m_RootOrder
@@ -11522,6 +11570,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 1.6
       objectReference: {fileID: 0}
+    - target: {fileID: 6696026842710103776, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
+      propertyPath: _isImmortal
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6696026843032660181, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
       propertyPath: m_Name
       value: GumbaEnemy (7)
@@ -11824,6 +11876,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1734297158}
     m_Modifications:
+    - target: {fileID: 8691223564396874258, guid: fac12d82708d34124a84dc0331d9b004, type: 3}
+      propertyPath: _isImmortal
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8691223564396874266, guid: fac12d82708d34124a84dc0331d9b004, type: 3}
       propertyPath: _chaseTarget
       value: 
@@ -17911,6 +17967,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: -0.45
       objectReference: {fileID: 0}
+    - target: {fileID: 1159990852007583922, guid: a8f7aa8eb019e4aa98458994e2c791a4, type: 3}
+      propertyPath: _isImmortal
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1159990852397506180, guid: a8f7aa8eb019e4aa98458994e2c791a4, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -18040,6 +18100,10 @@ PrefabInstance:
     - target: {fileID: 885005564573824740, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
       propertyPath: m_Name
       value: KoopaEnemy (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 885005564573824740, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 885005564573824743, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
       propertyPath: m_RootOrder
@@ -24125,6 +24189,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Piranha Plant Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 886963155510315076, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 886963155510315079, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
       propertyPath: m_RootOrder
       value: 8
@@ -24774,6 +24842,10 @@ PrefabInstance:
     - target: {fileID: 6696026843032660181, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
       propertyPath: m_Name
       value: GumbaEnemy (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6696026843032660181, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6696026843032660182, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
       propertyPath: m_RootOrder
@@ -27044,6 +27116,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: KoopaEnemy (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 885005564573824740, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 885005564573824743, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
       propertyPath: m_RootOrder
       value: 12
@@ -27168,13 +27244,37 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0
   m_Vertices:
-  - position: {x: 0, y: 0, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
+  - position: {x: 0.9985302, y: 0.9985302, z: 0}
+    color: {r: 0.70710677, g: 0.70710677, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  m_Triangles: 0000
+  - position: {x: 0.9985302, y: 0.9985302, z: 0}
+    color: {r: 0, g: 0, b: 0, a: 1}
+    uv: {x: 0, y: 0}
+  - position: {x: -0.9985302, y: 0.9985302, z: 0}
+    color: {r: -0.70710677, g: 0.70710677, b: 0, a: 0}
+    uv: {x: 0, y: 0}
+  - position: {x: -0.9985302, y: 0.9985302, z: 0}
+    color: {r: 0, g: 0, b: 0, a: 1}
+    uv: {x: 0, y: 0}
+  - position: {x: -0.99853003, y: -0.9985304, z: 0}
+    color: {r: -0.70710665, g: -0.7071069, b: 0, a: 0}
+    uv: {x: 0, y: 0}
+  - position: {x: -0.99853003, y: -0.9985304, z: 0}
+    color: {r: 0, g: 0, b: 0, a: 1}
+    uv: {x: 0, y: 0}
+  - position: {x: 0.99853003, y: -0.9985304, z: 0}
+    color: {r: 0.70710665, g: -0.7071069, b: 0, a: 0}
+    uv: {x: 0, y: 0}
+  - position: {x: 0.99853003, y: -0.9985304, z: 0}
+    color: {r: 0, g: 0, b: 0, a: 1}
+    uv: {x: 0, y: 0}
+  - position: {x: 0, y: 0, z: 0}
+    color: {r: 0, g: 0, b: 0, a: 1}
+    uv: {x: 0, y: 0}
+  m_Triangles: 030001000800020000000100030002000100050003000800040002000300050004000300070005000800060004000500070006000500010007000800000006000700010000000700
   m_LocalBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
+    m_Center: {x: 0, y: -0.00000011920929, z: 0}
+    m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 2
@@ -27338,6 +27438,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: KoopaEnemy (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 885005564573824740, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 885005564573824743, guid: 1f3d5c761bfdf402f888b2fbbfb860ab, type: 3}
       propertyPath: m_RootOrder
       value: 17
@@ -27494,6 +27598,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Piranha Plant Enemy (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 886963155510315076, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 886963155510315079, guid: adf53a391d6de4df98aee056ee19b0ee, type: 3}
       propertyPath: m_RootOrder
       value: 10
@@ -27637,6 +27745,10 @@ PrefabInstance:
     - target: {fileID: 6696026842625241249, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.58
+      objectReference: {fileID: 0}
+    - target: {fileID: 6696026842710103776, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
+      propertyPath: _isImmortal
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6696026843032660181, guid: abb388d406faf4bd8a456483384d7e4c, type: 3}
       propertyPath: m_Name
@@ -35293,6 +35405,10 @@ PrefabInstance:
     - target: {fileID: 1159990851989030643, guid: a8f7aa8eb019e4aa98458994e2c791a4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 1159990852007583922, guid: a8f7aa8eb019e4aa98458994e2c791a4, type: 3}
+      propertyPath: _isImmortal
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1159990852397506180, guid: a8f7aa8eb019e4aa98458994e2c791a4, type: 3}
       propertyPath: m_RootOrder
