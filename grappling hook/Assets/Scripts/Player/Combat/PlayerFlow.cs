@@ -7,11 +7,14 @@ public class PlayerFlow : MonoBehaviour
     private bool _inFlow = false;
     //having this script refernce the player inputs, maybe there is a cleaner way to do it in case 
     //there are other modifiers affecting move or attack speed
+    [Header("Components")]
     [SerializeField] private Player.PlayerInputs _playerInputs;
+    [SerializeField] private RectTransform _uiTransform;
+
+    [Header("Stats")]
     [SerializeField] private float _maxFlow = 1f;
     [SerializeField] private float _flowDecayRate;
     [SerializeField] private float _flowAddedPerHit;
-    [SerializeField] private RectTransform _uiTransform;
     private float _currentFlow;
 
     [Header("Testing")]
@@ -19,6 +22,7 @@ public class PlayerFlow : MonoBehaviour
     [SerializeField] private float _moveSpeedIncrease;
     [SerializeField] private bool _increaseAttackDamage;
     [SerializeField] private bool _incraseAttackSpeed;
+    [SerializeField] private float _attackSpeedIncrease;
     //this is the increase as proportional to the amount of flow the player has compaerd to some arbitrary maximum
     [SerializeField] private bool _setIncreasesProportionalToAmountOfFlow;
     //this one only turns on the effects of flow if the player gets it to a certain level, then keeps it on until it drops
@@ -41,6 +45,10 @@ public class PlayerFlow : MonoBehaviour
             {
                 _playerInputs.MultiplyMoveSpeed(_moveSpeedIncrease);
             }
+            if (_incraseAttackSpeed)
+            {
+                _playerInputs.GetPlayerAttackDriver().AttackSpeed = _playerInputs.GetPlayerAttackDriver().AttackSpeed * _attackSpeedIncrease;
+            }
 
         }
     }
@@ -61,6 +69,10 @@ public class PlayerFlow : MonoBehaviour
         if (_increaseMoveSpeed)
         {
             _playerInputs.ResetMoveSpeed();
+        }
+        if (_incraseAttackSpeed)
+        {
+            _playerInputs.GetPlayerAttackDriver().AttackSpeed = 1f;
         }
     }
 

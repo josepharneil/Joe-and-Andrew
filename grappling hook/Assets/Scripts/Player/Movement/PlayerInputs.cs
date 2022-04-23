@@ -972,6 +972,11 @@ namespace Player
             }
         }
 
+        public PlayerAttackDriver GetPlayerAttackDriver()
+        {
+            return _playerAttackDriver;
+        }
+
         #endregion
     }
 }
