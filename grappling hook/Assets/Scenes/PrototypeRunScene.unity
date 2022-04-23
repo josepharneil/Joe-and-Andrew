@@ -35037,6 +35037,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8349656700711951363, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8349656700711951363, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9147847883264161609, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -35065,6 +35073,14 @@ PrefabInstance:
       propertyPath: cinemachineShake
       value: 
       objectReference: {fileID: 1446264448}
+    - target: {fileID: 9147847883452652285, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652285, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: m_Offset.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652287, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: m_RootOrder
       value: 1
