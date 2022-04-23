@@ -15,6 +15,8 @@ namespace Player
         // Attack frame <- no timer here
         // End attack, recovery for this amount of time
         [Range(0f,5f)] [SerializeField] private float _recoveryDuration = 0.5f;
+
+        public float AttackSpeed = 1f;
         
         private float _timer = 0f;
 
@@ -58,10 +60,20 @@ namespace Player
             }
         }
 
+        private float GetWindUpDuration()
+        {
+            return _windUpDuration / AttackSpeed;
+        }
+
+        private float GetRecoveryDuration()
+        {
+            return _recoveryDuration / AttackSpeed;
+        }
+
         private void WindUpAttack()
         {
             _timer += Time.deltaTime;
-            if (_timer < _windUpDuration) return;
+            if (_timer < GetWindUpDuration()) return;
             
             _timer = 0f;
             _attackState = AttackState.AttackFrame;
@@ -77,32 +89,12 @@ namespace Player
         private void Recovery()
         {
             _timer += Time.deltaTime;
-            if (_timer < _recoveryDuration) return;
+            if (_timer < GetRecoveryDuration()) return;
             
             _timer = 0f;
             _attackState = AttackState.NotAttacking;
         }
 
-        private float? GetCurrentDuration()
-        {
-            switch (_attackState)
-            {
-                case AttackState.NotAttacking:
-                    break;
-                case AttackState.WindUp:
-                    break;
-                case AttackState.AttackFrame:
-                    break;
-                case AttackState.Recovery:
-                    break;
-                default:
-                    Debug.LogError("Unknown attack state in PlayerAttackDriver", _combat);
-                    break;
-            }
-
-            return 0f;
-        }
-        
         public void ShowDebugGUI()
         {
             if (!_showDebugGUI) return;
@@ -122,7 +114,7 @@ namespace Player
                     guiTextBuilder.Append(_attackState);
                     return;
                 }
-                float durationToUse = _attackState == AttackState.Recovery ? _recoveryDuration : _windUpDuration;
+                float durationToUse = _attackState == AttackState.Recovery ? GetRecoveryDuration() : GetWindUpDuration();
                 
                 guiTextBuilder.Append(_attackState);
                 guiTextBuilder.Append(": ");
