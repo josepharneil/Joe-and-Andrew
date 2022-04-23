@@ -31,7 +31,7 @@ namespace Player
         [SerializeField] private bool _debugRollFall = false;
         private float _apexPoint; //This becomes 1 at the end of the jump
         private float _fallSpeed;
-        [SerializeField] private int _maxNumAerialJumps = 1; 
+        [SerializeField] private int _maxNumAerialJumps = 1;
         private int _currentNumAerialJumps = 0;
 
         [Header("Wall Jump / Sliding Stats")]
@@ -46,7 +46,7 @@ namespace Player
         private int _currentNumberOfWallJumps = 0;
         private bool _isWallSliding = false;
         [SerializeField] private float _wallSideGravityMultiplier;
-        
+
         [Header("Ground Move Stats")]
         [SerializeField] private float moveSpeed = 10f;
         [SerializeField] private AnimationCurve accelerationCurve;
@@ -58,6 +58,10 @@ namespace Player
         [SerializeField] private AnimationCurve changeDirectionCurve;
         [SerializeField] [Range(0f, 1f)] private float changeDirectionRate;
         [SerializeField] private float changeDirectionTolerance;
+
+        //AK 23/4/21 I've set this up to be used in cases where the movespeed needs to be changed, but we want to change it back to the default 
+        //currently this holds the movespeed set above, which is called in the start method
+        private float baseMoveSpeed;
 
         [Header("Air Move Stats")]
         [SerializeField] [Range(0f, 1f)] private float airAccelerationRate;
@@ -161,6 +165,7 @@ namespace Player
             
             _moveState = MoveState.Stopped;
             _rollState = RollState.NotRolling;
+            baseMoveSpeed = moveSpeed;
         }
 
         // https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnValidate.html
@@ -248,6 +253,16 @@ namespace Player
             }
 
             CheckIfAttackIsCancellable();
+        }
+        //AK 23/4 added for use when changing the the speeds from flow
+        public void ResetMoveSpeed()
+        {
+            moveSpeed = baseMoveSpeed;
+        }
+
+        public void MultiplyMoveSpeed(float increase)
+        {
+            moveSpeed = moveSpeed * increase;
         }
 
         #region Gravity and Fall calculations

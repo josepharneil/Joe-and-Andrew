@@ -5,11 +5,24 @@ using UnityEngine;
 public class PlayerFlow : MonoBehaviour
 {
     private bool _inFlow = false;
+    //having this script refernce the player inputs, maybe there is a cleaner way to do it in case 
+    //there are other modifiers affecting move or attack speed
+    [SerializeField] private Player.PlayerInputs _playerInputs;
     [SerializeField] private float _maxFlow = 1f;
     [SerializeField] private float _flowDecayRate;
     [SerializeField] private float _flowAddedPerHit;
     [SerializeField] private RectTransform _uiTransform;
     private float _currentFlow;
+
+    [Header("Testing")]
+    [SerializeField] private bool _increaseMoveSpeed;
+    [SerializeField] private float _moveSpeedIncrease;
+    [SerializeField] private bool _increaseAttackDamage;
+    [SerializeField] private bool _incraseAttackSpeed;
+    //this is the increase as proportional to the amount of flow the player has compaerd to some arbitrary maximum
+    [SerializeField] private bool _setIncreasesProportionalToAmountOfFlow;
+    //this one only turns on the effects of flow if the player gets it to a certain level, then keeps it on until it drops
+    [SerializeField] private bool _buldFlowBeforeActivating;
 
     //Called in the PlayerCombat Attack() method
     public void BeginFlow()
@@ -19,8 +32,17 @@ public class PlayerFlow : MonoBehaviour
         {
             AddFlow();
         }
-        _currentFlow = _flowAddedPerHit;
-        _inFlow = true;
+        else
+        {
+            _currentFlow = _flowAddedPerHit;
+            _inFlow = true;
+            //checks the conditions and applies the selected testing parameters
+            if (_increaseMoveSpeed)
+            {
+                _playerInputs.MultiplyMoveSpeed(_moveSpeedIncrease);
+            }
+
+        }
     }
     void ContinueFlow()
     {
@@ -36,6 +58,10 @@ public class PlayerFlow : MonoBehaviour
     {
         _currentFlow = 0f;
         _inFlow = false;
+        if (_increaseMoveSpeed)
+        {
+            _playerInputs.ResetMoveSpeed();
+        }
     }
 
     void AddFlow()
@@ -62,4 +88,5 @@ public class PlayerFlow : MonoBehaviour
             }
         }
     }
+
 }
