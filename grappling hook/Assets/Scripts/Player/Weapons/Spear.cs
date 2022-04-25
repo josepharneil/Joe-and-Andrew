@@ -8,15 +8,10 @@ namespace Player
     public class Spear : MeleeWeapon
     {
         [Header("Attack Size")]
-        [SerializeField] private float _attackLength = 2f;
-        [SerializeField] private float _attackWidth = 0.5f;
-        private ParticleSystem _particleOnHit;
+        [SerializeField] private float _attackLength = 3f;
+        [SerializeField] private float _attackWidth = 1.2f;
 
         #region UnityEvents
-        private void OnEnable()
-        {
-            ParticleOnHit.TryGetComponent(out _particleOnHit);
-        }
         #endregion
         
         #region Particles
@@ -24,111 +19,56 @@ namespace Player
 
         public override void ForceHideAttackParticles(){}
 
-        public override void ShowAttackHitParticle(Transform hitEntityTransform)
-        {
-            if (_particleOnHit)
-            {
-                ParticleSystem newParticleSystem = Instantiate(_particleOnHit, hitEntityTransform.position, Quaternion.identity, hitEntityTransform);
-                newParticleSystem.Play();
-            }
-        }
+        // public override void ShowAttackHitParticle(Transform hitEntityTransform){}
         #endregion
 
         public override void DetectAttackableObjects(out List<Collider2D> detectedObjects, ContactFilter2D contactFilter2D, Vector2 attackerPosition,
             AttackDirection attackDirection)
         {
             detectedObjects = new List<Collider2D>();
-
-            float boxHeight;
-            float boxWidth;
-            switch (attackDirection)
-            {
-                case AttackDirection.Up:
-                    boxWidth = _attackWidth;
-                    boxHeight = _attackLength;
-                    break;
-                case AttackDirection.Down:
-                    boxWidth = _attackWidth;
-                    boxHeight = _attackLength;
-                    break;
-                case AttackDirection.Left:
-                    boxWidth = _attackLength;
-                    boxHeight = _attackWidth;
-                    break;
-                case AttackDirection.Right:
-                    boxWidth = _attackLength;
-                    boxHeight = _attackWidth;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(attackDirection), attackDirection, null);
-            }
-            
-            Vector2 overlapBoxCentre = GetRectCentre(attackerPosition, attackDirection);
-            Physics2D.OverlapBox(overlapBoxCentre, new Vector2(boxWidth, boxHeight), 0f, contactFilter2D, detectedObjects);
+            GetRectInfo(attackDirection, out Vector2 centre, out float rectWidth, out float rectHeight);
+            Physics2D.OverlapBox(attackerPosition + centre, new Vector2(rectWidth, rectHeight), 0f, contactFilter2D, detectedObjects);
         }
 
-        public override void DrawLineRenderer(LineRenderer lineRenderer, AttackDirection attackDirection)
+        private void GetRectInfo(AttackDirection attackDirection, out Vector2 centre, out float rectWidth, out float rectHeight)
         {
-            float rectHeight;
-            float rectWidth;
-            Vector3 origin;
             switch (attackDirection)
             {
                 case AttackDirection.Up:
-                    rectHeight = -_attackLength;
+                    rectHeight = _attackLength;
                     rectWidth = _attackWidth;
-                    origin = new Vector3(0, 0f, 0);
+                    centre = new Vector2(0f, VerticalAttackWeaponHeightOffset + _attackLength / 2f);
                     break;
                 case AttackDirection.Down:
                     rectHeight = _attackLength;
                     rectWidth = _attackWidth;
-                    origin = new Vector3(0, 0f, 0);
+                    centre = new Vector2(0f, VerticalAttackWeaponHeightOffset - _attackLength / 2f);
                     break;
                 case AttackDirection.Left:
+                    rectWidth = _attackLength;
                     rectHeight = _attackWidth;
-                    rectWidth = -_attackLength;
-                    origin = new Vector3(0, WeaponHeightOffset, 0);
+                    centre = new Vector2(-_attackLength / 2f, VerticalAttackWeaponHeightOffset);
                     break;
                 case AttackDirection.Right:
-                    rectHeight = _attackWidth;
                     rectWidth = _attackLength;
-                    origin = new Vector3(0, WeaponHeightOffset, 0);
+                    rectHeight = _attackWidth;
+                    centre = new Vector2(_attackLength / 2f, VerticalAttackWeaponHeightOffset);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(attackDirection), attackDirection, null);
             }
+        }
 
-            lineRenderer.DrawRectangle(rectWidth, rectHeight, origin);
+        public override void DrawLineRenderer(LineRenderer lineRenderer, AttackDirection attackDirection)
+        {
+            GetRectInfo(attackDirection, out Vector2 centre, out float rectWidth, out float rectHeight);
+            lineRenderer.DrawRectangle(rectWidth, rectHeight, (Vector3)centre);
         }
 
         public override void DrawGizmos(Vector2 attackerPosition, AttackDirection attackDirection)
         {
-            Vector2 overlapBoxCentre = GetRectCentre(attackerPosition, attackDirection);
-            Gizmos.DrawWireCube(overlapBoxCentre, new Vector2(_attackLength, _attackWidth));
-        }
-        
-        private Vector2 GetRectCentre(Vector2 attackerPosition, AttackDirection attackDirection)
-        {
-            Vector2 overlapRectPosition;
-
-            switch (attackDirection)
-            {
-                case AttackDirection.Up:
-                    overlapRectPosition = attackerPosition + new Vector2(0f, _attackWidth / 2f);
-                    break;
-                case AttackDirection.Down:
-                    overlapRectPosition = attackerPosition + new Vector2(0f, -_attackWidth / 2f);
-                    break;
-                case AttackDirection.Left:
-                    overlapRectPosition = attackerPosition + new Vector2(-_attackLength / 2f, WeaponHeightOffset);
-                    break;
-                case AttackDirection.Right:
-                    overlapRectPosition = attackerPosition + new Vector2(_attackLength / 2f, WeaponHeightOffset);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(attackDirection), attackDirection, null);
-            }
-            return overlapRectPosition;
+            GetRectInfo(attackDirection, out Vector2 centre, out float rectWidth, out float rectHeight);
+            Gizmos.DrawWireCube(attackerPosition + centre, new Vector2(rectWidth, rectHeight));
         }
     }
 }

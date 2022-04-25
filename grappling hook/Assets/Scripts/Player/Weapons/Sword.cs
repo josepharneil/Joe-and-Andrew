@@ -10,18 +10,10 @@ namespace Player
         [Header("Attack Size")]
         [SerializeField] private float attackRadius = 2f;
 
-        private ParticleSystem _particleOnHit;
-        
         #region UnityEvents
-        private void OnEnable()
-        {
-            ParticleOnHit.TryGetComponent(out _particleOnHit);
-        }
-        
         public override void DrawGizmos(Vector2 attackerPosition, AttackDirection attackDirection)
         {
-            Vector3 position = GetCirclePosition(attackerPosition, attackDirection);
-            Gizmos.DrawWireSphere(position, attackRadius);
+            Gizmos.DrawWireSphere(attackerPosition + GetCircleCentre(attackDirection), attackRadius);
         }
         #endregion
 
@@ -31,14 +23,7 @@ namespace Player
 
         public override void ShowAttackParticle(AttackDirection attackDirection){}
 
-        public override void ShowAttackHitParticle(Transform hitEntityTransform)
-        {
-            if (_particleOnHit)
-            {
-                ParticleSystem newParticleSystem = Instantiate(_particleOnHit, hitEntityTransform.position, Quaternion.identity, hitEntityTransform);
-                newParticleSystem.Play();
-            }
-        }
+        // public override void ShowAttackHitParticle(Transform hitEntityTransform){}
         
         #endregion
         
@@ -47,41 +32,36 @@ namespace Player
         {
             detectedObjects = new List<Collider2D>();
             
-            Vector2 overlapCirclePosition = GetCirclePosition(attackerPosition, attackDirection);
-            Physics2D.OverlapCircle(overlapCirclePosition, attackRadius, contactFilter2D, detectedObjects);
+            Vector2 overlapCirclePosition = GetCircleCentre(attackDirection);
+            Physics2D.OverlapCircle(overlapCirclePosition + attackerPosition, attackRadius, contactFilter2D, detectedObjects);
         }
 
         public override void DrawLineRenderer(LineRenderer lineRenderer, AttackDirection attackDirection)
         {
-            Vector3 circleOrigin = new Vector2(attackRadius, WeaponHeightOffset);
-            if (attackDirection == AttackDirection.Left)
-            {
-                circleOrigin = new Vector3(-attackRadius, WeaponHeightOffset);
-            }
-            lineRenderer.DrawCircle(attackRadius, circleOrigin);
+            lineRenderer.DrawCircle(attackRadius, GetCircleCentre(attackDirection));
         }
 
-        private Vector2 GetCirclePosition(Vector2 attackerPosition, AttackDirection attackDirection)
+        private Vector2 GetCircleCentre(AttackDirection attackDirection)
         {
-            Vector2 overlapCirclePosition;
+            Vector2 circleCentre;
             switch (attackDirection)
             {
                 case AttackDirection.Up:
-                    overlapCirclePosition = attackerPosition + new Vector2(0f, attackRadius);
+                    circleCentre = new Vector2(0f, attackRadius + VerticalAttackWeaponHeightOffset);
                     break;
                 case AttackDirection.Down:
-                    overlapCirclePosition = attackerPosition + new Vector2(0f, -attackRadius);
+                    circleCentre = new Vector2(0f, -attackRadius + VerticalAttackWeaponHeightOffset);
                     break;
                 case AttackDirection.Left:
-                    overlapCirclePosition = attackerPosition + new Vector2(-attackRadius, WeaponHeightOffset);
+                    circleCentre = new Vector2(-attackRadius, HorizontalAttackWeaponHeightOffset);
                     break;
                 case AttackDirection.Right:
-                    overlapCirclePosition = attackerPosition + new Vector2(attackRadius, WeaponHeightOffset);
+                    circleCentre = new Vector2(attackRadius, HorizontalAttackWeaponHeightOffset);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(attackDirection), attackDirection, null);
             }
-            return overlapCirclePosition;
+            return circleCentre;
         }
     }
 }

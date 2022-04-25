@@ -107,8 +107,15 @@ public static class Extensions
     #endregion
 
     #region LineRenderer
-
-    public static void DrawCircle(this LineRenderer lineRenderer, float radius, Vector3 origin = default, int steps = 100)
+    
+    /// <summary>
+    /// Draws a circle from the centre.
+    /// </summary>
+    /// <param name="lineRenderer"></param>
+    /// <param name="radius"></param>
+    /// <param name="centre"></param>
+    /// <param name="steps"></param>
+    public static void DrawCircle(this LineRenderer lineRenderer, float radius, Vector3 centre = default, int steps = 100)
     {
         lineRenderer.loop = true;
         lineRenderer.positionCount = steps;
@@ -124,20 +131,30 @@ public static class Extensions
             float x = xScaled * radius;
             float y = yScaled * radius;
 
-            Vector3 currentPosition = new Vector3(x, y, 0) + origin;
+            Vector3 currentPosition = new Vector3(x, y, 0) + centre;
             lineRenderer.SetPosition(currentStep, currentPosition);
         }
     }
 
-    public static void DrawRectangle(this LineRenderer lineRenderer, float width, float height, Vector3 origin = default)
+    /// <summary>
+    /// Draws a rectangle from the centre.
+    /// </summary>
+    /// <param name="lineRenderer"></param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="centre"></param>
+    public static void DrawRectangle(this LineRenderer lineRenderer, float width, float height, Vector3 centre = default)
     {
+        // Line renderer actually draws starting from each corner, so offset the centre to be the top left corner.  
+        centre.x -= width / 2f;
+        centre.y -= height / 2f;
+
         lineRenderer.loop = true;
         lineRenderer.positionCount = 4;
-        float halfHeight = (height / 2f);
-        lineRenderer.SetPosition(0, new Vector3(0f, halfHeight, 0f) + origin);
-        lineRenderer.SetPosition(1, new Vector3(0f, -halfHeight, 0f) + origin);
-        lineRenderer.SetPosition(2, new Vector3(width, -halfHeight, 0f) + origin);
-        lineRenderer.SetPosition(3, new Vector3(width, halfHeight, 0f) + origin);  
+        lineRenderer.SetPosition(0, new Vector3(0f, 0f, 0f) + centre);
+        lineRenderer.SetPosition(1, new Vector3(0f, height, 0f) + centre);
+        lineRenderer.SetPosition(2, new Vector3(width, height, 0f) + centre);
+        lineRenderer.SetPosition(3, new Vector3(width, 0f, 0f) + centre);
     }
 
     #endregion

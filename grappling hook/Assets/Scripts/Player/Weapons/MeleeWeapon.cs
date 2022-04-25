@@ -40,7 +40,8 @@ namespace Player
         /// Height offset of the weapon.
         /// </summary>
         [Header("Weapon Position")]
-        public float WeaponHeightOffset = 0f;
+        public float HorizontalAttackWeaponHeightOffset = 0f;
+        public float VerticalAttackWeaponHeightOffset = 0f;
         
         /// <summary>
         /// Amount that this weapon knocks back the player.
@@ -54,7 +55,7 @@ namespace Player
         public float KnockbackAmountToTarget = 15f;
 
         [Header("Particles")] 
-        [SerializeField] protected GameObject ParticleOnHit;
+        [SerializeField] protected ParticleSystem ParticleOnHit;
 
         /// <summary>
         /// Draws gizmos.
@@ -76,7 +77,13 @@ namespace Player
         /// <summary>
         /// Shows particles of an attack *hit* on an enemy.
         /// </summary>
-        public abstract void ShowAttackHitParticle(Transform hitEntityTransform);
+        public virtual void ShowAttackHitParticle(Transform hitEntityTransform)
+        {
+            if (!ParticleOnHit) return;
+            
+            ParticleSystem newParticleSystem = Instantiate(ParticleOnHit, hitEntityTransform.position, Quaternion.identity, hitEntityTransform);
+            newParticleSystem.Play();
+        }
         #endregion
 
         /// <summary>
