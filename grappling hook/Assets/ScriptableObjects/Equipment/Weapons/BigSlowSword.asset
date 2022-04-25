@@ -18,5 +18,5 @@ MonoBehaviour:
   WeaponHeightOffset: 0
   KnockbackAmountToPlayer: 13
   KnockbackAmountToTarget: 25
-  ParticleOnHit: {fileID: 7595672073680235062, guid: e44bd1923f9184ef69f14c51d7cd1a52, type: 3}
+  ParticleOnHit: {fileID: -6166805564377841904, guid: e44bd1923f9184ef69f14c51d7cd1a52, type: 3}
   attackRadius: 2.5

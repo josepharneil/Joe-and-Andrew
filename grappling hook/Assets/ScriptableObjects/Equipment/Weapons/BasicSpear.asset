@@ -15,9 +15,10 @@ MonoBehaviour:
   AnimationWeaponStateName: 1
   WeaponDamage: 5
   WeaponSpeed: 1
-  WeaponHeightOffset: 0.2
+  HorizontalAttackWeaponHeightOffset: 0
+  VerticalAttackWeaponHeightOffset: 0
   KnockbackAmountToPlayer: 4
   KnockbackAmountToTarget: 5
-  ParticleOnHit: {fileID: 7595672073680235062, guid: e44bd1923f9184ef69f14c51d7cd1a52, type: 3}
+  ParticleOnHit: {fileID: -6166805564377841904, guid: e44bd1923f9184ef69f14c51d7cd1a52, type: 3}
   _attackLength: 3
   _attackWidth: 1.2
