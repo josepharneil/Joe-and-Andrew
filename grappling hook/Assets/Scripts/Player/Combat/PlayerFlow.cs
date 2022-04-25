@@ -35,12 +35,16 @@ public class PlayerFlow : MonoBehaviour
     
     [Header("Flow type")]
     //this is the increase as proportional to the amount of flow the player has compaerd to some arbitrary maximum
+    //TODO implement
     [SerializeField] private bool _setIncreasesProportionalToAmountOfFlow;
     //this one only turns on the effects of flow if the player gets it to a certain level, then keeps it on until it drops
     [SerializeField] private bool _buildFlowBeforeActivating;
+    private bool _hasHitMaximumFlow = false;
 
     [Header("Big Bar")]
     [SerializeField] private bool _bigFlowBar;
+    [SerializeField] private bool _tieredFlow;
+    //TODO implement
 
     private void OnValidate()
     {
@@ -82,6 +86,10 @@ public class PlayerFlow : MonoBehaviour
             // checks the conditions and applies the selected testing parameters
             if (!_buildFlowBeforeActivating)
             {
+                if (_setIncreasesProportionalToAmountOfFlow)
+                {
+                    return;
+                }
                 if (_increaseMoveSpeed)
                 {
                     _playerInputs.MultiplyMoveSpeed(_moveSpeedIncrease);
@@ -97,11 +105,25 @@ public class PlayerFlow : MonoBehaviour
     
     private void ContinueFlow()
     {
+
         //scales the UI bar based on how much flow there is compared to the maximum
         Vector3 scaleVector = _uiTransform.localScale;
         float xScale = _currentFlow / _maxFlow;
         scaleVector.x = xScale;
         _uiTransform.localScale = scaleVector;
+        if (_setIncreasesProportionalToAmountOfFlow)
+        {
+            //ak 25/4/22 super simple linear scaling atm, might be worth making it curved at some point to test feel
+            float proportionalIncrease = (_maxFlow + _currentFlow) / _maxFlow;
+            if (_increaseMoveSpeed)
+            {
+                _playerInputs.MultiplyMoveSpeed(_moveSpeedIncrease * proportionalIncrease);
+            }
+            if (_increaseAttackSpeed)
+            {
+                _playerInputs.GetPlayerAttackDriver().AttackSpeed = _playerInputs.GetPlayerAttackDriver().AttackSpeed * _attackSpeedIncrease;
+            }
+        }
         //reduce the flow by the decay rate
         _currentFlow -= _flowDecayRate * Time.deltaTime;
     }
@@ -118,16 +140,22 @@ public class PlayerFlow : MonoBehaviour
         {
             _playerInputs.GetPlayerAttackDriver().AttackSpeed = 1f;
         }
+        if (_buildFlowBeforeActivating)
+        {
+            _barImage.color = Color.gray;
+            _hasHitMaximumFlow = false;
+        }
     }
 
     private void AddFlow()
     {
+
         //check if adding the flow would tip it over the maximum
         //if it would, just go to the max, otherwise add the flow
         if (_currentFlow + _flowAddedPerHit >= _maxFlow)
         {
             _currentFlow = _maxFlow;
-            if (_buildFlowBeforeActivating)
+            if (_buildFlowBeforeActivating && !_hasHitMaximumFlow)
             {
                 _barImage.color = Color.green;
                 if (_increaseMoveSpeed)
@@ -138,11 +166,13 @@ public class PlayerFlow : MonoBehaviour
                 {
                     _playerInputs.GetPlayerAttackDriver().AttackSpeed = _playerInputs.GetPlayerAttackDriver().AttackSpeed * _attackSpeedIncrease;
                 }
+                _hasHitMaximumFlow = true;
             }
         }
         else
         {
             _currentFlow += _flowAddedPerHit;
+
         }
     }
     

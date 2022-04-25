@@ -264,7 +264,8 @@ namespace Player
 
         public void MultiplyMoveSpeed(float increase)
         {
-            moveSpeed = moveSpeed * increase;
+            //AK 25/4/22 changed to be basespeed from moveSpeeed to avoid continaul speed increases
+            moveSpeed = baseMoveSpeed * increase;
         }
 
         #region Gravity and Fall calculations
