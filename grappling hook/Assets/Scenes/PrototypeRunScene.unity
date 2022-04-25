@@ -35070,25 +35070,9 @@ PrefabInstance:
       propertyPath: _isImmortal
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2925616893897161360, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2925616893897161360, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3082049794991077041, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: m_LocalPosition.y
       value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4008834346478642906, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: m_UseWorldSpace
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4008834346478642906, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: m_Parameters.alignment
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8349656700711951363, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: m_LocalScale.y
