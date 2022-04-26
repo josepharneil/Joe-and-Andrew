@@ -11,6 +11,16 @@ using UnityEngine.InputSystem;
 
 namespace Player
 {
+    public enum MoveState
+    {
+        Stopped,
+        Accelerating,
+        Running,
+        Decelerating,
+        ChangingDirection,
+        Rolling
+    }
+    
     [RequireComponent(typeof(MovementController))]
     [RequireComponent(typeof(BoxRayCollider2D))]
     public class PlayerInputs : MonoBehaviour
@@ -68,18 +78,11 @@ namespace Player
         [SerializeField] [Range(0f, 1f)] private float airDecelerationRate;
         [SerializeField] [Range(0f, 1f)] private float airChangeDirectionRate;
 
-        [Header("Roll Stats")]
-        [SerializeField] private float rollDistance;
-        [SerializeField] private float rollSpeed = 20f;
-        [SerializeField] private float rollCoolDown;
-        [SerializeField] private bool _rollIsDirectional = false;
-        [SerializeField] private bool _rollIsAttack = false;
+        [SerializeField] private PlayerDash _playerDash;
 
         private float _jumpCalledTime;
         private float _lastGroundedTime;
         private Vector2 _rollDirection;
-        private float _rollDurationTimer = 0f;
-        private float _rollCoolDownTimer = 0f;
         private float _fallThroughPlatformTimer = 0f;
 
         private bool _isMoveInput;
@@ -89,14 +92,14 @@ namespace Player
         private bool _isBufferedJumpInput;
         private bool _hasJumped;
         private bool _isGrounded;
-        private bool _isRollInput;
+        // private bool _isRollInput;
         private bool _hasWallJumped;
         private bool _hasFallenThroughPlatform;
         public FacingDirection FacingDirection { get; private set; }
         public AttackDirection AttackDirection { get; private set; } 
         private float _lerpCurrent = 0f;
         [SerializeField] private MoveState _moveState = MoveState.Stopped;
-        private RollState _rollState;
+        // private RollState _rollState;
         [NonSerialized] public Vector2 Velocity;
         private Vector2 _moveInput;
         
@@ -141,14 +144,14 @@ namespace Player
         [SerializeField] private PlayerSounds _playerSounds;
         [SerializeField] private bool _debugUseSounds = true;
 
-        private enum MoveState
+        public void SetMoveState(MoveState moveState)
         {
-            Stopped,
-            Accelerating,
-            Running,
-            Decelerating,
-            ChangingDirection,
-            Rolling
+            _moveState = moveState;
+        }
+
+        public Vector2 GetMoveInput()
+        {
+            return _moveInput;
         }
 
         private enum RollState
@@ -157,6 +160,11 @@ namespace Player
             Rolling,
             EndRoll,
             NotRolling
+        }
+
+        private void Awake()
+        {
+            _playerDash.Initialise(this);
         }
 
         // Start is called before the first frame update
@@ -168,8 +176,9 @@ namespace Player
             }
             
             _moveState = MoveState.Stopped;
-            _rollState = RollState.NotRolling;
             baseMoveSpeed = moveSpeed;
+
+            _playerDash.Start();
         }
 
         // https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnValidate.html
@@ -332,12 +341,7 @@ namespace Player
                 _isJumpEndedEarly = true;
             }
         }
-
-        private void ActionCancelled(InputAction.CallbackContext obj)
-        {
-            throw new System.NotImplementedException();
-        }
-
+        
         public void DownAttackJump()
         {
             Velocity.y = _downAttackJumpVelocity;
@@ -614,27 +618,8 @@ namespace Player
 
         private void SetHorizontalMove()
         {
-            // Rolling
-            if (_isRollInput)
+            if (_playerDash.UpdateDash())
             {
-                StartRoll();
-                _isRollInput = false;
-            }
-            if (_rollState != RollState.NotRolling)
-            {
-                switch (_rollState)
-                {
-                    case RollState.Rolling:
-                        Roll();
-                        break;
-                    case RollState.EndRoll:
-                        StopRoll();
-                        break;
-                    case RollState.StartRoll:
-                        break;
-                    case RollState.NotRolling:
-                        break;
-                }
                 return;
             }
             
@@ -760,66 +745,10 @@ namespace Player
         /// </summary>
         [UsedImplicitly] public void ReadRollInput(InputAction.CallbackContext context)
         {
-            // TODO maybe should just directly call here.
-            if (context.started && !(entityDaze && entityDaze.isDazed))
+            if (context.started && !_playerDash.IsDashOnCooldown() && !(entityDaze && entityDaze.isDazed))
             {
-                _isRollInput = true;
+                _playerDash.DashState = DashState.StartDash;
             }
-        }
-
-        private void StartRoll()
-        {
-            //starts the roll timer and does the enums, could be state machine for animation purposes?
-            //roll overrides other movement
-            if (_isRollInput && (Time.time - _rollCoolDownTimer > rollCoolDown) && _rollState != RollState.Rolling)
-            {
-                _moveState = MoveState.Rolling;
-                _rollDurationTimer = 0f;
-                _rollState = RollState.Rolling;
-                if (_rollIsDirectional)
-                {
-                    if (_moveInput.x == 0 && _moveInput.y == 0)
-                    {
-                        _rollDirection.x = (int)FacingDirection;
-                        _rollDirection.y = 0f;
-                    }
-                    else
-                    {
-                        _rollDirection = _moveInput.normalized;
-                    }
-                }
-                else
-                {
-                    _rollDirection.x = (int)FacingDirection;
-                    _rollDirection.y = 0f;
-                }
-            }
-        }
-
-        private void Roll()
-        {
-            // Keeps rolling while the timer is on
-            float rollDuration = rollDistance / rollSpeed;
-            if (_rollDurationTimer <= rollDuration)
-            {
-                Velocity = _rollDirection * rollSpeed;
-                if (_debugRollFall)
-                {
-                    Velocity.y = 0;
-                }
-                _rollDurationTimer += Time.deltaTime;
-            }
-            else
-            {
-                _rollState = RollState.EndRoll;
-            }
-        }
-
-        private void StopRoll()
-        {
-            _moveState = MoveState.Decelerating;
-            _rollState = RollState.NotRolling;
-            _rollCoolDownTimer = Time.time;
         }
 
         #endregion
@@ -911,7 +840,7 @@ namespace Player
             // What cancels attacks?
             if ((playerCombatPrototyping.data.cancellables & PrototypeCancellables.Roll) != PrototypeCancellables.None)
             {
-                if (_isRollInput)
+                if (_playerDash.DashState == DashState.StartDash)
                 {
                     isAttacking = false;
                     animator.Play("Player_Idle");
