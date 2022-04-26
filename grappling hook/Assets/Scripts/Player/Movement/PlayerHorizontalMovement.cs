@@ -38,10 +38,16 @@ namespace Player
         private EntityBlock _entityBlock;
         public MoveState MoveState = MoveState.Stopped;
         private float _lerpCurrent = 0f;
+        private float _baseMoveSpeed;
 
-        public void SetMoveSpeed(float moveSpeed)
+        public void MultiplyMoveSpeed(float multiple)
         {
-            _moveSpeed = moveSpeed;
+            _moveSpeed = multiple * _baseMoveSpeed;
+        }
+
+        public void ResetMoveSpeed()
+        {
+            _moveSpeed = _baseMoveSpeed;
         }
         
         public void Initialise(PlayerInputs playerInputs, MovementController movementController, EntityBlock entityBlock)
@@ -54,6 +60,7 @@ namespace Player
         public void Start()
         {
             MoveState = MoveState.Stopped;
+            _baseMoveSpeed = _moveSpeed;
         }
 
         public void Update()

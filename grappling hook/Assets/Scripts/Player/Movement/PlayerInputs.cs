@@ -11,16 +11,6 @@ using UnityEngine.InputSystem;
 
 namespace Player
 {
-    public enum MoveStateOLD
-    {
-        Stopped,
-        Accelerating,
-        Running,
-        Decelerating,
-        ChangingDirection,
-        Rolling
-    }
-    
     [RequireComponent(typeof(MovementController))]
     [RequireComponent(typeof(BoxRayCollider2D))]
     public class PlayerInputs : MonoBehaviour
@@ -55,28 +45,7 @@ namespace Player
         private int _currentNumberOfWallJumps = 0;
         private bool _isWallSliding = false;
         [SerializeField] private float _wallSideGravityMultiplier = 0.3f;
-
-        [Header("Ground Move Stats")]
-        [SerializeField] private float moveSpeed = 10f;
-        [SerializeField] private AnimationCurve accelerationCurve;
-        [SerializeField] [Range(0f, 1f)] private float accelerationRate = 0.876f;
-        [SerializeField] private float accelerationTolerance = 0.005f;
-        [SerializeField] private AnimationCurve decelerationCurve;
-        [SerializeField] [Range(0f, 1f)] private float decelerationRate = 0.86f;
-        [SerializeField] private float decelerationTolerance = 0.005f;
-        [SerializeField] private AnimationCurve changeDirectionCurve;
-        [SerializeField] [Range(0f, 1f)] private float changeDirectionRate = 0.877f;
-        [SerializeField] private float changeDirectionTolerance = 0.005f;
-
-        //AK 23/4/21 I've set this up to be used in cases where the movespeed needs to be changed, but we want to change it back to the default 
-        //currently this holds the movespeed set above, which is called in the start method
-        private float _baseMoveSpeed;
-
-        [Header("Air Move Stats")]
-        [SerializeField] [Range(0f, 1f)] private float airAccelerationRate = 0.282f;
-        [SerializeField] [Range(0f, 1f)] private float airDecelerationRate = 0.194f;
-        [SerializeField] [Range(0f, 1f)] private float airChangeDirectionRate = 0.736f;
-
+        
         [SerializeField] private PlayerDash _playerDash;
         [SerializeField] private PlayerHorizontalMovement _playerHorizontalMovement;
 
@@ -95,9 +64,6 @@ namespace Player
         private bool _hasFallenThroughPlatform;
         public FacingDirection FacingDirection { get; private set; }
         public AttackDirection AttackDirection { get; private set; } 
-        // private float _lerpCurrent = 0f;
-        // [SerializeField] private MoveState _moveState = MoveState.Stopped;
-        // private RollState _rollState;
         [NonSerialized] public Vector2 Velocity;
         private Vector2 _moveInput;
         
@@ -142,10 +108,9 @@ namespace Player
         [SerializeField] private PlayerSounds _playerSounds;
         [SerializeField] private bool _debugUseSounds = true;
 
-        public void SetMoveState(MoveStateOLD moveStateOld)
+        public void SetMoveState(MoveState moveState)
         {
-            _playerHorizontalMovement.MoveState = (MoveState)moveStateOld;
-            // _moveState = moveStateOld;
+            _playerHorizontalMovement.MoveState = moveState;
         }
 
         public Vector2 GetMoveInput()
@@ -171,9 +136,6 @@ namespace Player
             {
                 spriteRenderer.sprite = defaultSquareSprite;
             }
-            
-            // _moveState = MoveStateOLD.Stopped;
-            _baseMoveSpeed = moveSpeed;
 
             _playerDash.Start();
             _playerHorizontalMovement.Start();
@@ -268,17 +230,12 @@ namespace Player
         //AK 23/4 added for use when changing the the speeds from flow
         public void ResetMoveSpeed()
         {
-            _playerHorizontalMovement.SetMoveSpeed(_baseMoveSpeed);
-            // moveSpeed = _baseMoveSpeed;
+            _playerHorizontalMovement.ResetMoveSpeed();
         }
 
-        public void MultiplyMoveSpeed(float increase)
+        public void MultiplyMoveSpeed(float multiple)
         {
-            //AK 25/4/22 changed to be basespeed from moveSpeeed to avoid continaul speed increases
-            
-            _playerHorizontalMovement.SetMoveSpeed(_baseMoveSpeed * increase);
-            
-            // moveSpeed = _baseMoveSpeed * increase;
+            _playerHorizontalMovement.MultiplyMoveSpeed(multiple);
         }
 
         #region Gravity and Fall calculations
@@ -624,133 +581,15 @@ namespace Player
 
         private void UpdateMovement()
         {
+            // Note to self: could do a switch on movestate here instead?
             if (_playerDash.UpdateDash())
             {
                 return;
             }
             
             _playerHorizontalMovement.Update();
-            #if false
-            // Moving
-            if (_isMoveInput)
-            {
-                if ((int)Mathf.Sign(Velocity.x) != (int)_moveInput.x && Velocity.x != 0)
-                {
-                    StartDirectionChange();
-                }
-                switch (_moveState)
-                {
-                    case MoveState.Stopped:
-                        //begins the movement, calls sets to accelerating
-                        //todo Joe here, is this correct? Start moving in the stopped state?
-                        //AK: yeah this is correct, this is for if the player has stopped and an input comes in to start moving
-                        StartMoving();
-                        break;
-                    case MoveState.Accelerating:
-                        //accelerates to run speed, sets to moveState to run once at speed
-                        Accelerate();
-                        break;
-                    case MoveState.Decelerating:
-                        //this will be called if the player starts decelerating and then wants to move again
-                        StartMoving();
-                        break;
-                    case MoveState.Running:
-                        //continues moving at the current speed
-                        Run();
-                        break;
-                    case MoveState.ChangingDirection:
-                        //changes the speed to the opposite one
-                        ChangeDirection();
-                        break;
-                }
-            }
-            else
-            {
-                if (_moveState != MoveState.Stopped)
-                {
-                    StopMoving();
-                    Decelerate();
-                }
-            }
-            #endif
         }
         
-        #if false
-
-        private void StartMoving()
-        {
-            _lerpCurrent = 0f;
-            _moveState = MoveState.Accelerating;
-        }
-
-        private void StopMoving()
-        {
-            _lerpCurrent = 0f;
-            _moveState = MoveState.Decelerating;
-        }
-
-        private void StartDirectionChange()
-        {
-            //resets the lerp to 0 each time we change direction
-            _lerpCurrent = 0f;
-            _moveState = MoveState.ChangingDirection;
-        }
-
-        private void Accelerate()
-        {
-            //uses a lerp which is then used to evaluate along an animation curve for the acceleration
-            //once we get to the max speed change to running
-            //checks if there is a collision below the player, and if so use the air timers
-            float rate = (movementController.customCollider2D.CollisionBelow ? accelerationRate : airAccelerationRate);
-            _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
-            Velocity.x = Mathf.Lerp(Velocity.x, moveSpeed * _moveInput.x, accelerationCurve.Evaluate(_lerpCurrent));
-            
-            // TODO Can input.x just be deleted here? They look like they cancel to me
-            // AK: yes its gone now!
-            if (moveSpeed - Mathf.Abs(Velocity.x) <=  accelerationTolerance)
-            {
-                _moveState = MoveState.Running;
-            }
-        }
-
-        private void Run()
-        {
-            float blockMoveSpeedModifier = 1.0f;
-            if (entityBlock && entityBlock.IsBlocking())
-            {
-                blockMoveSpeedModifier = entityBlock.blockSpeedModifier;
-            }
-            Velocity.x = _moveInput.x * moveSpeed * blockMoveSpeedModifier;
-        }
-
-        private void Decelerate()
-        {
-            //same lerp method as accelerate
-            //this time changes to stopped after getting low enough 
-            //(I tried doing if(speed==0) but that was glitchy af
-            float rate = movementController.customCollider2D.CollisionBelow ? decelerationRate : airDecelerationRate;
-            _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
-            Velocity.x = Mathf.Lerp(Velocity.x, 0f, decelerationCurve.Evaluate(_lerpCurrent));
-            if (Mathf.Abs(Velocity.x) <= decelerationTolerance)
-            {
-                Velocity.x = 0f;
-                _moveState = MoveState.Stopped;
-            }
-        }
-
-        private void ChangeDirection()
-        {
-            //same lerp method as accelerate
-            float rate = movementController.customCollider2D.CollisionBelow ? changeDirectionRate : airChangeDirectionRate;
-            _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
-            Velocity.x = Mathf.Lerp(Velocity.x, moveSpeed * _moveInput.x, changeDirectionCurve.Evaluate(_lerpCurrent));
-
-            if ((Mathf.Abs(Velocity.x) - moveSpeed) < changeDirectionTolerance) 
-            {
-                _moveState = MoveState.Running;
-            }
-        }
-#endif
         #endregion
 
         /// <summary>
