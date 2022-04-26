@@ -72,10 +72,12 @@ namespace Player
         [SerializeField] private float rollDistance;
         [SerializeField] private float rollSpeed = 20f;
         [SerializeField] private float rollCoolDown;
+        [SerializeField] private bool _rollIsDirectional = false;
+        [SerializeField] private bool _rollIsAttack = false;
 
         private float _jumpCalledTime;
         private float _lastGroundedTime;
-        private float _rollDirection;
+        private Vector2 _rollDirection;
         private float _rollDurationTimer = 0f;
         private float _rollCoolDownTimer = 0f;
         private float _fallThroughPlatformTimer = 0f;
@@ -630,6 +632,8 @@ namespace Player
                         break;
                     case RollState.StartRoll:
                         break;
+                    case RollState.NotRolling:
+                        break;
                 }
                 return;
             }
@@ -767,12 +771,28 @@ namespace Player
         {
             //starts the roll timer and does the enums, could be state machine for animation purposes?
             //roll overrides other movement
-            if (_isRollInput && (Time.time - _rollCoolDownTimer > rollCoolDown)&&_rollState!=RollState.Rolling) 
+            if (_isRollInput && (Time.time - _rollCoolDownTimer > rollCoolDown) && _rollState != RollState.Rolling)
             {
                 _moveState = MoveState.Rolling;
                 _rollDurationTimer = 0f;
                 _rollState = RollState.Rolling;
-                _rollDirection = (float)FacingDirection;
+                if (_rollIsDirectional)
+                {
+                    if (_moveInput.x == 0 && _moveInput.y == 0)
+                    {
+                        _rollDirection.x = (int)FacingDirection;
+                        _rollDirection.y = 0f;
+                    }
+                    else
+                    {
+                        _rollDirection = _moveInput.normalized;
+                    }
+                }
+                else
+                {
+                    _rollDirection.x = (int)FacingDirection;
+                    _rollDirection.y = 0f;
+                }
             }
         }
 
@@ -782,7 +802,7 @@ namespace Player
             float rollDuration = rollDistance / rollSpeed;
             if (_rollDurationTimer <= rollDuration)
             {
-                Velocity.x = (int)_rollDirection * rollSpeed;
+                Velocity = _rollDirection * rollSpeed;
                 if (_debugRollFall)
                 {
                     Velocity.y = 0;
