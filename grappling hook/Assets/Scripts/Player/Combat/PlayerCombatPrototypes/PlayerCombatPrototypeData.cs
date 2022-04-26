@@ -42,7 +42,7 @@ namespace Player
     {
         None = 0,
         Movement = 1 << 0,
-        Roll = 1 << 1,
+        Dash = 1 << 1,
         Jump = 1 << 2,
     }
 

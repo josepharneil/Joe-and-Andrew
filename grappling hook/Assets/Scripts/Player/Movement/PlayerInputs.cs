@@ -11,7 +11,7 @@ using UnityEngine.InputSystem;
 
 namespace Player
 {
-    public enum MoveState
+    public enum MoveStateOLD
     {
         Stopped,
         Accelerating,
@@ -30,15 +30,14 @@ namespace Player
 
         [Header("Jump Stats")]
         [SerializeField] private float jumpVelocity = 15f;
-        [SerializeField] private float coyoteTime;
+        [SerializeField] private float coyoteTime = 0.12f;
         [SerializeField] [Tooltip("How long the jump buffer will last")] private float _jumpBufferTime;
-        [SerializeField] private float minFallSpeed = 80f;
-        [SerializeField] private float maxFallSpeed = 120f;
-        [SerializeField] private float jumpApexThreshold = 5f;
-        [SerializeField] private float fallClamp = -40f;
-        [SerializeField] private float earlyJumpMultiplier = 3f;
-        [SerializeField] private float earlyJumpCancelTime = 0.1f;
-        [SerializeField] private bool _debugRollFall = false;
+        [SerializeField] private float minFallSpeed = 35f;
+        [SerializeField] private float maxFallSpeed = 40f;
+        [SerializeField] private float jumpApexThreshold = 10f;
+        [SerializeField] private float fallClamp = -35f;
+        [SerializeField] private float earlyJumpMultiplier = 2f;
+        [SerializeField] private float earlyJumpCancelTime = 0.15f;
         private float _apexPoint; //This becomes 1 at the end of the jump
         private float _fallSpeed;
         [SerializeField] private int _maxNumAerialJumps = 1;
@@ -46,43 +45,43 @@ namespace Player
 
         [Header("Wall Jump / Sliding Stats")]
         [SerializeField] private bool _debugDisableWallJumpSlide = false;
-        [SerializeField] private float _verticalWallJump;
-        [SerializeField] private float _horizontalWallJump;
+        [SerializeField] private float _verticalWallJump = 13f;
+        [SerializeField] private float _horizontalWallJump = 13f;
         [SerializeField] private float _wallJumpInputDisableTime = 0.2f;
-        [SerializeField] private float _wallJumpCoyoteDuration = 0.15f;
+        [SerializeField] private float _wallJumpCoyoteDuration = 0.12f;
         private float _lastWalledTime;
         [SerializeField] private int _maxNumberOfWallJumpsBeforeGrounding = 2;
         [SerializeField] private float _wallJumpSkinWidth = 0.25f;
         private int _currentNumberOfWallJumps = 0;
         private bool _isWallSliding = false;
-        [SerializeField] private float _wallSideGravityMultiplier;
+        [SerializeField] private float _wallSideGravityMultiplier = 0.3f;
 
         [Header("Ground Move Stats")]
         [SerializeField] private float moveSpeed = 10f;
         [SerializeField] private AnimationCurve accelerationCurve;
-        [SerializeField] [Range(0f, 1f)] private float accelerationRate;
-        [SerializeField] private float accelerationTolerance;
+        [SerializeField] [Range(0f, 1f)] private float accelerationRate = 0.876f;
+        [SerializeField] private float accelerationTolerance = 0.005f;
         [SerializeField] private AnimationCurve decelerationCurve;
-        [SerializeField] [Range(0f, 1f)] private float decelerationRate;
-        [SerializeField] private float decelerationTolerance;
+        [SerializeField] [Range(0f, 1f)] private float decelerationRate = 0.86f;
+        [SerializeField] private float decelerationTolerance = 0.005f;
         [SerializeField] private AnimationCurve changeDirectionCurve;
-        [SerializeField] [Range(0f, 1f)] private float changeDirectionRate;
-        [SerializeField] private float changeDirectionTolerance;
+        [SerializeField] [Range(0f, 1f)] private float changeDirectionRate = 0.877f;
+        [SerializeField] private float changeDirectionTolerance = 0.005f;
 
         //AK 23/4/21 I've set this up to be used in cases where the movespeed needs to be changed, but we want to change it back to the default 
         //currently this holds the movespeed set above, which is called in the start method
-        private float baseMoveSpeed;
+        private float _baseMoveSpeed;
 
         [Header("Air Move Stats")]
-        [SerializeField] [Range(0f, 1f)] private float airAccelerationRate;
-        [SerializeField] [Range(0f, 1f)] private float airDecelerationRate;
-        [SerializeField] [Range(0f, 1f)] private float airChangeDirectionRate;
+        [SerializeField] [Range(0f, 1f)] private float airAccelerationRate = 0.282f;
+        [SerializeField] [Range(0f, 1f)] private float airDecelerationRate = 0.194f;
+        [SerializeField] [Range(0f, 1f)] private float airChangeDirectionRate = 0.736f;
 
         [SerializeField] private PlayerDash _playerDash;
+        [SerializeField] private PlayerHorizontalMovement _playerHorizontalMovement;
 
         private float _jumpCalledTime;
         private float _lastGroundedTime;
-        private Vector2 _rollDirection;
         private float _fallThroughPlatformTimer = 0f;
 
         private bool _isMoveInput;
@@ -92,13 +91,12 @@ namespace Player
         private bool _isBufferedJumpInput;
         private bool _hasJumped;
         private bool _isGrounded;
-        // private bool _isRollInput;
         private bool _hasWallJumped;
         private bool _hasFallenThroughPlatform;
         public FacingDirection FacingDirection { get; private set; }
         public AttackDirection AttackDirection { get; private set; } 
-        private float _lerpCurrent = 0f;
-        [SerializeField] private MoveState _moveState = MoveState.Stopped;
+        // private float _lerpCurrent = 0f;
+        // [SerializeField] private MoveState _moveState = MoveState.Stopped;
         // private RollState _rollState;
         [NonSerialized] public Vector2 Velocity;
         private Vector2 _moveInput;
@@ -144,9 +142,10 @@ namespace Player
         [SerializeField] private PlayerSounds _playerSounds;
         [SerializeField] private bool _debugUseSounds = true;
 
-        public void SetMoveState(MoveState moveState)
+        public void SetMoveState(MoveStateOLD moveStateOld)
         {
-            _moveState = moveState;
+            _playerHorizontalMovement.MoveState = (MoveState)moveStateOld;
+            // _moveState = moveStateOld;
         }
 
         public Vector2 GetMoveInput()
@@ -154,17 +153,15 @@ namespace Player
             return _moveInput;
         }
 
-        private enum RollState
+        public bool GetIsMoveInput()
         {
-            StartRoll,
-            Rolling,
-            EndRoll,
-            NotRolling
+            return _isMoveInput;
         }
 
         private void Awake()
         {
             _playerDash.Initialise(this);
+            _playerHorizontalMovement.Initialise(this, movementController, entityBlock);
         }
 
         // Start is called before the first frame update
@@ -175,24 +172,13 @@ namespace Player
                 spriteRenderer.sprite = defaultSquareSprite;
             }
             
-            _moveState = MoveState.Stopped;
-            baseMoveSpeed = moveSpeed;
+            // _moveState = MoveStateOLD.Stopped;
+            _baseMoveSpeed = moveSpeed;
 
             _playerDash.Start();
+            _playerHorizontalMovement.Start();
         }
-
-        // https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnValidate.html
-        // Editor-only function that Unity calls when the script is loaded or a value changes in the Inspector.
-        // You would usually use this to perform an action after a value changes in the Inspector; for example, making sure that data stays within a certain range.
-        // NOTE @JA I've never heard of this, but looks perfect for updating values during game time :) 
-        private void OnValidate()
-        {
-        }
-
-        private void OnDrawGizmosSelected()
-        {
-        }
-
+        
         private void OnGUI()
         {
             _playerAttackDriver.ShowDebugGUI();
@@ -201,44 +187,69 @@ namespace Player
         // Update is called once per frame
         private void Update()
         {
-            // Movement
-            SetHorizontalMove();
-            if (!_debugDisableWallJumpSlide)
-            {
-                CheckWallSlide();
-            }
+            UpdateMovement();
+            CheckWallSlide();
             CheckGrounded();
             CheckCoyote();
             CheckJumpBuffer();
             CalculateJumpApex();
             CalculateGravity();
             DropThroughPlatform();
-            if (!_debugDisableWallJumpSlide)
-            {
-                WallJump();
-            }
+            WallJump();
             Jump();
+            Move();
+            UpdateFacingDirection();
+            SetAnimatorSpeedFloats();
+            UpdateAttackDriver();
+            CheckIfAttackIsCancellable();
+        }
 
-            // Attack movement
-            if (debugUseAnimations && isAttacking && playerCombatPrototyping.data.movementDisabledByAttacks)
+        private void UpdateAttackDriver()
+        {
+            if (!_attacksDrivenByAnimations)
             {
-                // TODO @JA Not sure what to do here.
-                if (_isGrounded)
+                _playerAttackDriver.UpdateAttack();
+            }
+        }
+
+        private void SetAnimatorSpeedFloats()
+        {
+            // Animation
+            if (!debugUseAnimations) return;
+            
+            animator.SetFloat(HorizontalSpeedID, Mathf.Abs(Velocity.x));
+            animator.SetFloat(VerticalSpeedID, Velocity.y);
+        }
+
+        private void Move()
+        {
+            if (!playerCombatPrototyping.data.movementDisabledByAttacks)
+            {
+                movementController.Move(Velocity);
+            }
+            else
+            {                
+                if (isAttacking)
                 {
-                    Velocity.x = 0f;
-                }
-                CheckGrounded();
-                CalculateGravity();
-                movementController.Move(Velocity);
-            }
-            if (!isAttacking || (isAttacking && !playerCombatPrototyping.data.movementDisabledByAttacks))
-            {
-                //move works by taking in a displacement, firing raycasts in the directions of the displacement
-                //then if the raycasts collide with anything the displacement is altered to be the distance from the player edge to the collider
-                //then at the end of controller it uses transform.translate(displacement) with the edited displacement 
-                movementController.Move(Velocity);
-            }
+                    // TODO @JA Not sure what to do here.
+                    if (_isGrounded)
+                    {
+                        Velocity.x = 0f;
+                    }
 
+                    CheckGrounded();
+                    CalculateGravity();
+                    movementController.Move(Velocity);
+                }
+                else
+                {
+                    movementController.Move(Velocity);
+                }
+            }
+        }
+
+        private void UpdateFacingDirection()
+        {
             if (!isAttacking || (isAttacking && playerCombatPrototyping.data.canChangeDirectionsDuringAttack))
             {
                 if (_moveInput.x < 0)
@@ -246,37 +257,28 @@ namespace Player
                     FacingDirection = FacingDirection.Left;
                     spriteRenderer.flipX = true;
                 }
-                else if( _moveInput.x > 0)
-                {                    
+                else if (_moveInput.x > 0)
+                {
                     FacingDirection = FacingDirection.Right;
                     spriteRenderer.flipX = false;
                 }
             }
-
-            // Animation
-            if (debugUseAnimations)
-            {
-                animator.SetFloat(HorizontalSpeedID, Mathf.Abs(Velocity.x));
-                animator.SetFloat(VerticalSpeedID,Velocity.y);
-            }
-            
-            if (!_attacksDrivenByAnimations)
-            {
-                _playerAttackDriver.UpdateAttack();
-            }
-
-            CheckIfAttackIsCancellable();
         }
+
         //AK 23/4 added for use when changing the the speeds from flow
         public void ResetMoveSpeed()
         {
-            moveSpeed = baseMoveSpeed;
+            _playerHorizontalMovement.SetMoveSpeed(_baseMoveSpeed);
+            // moveSpeed = _baseMoveSpeed;
         }
 
         public void MultiplyMoveSpeed(float increase)
         {
             //AK 25/4/22 changed to be basespeed from moveSpeeed to avoid continaul speed increases
-            moveSpeed = baseMoveSpeed * increase;
+            
+            _playerHorizontalMovement.SetMoveSpeed(_baseMoveSpeed * increase);
+            
+            // moveSpeed = _baseMoveSpeed * increase;
         }
 
         #region Gravity and Fall calculations
@@ -460,6 +462,8 @@ namespace Player
         
         private void WallJump()
         {
+            if (_debugDisableWallJumpSlide) return;
+            
             if (!_isGrounded && !_isInCoyoteTime &&
                 (_currentNumberOfWallJumps < _maxNumberOfWallJumpsBeforeGrounding))
             {
@@ -560,9 +564,11 @@ namespace Player
         #region WallSlide
         private void CheckWallSlide()
         {
+            if (_debugDisableWallJumpSlide) return;
+            
             bool collisionLeftRight = FacingDirection == FacingDirection.Left ?
                 movementController.customCollider2D.CollisionLeft : movementController.customCollider2D.CollisionRight;
-            if (_isMoveInput && !_isGrounded &&collisionLeftRight)
+            if (_isMoveInput && !_isGrounded && collisionLeftRight)
             {
                  _isWallSliding = true;
             }
@@ -616,13 +622,15 @@ namespace Player
             }
         }
 
-        private void SetHorizontalMove()
+        private void UpdateMovement()
         {
             if (_playerDash.UpdateDash())
             {
                 return;
             }
             
+            _playerHorizontalMovement.Update();
+            #if false
             // Moving
             if (_isMoveInput)
             {
@@ -664,7 +672,10 @@ namespace Player
                     Decelerate();
                 }
             }
+            #endif
         }
+        
+        #if false
 
         private void StartMoving()
         {
@@ -739,6 +750,8 @@ namespace Player
                 _moveState = MoveState.Running;
             }
         }
+#endif
+        #endregion
 
         /// <summary>
         /// Called by PlayerInput Unity Event.
@@ -750,8 +763,6 @@ namespace Player
                 _playerDash.DashState = DashState.StartDash;
             }
         }
-
-        #endregion
 
         #region Combat
         
@@ -838,7 +849,7 @@ namespace Player
             }
             
             // What cancels attacks?
-            if ((playerCombatPrototyping.data.cancellables & PrototypeCancellables.Roll) != PrototypeCancellables.None)
+            if ((playerCombatPrototyping.data.cancellables & PrototypeCancellables.Dash) != PrototypeCancellables.None)
             {
                 if (_playerDash.DashState == DashState.StartDash)
                 {

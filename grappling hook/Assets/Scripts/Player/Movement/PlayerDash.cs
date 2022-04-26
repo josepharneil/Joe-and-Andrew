@@ -72,7 +72,7 @@ namespace Player
         private void StartDash()
         {
             _dashDurationTimer = 0f;
-            _playerInputs.SetMoveState(MoveState.Rolling);
+            _playerInputs.SetMoveState(MoveStateOLD.Rolling);
             DashState = DashState.Dashing;
             if (_dashIsDirectional)
             {
@@ -115,7 +115,7 @@ namespace Player
 
         private void StopDash()
         {
-            _playerInputs.SetMoveState(MoveState.Decelerating);
+            _playerInputs.SetMoveState(MoveStateOLD.Decelerating);
             DashState = DashState.NotDashing;
             _dashCoolDownTimer = Time.time;
         }
