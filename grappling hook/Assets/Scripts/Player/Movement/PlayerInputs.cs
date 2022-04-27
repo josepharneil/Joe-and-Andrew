@@ -26,14 +26,13 @@ namespace Player
         [SerializeField] private PlayerWallJumpSlide _playerWallJumpSlide;
         [SerializeField] private PlayerGravity _playerGravity;
         [SerializeField] private PlayerAnimator _playerAnimator;
+        [SerializeField] private PlayerMovement _playerMovement;
 
-        private float _jumpInputTime;
-        private float _lastGroundedTime;
         private bool _isMoveInput;
         private bool _isJumpInput;
+        private float _jumpInputTime;
         private bool _isJumpEndedEarly;
         private bool _isBufferedJumpInput;
-        private bool _isGrounded;
 
         private FacingDirection _facingDirection;
         public AttackDirection AttackDirection { get; private set; } 
@@ -42,10 +41,6 @@ namespace Player
         
         // Attacks
         [Header("Attacking")] 
-        [SerializeField] private bool _debugUseAnimations = true;
-        // [SerializeField] private Animator animator;
-        [SerializeField] private SpriteRenderer spriteRenderer;
-        [SerializeField] private Sprite defaultSquareSprite;
         [HideInInspector] public bool isAttacking;
         [HideInInspector] public bool isInPreDamageAttackPhase = true;
         public PlayerEquipment CurrentPlayerEquipment;
@@ -54,7 +49,6 @@ namespace Player
         [SerializeField] private float _downAttackJumpVelocity = 15f;
 
         public FacingDirection GetFacingDirection() => _facingDirection;
-        public bool GetDebugUseAnimations() => _debugUseAnimations;
         public bool GetDebugUseSounds() => _debugUseSounds;
         public PlayerSounds GetPlayerSounds() => _playerSounds;
         public ref Vector2 GetVelocity() => ref _velocity;
@@ -80,11 +74,7 @@ namespace Player
         // Start is called before the first frame update
         private void Start()
         {
-            if (!_debugUseAnimations)
-            {
-                spriteRenderer.sprite = defaultSquareSprite;
-            }
-
+            _playerAnimator.Start();
             _playerDash.Start();
             _playerHorizontalMovement.Start();
         }
@@ -98,12 +88,12 @@ namespace Player
         private void Update()
         {
             UpdateMovement();
-            CheckWallSlide();
-            CheckGrounded();
+            UpdateWallSlide();
+            UpdateGrounded();
             CheckBufferedJumpInput();
-            CalculateGravity();
-            DropThroughPlatform();
-            WallJump();
+            UpdateGravity();
+            UpdateFallThroughPlatform();
+            UpdateWallJump();
             UpdateJump();
             Move();
             UpdateFacingDirection();
@@ -122,9 +112,6 @@ namespace Player
 
         private void SetAnimatorSpeedFloats()
         {
-            // Animation
-            if (!_debugUseAnimations) return;
-            
             _playerAnimator.SetHorizontalSpeed(Mathf.Abs(_velocity.x));
             _playerAnimator.SetVerticalSpeed(_velocity.y);
         }
@@ -140,13 +127,13 @@ namespace Player
                 if (isAttacking)
                 {
                     // TODO @JA Not sure what to do here.
-                    if (_isGrounded)
+                    if (_playerMovement.IsGrounded())
                     {
                         _velocity.x = 0f;
                     }
 
-                    CheckGrounded();
-                    CalculateGravity();
+                    UpdateGrounded();
+                    UpdateGravity();
                     movementController.Move(_velocity);
                 }
                 else
@@ -163,12 +150,12 @@ namespace Player
                 if (_moveInput.x < 0)
                 {
                     _facingDirection = FacingDirection.Left;
-                    spriteRenderer.flipX = true;
+                    _playerAnimator.SetSpriteFlipX(true);
                 }
                 else if (_moveInput.x > 0)
                 {
                     _facingDirection = FacingDirection.Right;
-                    spriteRenderer.flipX = false;
+                    _playerAnimator.SetSpriteFlipX(false);
                 }
             }
         }
@@ -185,7 +172,7 @@ namespace Player
 
         #region Gravity and Fall calculations
         //Taken from Tarodevs GitHub: https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/blob/main/Scripts/PlayerController.cs
-        private void CalculateGravity()
+        private void UpdateGravity()
         {
             _playerGravity.UpdateGravity(movementController.customCollider2D.CollisionBelow, 
                 movementController.customCollider2D.CheckIfHittingCeiling(),
@@ -219,8 +206,8 @@ namespace Player
 
         private void UpdateJump()
         {
-            float timeBetweenJumpInputAndLastGrounded = _jumpInputTime - _lastGroundedTime;
-            _playerJump.Update(ref _isJumpInput, _isGrounded, ref _isBufferedJumpInput, 
+            float timeBetweenJumpInputAndLastGrounded = _jumpInputTime - _playerMovement.GetLastGroundedTime();
+            _playerJump.Update(ref _isJumpInput, _playerMovement.IsGrounded(), ref _isBufferedJumpInput, 
                 timeBetweenJumpInputAndLastGrounded, ref _velocity, movementController.customCollider2D.CollisionBelow, _playerAnimator);
         }
         
@@ -229,39 +216,16 @@ namespace Player
             _velocity.y = _downAttackJumpVelocity;
         }
 
-        private void CheckGrounded()
+        private void UpdateGrounded()
         {
-            if(movementController.customCollider2D.CheckIfGrounded())
-            {
-                _playerAnimator.SetGrounded(true);
-                _isGrounded = true;
-                _lastGroundedTime = Time.time;
-                _playerJump.SetHasJumped(false);
-                _playerWallJumpSlide.ResetWallJumpCounter();
-                _playerJump.ResetCurrentNumAerialJumps();
-                
-                // Cancel wall jump blocking move inputs
-                if (_playerWallJumpSlide.HasWallJumped())
-                {
-                    // JA:29/03/22 Not sure if this is a good idea, but it fixes the instance where
-                    // you wall jump, and maintain the exact same input, thus no input read up
-                    _moveInput.x = Input.GetAxisRaw("Horizontal");
-                    _moveInput.y = Input.GetAxisRaw("Vertical");
-                    _isMoveInput = true;
-                    _playerWallJumpSlide.SetHasWallJumped(false);
-                }
-            }
-            else
-            {
-                _isGrounded = false;
-            }
+            _playerMovement.UpdateGrounded(movementController.customCollider2D, _playerAnimator, _playerJump, _playerWallJumpSlide, ref _isMoveInput, ref _moveInput);
         }
 
         private void CheckBufferedJumpInput()
         {
             // "When the character is already in the air pressing jump moments before the ground will trigger jump as soon as they land"
             // http://www.davetech.co.uk/gamedevplatformer
-            if (_isJumpInput && !_isGrounded)
+            if (_isJumpInput && !_playerMovement.IsGrounded())
             {
                 _isBufferedJumpInput = true;
             }
@@ -273,15 +237,15 @@ namespace Player
             }
         }
         
-        private void WallJump()
+        private void UpdateWallJump()
         {
             _playerWallJumpSlide.UpdateWallJump(ref _isJumpInput, ref _isBufferedJumpInput, 
-                _isGrounded, ref _playerJump.GetIsInCoyoteTime(), ref _isMoveInput, _jumpInputTime, 
+                _playerMovement.IsGrounded(), ref _playerJump.GetIsInCoyoteTime(), ref _isMoveInput, _jumpInputTime, 
                 movementController.customCollider2D, ref _velocity, facingDirection: ref _facingDirection, 
                 ref _moveInput, this, _playerJump, _playerAnimator);
         }
         
-        private void DropThroughPlatform()
+        private void UpdateFallThroughPlatform()
         {
             // TODO Check if we should be directly accessing Input here.. might be okay, but also might not be.
             // Can we not just use _moveInput.y < 0f ?
@@ -292,9 +256,9 @@ namespace Player
         #endregion
 
         #region WallSlide
-        private void CheckWallSlide()
+        private void UpdateWallSlide()
         {
-            _playerWallJumpSlide.UpdateWallSlide(_isMoveInput, _isGrounded, _facingDirection,
+            _playerWallJumpSlide.UpdateWallSlide(_isMoveInput, _playerMovement.IsGrounded(), _facingDirection,
                 movementController.customCollider2D.CollisionLeft, movementController.customCollider2D.CollisionRight);
         }
         #endregion
@@ -328,12 +292,12 @@ namespace Player
                 if (_moveInput.x < 0)
                 {
                     _facingDirection = FacingDirection.Left;
-                    spriteRenderer.flipX = true;
+                    _playerAnimator.SetSpriteFlipX(true);
                 }
                 else if (_moveInput.x > 0)
                 {                    
                     _facingDirection = FacingDirection.Right;
-                    spriteRenderer.flipX = false;
+                    _playerAnimator.SetSpriteFlipX(false);
                 }
             }
             else
@@ -374,7 +338,7 @@ namespace Player
         /// <param name="context"></param>
         [UsedImplicitly] public void ReadAttackInput(InputAction.CallbackContext context)
         {
-            if (!_debugUseAnimations || (!entityBlock || entityBlock.IsBlocking()) && entityBlock)
+            if ((!entityBlock || entityBlock.IsBlocking()) && entityBlock)
             {
                 return;
             }
@@ -392,7 +356,7 @@ namespace Player
             {
                 AttackDirection = AttackDirection.Up;
             }
-            else if (!_isGrounded && (_moveInput.y < -verticalInputThreshold))
+            else if (!_playerMovement.IsGrounded() && (_moveInput.y < -verticalInputThreshold))
             {
                 AttackDirection = AttackDirection.Down;
             }
@@ -403,12 +367,12 @@ namespace Player
                     if (_moveInput.x < 0)
                     {
                         _facingDirection = FacingDirection.Left;
-                        spriteRenderer.flipX = true;
+                        _playerAnimator.SetSpriteFlipX(true);
                     }
                     else if ( _moveInput.x > 0 )
                     {
                         _facingDirection = FacingDirection.Right;
-                        spriteRenderer.flipX = false;
+                        _playerAnimator.SetSpriteFlipX(false);
                     }
                 }
                 AttackDirection = _facingDirection == FacingDirection.Left ? AttackDirection.Left : AttackDirection.Right;

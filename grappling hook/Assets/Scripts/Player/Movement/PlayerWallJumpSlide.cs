@@ -94,11 +94,8 @@ namespace Player
 
                     _currentNumberOfWallJumps++;
 
-                    if (playerInputs.GetDebugUseAnimations())
-                    {
-                        playerAnimator.SetTriggerJump();
-                    }
-                    
+                    playerAnimator.SetTriggerJump();
+
                     if (playerInputs.GetDebugUseSounds())
                     {
                         playerInputs.GetPlayerSounds().PlayWallJumpSound();

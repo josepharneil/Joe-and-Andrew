@@ -81,11 +81,8 @@ namespace Player
                 
                 _hasJumped = true;
                 
-                if (_playerInputs.GetDebugUseAnimations())
-                {
-                    playerAnimator.SetTriggerJump();
-                    playerAnimator.SetGrounded(false);
-                }
+                playerAnimator.SetTriggerJump();
+                playerAnimator.SetGrounded(false);
 
                 if (_playerInputs.GetDebugUseSounds())
                 {
