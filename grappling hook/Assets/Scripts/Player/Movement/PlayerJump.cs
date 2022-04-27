@@ -23,8 +23,6 @@ namespace Player
         private float _fallSpeed;
         private bool _isInCoyoteTime;
         private bool _hasJumped;
-
-        private PlayerInputs _playerInputs;// want to remove this eventually
         
         private static readonly int JumpTriggerID = Animator.StringToHash("jumpTrigger");
         private static readonly int GroundedTriggerID = Animator.StringToHash("groundedTrigger");
@@ -40,21 +38,15 @@ namespace Player
         public float GetJumpBufferTime() => _jumpBufferTime;
         #endregion
 
-        public void Initialise(PlayerInputs playerInputs)
-        {
-            _playerInputs = playerInputs;
-            
-        }
-
         public void Update(ref bool ref_isJumpInput, bool isGrounded, ref bool ref_isBufferedJumpInput, 
-            float timeBetweenJumpInputAndLastGrounded, ref Vector2 ref_playerVelocity, bool isCollisionBelow, PlayerAnimator playerAnimator)
+            float timeBetweenJumpInputAndLastGrounded, ref Vector2 ref_playerVelocity, bool isCollisionBelow, PlayerAnimator playerAnimator, PlayerSounds playerSounds)
         {
             CheckCoyote(ref_isJumpInput, isGrounded, timeBetweenJumpInputAndLastGrounded);
             CalculateJumpApex(ref ref_playerVelocity, isCollisionBelow);
-            Jump(ref ref_isJumpInput, isGrounded, ref ref_isBufferedJumpInput, ref ref_playerVelocity, playerAnimator);
+            Jump(ref ref_isJumpInput, isGrounded, ref ref_isBufferedJumpInput, ref ref_playerVelocity, playerAnimator, playerSounds);
         }
 
-        private void Jump(ref bool ref_isJumpInput, bool isGrounded, ref bool ref_isBufferedJumpInput, ref Vector2 ref_playerVelocity, PlayerAnimator playerAnimator)
+        private void Jump(ref bool ref_isJumpInput, bool isGrounded, ref bool ref_isBufferedJumpInput, ref Vector2 ref_playerVelocity, PlayerAnimator playerAnimator, PlayerSounds playerSounds)
         {
             // If we get a jump input, and we're in the air but we've reached our max aerial jumps, turn off the jump input
             if (ref_isJumpInput && !isGrounded && !_isInCoyoteTime && _currentNumAerialJumps >= _maxNumAerialJumps)
@@ -84,7 +76,7 @@ namespace Player
                 playerAnimator.SetTriggerJump();
                 playerAnimator.SetGrounded(false);
 
-                _playerInputs.GetPlayerSounds().PlayJumpSound();
+                playerSounds.PlayJumpSound();
             }
         }
         

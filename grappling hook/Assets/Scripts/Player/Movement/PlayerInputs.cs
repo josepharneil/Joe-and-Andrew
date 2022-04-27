@@ -49,7 +49,6 @@ namespace Player
         [SerializeField] private float _downAttackJumpVelocity = 15f;
 
         public FacingDirection GetFacingDirection() => _facingDirection;
-        public PlayerSounds GetPlayerSounds() => _playerSounds;
         public ref Vector2 GetVelocity() => ref _velocity;
         
         [Header("Parrying")] [SerializeField] private EntityParry entityParry;
@@ -57,16 +56,13 @@ namespace Player
         [Header("Knockback")] [SerializeField] private EntityKnockback entityKnockback;
         [Header("Daze")] [SerializeField] private EntityDaze entityDaze;
         
-        [Header("Prototyping")]
-        public PlayerCombatPrototyping playerCombatPrototyping;
+        [Header("Prototyping")] public PlayerCombatPrototyping playerCombatPrototyping;
 
-        [Header("Player Sounds")] 
-        [SerializeField] private PlayerSounds _playerSounds;
+        [Header("Player Sounds")] [SerializeField] private PlayerSounds _playerSounds;
         
         private void Awake()
         {
             _playerHorizontalMovement.Initialise(entityBlock);
-            _playerJump.Initialise(this);
             _playerSounds.Initialise();
         }
 
@@ -86,17 +82,21 @@ namespace Player
         // Update is called once per frame
         private void Update()
         {
+            // Input (could put this in an input function???)
+            CheckBufferedJumpInput();
+            
+            // Movement
+            // The goal is to: _playerMovement.Update();
             UpdateMovement();
             UpdateWallSlide();
             UpdateGrounded();
-            CheckBufferedJumpInput();
             UpdateGravity();
             UpdateFallThroughPlatform();
             UpdateWallJump();
             UpdateJump();
             Move();
-            UpdateFacingDirection();
-            SetAnimatorSpeedFloats();
+
+            // Attacks
             UpdateAttackDriver();
             CheckIfAttackIsCancellable();
         }
@@ -140,6 +140,9 @@ namespace Player
                     movementController.Move(_velocity);
                 }
             }
+            
+            UpdateFacingDirection();
+            SetAnimatorSpeedFloats();
         }
 
         private void UpdateFacingDirection()
@@ -163,6 +166,7 @@ namespace Player
         {
             _playerHorizontalMovement.ResetMoveSpeed();
         }
+        
 
         public void MultiplyMoveSpeed(float multiple)
         {
@@ -170,7 +174,7 @@ namespace Player
         }
 
         #region Gravity and Fall calculations
-        //Taken from Tarodevs GitHub: https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/blob/main/Scripts/PlayerController.cs
+        // Taken from Tarodevs GitHub: https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/blob/main/Scripts/PlayerController.cs
         private void UpdateGravity()
         {
             _playerGravity.UpdateGravity(movementController.customCollider2D.CollisionBelow, 
@@ -207,7 +211,7 @@ namespace Player
         {
             float timeBetweenJumpInputAndLastGrounded = _jumpInputTime - _playerMovement.GetLastGroundedTime();
             _playerJump.Update(ref _isJumpInput, _playerMovement.IsGrounded(), ref _isBufferedJumpInput, 
-                timeBetweenJumpInputAndLastGrounded, ref _velocity, movementController.customCollider2D.CollisionBelow, _playerAnimator);
+                timeBetweenJumpInputAndLastGrounded, ref _velocity, movementController.customCollider2D.CollisionBelow, _playerAnimator, _playerSounds);
         }
         
         public void DownAttackJump()
@@ -241,7 +245,7 @@ namespace Player
             _playerWallJumpSlide.UpdateWallJump(ref _isJumpInput, ref _isBufferedJumpInput, 
                 _playerMovement.IsGrounded(), ref _playerJump.GetIsInCoyoteTime(), ref _isMoveInput, _jumpInputTime, 
                 movementController.customCollider2D, ref _velocity, facingDirection: ref _facingDirection, 
-                ref _moveInput, this, _playerJump, _playerAnimator);
+                ref _moveInput, _playerSounds, _playerJump, _playerAnimator);
         }
         
         private void UpdateFallThroughPlatform()

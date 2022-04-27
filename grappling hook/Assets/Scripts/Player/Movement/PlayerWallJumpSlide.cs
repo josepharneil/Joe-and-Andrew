@@ -43,7 +43,7 @@ namespace Player
         public void UpdateWallJump(ref bool ref_isJumpInput, ref bool ref_isBufferedJumpInput, bool isGrounded, 
             ref bool ref_isInCoyoteTime, ref bool ref_isMoveInput, float jumpInputTime,
             BoxRayCollider2D boxRayCollider2D, ref Vector2 ref_playerVelocity, ref FacingDirection facingDirection,
-            ref Vector2 ref_moveInput, PlayerInputs playerInputs, PlayerJump playerJump, PlayerAnimator playerAnimator)
+            ref Vector2 ref_moveInput, PlayerSounds playerSounds, PlayerJump playerJump, PlayerAnimator playerAnimator)
         {
             if (_debugDisableWallJump) return;
             
@@ -56,7 +56,7 @@ namespace Player
                 bool isAgainstWall = wallIsToLeft || wallIsToRight;
                 if(wallIsToLeft && wallIsToRight)
                 {
-                    Debug.LogError("WALL JUMPING: Wall to the left AND to the right: This implies bad level design? Not sure what to do here.", playerInputs);
+                    Debug.LogError("WALL JUMPING: Wall to the left AND to the right: This implies bad level design? Not sure what to do here.");
                 }
                 if (isAgainstWall)
                 {
@@ -96,7 +96,7 @@ namespace Player
 
                     playerAnimator.SetTriggerJump();
 
-                    playerInputs.GetPlayerSounds().PlayWallJumpSound();
+                    playerSounds.PlayWallJumpSound();
                 }
             }
 
