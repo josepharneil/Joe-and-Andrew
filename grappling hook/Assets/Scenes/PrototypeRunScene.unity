@@ -39803,6 +39803,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: _playerAnimator._animator
+      value: 
+      objectReference: {fileID: 2115476036}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: _attacksDrivenByAnimations
       value: 0
       objectReference: {fileID: 0}
@@ -39970,14 +39974,6 @@ PrefabInstance:
       propertyPath: _playerDirectionalMovement._decelerationCurve.m_Curve.Array.data[0].outSlope
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 9147847883452652279, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ReadDashInput
-      objectReference: {fileID: 0}
-    - target: {fileID: 9147847883452652279, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Player.PlayerInputs, Assembly-CSharp
-      objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: flow
       value: 
@@ -40099,6 +40095,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c86546bf22606b243bc43e516930e92c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &2115476036 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 9147847883452652280, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+  m_PrefabInstance: {fileID: 2115476010}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2116562643
 GameObject:
   m_ObjectHideFlags: 0

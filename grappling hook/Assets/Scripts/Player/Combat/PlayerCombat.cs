@@ -21,11 +21,8 @@ namespace Player
         [SerializeField] private LayerMask whatIsDamageable;
         [SerializeField] private PlayerInputs inputs;
 
-        // [Header("Shake")] 
+        [Header("Shake")] 
         [SerializeField] private CameraShakeData _cameraShakeData; 
-        // [SerializeField] private float shakeAmplitude = 3f;
-        // [SerializeField] private float shakeFrequency = 1f;
-        // [SerializeField] private float shakeDuration = 0.1f;
 
         [Header("Gamepad Vibration")]
         [SerializeField] private GamepadVibrator gamepadVibrator;

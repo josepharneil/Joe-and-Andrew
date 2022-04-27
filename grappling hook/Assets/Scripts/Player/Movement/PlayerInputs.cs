@@ -17,7 +17,7 @@ namespace Player
     {
         [Header("Components")]
         [SerializeField] private MovementController movementController;
-
+        
         [Header("Player Components")]
         [SerializeField] private PlayerDash _playerDash;
         [SerializeField] private PlayerHorizontalMovement _playerHorizontalMovement;
@@ -25,6 +25,7 @@ namespace Player
         [SerializeField] private PlayerFallThroughPlatform _playerFallThroughPlatform;
         [SerializeField] private PlayerWallJumpSlide _playerWallJumpSlide;
         [SerializeField] private PlayerGravity _playerGravity;
+        [SerializeField] private PlayerAnimator _playerAnimator;
 
         private float _jumpInputTime;
         private float _lastGroundedTime;
@@ -42,7 +43,7 @@ namespace Player
         // Attacks
         [Header("Attacking")] 
         [SerializeField] private bool _debugUseAnimations = true;
-        [SerializeField] private Animator animator;
+        // [SerializeField] private Animator animator;
         [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] private Sprite defaultSquareSprite;
         [HideInInspector] public bool isAttacking;
@@ -55,7 +56,6 @@ namespace Player
         public FacingDirection GetFacingDirection() => _facingDirection;
         public bool GetDebugUseAnimations() => _debugUseAnimations;
         public bool GetDebugUseSounds() => _debugUseSounds;
-        public Animator GetAnimator() => animator;
         public PlayerSounds GetPlayerSounds() => _playerSounds;
         public ref Vector2 GetVelocity() => ref _velocity;
         
@@ -64,15 +64,6 @@ namespace Player
         [Header("Knockback")] [SerializeField] private EntityKnockback entityKnockback;
         [Header("Daze")] [SerializeField] private EntityDaze entityDaze;
         
-        // Animation parameter IDs.
-        private static readonly int HorizontalSpeedID = Animator.StringToHash("horizontalSpeed");
-        private static readonly int VerticalSpeedID = Animator.StringToHash("verticalSpeed");
-        private static readonly int AttackTriggerID = Animator.StringToHash("attackTrigger");
-        private static readonly int AttackUpTriggerID = Animator.StringToHash("attackUpTrigger");
-        private static readonly int AttackDownTriggerID = Animator.StringToHash("attackDownTrigger");
-        private static readonly int JumpTriggerID = Animator.StringToHash("jumpTrigger");
-        private static readonly int GroundedTriggerID = Animator.StringToHash("groundedTrigger");
-
         [Header("Prototyping")]
         public PlayerCombatPrototyping playerCombatPrototyping;
 
@@ -134,8 +125,8 @@ namespace Player
             // Animation
             if (!_debugUseAnimations) return;
             
-            animator.SetFloat(HorizontalSpeedID, Mathf.Abs(_velocity.x));
-            animator.SetFloat(VerticalSpeedID, _velocity.y);
+            _playerAnimator.SetHorizontalSpeed(Mathf.Abs(_velocity.x));
+            _playerAnimator.SetVerticalSpeed(_velocity.y);
         }
 
         private void Move()
@@ -230,7 +221,7 @@ namespace Player
         {
             float timeBetweenJumpInputAndLastGrounded = _jumpInputTime - _lastGroundedTime;
             _playerJump.Update(ref _isJumpInput, _isGrounded, ref _isBufferedJumpInput, 
-                timeBetweenJumpInputAndLastGrounded, ref _velocity, movementController.customCollider2D.CollisionBelow);
+                timeBetweenJumpInputAndLastGrounded, ref _velocity, movementController.customCollider2D.CollisionBelow, _playerAnimator);
         }
         
         public void DownAttackJump()
@@ -242,7 +233,7 @@ namespace Player
         {
             if(movementController.customCollider2D.CheckIfGrounded())
             {
-                animator.SetBool(GroundedTriggerID, true);
+                _playerAnimator.SetGrounded(true);
                 _isGrounded = true;
                 _lastGroundedTime = Time.time;
                 _playerJump.SetHasJumped(false);
@@ -287,7 +278,7 @@ namespace Player
             _playerWallJumpSlide.UpdateWallJump(ref _isJumpInput, ref _isBufferedJumpInput, 
                 _isGrounded, ref _playerJump.GetIsInCoyoteTime(), ref _isMoveInput, _jumpInputTime, 
                 movementController.customCollider2D, ref _velocity, facingDirection: ref _facingDirection, 
-                ref _moveInput, this, _playerJump );
+                ref _moveInput, this, _playerJump, _playerAnimator);
         }
         
         private void DropThroughPlatform()
@@ -425,7 +416,7 @@ namespace Player
             
             if (_attacksDrivenByAnimations)
             {
-                animator.SetTrigger(AttackTriggerID);
+                _playerAnimator.SetTriggerAttack();
             }
             else
             {
@@ -464,7 +455,7 @@ namespace Player
                 if (_playerDash.DashState == DashState.StartDash)
                 {
                     isAttacking = false;
-                    animator.Play("Player_Idle");
+                    _playerAnimator.PlayState("Player_Idle");
                     // todo getting playercombat here is bad.
                     GetComponent<PlayerCombat>().ForceHideAttackParticles();
                 }
@@ -475,7 +466,7 @@ namespace Player
                 if (_isJumpInput)
                 {
                     isAttacking = false;
-                    animator.Play("Player_Jump");
+                    _playerAnimator.PlayState("Player_Jump");
                     GetComponent<PlayerCombat>().ForceHideAttackParticles();
                 }
             }
@@ -485,7 +476,7 @@ namespace Player
                 if (_isMoveInput)
                 {
                     isAttacking = false;
-                    animator.Play("Player_Idle");
+                    _playerAnimator.PlayState("Player_Idle");
                     GetComponent<PlayerCombat>().ForceHideAttackParticles();
                 }
             }

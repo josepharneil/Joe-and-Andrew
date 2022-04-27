@@ -43,17 +43,18 @@ namespace Player
         public void Initialise(PlayerInputs playerInputs)
         {
             _playerInputs = playerInputs;
+            
         }
 
         public void Update(ref bool ref_isJumpInput, bool isGrounded, ref bool ref_isBufferedJumpInput, 
-            float timeBetweenJumpInputAndLastGrounded, ref Vector2 ref_playerVelocity, bool isCollisionBelow)
+            float timeBetweenJumpInputAndLastGrounded, ref Vector2 ref_playerVelocity, bool isCollisionBelow, PlayerAnimator playerAnimator)
         {
             CheckCoyote(ref_isJumpInput, isGrounded, timeBetweenJumpInputAndLastGrounded);
             CalculateJumpApex(ref ref_playerVelocity, isCollisionBelow);
-            Jump(ref ref_isJumpInput, isGrounded, ref ref_isBufferedJumpInput, ref ref_playerVelocity);
+            Jump(ref ref_isJumpInput, isGrounded, ref ref_isBufferedJumpInput, ref ref_playerVelocity, playerAnimator);
         }
 
-        private void Jump(ref bool ref_isJumpInput, bool isGrounded, ref bool ref_isBufferedJumpInput, ref Vector2 ref_playerVelocity)
+        private void Jump(ref bool ref_isJumpInput, bool isGrounded, ref bool ref_isBufferedJumpInput, ref Vector2 ref_playerVelocity, PlayerAnimator playerAnimator)
         {
             // If we get a jump input, and we're in the air but we've reached our max aerial jumps, turn off the jump input
             if (ref_isJumpInput && !isGrounded && !_isInCoyoteTime && _currentNumAerialJumps >= _maxNumAerialJumps)
@@ -82,8 +83,8 @@ namespace Player
                 
                 if (_playerInputs.GetDebugUseAnimations())
                 {
-                    _playerInputs.GetAnimator().SetTrigger(JumpTriggerID);
-                    _playerInputs.GetAnimator().SetBool(GroundedTriggerID, false);
+                    playerAnimator.SetTriggerJump();
+                    playerAnimator.SetGrounded(false);
                 }
 
                 if (_playerInputs.GetDebugUseSounds())

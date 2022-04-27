@@ -43,7 +43,7 @@ namespace Player
         public void UpdateWallJump(ref bool ref_isJumpInput, ref bool ref_isBufferedJumpInput, bool isGrounded, 
             ref bool ref_isInCoyoteTime, ref bool ref_isMoveInput, float jumpInputTime,
             BoxRayCollider2D boxRayCollider2D, ref Vector2 ref_playerVelocity, ref FacingDirection facingDirection,
-            ref Vector2 ref_moveInput, PlayerInputs playerInputs, PlayerJump playerJump)
+            ref Vector2 ref_moveInput, PlayerInputs playerInputs, PlayerJump playerJump, PlayerAnimator playerAnimator)
         {
             if (_debugDisableWallJump) return;
             
@@ -96,7 +96,7 @@ namespace Player
 
                     if (playerInputs.GetDebugUseAnimations())
                     {
-                        playerInputs.GetAnimator().SetTrigger(JumpTriggerID);
+                        playerAnimator.SetTriggerJump();
                     }
                     
                     if (playerInputs.GetDebugUseSounds())
