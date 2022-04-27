@@ -39970,6 +39970,14 @@ PrefabInstance:
       propertyPath: _playerDirectionalMovement._decelerationCurve.m_Curve.Array.data[0].outSlope
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652279, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ReadDashInput
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652279, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: m_ActionEvents.Array.data[2].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Player.PlayerInputs, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: flow
       value: 

@@ -588,8 +588,8 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 9147847883452652259}
-        m_TargetAssemblyTypeName: PlayerInputs, Assembly-CSharp
-        m_MethodName: ReadRollInput
+        m_TargetAssemblyTypeName: Player.PlayerInputs, Assembly-CSharp
+        m_MethodName: ReadDashInput
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -667,17 +667,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementController: {fileID: 9147847883452652284}
-  jumpVelocity: 15
-  coyoteTime: 0.12
-  _jumpBufferTime: 0.1
-  minFallSpeed: 35
-  maxFallSpeed: 40
-  jumpApexThreshold: 10
-  fallClamp: -35
-  earlyJumpMultiplier: 2
-  earlyJumpCancelTime: 0.15
-  _debugRollFall: 0
-  _maxNumAerialJumps: 1
+  _fallClamp: -35
   _debugDisableWallJumpSlide: 0
   _verticalWallJump: 13
   _horizontalWallJump: 13
@@ -686,93 +676,57 @@ MonoBehaviour:
   _maxNumberOfWallJumpsBeforeGrounding: 2
   _wallJumpSkinWidth: 0.25
   _wallSideGravityMultiplier: 0.3
-  moveSpeed: 10
-  accelerationCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.08526611
-      value: 1.0076141
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  accelerationRate: 0.876
-  accelerationTolerance: 0.005
-  decelerationCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.018493652
-      value: 1.0152855
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  decelerationRate: 0.86
-  decelerationTolerance: 0.005
-  changeDirectionCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.019989014
-      value: 0.9999428
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  changeDirectionRate: 0.877
-  changeDirectionTolerance: 0.005
-  airAccelerationRate: 0.282
-  airDecelerationRate: 0.194
-  airChangeDirectionRate: 0.736
-  rollDistance: 2
-  rollSpeed: 20
-  rollCoolDown: 0.8
-  _moveState: 0
-  debugUseAnimations: 1
+  _playerDash:
+    dashDistance: 2
+    dashSpeed: 20
+    dashCoolDownDuration: 0.8
+    _dashIsDirectional: 0
+    _dashIsAttack: 0
+    _dashDamageRadius: 1
+    _dashDamage: 5
+    _debugDashFall: 0
+    DashState: 0
+  _playerHorizontalMovement:
+    _moveSpeed: 10
+    _accelerationCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    _accelerationRate: 0.876
+    _accelerationTolerance: 0.005
+    _decelerationCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    _decelerationRate: 0.86
+    _decelerationTolerance: 0.005
+    _changeDirectionCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    _changeDirectionRate: 0.877
+    _changeDirectionTolerance: 0.005
+    _airAccelerationRate: 0.282
+    _airDecelerationRate: 0.194
+    _airChangeDirectionRate: 0.736
+    MoveState: 0
+  _playerJump:
+    jumpVelocity: 15
+    coyoteTime: 0.12
+    _jumpBufferTime: 0
+    minFallSpeed: 35
+    maxFallSpeed: 40
+    jumpApexThreshold: 10
+    earlyJumpMultiplier: 2
+    earlyJumpCancelTime: 0.15
+    _maxNumAerialJumps: 1
+  _debugUseAnimations: 1
   animator: {fileID: 9147847883452652280}
   spriteRenderer: {fileID: 9147847883264161609}
   defaultSquareSprite: {fileID: 7482667652216324306, guid: 5205f3571171146c886d386aeaa65929, type: 3}
@@ -784,7 +738,9 @@ MonoBehaviour:
     _combat: {fileID: 9147847883452652281}
     _windUpDuration: 0.1
     _recoveryDuration: 0.2
+    AttackSpeed: 1
     _showDebugGUI: 0
+  _downAttackJumpVelocity: 15
   entityParry: {fileID: 9147847883452652277}
   entityBlock: {fileID: 9147847883452652278}
   entityKnockback: {fileID: 9147847883452652283}
@@ -822,6 +778,7 @@ MonoBehaviour:
   _lineRenderDuration: 0.1
   _showGizmos: 1
   _showLineRenderer: 1
+  flow: {fileID: 0}
 --- !u!114 &9147847883452652286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1095,7 +1052,7 @@ MonoBehaviour:
   hitIFrameDuration: 1
   spriteRenderer: {fileID: 9147847883264161609}
   entityController: {fileID: 447105601662447162}
-  _isImmortal: 0
+  _isImmortal_fixed: 0
 --- !u!50 &4928653896513910851
 Rigidbody2D:
   serializedVersion: 4

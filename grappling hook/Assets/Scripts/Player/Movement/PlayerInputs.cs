@@ -515,7 +515,7 @@ namespace Player
         /// <summary>
         /// Called by PlayerInput Unity Event.
         /// </summary>
-        [UsedImplicitly] public void ReadRollInput(InputAction.CallbackContext context)
+        [UsedImplicitly] public void ReadDashInput(InputAction.CallbackContext context)
         {
             if (context.started && !_playerDash.IsDashOnCooldown() && !(entityDaze && entityDaze.isDazed))
             {
