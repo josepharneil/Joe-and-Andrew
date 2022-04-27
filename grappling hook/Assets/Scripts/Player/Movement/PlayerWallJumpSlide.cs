@@ -96,10 +96,7 @@ namespace Player
 
                     playerAnimator.SetTriggerJump();
 
-                    if (playerInputs.GetDebugUseSounds())
-                    {
-                        playerInputs.GetPlayerSounds().PlayWallJumpSound();
-                    }
+                    playerInputs.GetPlayerSounds().PlayWallJumpSound();
                 }
             }
 

@@ -84,10 +84,7 @@ namespace Player
                 playerAnimator.SetTriggerJump();
                 playerAnimator.SetGrounded(false);
 
-                if (_playerInputs.GetDebugUseSounds())
-                {
-                    _playerInputs.GetPlayerSounds().PlayJumpSound();
-                }
+                _playerInputs.GetPlayerSounds().PlayJumpSound();
             }
         }
         

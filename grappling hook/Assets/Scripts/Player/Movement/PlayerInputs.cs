@@ -29,6 +29,7 @@ namespace Player
         [SerializeField] private PlayerMovement _playerMovement;
 
         private bool _isMoveInput;
+        private Vector2 _moveInput;
         private bool _isJumpInput;
         private float _jumpInputTime;
         private bool _isJumpEndedEarly;
@@ -37,7 +38,6 @@ namespace Player
         private FacingDirection _facingDirection;
         public AttackDirection AttackDirection { get; private set; } 
         private Vector2 _velocity;
-        private Vector2 _moveInput;
         
         // Attacks
         [Header("Attacking")] 
@@ -49,7 +49,6 @@ namespace Player
         [SerializeField] private float _downAttackJumpVelocity = 15f;
 
         public FacingDirection GetFacingDirection() => _facingDirection;
-        public bool GetDebugUseSounds() => _debugUseSounds;
         public PlayerSounds GetPlayerSounds() => _playerSounds;
         public ref Vector2 GetVelocity() => ref _velocity;
         
@@ -63,12 +62,12 @@ namespace Player
 
         [Header("Player Sounds")] 
         [SerializeField] private PlayerSounds _playerSounds;
-        [SerializeField] private bool _debugUseSounds = true;
         
         private void Awake()
         {
             _playerHorizontalMovement.Initialise(entityBlock);
             _playerJump.Initialise(this);
+            _playerSounds.Initialise();
         }
 
         // Start is called before the first frame update
