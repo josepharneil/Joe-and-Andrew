@@ -37,22 +37,19 @@ namespace Player
         [SerializeField] private PlayerDash _playerDash;
         [SerializeField] private PlayerHorizontalMovement _playerHorizontalMovement;
         [SerializeField] private PlayerJump _playerJump;
+        [SerializeField] private PlayerFallThroughPlatform _playerFallThroughPlatform;
 
         private float _jumpInputTime;
         private float _lastGroundedTime;
-        private float _fallThroughPlatformTimer = 0f;
         
         private bool _isMoveInput;
         private bool _isJumpInput;
         
         private bool _isJumpEndedEarly = false;
-        // private bool _isInCoyoteTime; // do we need this? TODO check
         private bool _isBufferedJumpInput;
 
-        // private bool _hasJumped;
         private bool _isGrounded;
         private bool _hasWallJumped;
-        private bool _hasFallenThroughPlatform;
         public FacingDirection FacingDirection { get; private set; }
         public AttackDirection AttackDirection { get; private set; } 
         private Vector2 _velocity;
@@ -208,7 +205,6 @@ namespace Player
             }
         }
 
-        //AK 23/4 added for use when changing the the speeds from flow
         public void ResetMoveSpeed()
         {
             _playerHorizontalMovement.ResetMoveSpeed();
@@ -414,26 +410,10 @@ namespace Player
         
         private void DropThroughPlatform()
         {
-            BoxRayCollider2D customCollider2D = movementController.customCollider2D;
-            // JA:29/03/22 Not sure if you should use frame counting for this instead of a timer...???
-            if (_hasFallenThroughPlatform && _fallThroughPlatformTimer < 20)
-            {
-                _fallThroughPlatformTimer += 1;
-            }
-            else
-            {
-                _hasFallenThroughPlatform = false;
-                _fallThroughPlatformTimer = 0;
-                customCollider2D.SetFallThroughPlatform(false);
-            }
-
-            // TODO This should be called within some kind of read input function if we're reading the axis... I think
-            if (_isJumpInput && customCollider2D.CheckIfOneWayPlatform() && Input.GetAxisRaw("Vertical") < 0f)
-            {
-                _isJumpInput = false;
-                customCollider2D.SetFallThroughPlatform(true);
-                _hasFallenThroughPlatform = true;
-            }
+            // TODO Check if we should be directly accessing Input here.. might be okay, but also might not be.
+            // Can we not just use _moveInput.y < 0f ?
+            _playerFallThroughPlatform.Update(movementController.customCollider2D, ref _isJumpInput, 
+                Input.GetAxisRaw("Vertical") < 0f);
         }
 
         #endregion
