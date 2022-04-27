@@ -22,12 +22,10 @@ namespace Player
         private float _fallSpeed;
         private bool _isInCoyoteTime; // do we need this? TODO check
         private bool _hasJumped;
-
         
         private static readonly int JumpTriggerID = Animator.StringToHash("jumpTrigger");
         private static readonly int GroundedTriggerID = Animator.StringToHash("groundedTrigger");
 
-        
         public float GetFallSpeed() => _fallSpeed;
         public void ResetCurrentNumAerialJumps() => _currentNumAerialJumps = 0;
         public void SetIsInCoyoteTime(bool isInCoyoteTime) => _isInCoyoteTime = isInCoyoteTime;
@@ -47,24 +45,31 @@ namespace Player
             _movementController = movementController;
         }
 
-        public void Jump()
+        public void Update(bool isJumpInput, bool isGrounded, bool isBufferedJumpInput, float timeBetweenJumpInputAndLastGrounded)
+        {
+            CheckCoyote(isJumpInput, isGrounded, timeBetweenJumpInputAndLastGrounded);
+            CalculateJumpApex();
+            Jump(isJumpInput, isGrounded, isBufferedJumpInput);
+        }
+
+        private void Jump(bool isJumpInput, bool isGrounded, bool isBufferedJumpInput)
         {
             // If we get a jump input, and we're in the air but we've reached our max aerial jumps, turn off the jump input
-            if (_playerInputs.IsJumpInput() && !_playerInputs.IsGrounded() && !_isInCoyoteTime && _currentNumAerialJumps >= _maxNumAerialJumps)
+            if (isJumpInput && !isGrounded && !_isInCoyoteTime && _currentNumAerialJumps >= _maxNumAerialJumps)
             {
-                _playerInputs.SetIsJumpInput(false);
+                _playerInputs.TurnOffJumpInput();
             }
             
-            bool isAerialJump = !_playerInputs.IsGrounded() && (_currentNumAerialJumps < _maxNumAerialJumps);
-            bool isGroundAerialOrCoyoteJump = _playerInputs.IsJumpInput() && (_playerInputs.IsGrounded() || _isInCoyoteTime || isAerialJump);
-            bool isBufferedJumpFromGround = _playerInputs.GetIsBufferedJumpInput() && _playerInputs.IsGrounded();
+            bool isAerialJump = !isGrounded && (_currentNumAerialJumps < _maxNumAerialJumps);
+            bool isGroundAerialOrCoyoteJump = isJumpInput && (isGrounded || _isInCoyoteTime || isAerialJump);
+            bool isBufferedJumpFromGround = isBufferedJumpInput && isGrounded;
             
             if (isGroundAerialOrCoyoteJump || isBufferedJumpFromGround)
             {
                 _playerInputs.Velocity.y = jumpVelocity;
 
-                _playerInputs.SetIsBufferedJumpInput(false);
-                _playerInputs.SetIsJumpInput(false);
+                _playerInputs.TurnOffBufferedJumpInput();
+                _playerInputs.TurnOffJumpInput();
                 _isInCoyoteTime = false;
 
                 if (isAerialJump)
@@ -87,7 +92,7 @@ namespace Player
             }
         }
         
-        public void CalculateJumpApex()
+        private void CalculateJumpApex()
         {
             if (!_movementController.customCollider2D.CollisionBelow)
             {
@@ -102,10 +107,10 @@ namespace Player
             }
         }
 
-        public void CheckCoyote()
+        private void CheckCoyote(bool isJumpInput, bool isGrounded, float timeBetweenJumpInputAndLastGrounded)
         {
-            if (_playerInputs.IsJumpInput() && !_playerInputs.IsGrounded() && !_hasJumped 
-                && (_playerInputs.GetJumpInputTime() - _playerInputs.GetLastGroundedTime()) < coyoteTime )
+            if (isJumpInput && !isGrounded && !_hasJumped 
+                && timeBetweenJumpInputAndLastGrounded < coyoteTime )
             {
                 _isInCoyoteTime = true;
             }

@@ -18,20 +18,7 @@ namespace Player
         [Header("Components")]
         [SerializeField] private MovementController movementController;
 
-        [Header("Jump Stats")]
-        // [SerializeField] private float jumpVelocity = 15f;
-        // [SerializeField] private float coyoteTime = 0.12f;
-        // [SerializeField] [Tooltip("How long the jump buffer will last")] private float _jumpBufferTime;
-        // [SerializeField] private float minFallSpeed = 35f;
-        // [SerializeField] private float maxFallSpeed = 40f;
-        // [SerializeField] private float jumpApexThreshold = 10f;
-        // [SerializeField] private float earlyJumpMultiplier = 2f;
-        // [SerializeField] private float earlyJumpCancelTime = 0.15f;
-        // private float _apexPoint; //This becomes 1 at the end of the jump
-        // [SerializeField] private int _maxNumAerialJumps = 1;
-        // private int _currentNumAerialJumps = 0;
-        
-        // fall stuff
+        [Header("Fall Stats")]
         [SerializeField] private float _fallClamp = -35f;
 
         [Header("Wall Jump / Sliding Stats")]
@@ -53,26 +40,13 @@ namespace Player
 
         private float _jumpInputTime;
         private float _lastGroundedTime;
-        public float GetLastGroundedTime() => _lastGroundedTime;
-        public float GetJumpInputTime() => _jumpInputTime;
-        public void SetIsJumpInput(bool isJumpInput) => _isJumpInput = isJumpInput;
-        public void SetIsBufferedJumpInput(bool isBufferedJumpInput) => _isJumpInput = isBufferedJumpInput;
-        public bool GetIsBufferedJumpInput() => _isBufferedJumpInput;
+        public void TurnOffJumpInput() => _isJumpInput = false;
+        public void TurnOffBufferedJumpInput() => _isBufferedJumpInput = false;
         
         private float _fallThroughPlatformTimer = 0f;
 
         private bool _isMoveInput;
         private bool _isJumpInput;
-
-        public bool IsJumpInput()
-        {
-            return _isJumpInput;
-        }
-
-        public bool IsGrounded()
-        {
-            return _isGrounded;
-        }
         
         private bool _isJumpEndedEarly = false;
         // private bool _isInCoyoteTime; // do we need this? TODO check
@@ -179,13 +153,11 @@ namespace Player
             UpdateMovement();
             CheckWallSlide();
             CheckGrounded();
-            _playerJump.CheckCoyote(); // CheckCoyote();
-            CheckJumpBuffer();
-            _playerJump.CalculateJumpApex(); // CalculateJumpApex();
+            CheckBufferedJumpInput();
             CalculateGravity();
             DropThroughPlatform();
             WallJump();
-            _playerJump.Jump(); // Jump();
+            UpdateJump();
             Move();
             UpdateFacingDirection();
             SetAnimatorSpeedFloats();
@@ -327,6 +299,12 @@ namespace Player
                 _isJumpEndedEarly = true;
             }
         }
+
+        private void UpdateJump()
+        {
+            float timeBetweenJumpInputAndLastGrounded = _jumpInputTime - _lastGroundedTime;
+            _playerJump.Update(_isJumpInput, _isGrounded, _isBufferedJumpInput, timeBetweenJumpInputAndLastGrounded);
+        }
         
         public void DownAttackJump()
         {
@@ -361,20 +339,8 @@ namespace Player
                 _isGrounded = false;
             }
         }
-        
-        // private void CheckCoyote()
-        // {
-        //     if (_isJumpInput && !_isGrounded && !_hasJumped && (_jumpCalledTime - _lastGroundedTime) < coyoteTime )
-        //     {
-        //         _isInCoyoteTime = true;
-        //     }
-        //     else
-        //     {
-        //         _isInCoyoteTime = false;
-        //     }
-        // }
 
-        private void CheckJumpBuffer()
+        private void CheckBufferedJumpInput()
         {
             // "When the character is already in the air pressing jump moments before the ground will trigger jump as soon as they land"
             // http://www.davetech.co.uk/gamedevplatformer
