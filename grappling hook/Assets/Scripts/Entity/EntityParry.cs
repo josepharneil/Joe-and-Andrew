@@ -6,8 +6,7 @@ namespace Entity
 {
     public class EntityParry : MonoBehaviour
     {
-        // TODO: This should probably use movement controller instead of inputs? for facing direction...
-        // something like that
+        // TODO Move this to player prob... or refactor to be more general...
         [SerializeField] private Player.PlayerInputs inputs;
         [SerializeField] private LayerMask whatIsParryable;
         [SerializeField] private float parryRadius = 1f;
@@ -40,7 +39,7 @@ namespace Entity
 
             Debug.Log("Parry!");
             
-            FacingDirection parryDirection = inputs.FacingDirection;
+            FacingDirection parryDirection = inputs.GetFacingDirection();
             
             Vector2 overlapCirclePosition;
             if (parryDirection == FacingDirection.Left)
@@ -77,7 +76,7 @@ namespace Entity
         private void OnDrawGizmosSelected()
         {
             if (!_showGizmos) return;
-            if (inputs.FacingDirection == FacingDirection.Left)
+            if (inputs.GetFacingDirection() == FacingDirection.Left)
             {
                 Vector3 position = transform.position + new Vector3(-1, 0);
                 Gizmos.DrawWireSphere(position, parryRadius);

@@ -18,39 +18,23 @@ namespace Player
         [Header("Components")]
         [SerializeField] private MovementController movementController;
 
-        [Header("Fall Stats")]
-        [SerializeField] private float _fallClamp = -35f;
-
-        [Header("Wall Jump / Sliding Stats")]
-        [SerializeField] private bool _debugDisableWallJumpSlide = false;
-        [SerializeField] private float _verticalWallJump = 13f;
-        [SerializeField] private float _horizontalWallJump = 13f;
-        [SerializeField] private float _wallJumpInputDisableTime = 0.2f;
-        [SerializeField] private float _wallJumpCoyoteDuration = 0.12f;
-        private float _lastWalledTime;
-        [SerializeField] private int _maxNumberOfWallJumpsBeforeGrounding = 2;
-        [SerializeField] private float _wallJumpSkinWidth = 0.25f;
-        private int _currentNumberOfWallJumps = 0;
-        private bool _isWallSliding = false;
-        [SerializeField] private float _wallSideGravityMultiplier = 0.3f;
-        
+        [Header("Player Components")]
         [SerializeField] private PlayerDash _playerDash;
         [SerializeField] private PlayerHorizontalMovement _playerHorizontalMovement;
         [SerializeField] private PlayerJump _playerJump;
         [SerializeField] private PlayerFallThroughPlatform _playerFallThroughPlatform;
+        [SerializeField] private PlayerWallJumpSlide _playerWallJumpSlide;
+        [SerializeField] private PlayerGravity _playerGravity;
 
         private float _jumpInputTime;
         private float _lastGroundedTime;
-        
         private bool _isMoveInput;
         private bool _isJumpInput;
-        
-        private bool _isJumpEndedEarly = false;
+        private bool _isJumpEndedEarly;
         private bool _isBufferedJumpInput;
-
         private bool _isGrounded;
-        private bool _hasWallJumped;
-        public FacingDirection FacingDirection { get; private set; }
+
+        private FacingDirection _facingDirection;
         public AttackDirection AttackDirection { get; private set; } 
         private Vector2 _velocity;
         private Vector2 _moveInput;
@@ -67,25 +51,18 @@ namespace Player
         [SerializeField] private bool _attacksDrivenByAnimations = true;
         [SerializeField] private PlayerAttackDriver _playerAttackDriver;
         [SerializeField] private float _downAttackJumpVelocity = 15f;
-        
+
+        public FacingDirection GetFacingDirection() => _facingDirection;
         public bool GetDebugUseAnimations() => _debugUseAnimations;
         public bool GetDebugUseSounds() => _debugUseSounds;
         public Animator GetAnimator() => animator;
         public PlayerSounds GetPlayerSounds() => _playerSounds;
         public ref Vector2 GetVelocity() => ref _velocity;
         
-
-        [Header("Parrying")]
-        [SerializeField] private EntityParry entityParry;
-
-        [Header("Blocking")] 
-        [SerializeField] private EntityBlock entityBlock;
-        
-        [Header("Knockback")]
-        [SerializeField] private EntityKnockback entityKnockback;
-
-        [Header("Daze")]
-        [SerializeField] private EntityDaze entityDaze;
+        [Header("Parrying")] [SerializeField] private EntityParry entityParry;
+        [Header("Blocking")] [SerializeField] private EntityBlock entityBlock;
+        [Header("Knockback")] [SerializeField] private EntityKnockback entityKnockback;
+        [Header("Daze")] [SerializeField] private EntityDaze entityDaze;
         
         // Animation parameter IDs.
         private static readonly int HorizontalSpeedID = Animator.StringToHash("horizontalSpeed");
@@ -194,12 +171,12 @@ namespace Player
             {
                 if (_moveInput.x < 0)
                 {
-                    FacingDirection = FacingDirection.Left;
+                    _facingDirection = FacingDirection.Left;
                     spriteRenderer.flipX = true;
                 }
                 else if (_moveInput.x > 0)
                 {
-                    FacingDirection = FacingDirection.Right;
+                    _facingDirection = FacingDirection.Right;
                     spriteRenderer.flipX = false;
                 }
             }
@@ -219,38 +196,9 @@ namespace Player
         //Taken from Tarodevs GitHub: https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/blob/main/Scripts/PlayerController.cs
         private void CalculateGravity()
         {
-            if (movementController.customCollider2D.CollisionBelow)
-            {
-                if (_velocity.y < 0)
-                {
-                    _velocity.y = 0;
-                }
-            }
-            else
-            {
-                if (movementController.customCollider2D.CheckIfHittingCeiling())
-                {
-                    _isJumpEndedEarly = true;
-                }
-                
-                // Checks if the player has ended a jump early, and if so increase the gravity
-                if (_isJumpEndedEarly)
-                {
-                    _velocity.y -= _playerJump.GetFallSpeed() * _playerJump.GetEarlyJumpMultiplier() * Time.deltaTime;
-                }
-                else if (_isWallSliding && _velocity.y < 0) 
-                {
-                    _velocity.y -= _playerJump.GetFallSpeed() * _wallSideGravityMultiplier * Time.deltaTime;
-                }
-                else
-                {
-                    _velocity.y -= _playerJump.GetFallSpeed() * Time.deltaTime;
-                }
-                
-                // Makes the player actually fall
-                // Clamps the y velocity to a certain value
-                if (_velocity.y < _fallClamp) _velocity.y = _fallClamp;
-            }
+            _playerGravity.UpdateGravity(movementController.customCollider2D.CollisionBelow, 
+                movementController.customCollider2D.CheckIfHittingCeiling(),
+                _isJumpEndedEarly, ref _velocity, _playerJump, _playerWallJumpSlide);
         }
 
         #endregion
@@ -298,18 +246,18 @@ namespace Player
                 _isGrounded = true;
                 _lastGroundedTime = Time.time;
                 _playerJump.SetHasJumped(false);
-                _currentNumberOfWallJumps = 0;
+                _playerWallJumpSlide.ResetWallJumpCounter();
                 _playerJump.ResetCurrentNumAerialJumps();
                 
                 // Cancel wall jump blocking move inputs
-                if (_hasWallJumped)
+                if (_playerWallJumpSlide.HasWallJumped())
                 {
                     // JA:29/03/22 Not sure if this is a good idea, but it fixes the instance where
                     // you wall jump, and maintain the exact same input, thus no input read up
                     _moveInput.x = Input.GetAxisRaw("Horizontal");
                     _moveInput.y = Input.GetAxisRaw("Vertical");
                     _isMoveInput = true;
-                    _hasWallJumped = false;
+                    _playerWallJumpSlide.SetHasWallJumped(false);
                 }
             }
             else
@@ -336,76 +284,10 @@ namespace Player
         
         private void WallJump()
         {
-            if (_debugDisableWallJumpSlide) return;
-            
-            if (!_isGrounded && !_playerJump.GetIsInCoyoteTime() &&
-                (_currentNumberOfWallJumps < _maxNumberOfWallJumpsBeforeGrounding))
-            {
-                // Check for wall to right / left OR check for wall jump coyote
-                movementController.customCollider2D.CheckHorizontalCollisions(out bool wallIsToLeft, out bool wallIsToRight, _wallJumpSkinWidth);
-
-                bool isAgainstWall = wallIsToLeft || wallIsToRight;
-                if(wallIsToLeft && wallIsToRight)
-                {
-                    Debug.LogError("WALL JUMPING: Wall to the left AND to the right: This implies bad level design? Not sure what to do here.", this);
-                }
-                if (isAgainstWall)
-                {
-                    _lastWalledTime = Time.time;
-                }
-                bool isInWallJumpCoyote = (Time.time - _lastWalledTime) < _wallJumpCoyoteDuration;
-                
-                bool jumpFromWall = _isJumpInput && (isAgainstWall || isInWallJumpCoyote);
-                if (jumpFromWall)
-                {
-                    _velocity.y = _verticalWallJump;
-                    
-                    if (wallIsToRight)
-                    {
-                        // Jump to left
-                        _velocity.x = _horizontalWallJump * -1f;
-                        FacingDirection = FacingDirection.Left;
-                    }
-                    else
-                    {
-                        // Jump to right
-                        _velocity.x = _horizontalWallJump;
-                        FacingDirection = FacingDirection.Right;
-                    }
-                    
-                    _isBufferedJumpInput = false;
-                    _isJumpInput = false;
-                    _playerJump.SetIsInCoyoteTime(false);
-                    _isMoveInput = false;
-                    
-                    _moveInput.x = 0f;
-
-                    _hasWallJumped = true;
-                    _playerJump.SetHasJumped(true);
-
-                    _currentNumberOfWallJumps++;
-
-                    if (_debugUseAnimations)
-                    {
-                        animator.SetTrigger(JumpTriggerID);
-                    }
-                    
-                    if (_debugUseSounds)
-                    {
-                        _playerSounds.PlayWallJumpSound();
-                    }
-                }
-            }
-
-            if (_hasWallJumped && (Time.time - _jumpInputTime) > _wallJumpInputDisableTime)
-            {
-                // JA:29/03/22 Not sure if this is a good idea, but it fixes the instance where
-                // you wall jump, and maintain the exact same input, thus no input read up
-                _moveInput.x = Input.GetAxisRaw("Horizontal");
-                _moveInput.y = Input.GetAxisRaw("Vertical");
-                _isMoveInput = true;
-                _hasWallJumped = false;
-            }
+            _playerWallJumpSlide.UpdateWallJump(ref _isJumpInput, ref _isBufferedJumpInput, 
+                _isGrounded, ref _playerJump.GetIsInCoyoteTime(), ref _isMoveInput, _jumpInputTime, 
+                movementController.customCollider2D, ref _velocity, facingDirection: ref _facingDirection, 
+                ref _moveInput, this, _playerJump );
         }
         
         private void DropThroughPlatform()
@@ -421,18 +303,8 @@ namespace Player
         #region WallSlide
         private void CheckWallSlide()
         {
-            if (_debugDisableWallJumpSlide) return;
-            
-            bool collisionLeftRight = FacingDirection == FacingDirection.Left ?
-                movementController.customCollider2D.CollisionLeft : movementController.customCollider2D.CollisionRight;
-            if (_isMoveInput && !_isGrounded && collisionLeftRight)
-            {
-                 _isWallSliding = true;
-            }
-            else
-            {
-                _isWallSliding = false;
-            }
+            _playerWallJumpSlide.UpdateWallSlide(_isMoveInput, _isGrounded, _facingDirection,
+                movementController.customCollider2D.CollisionLeft, movementController.customCollider2D.CollisionRight);
         }
         #endregion
 
@@ -448,7 +320,7 @@ namespace Player
             {
                 _moveInput = Vector2.zero;
             }
-            if (_hasWallJumped)
+            if (_playerWallJumpSlide.HasWallJumped())
             {
                 //used to stop the player moving for a short period after they have wall jumped
                 //once it works it should let wall jumps be chained together
@@ -464,12 +336,12 @@ namespace Player
                 }
                 if (_moveInput.x < 0)
                 {
-                    FacingDirection = FacingDirection.Left;
+                    _facingDirection = FacingDirection.Left;
                     spriteRenderer.flipX = true;
                 }
                 else if (_moveInput.x > 0)
                 {                    
-                    FacingDirection = FacingDirection.Right;
+                    _facingDirection = FacingDirection.Right;
                     spriteRenderer.flipX = false;
                 }
             }
@@ -482,7 +354,7 @@ namespace Player
         private void UpdateMovement()
         {
             // Note to self: could do a switch on movestate here instead?
-            if (_playerDash.UpdateDash(_moveInput, FacingDirection, ref _playerHorizontalMovement.MoveState, ref _velocity))
+            if (_playerDash.UpdateDash(_moveInput, _facingDirection, ref _playerHorizontalMovement.MoveState, ref _velocity))
             {
                 return;
             }
@@ -539,16 +411,16 @@ namespace Player
                 {
                     if (_moveInput.x < 0)
                     {
-                        FacingDirection = FacingDirection.Left;
+                        _facingDirection = FacingDirection.Left;
                         spriteRenderer.flipX = true;
                     }
                     else if ( _moveInput.x > 0 )
                     {
-                        FacingDirection = FacingDirection.Right;
+                        _facingDirection = FacingDirection.Right;
                         spriteRenderer.flipX = false;
                     }
                 }
-                AttackDirection = FacingDirection == FacingDirection.Left ? AttackDirection.Left : AttackDirection.Right;
+                AttackDirection = _facingDirection == FacingDirection.Left ? AttackDirection.Left : AttackDirection.Right;
             }
             
             if (_attacksDrivenByAnimations)
@@ -559,7 +431,6 @@ namespace Player
             {
                 _playerAttackDriver.StartAttack();
             }
-
         }
 
         private void CheckIfAttackIsCancellable()

@@ -9,5 +9,6 @@ namespace Player
         public Vector2 Velocity;
         public FacingDirection FacingDirection;
         public AttackDirection AttackDirection;
+        public bool IsGrounded;
     }
 }
