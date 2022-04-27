@@ -1,5 +1,6 @@
 using System;
 using Entity;
+using Physics;
 using UnityEngine;
 
 namespace Player
@@ -20,12 +21,15 @@ namespace Player
         private int _currentNumAerialJumps = 0;
         private float _apexPoint; //This becomes 1 at the end of the jump
         private float _fallSpeed;
-        private bool _isInCoyoteTime; // do we need this? TODO check
+        private bool _isInCoyoteTime;
         private bool _hasJumped;
+
+        private PlayerInputs _playerInputs;// want to remove this eventually
         
         private static readonly int JumpTriggerID = Animator.StringToHash("jumpTrigger");
         private static readonly int GroundedTriggerID = Animator.StringToHash("groundedTrigger");
-
+        
+        #region Getters & Setters
         public float GetFallSpeed() => _fallSpeed;
         public void ResetCurrentNumAerialJumps() => _currentNumAerialJumps = 0;
         public void SetIsInCoyoteTime(bool isInCoyoteTime) => _isInCoyoteTime = isInCoyoteTime;
@@ -34,42 +38,39 @@ namespace Player
         public float GetEarlyJumpMultiplier() => earlyJumpMultiplier;
         public float GetEarlyCancelTime() => earlyJumpCancelTime;
         public float GetJumpBufferTime() => _jumpBufferTime;
-        
-        
-        private PlayerInputs _playerInputs;
-        private MovementController _movementController;
+        #endregion
 
-        public void Initialise(PlayerInputs playerInputs, MovementController movementController)
+        public void Initialise(PlayerInputs playerInputs)
         {
             _playerInputs = playerInputs;
-            _movementController = movementController;
         }
 
-        public void Update(bool isJumpInput, bool isGrounded, bool isBufferedJumpInput, float timeBetweenJumpInputAndLastGrounded)
+        public void Update(ref bool ref_isJumpInput, bool isGrounded, ref bool ref_isBufferedJumpInput, 
+            float timeBetweenJumpInputAndLastGrounded, ref Vector2 ref_playerVelocity, bool isCollisionBelow)
         {
-            CheckCoyote(isJumpInput, isGrounded, timeBetweenJumpInputAndLastGrounded);
-            CalculateJumpApex();
-            Jump(isJumpInput, isGrounded, isBufferedJumpInput);
+            CheckCoyote(ref_isJumpInput, isGrounded, timeBetweenJumpInputAndLastGrounded);
+            CalculateJumpApex(ref ref_playerVelocity, isCollisionBelow);
+            Jump(ref ref_isJumpInput, isGrounded, ref ref_isBufferedJumpInput, ref ref_playerVelocity);
         }
 
-        private void Jump(bool isJumpInput, bool isGrounded, bool isBufferedJumpInput)
+        private void Jump(ref bool ref_isJumpInput, bool isGrounded, ref bool ref_isBufferedJumpInput, ref Vector2 ref_playerVelocity)
         {
             // If we get a jump input, and we're in the air but we've reached our max aerial jumps, turn off the jump input
-            if (isJumpInput && !isGrounded && !_isInCoyoteTime && _currentNumAerialJumps >= _maxNumAerialJumps)
+            if (ref_isJumpInput && !isGrounded && !_isInCoyoteTime && _currentNumAerialJumps >= _maxNumAerialJumps)
             {
-                _playerInputs.TurnOffJumpInput();
+                ref_isJumpInput = false;
             }
             
             bool isAerialJump = !isGrounded && (_currentNumAerialJumps < _maxNumAerialJumps);
-            bool isGroundAerialOrCoyoteJump = isJumpInput && (isGrounded || _isInCoyoteTime || isAerialJump);
-            bool isBufferedJumpFromGround = isBufferedJumpInput && isGrounded;
+            bool isGroundAerialOrCoyoteJump = ref_isJumpInput && (isGrounded || _isInCoyoteTime || isAerialJump);
+            bool isBufferedJumpFromGround = ref_isBufferedJumpInput && isGrounded;
             
             if (isGroundAerialOrCoyoteJump || isBufferedJumpFromGround)
             {
-                _playerInputs.Velocity.y = jumpVelocity;
+                ref_playerVelocity.y = jumpVelocity;
 
-                _playerInputs.TurnOffBufferedJumpInput();
-                _playerInputs.TurnOffJumpInput();
+                ref_isBufferedJumpInput = false;
+                ref_isJumpInput = false;
                 _isInCoyoteTime = false;
 
                 if (isAerialJump)
@@ -92,12 +93,12 @@ namespace Player
             }
         }
         
-        private void CalculateJumpApex()
+        private void CalculateJumpApex(ref Vector2 ref_playerVelocity, bool isCollisionBelow)
         {
-            if (!_movementController.customCollider2D.CollisionBelow)
+            if (!isCollisionBelow)
             {
                 //sets the apexPoint based on how large the y velocity is
-                _apexPoint = Mathf.InverseLerp(jumpApexThreshold, 0, Mathf.Abs(_playerInputs.Velocity.y));
+                _apexPoint = Mathf.InverseLerp(jumpApexThreshold, 0, Mathf.Abs(ref_playerVelocity.y));
                 //uses the apexPoint to lerp between the min and max fallspeeds (our new gravity replacement)
                 _fallSpeed = Mathf.Lerp(minFallSpeed, maxFallSpeed, _apexPoint);
             }

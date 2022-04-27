@@ -1,4 +1,5 @@
 using System;
+using Entity;
 using UnityEngine;
 
 namespace Player
@@ -23,41 +24,36 @@ namespace Player
         [SerializeField] private bool _dashIsAttack = false;
         [SerializeField] private float _dashDamageRadius = 1f;
         [SerializeField] private int _dashDamage = 5;
+        
+        [Header("Debug")]
         [SerializeField] private bool _debugDashFall = false;
 
         private Vector2 _dashDirection;
         private float _dashDurationTimer = 0f;
         private float _dashCoolDownTimer = 0f;
         [HideInInspector] public DashState DashState = DashState.NotDashing;
-
-        private PlayerInputs _playerInputs;
-
-        public void Initialise(PlayerInputs playerInputs)
-        {
-            _playerInputs = playerInputs;
-        }
-
+        
         public void Start()
         {
             DashState = DashState.NotDashing;
         }
         
-        public bool UpdateDash()
+        public bool UpdateDash(Vector2 moveInput, FacingDirection facingDirection, ref MoveState ref_moveState, ref Vector2 ref_velocity)
         {
             bool isInADashState = false;
             
             switch (DashState)
             {
                 case DashState.StartDash:
-                    StartDash();
+                    StartDash(moveInput, facingDirection, out ref_moveState);
                     isInADashState = true;
                     break;
                 case DashState.Dashing:
-                    Dashing();
+                    Dashing(ref ref_velocity);
                     isInADashState = true;
                     break;
                 case DashState.EndDash:
-                    StopDash();
+                    StopDash(out ref_moveState);
                     isInADashState = true;
                     break;
                 case DashState.NotDashing:
@@ -69,17 +65,16 @@ namespace Player
             return isInADashState;
         }
         
-        private void StartDash()
+        private void StartDash(Vector2 moveInput, FacingDirection facingDirection, out MoveState out_MoveState)
         {
             _dashDurationTimer = 0f;
-            _playerInputs.SetMoveState(MoveState.Dashing);
+            out_MoveState = MoveState.Dashing;
             DashState = DashState.Dashing;
             if (_dashIsDirectional)
             {
-                Vector2 moveInput = _playerInputs.GetMoveInput();
                 if (moveInput.x == 0 && moveInput.y == 0)
                 {
-                    _dashDirection.x = (int)_playerInputs.FacingDirection;
+                    _dashDirection.x = (int)facingDirection;
                     _dashDirection.y = 0f;
                 }
                 else
@@ -89,21 +84,21 @@ namespace Player
             }
             else
             {
-                _dashDirection.x = (int)_playerInputs.FacingDirection;
+                _dashDirection.x = (int)facingDirection;
                 _dashDirection.y = 0f;
             }
         }
 
-        private void Dashing()
+        private void Dashing(ref Vector2 ref_velocity)
         {
             // Keeps dashing while the timer is on
             float dashDuration = dashDistance / dashSpeed;
             if (_dashDurationTimer <= dashDuration)
             {
-                _playerInputs.Velocity = _dashDirection * dashSpeed;
+                ref_velocity = _dashDirection * dashSpeed;
                 if (_debugDashFall)
                 {
-                    _playerInputs.Velocity.y = 0;
+                    ref_velocity.y = 0;
                 }
                 _dashDurationTimer += Time.deltaTime;
             }
@@ -113,9 +108,9 @@ namespace Player
             }
         }
 
-        private void StopDash()
+        private void StopDash(out MoveState out_moveState)
         {
-            _playerInputs.SetMoveState(MoveState.Decelerating);
+            out_moveState = MoveState.Decelerating;
             DashState = DashState.NotDashing;
             _dashCoolDownTimer = Time.time;
         }

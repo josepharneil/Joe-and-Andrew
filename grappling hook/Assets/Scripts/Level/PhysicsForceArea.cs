@@ -21,37 +21,39 @@ namespace Level
                 {
                     Vector2 forceVector = _forceDirection * _forceAmount;
 
+                    ref Vector2 playerVelocity = ref playerInputs.GetVelocity();
+
                     // Rightwards force
                     if (forceVector.x > 0f)
                     {
-                        if (playerInputs.Velocity.x < forceVector.x)
+                        if (playerVelocity.x < forceVector.x)
                         {
-                            playerInputs.Velocity.x = forceVector.x;
+                            playerVelocity.x = forceVector.x;
                         }
                     }
                     // Leftwards force
                     else if (forceVector.x < 0f)
                     {
-                        if (playerInputs.Velocity.x > forceVector.x)
+                        if (playerVelocity.x > forceVector.x)
                         {
-                            playerInputs.Velocity.x = forceVector.x;
+                            playerVelocity.x = forceVector.x;
                         }
                     }
                     
                     // Upwards force
                     if (forceVector.y > 0f)
                     {
-                        if (playerInputs.Velocity.y < forceVector.y)
+                        if (playerVelocity.y < forceVector.y)
                         {
-                            playerInputs.Velocity.y = forceVector.y;
+                            playerVelocity.y = forceVector.y;
                         }
                     }
                     // Downwards force
                     else if (forceVector.y < 0f)
                     {
-                        if (playerInputs.Velocity.y > forceVector.y)
+                        if (playerVelocity.y > forceVector.y)
                         {
-                            playerInputs.Velocity.y = forceVector.y;
+                            playerVelocity.y = forceVector.y;
                         }
                     }
                 }
@@ -78,7 +80,7 @@ namespace Level
                     // Sideways force
                     if (forceVector.x != 0f)
                     {
-                        playerInputs.Velocity.x = 0;
+                        playerInputs.GetVelocity().x = 0;
                     }
                 }
             }

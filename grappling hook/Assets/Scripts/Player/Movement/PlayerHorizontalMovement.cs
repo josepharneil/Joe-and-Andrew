@@ -1,5 +1,6 @@
 using System;
 using Entity;
+using Physics;
 using UnityEngine;
 
 namespace Player
@@ -33,8 +34,9 @@ namespace Player
         [SerializeField] [Range(0f, 1f)] private float _airDecelerationRate = 0.194f;
         [SerializeField] [Range(0f, 1f)] private float _airChangeDirectionRate = 0.736f;
         
-        private PlayerInputs _playerInputs;
-        private MovementController _movementController;
+        // TODO Could reformat entity block, or flow... need a nice way of modifying speed...
+        // Either through bools or by setting...?
+        // Bools could be more stable (like a state)
         private EntityBlock _entityBlock;
         public MoveState MoveState = MoveState.Stopped;
         private float _lerpCurrent = 0f;
@@ -50,10 +52,8 @@ namespace Player
             _moveSpeed = _baseMoveSpeed;
         }
         
-        public void Initialise(PlayerInputs playerInputs, MovementController movementController, EntityBlock entityBlock)
+        public void Initialise(EntityBlock entityBlock)
         {
-            _playerInputs = playerInputs;
-            _movementController = movementController;
             _entityBlock = entityBlock;
         }
 
@@ -63,38 +63,34 @@ namespace Player
             _baseMoveSpeed = _moveSpeed;
         }
 
-        public void Update()
+        public void Update(bool isMoveInput, Vector2 moveInput, ref Vector2 ref_playerVelocity, bool isCollisionBelow)
         {
-            bool isMoveInput = _playerInputs.GetIsMoveInput();
-            
             // Moving
             if (isMoveInput)
             {
-                UpdateChangeDirection();
+                UpdateChangeDirection(moveInput, ref_playerVelocity);
                 
                 switch (MoveState)
                 {
                     case MoveState.Stopped:
-                        //begins the movement, calls sets to accelerating
-                        //todo Joe here, is this correct? Start moving in the stopped state?
-                        //AK: yeah this is correct, this is for if the player has stopped and an input comes in to start moving
+                        // NOTE: StartMoving() here is correct
+                        // This is for if the player has stopped and an input comes in to start moving
                         StartMoving();
                         break;
                     case MoveState.Accelerating:
-                        //accelerates to run speed, sets to moveState to run once at speed
-                        Accelerate();
+                        Accelerate(moveInput, ref ref_playerVelocity, isCollisionBelow);
                         break;
                     case MoveState.Decelerating:
-                        //this will be called if the player starts decelerating and then wants to move again
+                        // This will be called if the player starts decelerating and then wants to move again
+                        // This means using "StartMoving()" here is correct.
                         StartMoving();
                         break;
                     case MoveState.Running:
-                        //continues moving at the current speed
-                        Run();
+                        Run(moveInput, ref ref_playerVelocity);
                         break;
                     case MoveState.ChangingDirection:
                         //changes the speed to the opposite one
-                        ChangeDirection();
+                        ChangeDirection(moveInput, ref ref_playerVelocity, isCollisionBelow);
                         break;
                 }
             }
@@ -103,16 +99,13 @@ namespace Player
                 if (MoveState != MoveState.Stopped)
                 {
                     StopMoving();
-                    Decelerate();
+                    Decelerate(ref ref_playerVelocity, isCollisionBelow);
                 }
             }
         }
 
-        private void UpdateChangeDirection()
+        private void UpdateChangeDirection(Vector2 moveInput, Vector2 playerVelocity)
         {
-            Vector2 playerVelocity = _playerInputs.Velocity;
-            Vector2 moveInput = _playerInputs.GetMoveInput();
-
             bool moveInputIsOppositeToVelocity = (int)Mathf.Sign(playerVelocity.x) != (int)moveInput.x;
             if (moveInputIsOppositeToVelocity && playerVelocity.x != 0)
             {
@@ -126,6 +119,7 @@ namespace Player
             MoveState = MoveState.ChangingDirection;
         }
         
+        // Begins the movement, calls sets to accelerating
         private void StartMoving()
         {
             _lerpCurrent = 0f;
@@ -138,54 +132,56 @@ namespace Player
             MoveState = MoveState.Decelerating;
         }
         
-        private void Accelerate()
+        // Accelerates to run speed, sets to moveState to run once at speed
+        private void Accelerate(Vector2 moveInput, ref Vector2 ref_playerVelocity, bool isCollisionBelow)
         {
             //uses a lerp which is then used to evaluate along an animation curve for the acceleration
             //once we get to the max speed change to running
             //checks if there is a collision below the player, and if so use the air timers
-            float rate = (_movementController.customCollider2D.CollisionBelow ? _accelerationRate : _airAccelerationRate);
+            float rate = (isCollisionBelow ? _accelerationRate : _airAccelerationRate);
             _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
-            _playerInputs.Velocity.x = Mathf.Lerp(_playerInputs.Velocity.x, _moveSpeed * _playerInputs.GetMoveInput().x, _accelerationCurve.Evaluate(_lerpCurrent));
+            ref_playerVelocity.x = Mathf.Lerp(ref_playerVelocity.x, _moveSpeed * moveInput.x, _accelerationCurve.Evaluate(_lerpCurrent));
             
-            if (_moveSpeed - Mathf.Abs(_playerInputs.Velocity.x) <=  _accelerationTolerance)
+            if (_moveSpeed - Mathf.Abs(ref_playerVelocity.x) <=  _accelerationTolerance)
             {
                 MoveState = MoveState.Running;
             }
         }
         
-        private void Run()
+        // Continue moving at the current speed
+        private void Run(Vector2 moveInput, ref Vector2 ref_playerVelocity)
         {
             float blockMoveSpeedModifier = 1f;
             if (_entityBlock && _entityBlock.IsBlocking())
             {
                 blockMoveSpeedModifier = _entityBlock.blockSpeedModifier;
             }
-            _playerInputs.Velocity.x = _playerInputs.GetMoveInput().x * _moveSpeed * blockMoveSpeedModifier;
+            ref_playerVelocity.x = moveInput.x * _moveSpeed * blockMoveSpeedModifier;
         }
 
-        private void Decelerate()
+        private void Decelerate(ref Vector2 ref_playerVelocity, bool isCollisionBelow)
         {
             //same lerp method as accelerate
             //this time changes to stopped after getting low enough 
             //(I tried doing if(speed==0) but that was glitchy af
-            float rate = _movementController.customCollider2D.CollisionBelow ? _decelerationRate : _airDecelerationRate;
+            float rate = isCollisionBelow ? _decelerationRate : _airDecelerationRate;
             _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
-            _playerInputs.Velocity.x = Mathf.Lerp(_playerInputs.Velocity.x, 0f, _decelerationCurve.Evaluate(_lerpCurrent));
-            if (Mathf.Abs(_playerInputs.Velocity.x) <= _decelerationTolerance)
+            ref_playerVelocity.x = Mathf.Lerp(ref_playerVelocity.x, 0f, _decelerationCurve.Evaluate(_lerpCurrent));
+            if (Mathf.Abs(ref_playerVelocity.x) <= _decelerationTolerance)
             {
-                _playerInputs.Velocity.x = 0f;
+                ref_playerVelocity.x = 0f;
                 MoveState = MoveState.Stopped;
             }
         }
         
-        private void ChangeDirection()
+        private void ChangeDirection(Vector2 moveInput, ref Vector2 ref_playerVelocity, bool isCollisionBelow)
         {
             //same lerp method as accelerate
-            float rate = _movementController.customCollider2D.CollisionBelow ? _changeDirectionRate : _airChangeDirectionRate;
+            float rate = isCollisionBelow ? _changeDirectionRate : _airChangeDirectionRate;
             _lerpCurrent = Mathf.Lerp(_lerpCurrent, 1f, rate * Time.deltaTime);
-            _playerInputs.Velocity.x = Mathf.Lerp(_playerInputs.Velocity.x, _moveSpeed * _playerInputs.GetMoveInput().x, _changeDirectionCurve.Evaluate(_lerpCurrent));
+            ref_playerVelocity.x = Mathf.Lerp(ref_playerVelocity.x, _moveSpeed * moveInput.x, _changeDirectionCurve.Evaluate(_lerpCurrent));
 
-            if ((Mathf.Abs(_playerInputs.Velocity.x) - _moveSpeed) < _changeDirectionTolerance) 
+            if ((Mathf.Abs(ref_playerVelocity.x) - _moveSpeed) < _changeDirectionTolerance) 
             {
                 MoveState = MoveState.Running;
             }

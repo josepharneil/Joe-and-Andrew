@@ -40,11 +40,8 @@ namespace Player
 
         private float _jumpInputTime;
         private float _lastGroundedTime;
-        public void TurnOffJumpInput() => _isJumpInput = false;
-        public void TurnOffBufferedJumpInput() => _isBufferedJumpInput = false;
-        
         private float _fallThroughPlatformTimer = 0f;
-
+        
         private bool _isMoveInput;
         private bool _isJumpInput;
         
@@ -58,7 +55,7 @@ namespace Player
         private bool _hasFallenThroughPlatform;
         public FacingDirection FacingDirection { get; private set; }
         public AttackDirection AttackDirection { get; private set; } 
-        [NonSerialized] public Vector2 Velocity;
+        private Vector2 _velocity;
         private Vector2 _moveInput;
         
         // Attacks
@@ -78,6 +75,7 @@ namespace Player
         public bool GetDebugUseSounds() => _debugUseSounds;
         public Animator GetAnimator() => animator;
         public PlayerSounds GetPlayerSounds() => _playerSounds;
+        public ref Vector2 GetVelocity() => ref _velocity;
         
 
         [Header("Parrying")]
@@ -107,27 +105,11 @@ namespace Player
         [Header("Player Sounds")] 
         [SerializeField] private PlayerSounds _playerSounds;
         [SerializeField] private bool _debugUseSounds = true;
-
-        public void SetMoveState(MoveState moveState)
-        {
-            _playerHorizontalMovement.MoveState = moveState;
-        }
-
-        public Vector2 GetMoveInput()
-        {
-            return _moveInput;
-        }
-
-        public bool GetIsMoveInput()
-        {
-            return _isMoveInput;
-        }
-
+        
         private void Awake()
         {
-            _playerDash.Initialise(this);
-            _playerHorizontalMovement.Initialise(this, movementController, entityBlock);
-            _playerJump.Initialise(this, movementController);
+            _playerHorizontalMovement.Initialise(entityBlock);
+            _playerJump.Initialise(this);
         }
 
         // Start is called before the first frame update
@@ -178,15 +160,15 @@ namespace Player
             // Animation
             if (!_debugUseAnimations) return;
             
-            animator.SetFloat(HorizontalSpeedID, Mathf.Abs(Velocity.x));
-            animator.SetFloat(VerticalSpeedID, Velocity.y);
+            animator.SetFloat(HorizontalSpeedID, Mathf.Abs(_velocity.x));
+            animator.SetFloat(VerticalSpeedID, _velocity.y);
         }
 
         private void Move()
         {
             if (!playerCombatPrototyping.data.movementDisabledByAttacks)
             {
-                movementController.Move(Velocity);
+                movementController.Move(_velocity);
             }
             else
             {                
@@ -195,16 +177,16 @@ namespace Player
                     // TODO @JA Not sure what to do here.
                     if (_isGrounded)
                     {
-                        Velocity.x = 0f;
+                        _velocity.x = 0f;
                     }
 
                     CheckGrounded();
                     CalculateGravity();
-                    movementController.Move(Velocity);
+                    movementController.Move(_velocity);
                 }
                 else
                 {
-                    movementController.Move(Velocity);
+                    movementController.Move(_velocity);
                 }
             }
         }
@@ -243,9 +225,9 @@ namespace Player
         {
             if (movementController.customCollider2D.CollisionBelow)
             {
-                if (Velocity.y < 0)
+                if (_velocity.y < 0)
                 {
-                    Velocity.y = 0;
+                    _velocity.y = 0;
                 }
             }
             else
@@ -258,20 +240,20 @@ namespace Player
                 // Checks if the player has ended a jump early, and if so increase the gravity
                 if (_isJumpEndedEarly)
                 {
-                    Velocity.y -= _playerJump.GetFallSpeed() * _playerJump.GetEarlyJumpMultiplier() * Time.deltaTime;
+                    _velocity.y -= _playerJump.GetFallSpeed() * _playerJump.GetEarlyJumpMultiplier() * Time.deltaTime;
                 }
-                else if (_isWallSliding && Velocity.y < 0) 
+                else if (_isWallSliding && _velocity.y < 0) 
                 {
-                    Velocity.y -= _playerJump.GetFallSpeed() * _wallSideGravityMultiplier * Time.deltaTime;
+                    _velocity.y -= _playerJump.GetFallSpeed() * _wallSideGravityMultiplier * Time.deltaTime;
                 }
                 else
                 {
-                    Velocity.y -= _playerJump.GetFallSpeed() * Time.deltaTime;
+                    _velocity.y -= _playerJump.GetFallSpeed() * Time.deltaTime;
                 }
                 
                 // Makes the player actually fall
                 // Clamps the y velocity to a certain value
-                if (Velocity.y < _fallClamp) Velocity.y = _fallClamp;
+                if (_velocity.y < _fallClamp) _velocity.y = _fallClamp;
             }
         }
 
@@ -303,12 +285,13 @@ namespace Player
         private void UpdateJump()
         {
             float timeBetweenJumpInputAndLastGrounded = _jumpInputTime - _lastGroundedTime;
-            _playerJump.Update(_isJumpInput, _isGrounded, _isBufferedJumpInput, timeBetweenJumpInputAndLastGrounded);
+            _playerJump.Update(ref _isJumpInput, _isGrounded, ref _isBufferedJumpInput, 
+                timeBetweenJumpInputAndLastGrounded, ref _velocity, movementController.customCollider2D.CollisionBelow);
         }
         
         public void DownAttackJump()
         {
-            Velocity.y = _downAttackJumpVelocity;
+            _velocity.y = _downAttackJumpVelocity;
         }
 
         private void CheckGrounded()
@@ -363,8 +346,7 @@ namespace Player
                 (_currentNumberOfWallJumps < _maxNumberOfWallJumpsBeforeGrounding))
             {
                 // Check for wall to right / left OR check for wall jump coyote
-                BoxRayCollider2D customCollider2D = movementController.customCollider2D;
-                customCollider2D.CheckHorizontalCollisions(out bool wallIsToLeft, out bool wallIsToRight, _wallJumpSkinWidth);
+                movementController.customCollider2D.CheckHorizontalCollisions(out bool wallIsToLeft, out bool wallIsToRight, _wallJumpSkinWidth);
 
                 bool isAgainstWall = wallIsToLeft || wallIsToRight;
                 if(wallIsToLeft && wallIsToRight)
@@ -380,18 +362,18 @@ namespace Player
                 bool jumpFromWall = _isJumpInput && (isAgainstWall || isInWallJumpCoyote);
                 if (jumpFromWall)
                 {
-                    Velocity.y = _verticalWallJump;
+                    _velocity.y = _verticalWallJump;
                     
                     if (wallIsToRight)
                     {
                         // Jump to left
-                        Velocity.x = _horizontalWallJump * -1f;
+                        _velocity.x = _horizontalWallJump * -1f;
                         FacingDirection = FacingDirection.Left;
                     }
                     else
                     {
                         // Jump to right
-                        Velocity.x = _horizontalWallJump;
+                        _velocity.x = _horizontalWallJump;
                         FacingDirection = FacingDirection.Right;
                     }
                     
@@ -520,12 +502,12 @@ namespace Player
         private void UpdateMovement()
         {
             // Note to self: could do a switch on movestate here instead?
-            if (_playerDash.UpdateDash())
+            if (_playerDash.UpdateDash(_moveInput, FacingDirection, ref _playerHorizontalMovement.MoveState, ref _velocity))
             {
                 return;
             }
             
-            _playerHorizontalMovement.Update();
+            _playerHorizontalMovement.Update(_isMoveInput, _moveInput, ref _velocity, movementController.customCollider2D.CollisionBelow);
         }
         
         #endregion
