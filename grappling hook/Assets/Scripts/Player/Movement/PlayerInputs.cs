@@ -318,8 +318,7 @@ namespace Player
                 animator.SetBool(GroundedTriggerID, true);
                 _isGrounded = true;
                 _lastGroundedTime = Time.time;
-                // _hasJumped = false;
-                _playerJump.SetHasJumped();
+                _playerJump.SetHasJumped(false);
                 _currentNumberOfWallJumps = 0;
                 _playerJump.ResetCurrentNumAerialJumps();
                 
@@ -404,7 +403,7 @@ namespace Player
                     _moveInput.x = 0f;
 
                     _hasWallJumped = true;
-                    _playerJump.SetHasJumped();
+                    _playerJump.SetHasJumped(true);
 
                     _currentNumberOfWallJumps++;
 

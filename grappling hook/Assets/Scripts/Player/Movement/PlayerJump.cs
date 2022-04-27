@@ -30,7 +30,7 @@ namespace Player
         public void ResetCurrentNumAerialJumps() => _currentNumAerialJumps = 0;
         public void SetIsInCoyoteTime(bool isInCoyoteTime) => _isInCoyoteTime = isInCoyoteTime;
         public bool GetIsInCoyoteTime() => _isInCoyoteTime;
-        public void SetHasJumped() => _hasJumped = true;
+        public void SetHasJumped(bool hasJumped) => _hasJumped = hasJumped;
         public float GetEarlyJumpMultiplier() => earlyJumpMultiplier;
         public float GetEarlyCancelTime() => earlyJumpCancelTime;
         public float GetJumpBufferTime() => _jumpBufferTime;
