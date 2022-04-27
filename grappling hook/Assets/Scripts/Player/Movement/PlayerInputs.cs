@@ -19,19 +19,20 @@ namespace Player
         [SerializeField] private MovementController movementController;
 
         [Header("Jump Stats")]
-        [SerializeField] private float jumpVelocity = 15f;
-        [SerializeField] private float coyoteTime = 0.12f;
-        [SerializeField] [Tooltip("How long the jump buffer will last")] private float _jumpBufferTime;
-        [SerializeField] private float minFallSpeed = 35f;
-        [SerializeField] private float maxFallSpeed = 40f;
-        [SerializeField] private float jumpApexThreshold = 10f;
-        [SerializeField] private float fallClamp = -35f;
-        [SerializeField] private float earlyJumpMultiplier = 2f;
-        [SerializeField] private float earlyJumpCancelTime = 0.15f;
-        private float _apexPoint; //This becomes 1 at the end of the jump
-        private float _fallSpeed;
-        [SerializeField] private int _maxNumAerialJumps = 1;
-        private int _currentNumAerialJumps = 0;
+        // [SerializeField] private float jumpVelocity = 15f;
+        // [SerializeField] private float coyoteTime = 0.12f;
+        // [SerializeField] [Tooltip("How long the jump buffer will last")] private float _jumpBufferTime;
+        // [SerializeField] private float minFallSpeed = 35f;
+        // [SerializeField] private float maxFallSpeed = 40f;
+        // [SerializeField] private float jumpApexThreshold = 10f;
+        // [SerializeField] private float earlyJumpMultiplier = 2f;
+        // [SerializeField] private float earlyJumpCancelTime = 0.15f;
+        // private float _apexPoint; //This becomes 1 at the end of the jump
+        // [SerializeField] private int _maxNumAerialJumps = 1;
+        // private int _currentNumAerialJumps = 0;
+        
+        // fall stuff
+        [SerializeField] private float _fallClamp = -35f;
 
         [Header("Wall Jump / Sliding Stats")]
         [SerializeField] private bool _debugDisableWallJumpSlide = false;
@@ -48,17 +49,36 @@ namespace Player
         
         [SerializeField] private PlayerDash _playerDash;
         [SerializeField] private PlayerHorizontalMovement _playerHorizontalMovement;
+        [SerializeField] private PlayerJump _playerJump;
 
-        private float _jumpCalledTime;
+        private float _jumpInputTime;
         private float _lastGroundedTime;
+        public float GetLastGroundedTime() => _lastGroundedTime;
+        public float GetJumpInputTime() => _jumpInputTime;
+        public void SetIsJumpInput(bool isJumpInput) => _isJumpInput = isJumpInput;
+        public void SetIsBufferedJumpInput(bool isBufferedJumpInput) => _isJumpInput = isBufferedJumpInput;
+        public bool GetIsBufferedJumpInput() => _isBufferedJumpInput;
+        
         private float _fallThroughPlatformTimer = 0f;
 
         private bool _isMoveInput;
         private bool _isJumpInput;
+
+        public bool IsJumpInput()
+        {
+            return _isJumpInput;
+        }
+
+        public bool IsGrounded()
+        {
+            return _isGrounded;
+        }
+        
         private bool _isJumpEndedEarly = false;
-        private bool _isInCoyoteTime; // do we need this? TODO check
+        // private bool _isInCoyoteTime; // do we need this? TODO check
         private bool _isBufferedJumpInput;
-        private bool _hasJumped;
+
+        // private bool _hasJumped;
         private bool _isGrounded;
         private bool _hasWallJumped;
         private bool _hasFallenThroughPlatform;
@@ -69,7 +89,7 @@ namespace Player
         
         // Attacks
         [Header("Attacking")] 
-        [SerializeField] private bool debugUseAnimations = true;
+        [SerializeField] private bool _debugUseAnimations = true;
         [SerializeField] private Animator animator;
         [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] private Sprite defaultSquareSprite;
@@ -79,6 +99,12 @@ namespace Player
         [SerializeField] private bool _attacksDrivenByAnimations = true;
         [SerializeField] private PlayerAttackDriver _playerAttackDriver;
         [SerializeField] private float _downAttackJumpVelocity = 15f;
+        
+        public bool GetDebugUseAnimations() => _debugUseAnimations;
+        public bool GetDebugUseSounds() => _debugUseSounds;
+        public Animator GetAnimator() => animator;
+        public PlayerSounds GetPlayerSounds() => _playerSounds;
+        
 
         [Header("Parrying")]
         [SerializeField] private EntityParry entityParry;
@@ -96,9 +122,9 @@ namespace Player
         private static readonly int HorizontalSpeedID = Animator.StringToHash("horizontalSpeed");
         private static readonly int VerticalSpeedID = Animator.StringToHash("verticalSpeed");
         private static readonly int AttackTriggerID = Animator.StringToHash("attackTrigger");
-        private static readonly int JumpTriggerID = Animator.StringToHash("jumpTrigger");
         private static readonly int AttackUpTriggerID = Animator.StringToHash("attackUpTrigger");
         private static readonly int AttackDownTriggerID = Animator.StringToHash("attackDownTrigger");
+        private static readonly int JumpTriggerID = Animator.StringToHash("jumpTrigger");
         private static readonly int GroundedTriggerID = Animator.StringToHash("groundedTrigger");
 
         [Header("Prototyping")]
@@ -127,12 +153,13 @@ namespace Player
         {
             _playerDash.Initialise(this);
             _playerHorizontalMovement.Initialise(this, movementController, entityBlock);
+            _playerJump.Initialise(this, movementController);
         }
 
         // Start is called before the first frame update
         private void Start()
         {
-            if (!debugUseAnimations)
+            if (!_debugUseAnimations)
             {
                 spriteRenderer.sprite = defaultSquareSprite;
             }
@@ -152,13 +179,13 @@ namespace Player
             UpdateMovement();
             CheckWallSlide();
             CheckGrounded();
-            CheckCoyote();
+            _playerJump.CheckCoyote(); // CheckCoyote();
             CheckJumpBuffer();
-            CalculateJumpApex();
+            _playerJump.CalculateJumpApex(); // CalculateJumpApex();
             CalculateGravity();
             DropThroughPlatform();
             WallJump();
-            Jump();
+            _playerJump.Jump(); // Jump();
             Move();
             UpdateFacingDirection();
             SetAnimatorSpeedFloats();
@@ -177,7 +204,7 @@ namespace Player
         private void SetAnimatorSpeedFloats()
         {
             // Animation
-            if (!debugUseAnimations) return;
+            if (!_debugUseAnimations) return;
             
             animator.SetFloat(HorizontalSpeedID, Mathf.Abs(Velocity.x));
             animator.SetFloat(VerticalSpeedID, Velocity.y);
@@ -259,20 +286,20 @@ namespace Player
                 // Checks if the player has ended a jump early, and if so increase the gravity
                 if (_isJumpEndedEarly)
                 {
-                    Velocity.y -= _fallSpeed * earlyJumpMultiplier * Time.deltaTime;
+                    Velocity.y -= _playerJump.GetFallSpeed() * _playerJump.GetEarlyJumpMultiplier() * Time.deltaTime;
                 }
                 else if (_isWallSliding && Velocity.y < 0) 
                 {
-                    Velocity.y -= _fallSpeed * _wallSideGravityMultiplier * Time.deltaTime;
+                    Velocity.y -= _playerJump.GetFallSpeed() * _wallSideGravityMultiplier * Time.deltaTime;
                 }
                 else
                 {
-                    Velocity.y -= _fallSpeed * Time.deltaTime;
+                    Velocity.y -= _playerJump.GetFallSpeed() * Time.deltaTime;
                 }
                 
                 // Makes the player actually fall
                 // Clamps the y velocity to a certain value
-                if (Velocity.y < fallClamp) Velocity.y = fallClamp;
+                if (Velocity.y < _fallClamp) Velocity.y = _fallClamp;
             }
         }
 
@@ -292,10 +319,10 @@ namespace Player
                 _isJumpEndedEarly = false;
                 // Note for the future, because this is setting an exact value... it should be fine?? Hopefully...
                 // This is a little bit of a "magic number" fix though.
-                _jumpCalledTime = Time.time;
+                _jumpInputTime = Time.time;
             }
 
-            if (context.canceled && (Time.time - _jumpCalledTime < earlyJumpCancelTime))
+            if (context.canceled && (Time.time - _jumpInputTime < _playerJump.GetEarlyCancelTime()))
             {
                 _isJumpEndedEarly = true;
             }
@@ -306,61 +333,6 @@ namespace Player
             Velocity.y = _downAttackJumpVelocity;
         }
 
-        private void Jump()
-        {
-            // If we get a jump input, and we're in the air but we've reached our max aerial jumps, turn off the jump input
-            if (_isJumpInput && !_isGrounded && !_isInCoyoteTime && _currentNumAerialJumps >= _maxNumAerialJumps)
-            {
-                _isJumpInput = false;
-            }
-            
-            bool isAerialJump = !_isGrounded && (_currentNumAerialJumps < _maxNumAerialJumps);
-            bool isGroundAerialOrCoyoteJump = _isJumpInput && (_isGrounded || _isInCoyoteTime || isAerialJump);
-            bool isBufferedJumpFromGround = _isBufferedJumpInput && _isGrounded;
-            
-            if (isGroundAerialOrCoyoteJump || isBufferedJumpFromGround)
-            {
-                Velocity.y = jumpVelocity;
-
-                _isBufferedJumpInput = false;
-                _isJumpInput = false;
-                _isInCoyoteTime = false;
-
-                if (isAerialJump)
-                {
-                    _currentNumAerialJumps++;
-                }
-                
-                _hasJumped = true;
-                
-                if (debugUseAnimations)
-                {
-                    animator.SetTrigger(JumpTriggerID);
-                    animator.SetBool(GroundedTriggerID, false);
-                }
-
-                if (_debugUseSounds)
-                {
-                    _playerSounds.PlayJumpSound();
-                }
-            }
-        }
-
-        private void CalculateJumpApex()
-        {
-            if (!movementController.customCollider2D.CollisionBelow)
-            {
-                //sets the apexPoint based on how large the y velocity is
-                _apexPoint = Mathf.InverseLerp(jumpApexThreshold, 0, Mathf.Abs(Velocity.y));
-                //uses the apexPoint to lerp between the min and max fallspeeds (our new gravity replacement)
-                _fallSpeed = Mathf.Lerp(minFallSpeed, maxFallSpeed, _apexPoint);
-            }
-            else
-            {
-                _apexPoint = 0f;
-            }
-        }
-
         private void CheckGrounded()
         {
             if(movementController.customCollider2D.CheckIfGrounded())
@@ -368,9 +340,10 @@ namespace Player
                 animator.SetBool(GroundedTriggerID, true);
                 _isGrounded = true;
                 _lastGroundedTime = Time.time;
-                _hasJumped = false;
+                // _hasJumped = false;
+                _playerJump.SetHasJumped();
                 _currentNumberOfWallJumps = 0;
-                _currentNumAerialJumps = 0;
+                _playerJump.ResetCurrentNumAerialJumps();
                 
                 // Cancel wall jump blocking move inputs
                 if (_hasWallJumped)
@@ -389,17 +362,17 @@ namespace Player
             }
         }
         
-        private void CheckCoyote()
-        {
-            if (_isJumpInput && !_isGrounded && !_hasJumped && (_jumpCalledTime - _lastGroundedTime) < coyoteTime )
-            {
-                _isInCoyoteTime = true;
-            }
-            else
-            {
-                _isInCoyoteTime = false;
-            }
-        }
+        // private void CheckCoyote()
+        // {
+        //     if (_isJumpInput && !_isGrounded && !_hasJumped && (_jumpCalledTime - _lastGroundedTime) < coyoteTime )
+        //     {
+        //         _isInCoyoteTime = true;
+        //     }
+        //     else
+        //     {
+        //         _isInCoyoteTime = false;
+        //     }
+        // }
 
         private void CheckJumpBuffer()
         {
@@ -411,7 +384,7 @@ namespace Player
             }
             
             // Remove buffered jump if it has been too long.
-            if (_isBufferedJumpInput && (Time.time - _jumpCalledTime) > _jumpBufferTime)
+            if (_isBufferedJumpInput && (Time.time - _jumpInputTime) > _playerJump.GetJumpBufferTime())
             {
                 _isBufferedJumpInput = false;
             }
@@ -421,7 +394,7 @@ namespace Player
         {
             if (_debugDisableWallJumpSlide) return;
             
-            if (!_isGrounded && !_isInCoyoteTime &&
+            if (!_isGrounded && !_playerJump.GetIsInCoyoteTime() &&
                 (_currentNumberOfWallJumps < _maxNumberOfWallJumpsBeforeGrounding))
             {
                 // Check for wall to right / left OR check for wall jump coyote
@@ -459,17 +432,17 @@ namespace Player
                     
                     _isBufferedJumpInput = false;
                     _isJumpInput = false;
-                    _isInCoyoteTime = false;
+                    _playerJump.SetIsInCoyoteTime(false);
                     _isMoveInput = false;
                     
                     _moveInput.x = 0f;
 
                     _hasWallJumped = true;
-                    _hasJumped = true;
+                    _playerJump.SetHasJumped();
 
                     _currentNumberOfWallJumps++;
 
-                    if (debugUseAnimations)
+                    if (_debugUseAnimations)
                     {
                         animator.SetTrigger(JumpTriggerID);
                     }
@@ -481,7 +454,7 @@ namespace Player
                 }
             }
 
-            if (_hasWallJumped && (Time.time - _jumpCalledTime) > _wallJumpInputDisableTime)
+            if (_hasWallJumped && (Time.time - _jumpInputTime) > _wallJumpInputDisableTime)
             {
                 // JA:29/03/22 Not sure if this is a good idea, but it fixes the instance where
                 // you wall jump, and maintain the exact same input, thus no input read up
@@ -611,7 +584,7 @@ namespace Player
         /// <param name="context"></param>
         [UsedImplicitly] public void ReadAttackInput(InputAction.CallbackContext context)
         {
-            if (!debugUseAnimations || (!entityBlock || entityBlock.IsBlocking()) && entityBlock)
+            if (!_debugUseAnimations || (!entityBlock || entityBlock.IsBlocking()) && entityBlock)
             {
                 return;
             }
