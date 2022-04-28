@@ -8,7 +8,7 @@ namespace Player
         [SerializeField] private float _fallClamp = -35f;
         
         // Taken from Tarodevs GitHub: https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/blob/main/Scripts/PlayerController.cs
-        public void UpdateGravity(bool isCollisionBelow, bool isHittingCeiling, bool isJumpEndedEarly, 
+        public void UpdateGravity(bool isCollisionBelow, bool isHittingCeiling, ref bool isJumpEndedEarly, 
             ref Vector2 ref_playerVelocity, PlayerJump playerJump, PlayerWallJumpSlide playerWallJumpSlide)
         {
             if (isCollisionBelow)

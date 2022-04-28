@@ -24,70 +24,61 @@ namespace Player
         [Header("Prototyping")] public PlayerCombatPrototyping playerCombatPrototyping;
         
         
-        private bool _isMoveInput;
-        private Vector2 _moveInput;
-        private bool _isJumpInput;
-        private float _jumpInputTime;
-        private bool _isJumpEndedEarly;
-        private bool _isBufferedJumpInput;
+        // private bool _isMoveInput;
+        // private Vector2 _moveInput;
+        // private bool _isJumpInput;
+        // private float _jumpInputTime;
+        // private bool _isJumpEndedEarly;
+        // private bool _isBufferedJumpInput;
         
         
-        [HideInInspector] public bool isAttacking;
+        // [HideInInspector] public bool isAttacking;
         private FacingDirection _facingDirection;
         private Vector2 _velocity;
 
         private float _lastGroundedTime;
         private bool _isGrounded;
 
-
         public float GetLastGroundedTime() => _lastGroundedTime;
         public bool IsGrounded() => _isGrounded;
 
-        public void Update()
+        public void Update(ref bool isMoveInput, ref Vector2 moveInput, ref bool isJumpInput, 
+            ref bool isBufferedJumpInput, ref bool isJumpEndedEarly, float jumpInputTime,
+            bool isAttacking)
         {
-            UpdateMovement();
-            UpdateWallSlide();
-            UpdateGrounded();
-            UpdateGravity();
-            UpdateFallThroughPlatform();
-            UpdateWallJump();
-            UpdateJump();
-            Move();
+            UpdateMovement(isMoveInput, moveInput);
+            UpdateWallSlide(isMoveInput);
+            UpdateGrounded(ref isMoveInput, ref moveInput);
+            UpdateGravity(ref isJumpEndedEarly);
+            UpdateFallThroughPlatform(ref isJumpInput);
+            UpdateWallJump(ref isMoveInput, ref moveInput, ref isJumpInput, ref isBufferedJumpInput, jumpInputTime);
+            UpdateJump(ref isJumpInput, ref isBufferedJumpInput, jumpInputTime);
+            Move(ref isMoveInput, ref moveInput, isJumpEndedEarly, isAttacking);
+            UpdateFacingDirection(moveInput, isAttacking);
+            SetAnimatorSpeedFloats();
         }
-
-
-        private void UpdateMovement()
+        
+        private void UpdateMovement(bool isMoveInput, Vector2 moveInput)
         {
             // Note to self: could do a switch on movestate here instead?
-            if (_playerDash.UpdateDash(_moveInput, _facingDirection, ref _playerHorizontalMovement.MoveState, ref _velocity))
+            if (_playerDash.UpdateDash(moveInput, _facingDirection, ref _playerHorizontalMovement.MoveState, ref _velocity))
             {
                 return;
             }
             
-            _playerHorizontalMovement.Update(_isMoveInput, _moveInput, ref _velocity, movementController.customCollider2D.CollisionBelow);
+            _playerHorizontalMovement.Update(isMoveInput, moveInput, ref _velocity, movementController.customCollider2D.CollisionBelow);
         }
         
-        private void UpdateWallSlide()
+        private void UpdateWallSlide(bool isMoveInput)
         {
-            _playerWallJumpSlide.UpdateWallSlide(_isMoveInput, _isGrounded, _facingDirection,
+            _playerWallJumpSlide.UpdateWallSlide(isMoveInput, _isGrounded, _facingDirection,
                 movementController.customCollider2D.CollisionLeft, movementController.customCollider2D.CollisionRight);
         }
-
-        private void UpdateGravity()
-        {
-            _playerGravity.UpdateGravity(movementController.customCollider2D.CollisionBelow, 
-                movementController.customCollider2D.CheckIfHittingCeiling(),
-                _isJumpEndedEarly, ref _velocity, _playerJump, _playerWallJumpSlide);
-        }
         
-        private void UpdateGrounded()
+        private void UpdateGrounded(ref bool isMoveInput, ref Vector2 moveInput)
         {
-            _playerGravity.UpdateGravity(movementController.customCollider2D.CollisionBelow, 
-                movementController.customCollider2D.CheckIfHittingCeiling(),
-                _isJumpEndedEarly, ref _velocity, _playerJump, _playerWallJumpSlide);
-            
+            UpdateGrounded(movementController.customCollider2D, _playerAnimator, _playerJump, _playerWallJumpSlide, ref isMoveInput, ref moveInput);
         }
-
         public void UpdateGrounded(BoxRayCollider2D boxRayCollider2D, PlayerAnimator playerAnimator, 
             PlayerJump playerJump, PlayerWallJumpSlide playerWallJumpSlide, ref bool isMoveInput, ref Vector2 moveInput)
         {
@@ -117,69 +108,67 @@ namespace Player
             }
         }
         
-        private void UpdateFallThroughPlatform()
+        private void UpdateGravity(ref bool isJumpEndedEarly)
+        {
+            _playerGravity.UpdateGravity(movementController.customCollider2D.CollisionBelow, 
+                movementController.customCollider2D.CheckIfHittingCeiling(),
+                ref isJumpEndedEarly, ref _velocity, _playerJump, _playerWallJumpSlide);
+        }
+        
+        private void UpdateFallThroughPlatform(ref bool isJumpInput)
         {
             // TODO Check if we should be directly accessing Input here.. might be okay, but also might not be.
             // Can we not just use _moveInput.y < 0f ?
-            _playerFallThroughPlatform.Update(movementController.customCollider2D, ref _isJumpInput, 
+            _playerFallThroughPlatform.Update(movementController.customCollider2D, ref isJumpInput, 
                 Input.GetAxisRaw("Vertical") < 0f);
         }
         
-        private void UpdateWallJump()
+        private void UpdateWallJump(ref bool isMoveInput, ref Vector2 moveInput, ref bool isJumpInput, ref bool isBufferedJumpInput, float jumpInputTime)
         {
-            _playerWallJumpSlide.UpdateWallJump(ref _isJumpInput, ref _isBufferedJumpInput, 
-                _isGrounded, ref _playerJump.GetIsInCoyoteTime(), ref _isMoveInput, _jumpInputTime, 
+            _playerWallJumpSlide.UpdateWallJump(ref isJumpInput, ref isBufferedJumpInput, 
+                _isGrounded, ref _playerJump.GetIsInCoyoteTime(), ref isMoveInput, jumpInputTime, 
                 movementController.customCollider2D, ref _velocity, facingDirection: ref _facingDirection, 
-                ref _moveInput, _playerSounds, _playerJump, _playerAnimator);
+                ref moveInput, _playerSounds, _playerJump, _playerAnimator);
         }
 
-        private void UpdateJump()
+        private void UpdateJump(ref bool isJumpInput, ref bool isBufferedJumpInput, float jumpInputTime)
         {
-            float timeBetweenJumpInputAndLastGrounded = _jumpInputTime - _lastGroundedTime;
-            _playerJump.Update(ref _isJumpInput, _isGrounded, ref _isBufferedJumpInput, 
+            float timeBetweenJumpInputAndLastGrounded = jumpInputTime - _lastGroundedTime;
+            _playerJump.Update(ref isJumpInput, _isGrounded, ref isBufferedJumpInput, 
                 timeBetweenJumpInputAndLastGrounded, ref _velocity, movementController.customCollider2D.CollisionBelow, _playerAnimator, _playerSounds);
         }
         
-        private void Move()
+        private void Move(ref bool isMoveInput, ref Vector2 moveInput, bool isJumpEndedEarly, bool isAttacking)
         {
-            if (!playerCombatPrototyping.data.movementDisabledByAttacks)
+            if (isAttacking && playerCombatPrototyping.data.movementDisabledByAttacks)
+            {
+                // TODO @JA Not sure what to do here.
+                if (_isGrounded)
+                {
+                    _velocity.x = 0f;
+                }
+
+                UpdateGrounded(ref isMoveInput, ref moveInput);
+                UpdateGravity(ref isJumpEndedEarly);
+                movementController.Move(_velocity);
+            }
+            // Either we're not attacking; or we are attacking but movement isn't disabled by attacking
+            else
             {
                 movementController.Move(_velocity);
             }
-            else
-            {                
-                if (isAttacking)
-                {
-                    // TODO @JA Not sure what to do here.
-                    if (_isGrounded)
-                    {
-                        _velocity.x = 0f;
-                    }
-
-                    UpdateGrounded();
-                    UpdateGravity();
-                    movementController.Move(_velocity);
-                }
-                else
-                {
-                    movementController.Move(_velocity);
-                }
-            }
-            
-            UpdateFacingDirection();
-            SetAnimatorSpeedFloats();
         }
         
-        private void UpdateFacingDirection()
+        private void UpdateFacingDirection(Vector2 moveInput, bool isAttacking)
         {
             if (!isAttacking || (isAttacking && playerCombatPrototyping.data.canChangeDirectionsDuringAttack))
             {
-                if (_moveInput.x < 0)
+                if (moveInput.x < 0)
                 {
                     _facingDirection = FacingDirection.Left;
                     _playerAnimator.SetSpriteFlipX(true);
                 }
-                else if (_moveInput.x > 0)
+                else if (moveInput.x > 0)
                 {
                     _facingDirection = FacingDirection.Right;
                     _playerAnimator.SetSpriteFlipX(false);

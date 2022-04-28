@@ -87,14 +87,16 @@ namespace Player
             
             // Movement
             // The goal is to: _playerMovement.Update();
-            UpdateMovement();
-            UpdateWallSlide();
-            UpdateGrounded();
-            UpdateGravity();
-            UpdateFallThroughPlatform();
-            UpdateWallJump();
-            UpdateJump();
-            Move();
+            _playerMovement.Update(ref _isMoveInput, ref _moveInput, ref _isJumpInput, 
+                ref _isBufferedJumpInput, ref _isJumpEndedEarly, _jumpInputTime, isAttacking);
+            // UpdateMovement();
+            // UpdateWallSlide();
+            // UpdateGrounded();
+            // UpdateGravity();
+            // UpdateFallThroughPlatform();
+            // UpdateWallJump();
+            // UpdateJump();
+            // Move();
 
             // Attacks
             UpdateAttackDriver();
@@ -179,7 +181,7 @@ namespace Player
         {
             _playerGravity.UpdateGravity(movementController.customCollider2D.CollisionBelow, 
                 movementController.customCollider2D.CheckIfHittingCeiling(),
-                _isJumpEndedEarly, ref _velocity, _playerJump, _playerWallJumpSlide);
+                ref _isJumpEndedEarly, ref _velocity, _playerJump, _playerWallJumpSlide);
         }
 
         #endregion
