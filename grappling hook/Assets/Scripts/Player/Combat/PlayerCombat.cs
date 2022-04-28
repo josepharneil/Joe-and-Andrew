@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Entity;
 using JetBrains.Annotations;
-using TMPro;
 using UnityEngine;
 
 namespace Player
@@ -19,7 +18,7 @@ namespace Player
     {
         [Header("Setup")]
         [SerializeField] private LayerMask whatIsDamageable;
-        [SerializeField] private PlayerInputs inputs;
+        [SerializeField] private PlayerAttacks _playerAttacks;
 
         [Header("Shake")] 
         [SerializeField] private CameraShakeData _cameraShakeData; 
@@ -55,7 +54,7 @@ namespace Player
         /// </summary>
         [UsedImplicitly] public void Attack(int attackIndex)//Number is unused right now.
         {
-            AttackDirection attackDirection = inputs.AttackDirection;
+            AttackDirection attackDirection = _playerAttacks.AttackDirection;
             
             CurrentPlayerEquipment.CurrentMeleeWeapon.ShowAttackParticle(attackDirection);
             
@@ -78,7 +77,7 @@ namespace Player
                 // Knockback player
                 if (attackDirection == AttackDirection.Down)
                 {
-                    inputs.DownAttackJump();
+                    _playerAttacks.DownwardsAttackJump();
                 }
                 else
                 {
@@ -92,7 +91,7 @@ namespace Player
             }
 
             // At the end, we're now post damage.
-            inputs.IsInPreDamageAttackPhase = false;
+            _playerAttacks.IsInPreDamageAttackPhase = false;
         }
 
         private void ShowLineRendererForSeconds(float seconds, AttackDirection attackDirection)
@@ -202,7 +201,7 @@ namespace Player
             if (!_showGizmos) return;
             if (!CurrentPlayerEquipment) return;
             if (!CurrentPlayerEquipment.CurrentMeleeWeapon) return;
-            CurrentPlayerEquipment.CurrentMeleeWeapon.DrawGizmos(transform.position, inputs.AttackDirection);
+            CurrentPlayerEquipment.CurrentMeleeWeapon.DrawGizmos(transform.position, _playerAttacks.AttackDirection);
         }
 #endif
     }

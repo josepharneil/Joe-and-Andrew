@@ -16,7 +16,7 @@ public class AttackOneTransitionBehaviour : PlayerStateMachineBehaviourBase
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        GetPlayerController(animator).IsAttacking = false;
+        GetPlayerController(animator).PlayerAttacks.IsAttacking = false;
         ResetSpeed(animator);
     }
 }

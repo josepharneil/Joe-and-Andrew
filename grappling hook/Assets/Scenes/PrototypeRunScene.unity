@@ -39816,6 +39816,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerAttacks._playerCombat
+      value: 
+      objectReference: {fileID: 2115476012}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: _playerAttackDriver._combat
       value: 
       objectReference: {fileID: 2115476012}
@@ -39844,9 +39848,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7482667652216324306, guid: 5205f3571171146c886d386aeaa65929, type: 3}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerAttacks.CurrentPlayerEquipment
+      value: 
+      objectReference: {fileID: 11400000, guid: 4042d4a8e76c840fc8b043436b9ebe73, type: 2}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: _maxNumberOfWallJumpsBeforeGrounding
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerAttacks.PlayerCombatPrototyping
+      value: 
+      objectReference: {fileID: 2115476048}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: PlayerMovement.playerCombatPrototyping
       value: 
@@ -39859,6 +39871,10 @@ PrefabInstance:
       propertyPath: _playerMovement.playerCombatPrototyping
       value: 
       objectReference: {fileID: 2115476048}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerAttacks.PlayerAttackDriver._combat
+      value: 
+      objectReference: {fileID: 2115476012}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: _playerMovement.PlayerAnimator._animator
       value: 

@@ -7,7 +7,7 @@ namespace Player
     [Serializable] public class PlayerAttackDriver
     {
         [Header("Components")]
-        [SerializeField] private PlayerCombat _combat;
+        private PlayerCombat _combat;
 
         [Header("Attack Timing")]
         // Start attack, windup for this amount of time
@@ -22,6 +22,11 @@ namespace Player
 
         [Header("Debug")]
         [SerializeField] private bool _showDebugGUI = false;
+
+        public void Initialise(PlayerCombat combat)
+        {
+            _combat = combat;
+        }
 
         private enum AttackState
         {

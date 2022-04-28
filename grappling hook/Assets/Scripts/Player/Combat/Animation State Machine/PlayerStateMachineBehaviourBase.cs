@@ -17,13 +17,13 @@ public class PlayerStateMachineBehaviourBase : StateMachineBehaviour
     protected void SetSpeedBasedOnPrototypeCustomisation(Animator animator)
     {
         PlayerInputs playerInputs = GetPlayerController(animator);
-        if (playerInputs.playerCombatPrototyping.data.attackSpeed == 0f)
+        if (playerInputs.PlayerAttacks.PlayerCombatPrototyping.data.attackSpeed == 0f)
         {
-            playerInputs.playerCombatPrototyping.data.attackSpeed = 1f;
+            playerInputs.PlayerAttacks.PlayerCombatPrototyping.data.attackSpeed = 1f;
         }
 
-        float baseAttackSpeed = playerInputs.playerCombatPrototyping.data.attackSpeed;
-        float weaponAttackSpeed = playerInputs.CurrentPlayerEquipment.CurrentMeleeWeapon.WeaponSpeed;
+        float baseAttackSpeed = playerInputs.PlayerAttacks.PlayerCombatPrototyping.data.attackSpeed;
+        float weaponAttackSpeed = playerInputs.PlayerAttacks.CurrentPlayerEquipment.CurrentMeleeWeapon.WeaponSpeed;
         animator.speed = baseAttackSpeed * weaponAttackSpeed;
     }
 

@@ -15,8 +15,8 @@ namespace Player
     [RequireComponent(typeof(BoxRayCollider2D))]
     public class PlayerInputs : MonoBehaviour
     {
-        [Header("Player Components")]
-        public PlayerMovement PlayerMovement;
+        [Header("Movement")] public PlayerMovement PlayerMovement;
+        [Header("Attacking")] public PlayerAttacks PlayerAttacks;
         
         private bool _isMoveInput;
         private Vector2 _moveInput;
@@ -25,27 +25,16 @@ namespace Player
         private bool _isJumpEndedEarly;
         private bool _isBufferedJumpInput;
 
-        public AttackDirection AttackDirection { get; private set; } 
-        
-        // Attacks
-        [Header("Attacking")] 
-        [NonSerialized] public bool IsAttacking;
-        [NonSerialized] public bool IsInPreDamageAttackPhase = true;
-        public PlayerEquipment CurrentPlayerEquipment;
-        [SerializeField] private bool _attacksDrivenByAnimations = true;
-        [SerializeField] private PlayerAttackDriver _playerAttackDriver;
-        [SerializeField] private float _downAttackJumpVelocity = 15f;
-        
-        [Header("Parrying")] [SerializeField] private EntityParry entityParry;
-        [Header("Blocking")] [SerializeField] private EntityBlock entityBlock;
-        [Header("Knockback")] [SerializeField] private EntityKnockback entityKnockback;
-        [Header("Daze")] [SerializeField] private EntityDaze entityDaze;
-        
-        [Header("Prototyping")] public PlayerCombatPrototyping playerCombatPrototyping;
+        [Header("Entity Components")] 
+        [SerializeField] private EntityParry entityParry;
+        [SerializeField] private EntityBlock entityBlock;
+        [SerializeField] private EntityKnockback entityKnockback;
+        [SerializeField] private EntityDaze entityDaze;
         
         private void Awake()
         {
             PlayerMovement.Initialise(entityBlock);
+            PlayerAttacks.Initialise(PlayerMovement);
         }
 
         // Start is called before the first frame update
@@ -56,7 +45,7 @@ namespace Player
         
         private void OnGUI()
         {
-            _playerAttackDriver.ShowDebugGUI();
+            PlayerAttacks.ShowGUI();
         }
 
         // Update is called once per frame
@@ -67,19 +56,10 @@ namespace Player
             
             // Movement
             PlayerMovement.Update(ref _isMoveInput, ref _moveInput, ref _isJumpInput, 
-                ref _isBufferedJumpInput, ref _isJumpEndedEarly, _jumpInputTime, IsAttacking);
+                ref _isBufferedJumpInput, ref _isJumpEndedEarly, _jumpInputTime, PlayerAttacks.IsAttacking);
 
             // Attacks
-            UpdateAttackDriver();
-            CheckIfAttackIsCancellable();
-        }
-
-        private void UpdateAttackDriver()
-        {
-            if (!_attacksDrivenByAnimations)
-            {
-                _playerAttackDriver.UpdateAttack();
-            }
+            PlayerAttacks.Update(PlayerMovement.PlayerDash.DashState, PlayerMovement.PlayerAnimator, _isMoveInput, _isJumpInput);
         }
 
         public void ResetMoveSpeed()
@@ -93,6 +73,7 @@ namespace Player
             // TODO Need to change in Flow script...
             PlayerMovement.PlayerHorizontalMovement.MultiplyMoveSpeed(multiple);
         }
+        
         /// <summary>
         /// Called by PlayerInput Unity Event.
         /// </summary>
@@ -112,11 +93,6 @@ namespace Player
             {
                 _isJumpEndedEarly = true;
             }
-        }
-        
-        public void DownAttackJump()
-        {
-            PlayerMovement.Velocity.y = _downAttackJumpVelocity;
         }
 
         private void CheckBufferedJumpInput()
@@ -156,7 +132,7 @@ namespace Player
             {
                 _isMoveInput = true;
                 if (entityKnockback.IsBeingKnockedBack() ||
-                    (IsAttacking && !playerCombatPrototyping.data.canChangeDirectionsDuringAttack))
+                    (PlayerAttacks.IsAttacking && !PlayerAttacks.PlayerCombatPrototyping.data.canChangeDirectionsDuringAttack))
                 {
                     return;
                 }
@@ -206,111 +182,16 @@ namespace Player
                 return;
             }
             
-            // Disabling this because we don't have up / down right now.
-
-            const float verticalInputThreshold = 0.5f;
-
-            if (_moveInput.y > verticalInputThreshold)
-            {
-                AttackDirection = AttackDirection.Up;
-            }
-            else if (!PlayerMovement.IsGrounded() && (_moveInput.y < -verticalInputThreshold))
-            {
-                AttackDirection = AttackDirection.Down;
-            }
-            else
-            {
-                if (playerCombatPrototyping.data.canChangeDirectionsDuringAttack)
-                {
-                    if (_moveInput.x < 0)
-                    {
-                        PlayerMovement.FacingDirection = FacingDirection.Left;
-                        PlayerMovement.PlayerAnimator.SetSpriteFlipX(true);
-                    }
-                    else if ( _moveInput.x > 0 )
-                    {
-                        PlayerMovement.FacingDirection = FacingDirection.Right;
-                        PlayerMovement.PlayerAnimator.SetSpriteFlipX(false);
-                    }
-                }
-                AttackDirection = (PlayerMovement.FacingDirection == FacingDirection.Left) ? AttackDirection.Left : AttackDirection.Right;
-            }
-            
-            if (_attacksDrivenByAnimations)
-            {
-                PlayerMovement.PlayerAnimator.SetTriggerAttack();
-            }
-            else
-            {
-                _playerAttackDriver.StartAttack();
-            }
+            PlayerAttacks.StartAttack(PlayerMovement.PlayerAnimator, PlayerMovement.IsGrounded(), _moveInput, ref PlayerMovement.FacingDirection);
         }
 
-        private void CheckIfAttackIsCancellable()
-        {
-            // Cancellable attack phases
-            if (!IsAttacking) return;
-
-            // TODO There are only really two phases right now
-            // the actual attack phase is only 1 frame right now.
-            if (IsInPreDamageAttackPhase)
-            {
-                // What phases are cancellable?
-                if ((playerCombatPrototyping.data.cancellableAttackPhases &
-                     PrototypeAttackPhases.PreDamage) == PrototypeAttackPhases.None)
-                {
-                    return;
-                }
-            }
-            else // Post damage
-            {
-                if ((playerCombatPrototyping.data.cancellableAttackPhases &
-                     PrototypeAttackPhases.PostDamage) == PrototypeAttackPhases.None)
-                {
-                    return;
-                }
-            }
-            
-            // What cancels attacks?
-            if ((playerCombatPrototyping.data.cancellables & PrototypeCancellables.Dash) != PrototypeCancellables.None)
-            {
-                if (PlayerMovement.PlayerDash.DashState == DashState.StartDash)
-                {
-                    IsAttacking = false;
-                    PlayerMovement.PlayerAnimator.PlayState("Player_Idle");
-                    // todo getting playercombat here is bad.
-                    GetComponent<PlayerCombat>().ForceHideAttackParticles();
-                }
-            }
-
-            if ((playerCombatPrototyping.data.cancellables & PrototypeCancellables.Jump) != PrototypeCancellables.None) 
-            {
-                if (_isJumpInput)
-                {
-                    IsAttacking = false;
-                    PlayerMovement.PlayerAnimator.PlayState("Player_Jump");
-                    GetComponent<PlayerCombat>().ForceHideAttackParticles();
-                }
-            }
-                
-            if ((playerCombatPrototyping.data.cancellables & PrototypeCancellables.Movement) != PrototypeCancellables.None) 
-            {
-                if (_isMoveInput)
-                {
-                    IsAttacking = false;
-                    PlayerMovement.PlayerAnimator.PlayState("Player_Idle");
-                    GetComponent<PlayerCombat>().ForceHideAttackParticles();
-                }
-            }
-        }
-        
         /// <summary>
         /// Called by PlayerInput Unity Event.
         /// </summary>
         /// <param name="context"></param>
         [UsedImplicitly] public void ReadParryInput(InputAction.CallbackContext context)
         {
-            if (!entityParry || IsAttacking)
+            if (!entityParry || PlayerAttacks.IsAttacking)
             {
                 return;
             }
@@ -335,7 +216,7 @@ namespace Player
                 return;
             }
 
-            if (context.performed && !IsAttacking)
+            if (context.performed && !PlayerAttacks.IsAttacking)
             {
                 // For now, don't need to worry about whether you're mid parry /attack
                 entityBlock.SetBlocking(true);
@@ -345,11 +226,6 @@ namespace Player
             {
                 entityBlock.SetBlocking(false);
             }
-        }
-
-        public PlayerAttackDriver GetPlayerAttackDriver()
-        {
-            return _playerAttackDriver;
         }
 
         #endregion

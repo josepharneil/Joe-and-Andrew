@@ -6,7 +6,7 @@ public class WeaponAttackTransitionBehaviour : PlayerStateMachineBehaviourBase
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         // Relies on AnimationWeaponStateName having the exactly correct string name that the state does.
-        int weaponAnimatorStateHash = GetPlayerController(animator).CurrentPlayerEquipment
+        int weaponAnimatorStateHash = GetPlayerController(animator).PlayerAttacks.CurrentPlayerEquipment
             .CurrentMeleeWeapon.AnimationWeaponStateName.ToAnimatorStateHash();
         animator.Play(weaponAnimatorStateHash);
     }
