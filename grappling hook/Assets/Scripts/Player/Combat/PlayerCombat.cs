@@ -92,7 +92,7 @@ namespace Player
             }
 
             // At the end, we're now post damage.
-            inputs.isInPreDamageAttackPhase = false;
+            inputs.IsInPreDamageAttackPhase = false;
         }
 
         private void ShowLineRendererForSeconds(float seconds, AttackDirection attackDirection)

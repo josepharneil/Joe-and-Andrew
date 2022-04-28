@@ -39820,6 +39820,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2115476012}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerMovement._playerSounds
+      value: 
+      objectReference: {fileID: 11400000, guid: 154070f64511041ebae35fa35bf3f9c7, type: 2}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: _playerMovement._playerSounds
       value: 
       objectReference: {fileID: 11400000, guid: 154070f64511041ebae35fa35bf3f9c7, type: 2}
@@ -39827,6 +39831,10 @@ PrefabInstance:
       propertyPath: _playerAnimator.spriteRenderer
       value: 
       objectReference: {fileID: 1555754390}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerMovement.movementController
+      value: 
+      objectReference: {fileID: 2115476014}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: _playerMovement.movementController
       value: 
@@ -39840,17 +39848,45 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerMovement.playerCombatPrototyping
+      value: 
+      objectReference: {fileID: 2115476048}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerMovement.PlayerAnimator._animator
+      value: 
+      objectReference: {fileID: 2115476036}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: _playerMovement.playerCombatPrototyping
       value: 
       objectReference: {fileID: 2115476048}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: _playerMovement.PlayerAnimator._animator
+      value: 
+      objectReference: {fileID: 2115476036}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: _playerMovement._playerAnimator._animator
       value: 
       objectReference: {fileID: 2115476036}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerMovement.PlayerAnimator.spriteRenderer
+      value: 
+      objectReference: {fileID: 1555754390}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: _playerMovement.PlayerAnimator.spriteRenderer
+      value: 
+      objectReference: {fileID: 1555754390}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: _playerMovement._playerAnimator.spriteRenderer
       value: 
       objectReference: {fileID: 1555754390}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerMovement.PlayerAnimator.defaultSquareSprite
+      value: 
+      objectReference: {fileID: 7482667652216324306, guid: 5205f3571171146c886d386aeaa65929, type: 3}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: _playerMovement.PlayerAnimator.defaultSquareSprite
+      value: 
+      objectReference: {fileID: 7482667652216324306, guid: 5205f3571171146c886d386aeaa65929, type: 3}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: _playerMovement._playerAnimator.defaultSquareSprite
       value: 
@@ -40012,6 +40048,22 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerMovement.PlayerHorizontalMovement._accelerationCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerMovement.PlayerHorizontalMovement._decelerationCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: _playerMovement.PlayerHorizontalMovement._accelerationCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: _playerMovement.PlayerHorizontalMovement._decelerationCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: _playerMovement._playerHorizontalMovement._accelerationCurve.m_Curve.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -40020,8 +40072,48 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerMovement.PlayerHorizontalMovement._changeDirectionCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: _playerMovement.PlayerHorizontalMovement._changeDirectionCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: _playerMovement._playerHorizontalMovement._changeDirectionCurve.m_Curve.Array.size
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerMovement.PlayerHorizontalMovement._accelerationCurve.m_Curve.Array.data[1].time
+      value: 0.08526611
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerMovement.PlayerHorizontalMovement._decelerationCurve.m_Curve.Array.data[1].time
+      value: 0.018493652
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerMovement.PlayerHorizontalMovement._accelerationCurve.m_Curve.Array.data[1].value
+      value: 1.0076141
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerMovement.PlayerHorizontalMovement._decelerationCurve.m_Curve.Array.data[1].value
+      value: 1.0152855
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: _playerMovement.PlayerHorizontalMovement._accelerationCurve.m_Curve.Array.data[1].time
+      value: 0.08526611
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: _playerMovement.PlayerHorizontalMovement._decelerationCurve.m_Curve.Array.data[1].time
+      value: 0.018493652
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: _playerMovement.PlayerHorizontalMovement._accelerationCurve.m_Curve.Array.data[1].value
+      value: 1.0076141
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: _playerMovement.PlayerHorizontalMovement._decelerationCurve.m_Curve.Array.data[1].value
+      value: 1.0152855
       objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: _playerMovement._playerHorizontalMovement._accelerationCurve.m_Curve.Array.data[1].time
@@ -40032,12 +40124,60 @@ PrefabInstance:
       value: 0.018493652
       objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerMovement.PlayerHorizontalMovement._accelerationCurve.m_Curve.Array.data[1].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerMovement.PlayerHorizontalMovement._changeDirectionCurve.m_Curve.Array.data[1].time
+      value: 0.019989014
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerMovement.PlayerHorizontalMovement._decelerationCurve.m_Curve.Array.data[0].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: _playerMovement._playerHorizontalMovement._accelerationCurve.m_Curve.Array.data[1].value
       value: 1.0076141
       objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: _playerMovement._playerHorizontalMovement._decelerationCurve.m_Curve.Array.data[1].value
       value: 1.0152855
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerMovement.PlayerHorizontalMovement._accelerationCurve.m_Curve.Array.data[1].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerMovement.PlayerHorizontalMovement._changeDirectionCurve.m_Curve.Array.data[1].value
+      value: 0.9999428
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerMovement.PlayerHorizontalMovement._decelerationCurve.m_Curve.Array.data[0].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: _playerMovement.PlayerHorizontalMovement._accelerationCurve.m_Curve.Array.data[1].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: _playerMovement.PlayerHorizontalMovement._changeDirectionCurve.m_Curve.Array.data[1].time
+      value: 0.019989014
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: _playerMovement.PlayerHorizontalMovement._decelerationCurve.m_Curve.Array.data[0].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: _playerMovement.PlayerHorizontalMovement._accelerationCurve.m_Curve.Array.data[1].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: _playerMovement.PlayerHorizontalMovement._changeDirectionCurve.m_Curve.Array.data[1].value
+      value: 0.9999428
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: _playerMovement.PlayerHorizontalMovement._decelerationCurve.m_Curve.Array.data[0].outSlope
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: _playerMovement._playerHorizontalMovement._accelerationCurve.m_Curve.Array.data[1].inSlope

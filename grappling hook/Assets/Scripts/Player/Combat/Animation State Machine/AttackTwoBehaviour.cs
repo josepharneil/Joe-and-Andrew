@@ -6,11 +6,11 @@ public class AttackTwoBehaviour : PlayerStateMachineBehaviourBase
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        GetPlayerController(animator).isAttacking = true;
+        GetPlayerController(animator).IsAttacking = true;
 
         SetSpeedBasedOnPrototypeCustomisation(animator);
         
-        GetPlayerController(animator).isInPreDamageAttackPhase = true;
+        GetPlayerController(animator).IsInPreDamageAttackPhase = true;
 
         // float moveDistance = 4f;
         // if (GetPlayerController(animator).facingDirection == PlayerControllerCombatScene.FacingDirection.Left)
@@ -33,7 +33,7 @@ public class AttackTwoBehaviour : PlayerStateMachineBehaviourBase
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        GetPlayerController(animator).isAttacking = false;
+        GetPlayerController(animator).IsAttacking = false;
         
         ResetSpeed(animator);
     }

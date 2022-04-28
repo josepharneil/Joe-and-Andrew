@@ -15,19 +15,9 @@ namespace Player
     [RequireComponent(typeof(BoxRayCollider2D))]
     public class PlayerInputs : MonoBehaviour
     {
-        [Header("Components")]
-        [SerializeField] private MovementController movementController;
-        
         [Header("Player Components")]
-        [SerializeField] private PlayerDash _playerDash;
-        [SerializeField] private PlayerHorizontalMovement _playerHorizontalMovement;
-        [SerializeField] private PlayerJump _playerJump;
-        [SerializeField] private PlayerFallThroughPlatform _playerFallThroughPlatform;
-        [SerializeField] private PlayerWallJumpSlide _playerWallJumpSlide;
-        [SerializeField] private PlayerGravity _playerGravity;
-        [SerializeField] private PlayerAnimator _playerAnimator;
-        [SerializeField] private PlayerMovement _playerMovement;
-
+        public PlayerMovement PlayerMovement;
+        
         private bool _isMoveInput;
         private Vector2 _moveInput;
         private bool _isJumpInput;
@@ -35,21 +25,16 @@ namespace Player
         private bool _isJumpEndedEarly;
         private bool _isBufferedJumpInput;
 
-        private FacingDirection _facingDirection;
         public AttackDirection AttackDirection { get; private set; } 
-        private Vector2 _velocity;
         
         // Attacks
         [Header("Attacking")] 
-        [HideInInspector] public bool isAttacking;
-        [HideInInspector] public bool isInPreDamageAttackPhase = true;
+        [NonSerialized] public bool IsAttacking;
+        [NonSerialized] public bool IsInPreDamageAttackPhase = true;
         public PlayerEquipment CurrentPlayerEquipment;
         [SerializeField] private bool _attacksDrivenByAnimations = true;
         [SerializeField] private PlayerAttackDriver _playerAttackDriver;
         [SerializeField] private float _downAttackJumpVelocity = 15f;
-
-        public FacingDirection GetFacingDirection() => _facingDirection;
-        public ref Vector2 GetVelocity() => ref _velocity;
         
         [Header("Parrying")] [SerializeField] private EntityParry entityParry;
         [Header("Blocking")] [SerializeField] private EntityBlock entityBlock;
@@ -57,21 +42,16 @@ namespace Player
         [Header("Daze")] [SerializeField] private EntityDaze entityDaze;
         
         [Header("Prototyping")] public PlayerCombatPrototyping playerCombatPrototyping;
-
-        [Header("Player Sounds")] [SerializeField] private PlayerSounds _playerSounds;
         
         private void Awake()
         {
-            _playerHorizontalMovement.Initialise(entityBlock);
-            _playerSounds.Initialise();
+            PlayerMovement.Initialise(entityBlock);
         }
 
         // Start is called before the first frame update
         private void Start()
         {
-            _playerAnimator.Start();
-            _playerDash.Start();
-            _playerHorizontalMovement.Start();
+            PlayerMovement.Start();
         }
         
         private void OnGUI()
@@ -86,17 +66,8 @@ namespace Player
             CheckBufferedJumpInput();
             
             // Movement
-            // The goal is to: _playerMovement.Update();
-            _playerMovement.Update(ref _isMoveInput, ref _moveInput, ref _isJumpInput, 
-                ref _isBufferedJumpInput, ref _isJumpEndedEarly, _jumpInputTime, isAttacking);
-            // UpdateMovement();
-            // UpdateWallSlide();
-            // UpdateGrounded();
-            // UpdateGravity();
-            // UpdateFallThroughPlatform();
-            // UpdateWallJump();
-            // UpdateJump();
-            // Move();
+            PlayerMovement.Update(ref _isMoveInput, ref _moveInput, ref _isJumpInput, 
+                ref _isBufferedJumpInput, ref _isJumpEndedEarly, _jumpInputTime, IsAttacking);
 
             // Attacks
             UpdateAttackDriver();
@@ -111,83 +82,17 @@ namespace Player
             }
         }
 
-        private void SetAnimatorSpeedFloats()
-        {
-            _playerAnimator.SetHorizontalSpeed(Mathf.Abs(_velocity.x));
-            _playerAnimator.SetVerticalSpeed(_velocity.y);
-        }
-
-        private void Move()
-        {
-            if (!playerCombatPrototyping.data.movementDisabledByAttacks)
-            {
-                movementController.Move(_velocity);
-            }
-            else
-            {                
-                if (isAttacking)
-                {
-                    // TODO @JA Not sure what to do here.
-                    if (_playerMovement.IsGrounded())
-                    {
-                        _velocity.x = 0f;
-                    }
-
-                    UpdateGrounded();
-                    UpdateGravity();
-                    movementController.Move(_velocity);
-                }
-                else
-                {
-                    movementController.Move(_velocity);
-                }
-            }
-            
-            UpdateFacingDirection();
-            SetAnimatorSpeedFloats();
-        }
-
-        private void UpdateFacingDirection()
-        {
-            if (!isAttacking || (isAttacking && playerCombatPrototyping.data.canChangeDirectionsDuringAttack))
-            {
-                if (_moveInput.x < 0)
-                {
-                    _facingDirection = FacingDirection.Left;
-                    _playerAnimator.SetSpriteFlipX(true);
-                }
-                else if (_moveInput.x > 0)
-                {
-                    _facingDirection = FacingDirection.Right;
-                    _playerAnimator.SetSpriteFlipX(false);
-                }
-            }
-        }
-
         public void ResetMoveSpeed()
         {
-            _playerHorizontalMovement.ResetMoveSpeed();
+            // TODO Need to change in Flow script...
+            PlayerMovement.PlayerHorizontalMovement.ResetMoveSpeed();
         }
         
-
         public void MultiplyMoveSpeed(float multiple)
         {
-            _playerHorizontalMovement.MultiplyMoveSpeed(multiple);
+            // TODO Need to change in Flow script...
+            PlayerMovement.PlayerHorizontalMovement.MultiplyMoveSpeed(multiple);
         }
-
-        #region Gravity and Fall calculations
-        // Taken from Tarodevs GitHub: https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/blob/main/Scripts/PlayerController.cs
-        private void UpdateGravity()
-        {
-            _playerGravity.UpdateGravity(movementController.customCollider2D.CollisionBelow, 
-                movementController.customCollider2D.CheckIfHittingCeiling(),
-                ref _isJumpEndedEarly, ref _velocity, _playerJump, _playerWallJumpSlide);
-        }
-
-        #endregion
-        
-        #region Jump Movement
-
         /// <summary>
         /// Called by PlayerInput Unity Event.
         /// </summary>
@@ -203,72 +108,33 @@ namespace Player
                 _jumpInputTime = Time.time;
             }
 
-            if (context.canceled && (Time.time - _jumpInputTime < _playerJump.GetEarlyCancelTime()))
+            if (context.canceled && (Time.time - _jumpInputTime < PlayerMovement.PlayerJump.GetEarlyCancelTime()))
             {
                 _isJumpEndedEarly = true;
             }
         }
-
-        private void UpdateJump()
-        {
-            float timeBetweenJumpInputAndLastGrounded = _jumpInputTime - _playerMovement.GetLastGroundedTime();
-            _playerJump.Update(ref _isJumpInput, _playerMovement.IsGrounded(), ref _isBufferedJumpInput, 
-                timeBetweenJumpInputAndLastGrounded, ref _velocity, movementController.customCollider2D.CollisionBelow, _playerAnimator, _playerSounds);
-        }
         
         public void DownAttackJump()
         {
-            _velocity.y = _downAttackJumpVelocity;
-        }
-
-        private void UpdateGrounded()
-        {
-            _playerMovement.UpdateGrounded(movementController.customCollider2D, _playerAnimator, _playerJump, _playerWallJumpSlide, ref _isMoveInput, ref _moveInput);
+            PlayerMovement.Velocity.y = _downAttackJumpVelocity;
         }
 
         private void CheckBufferedJumpInput()
         {
             // "When the character is already in the air pressing jump moments before the ground will trigger jump as soon as they land"
             // http://www.davetech.co.uk/gamedevplatformer
-            if (_isJumpInput && !_playerMovement.IsGrounded())
+            if (_isJumpInput && !PlayerMovement.IsGrounded())
             {
                 _isBufferedJumpInput = true;
             }
             
             // Remove buffered jump if it has been too long.
-            if (_isBufferedJumpInput && (Time.time - _jumpInputTime) > _playerJump.GetJumpBufferTime())
+            if (_isBufferedJumpInput && (Time.time - _jumpInputTime) >PlayerMovement.PlayerJump.GetJumpBufferTime())
             {
                 _isBufferedJumpInput = false;
             }
         }
-        
-        private void UpdateWallJump()
-        {
-            _playerWallJumpSlide.UpdateWallJump(ref _isJumpInput, ref _isBufferedJumpInput, 
-                _playerMovement.IsGrounded(), ref _playerJump.GetIsInCoyoteTime(), ref _isMoveInput, _jumpInputTime, 
-                movementController.customCollider2D, ref _velocity, facingDirection: ref _facingDirection, 
-                ref _moveInput, _playerSounds, _playerJump, _playerAnimator);
-        }
-        
-        private void UpdateFallThroughPlatform()
-        {
-            // TODO Check if we should be directly accessing Input here.. might be okay, but also might not be.
-            // Can we not just use _moveInput.y < 0f ?
-            _playerFallThroughPlatform.Update(movementController.customCollider2D, ref _isJumpInput, 
-                Input.GetAxisRaw("Vertical") < 0f);
-        }
 
-        #endregion
-
-        #region WallSlide
-        private void UpdateWallSlide()
-        {
-            _playerWallJumpSlide.UpdateWallSlide(_isMoveInput, _playerMovement.IsGrounded(), _facingDirection,
-                movementController.customCollider2D.CollisionLeft, movementController.customCollider2D.CollisionRight);
-        }
-        #endregion
-
-        #region Horizontal Movement
         /// <summary>
         /// called by Unity PlayerInput event
         /// </summary>
@@ -280,7 +146,7 @@ namespace Player
             {
                 _moveInput = Vector2.zero;
             }
-            if (_playerWallJumpSlide.HasWallJumped())
+            if (PlayerMovement.PlayerWallJumpSlide.HasWallJumped())
             {
                 //used to stop the player moving for a short period after they have wall jumped
                 //once it works it should let wall jumps be chained together
@@ -290,19 +156,19 @@ namespace Player
             {
                 _isMoveInput = true;
                 if (entityKnockback.IsBeingKnockedBack() ||
-                    (isAttacking && !playerCombatPrototyping.data.canChangeDirectionsDuringAttack))
+                    (IsAttacking && !playerCombatPrototyping.data.canChangeDirectionsDuringAttack))
                 {
                     return;
                 }
                 if (_moveInput.x < 0)
                 {
-                    _facingDirection = FacingDirection.Left;
-                    _playerAnimator.SetSpriteFlipX(true);
+                    PlayerMovement.FacingDirection = FacingDirection.Left;
+                    PlayerMovement.PlayerAnimator.SetSpriteFlipX(true);
                 }
                 else if (_moveInput.x > 0)
                 {                    
-                    _facingDirection = FacingDirection.Right;
-                    _playerAnimator.SetSpriteFlipX(false);
+                    PlayerMovement.FacingDirection = FacingDirection.Right;
+                    PlayerMovement.PlayerAnimator.SetSpriteFlipX(false);
                 }
             }
             else
@@ -311,27 +177,14 @@ namespace Player
             }
         }
 
-        private void UpdateMovement()
-        {
-            // Note to self: could do a switch on movestate here instead?
-            if (_playerDash.UpdateDash(_moveInput, _facingDirection, ref _playerHorizontalMovement.MoveState, ref _velocity))
-            {
-                return;
-            }
-            
-            _playerHorizontalMovement.Update(_isMoveInput, _moveInput, ref _velocity, movementController.customCollider2D.CollisionBelow);
-        }
-        
-        #endregion
-
         /// <summary>
         /// Called by PlayerInput Unity Event.
         /// </summary>
         [UsedImplicitly] public void ReadDashInput(InputAction.CallbackContext context)
         {
-            if (context.started && !_playerDash.IsDashOnCooldown() && !(entityDaze && entityDaze.isDazed))
+            if (context.started && !PlayerMovement.PlayerDash.IsDashOnCooldown() && !(entityDaze && entityDaze.isDazed))
             {
-                _playerDash.DashState = DashState.StartDash;
+                PlayerMovement.PlayerDash.DashState = DashState.StartDash;
             }
         }
 
@@ -361,7 +214,7 @@ namespace Player
             {
                 AttackDirection = AttackDirection.Up;
             }
-            else if (!_playerMovement.IsGrounded() && (_moveInput.y < -verticalInputThreshold))
+            else if (!PlayerMovement.IsGrounded() && (_moveInput.y < -verticalInputThreshold))
             {
                 AttackDirection = AttackDirection.Down;
             }
@@ -371,21 +224,21 @@ namespace Player
                 {
                     if (_moveInput.x < 0)
                     {
-                        _facingDirection = FacingDirection.Left;
-                        _playerAnimator.SetSpriteFlipX(true);
+                        PlayerMovement.FacingDirection = FacingDirection.Left;
+                        PlayerMovement.PlayerAnimator.SetSpriteFlipX(true);
                     }
                     else if ( _moveInput.x > 0 )
                     {
-                        _facingDirection = FacingDirection.Right;
-                        _playerAnimator.SetSpriteFlipX(false);
+                        PlayerMovement.FacingDirection = FacingDirection.Right;
+                        PlayerMovement.PlayerAnimator.SetSpriteFlipX(false);
                     }
                 }
-                AttackDirection = _facingDirection == FacingDirection.Left ? AttackDirection.Left : AttackDirection.Right;
+                AttackDirection = (PlayerMovement.FacingDirection == FacingDirection.Left) ? AttackDirection.Left : AttackDirection.Right;
             }
             
             if (_attacksDrivenByAnimations)
             {
-                _playerAnimator.SetTriggerAttack();
+                PlayerMovement.PlayerAnimator.SetTriggerAttack();
             }
             else
             {
@@ -396,11 +249,11 @@ namespace Player
         private void CheckIfAttackIsCancellable()
         {
             // Cancellable attack phases
-            if (!isAttacking) return;
+            if (!IsAttacking) return;
 
             // TODO There are only really two phases right now
             // the actual attack phase is only 1 frame right now.
-            if (isInPreDamageAttackPhase)
+            if (IsInPreDamageAttackPhase)
             {
                 // What phases are cancellable?
                 if ((playerCombatPrototyping.data.cancellableAttackPhases &
@@ -421,10 +274,10 @@ namespace Player
             // What cancels attacks?
             if ((playerCombatPrototyping.data.cancellables & PrototypeCancellables.Dash) != PrototypeCancellables.None)
             {
-                if (_playerDash.DashState == DashState.StartDash)
+                if (PlayerMovement.PlayerDash.DashState == DashState.StartDash)
                 {
-                    isAttacking = false;
-                    _playerAnimator.PlayState("Player_Idle");
+                    IsAttacking = false;
+                    PlayerMovement.PlayerAnimator.PlayState("Player_Idle");
                     // todo getting playercombat here is bad.
                     GetComponent<PlayerCombat>().ForceHideAttackParticles();
                 }
@@ -434,8 +287,8 @@ namespace Player
             {
                 if (_isJumpInput)
                 {
-                    isAttacking = false;
-                    _playerAnimator.PlayState("Player_Jump");
+                    IsAttacking = false;
+                    PlayerMovement.PlayerAnimator.PlayState("Player_Jump");
                     GetComponent<PlayerCombat>().ForceHideAttackParticles();
                 }
             }
@@ -444,8 +297,8 @@ namespace Player
             {
                 if (_isMoveInput)
                 {
-                    isAttacking = false;
-                    _playerAnimator.PlayState("Player_Idle");
+                    IsAttacking = false;
+                    PlayerMovement.PlayerAnimator.PlayState("Player_Idle");
                     GetComponent<PlayerCombat>().ForceHideAttackParticles();
                 }
             }
@@ -457,7 +310,7 @@ namespace Player
         /// <param name="context"></param>
         [UsedImplicitly] public void ReadParryInput(InputAction.CallbackContext context)
         {
-            if (!entityParry || isAttacking)
+            if (!entityParry || IsAttacking)
             {
                 return;
             }
@@ -482,7 +335,7 @@ namespace Player
                 return;
             }
 
-            if (context.performed && !isAttacking)
+            if (context.performed && !IsAttacking)
             {
                 // For now, don't need to worry about whether you're mid parry /attack
                 entityBlock.SetBlocking(true);

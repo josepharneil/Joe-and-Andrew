@@ -21,7 +21,7 @@ namespace Level
                 {
                     Vector2 forceVector = _forceDirection * _forceAmount;
 
-                    ref Vector2 playerVelocity = ref playerInputs.GetVelocity();
+                    ref Vector2 playerVelocity = ref playerInputs.PlayerMovement.Velocity;
 
                     // Rightwards force
                     if (forceVector.x > 0f)
@@ -80,7 +80,7 @@ namespace Level
                     // Sideways force
                     if (forceVector.x != 0f)
                     {
-                        playerInputs.GetVelocity().x = 0;
+                        playerInputs.PlayerMovement.Velocity.x = 0;
                     }
                 }
             }

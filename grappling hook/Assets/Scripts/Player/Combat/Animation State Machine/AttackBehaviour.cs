@@ -7,11 +7,11 @@ namespace Player
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            GetPlayerController(animator).isAttacking = true;
+            GetPlayerController(animator).IsAttacking = true;
 
             SetSpeedBasedOnPrototypeCustomisation(animator);
 
-            GetPlayerController(animator).isInPreDamageAttackPhase = true;
+            GetPlayerController(animator).IsInPreDamageAttackPhase = true;
         }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -25,7 +25,7 @@ namespace Player
         {
             ResetSpeed(animator);
             
-            GetPlayerController(animator).isAttacking = false;
+            GetPlayerController(animator).IsAttacking = false;
         }
     }
 }
