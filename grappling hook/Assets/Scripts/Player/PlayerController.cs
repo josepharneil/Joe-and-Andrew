@@ -48,7 +48,7 @@ namespace Player
         private void Update()
         {
             // Input (could put this in an input function???)
-            PlayerInputs.Update();
+            PlayerInputs.UpdateInputs();
             
             // Movement
             PlayerMovement.Update(

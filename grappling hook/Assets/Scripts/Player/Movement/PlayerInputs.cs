@@ -36,7 +36,7 @@ namespace Player
             _entityDaze = entityDaze;
         }
 
-        public void Update()
+        public void UpdateInputs()
         {
             CheckBufferedJumpInput();
         }
