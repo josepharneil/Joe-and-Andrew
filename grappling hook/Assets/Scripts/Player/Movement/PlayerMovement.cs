@@ -1,7 +1,5 @@
 using System;
 using Entity;
-using Physics;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Player
@@ -18,9 +16,9 @@ namespace Player
         public PlayerFallThroughPlatform PlayerFallThroughPlatform;
         public PlayerWallJumpSlide PlayerWallJumpSlide;
         public PlayerGravity PlayerGravity;
-        public PlayerAnimator PlayerAnimator;
         
-        [Header("Player Sounds")] [SerializeField] private PlayerSounds _playerSounds;
+        private PlayerAnimator _playerAnimator;
+        private PlayerSounds _playerSounds;
         
         [Header("Prototyping")] public PlayerCombatPrototyping playerCombatPrototyping;
 
@@ -37,15 +35,15 @@ namespace Player
         
         #endregion
 
-        public void Initialise(EntityBlock entityBlock)
+        public void Initialise(PlayerAnimator playerAnimator, EntityBlock entityBlock, PlayerSounds playerSounds)
         {
             PlayerHorizontalMovement.Initialise(entityBlock);
-            _playerSounds.Initialise();
+            _playerSounds = playerSounds;
+            _playerAnimator = playerAnimator;
         }
 
         public void Start()
         {
-            PlayerAnimator.Start();
             PlayerDash.Start();
             PlayerHorizontalMovement.Start();
         }
@@ -87,7 +85,7 @@ namespace Player
         {
             if(movementController.customCollider2D.CheckIfGrounded())
             {
-                PlayerAnimator.SetGrounded(true);
+                _playerAnimator.SetGrounded(true);
                 _isGrounded = true;
                 _lastGroundedTime = Time.time;
                 PlayerJump.SetHasJumped(false);
@@ -131,14 +129,14 @@ namespace Player
             PlayerWallJumpSlide.UpdateWallJump(ref isJumpInput, ref isBufferedJumpInput, 
                 _isGrounded, ref PlayerJump.GetIsInCoyoteTime(), ref isMoveInput, jumpInputTime, 
                 movementController.customCollider2D, ref Velocity, facingDirection: ref FacingDirection, 
-                ref moveInput, _playerSounds, PlayerJump, PlayerAnimator);
+                ref moveInput, _playerSounds, PlayerJump, _playerAnimator);
         }
 
         private void UpdateJump(ref bool isJumpInput, ref bool isBufferedJumpInput, float jumpInputTime)
         {
             float timeBetweenJumpInputAndLastGrounded = jumpInputTime - _lastGroundedTime;
             PlayerJump.Update(ref isJumpInput, _isGrounded, ref isBufferedJumpInput, 
-                timeBetweenJumpInputAndLastGrounded, ref Velocity, movementController.customCollider2D.CollisionBelow, PlayerAnimator, _playerSounds);
+                timeBetweenJumpInputAndLastGrounded, ref Velocity, movementController.customCollider2D.CollisionBelow, _playerAnimator, _playerSounds);
         }
         
         private void Move(ref bool isMoveInput, ref Vector2 moveInput, bool isJumpEndedEarly, bool isAttacking)
@@ -169,20 +167,20 @@ namespace Player
                 if (moveInput.x < 0)
                 {
                     FacingDirection = FacingDirection.Left;
-                    PlayerAnimator.SetSpriteFlipX(true);
+                    _playerAnimator.SetSpriteFlipX(true);
                 }
                 else if (moveInput.x > 0)
                 {
                     FacingDirection = FacingDirection.Right;
-                    PlayerAnimator.SetSpriteFlipX(false);
+                    _playerAnimator.SetSpriteFlipX(false);
                 }
             }
         }
         
         private void SetAnimatorSpeedFloats()
         {
-            PlayerAnimator.SetHorizontalSpeed(Mathf.Abs(Velocity.x));
-            PlayerAnimator.SetVerticalSpeed(Velocity.y);
+            _playerAnimator.SetHorizontalSpeed(Mathf.Abs(Velocity.x));
+            _playerAnimator.SetVerticalSpeed(Velocity.y);
         }
     }
 }

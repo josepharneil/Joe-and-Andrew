@@ -7,7 +7,7 @@ namespace Entity
     public class EntityParry : MonoBehaviour
     {
         // TODO Move this to player prob... or refactor to be more general...
-        [SerializeField] private Player.PlayerInputs inputs;
+        [SerializeField] private Player.PlayerController _playerController;
         [SerializeField] private LayerMask whatIsParryable;
         [SerializeField] private float parryRadius = 1f;
         [SerializeField] private float timeBetweenParries = 0.8f;
@@ -39,7 +39,7 @@ namespace Entity
 
             Debug.Log("Parry!");
             
-            FacingDirection parryDirection = inputs.PlayerMovement.FacingDirection;
+            FacingDirection parryDirection = _playerController.PlayerMovement.FacingDirection;
             
             Vector2 overlapCirclePosition;
             if (parryDirection == FacingDirection.Left)
@@ -76,7 +76,7 @@ namespace Entity
         private void OnDrawGizmosSelected()
         {
             if (!_showGizmos) return;
-            if (inputs.PlayerMovement.FacingDirection == FacingDirection.Left)
+            if (_playerController.PlayerMovement.FacingDirection == FacingDirection.Left)
             {
                 Vector3 position = transform.position + new Vector3(-1, 0);
                 Gizmos.DrawWireSphere(position, parryRadius);

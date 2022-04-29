@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +9,7 @@ namespace Player
         //having this script reference the player inputs, maybe there is a cleaner way to do it in case 
         //there are other modifiers affecting move or attack speed
         [Header("Components")]
-        [SerializeField] private PlayerInputs _playerInputs;
+        [SerializeField] private PlayerController _playerController;
         [SerializeField] private RectTransform _uiTransform;
         [SerializeField] private RectTransform _bgTransform;
         [SerializeField] private Image _barImage;
@@ -94,11 +91,11 @@ namespace Player
                     }
                     if (_increaseMoveSpeed)
                     {
-                        _playerInputs.MultiplyMoveSpeed(_moveSpeedIncrease);
+                        _playerController.PlayerMovement.PlayerHorizontalMovement.MultiplyMoveSpeed(_moveSpeedIncrease);
                     }
                     if (_increaseAttackSpeed)
                     {
-                        Player.PlayerAttackDriver attackDriver = _playerInputs.PlayerAttacks.PlayerAttackDriver;
+                        PlayerAttackDriver attackDriver = _playerController.PlayerAttacks.PlayerAttackDriver;
                         attackDriver.AttackSpeed *= _attackSpeedIncrease;
                     }
                 }
@@ -119,11 +116,11 @@ namespace Player
                 float proportionalIncrease = (_maxFlow + _currentFlow) / _maxFlow;
                 if (_increaseMoveSpeed)
                 {
-                    _playerInputs.MultiplyMoveSpeed(_moveSpeedIncrease * proportionalIncrease);
+                    _playerController.PlayerMovement.PlayerHorizontalMovement.MultiplyMoveSpeed(_moveSpeedIncrease * proportionalIncrease);
                 }
                 if (_increaseAttackSpeed)
                 {
-                    _playerInputs.PlayerAttacks.PlayerAttackDriver.AttackSpeed *= _attackSpeedIncrease;
+                    _playerController.PlayerAttacks.PlayerAttackDriver.AttackSpeed *= _attackSpeedIncrease;
                 }
             }
             //reduce the flow by the decay rate
@@ -136,11 +133,11 @@ namespace Player
             _inFlow = false;
             if (_increaseMoveSpeed)
             {
-                _playerInputs.ResetMoveSpeed();
+                _playerController.PlayerMovement.PlayerHorizontalMovement.ResetMoveSpeed();
             }
             if (_increaseAttackSpeed)
             {
-                _playerInputs.PlayerAttacks.PlayerAttackDriver.AttackSpeed = 1f;
+                _playerController.PlayerAttacks.PlayerAttackDriver.AttackSpeed = 1f;
             }
             if (_buildFlowBeforeActivating)
             {
@@ -162,11 +159,11 @@ namespace Player
                     _barImage.color = Color.green;
                     if (_increaseMoveSpeed)
                     {
-                        _playerInputs.MultiplyMoveSpeed(_moveSpeedIncrease);
+                        _playerController.PlayerMovement.PlayerHorizontalMovement.MultiplyMoveSpeed(_moveSpeedIncrease);
                     }
                     if (_increaseAttackSpeed)
                     {
-                        _playerInputs.PlayerAttacks.PlayerAttackDriver.AttackSpeed *= _attackSpeedIncrease;
+                        _playerController.PlayerAttacks.PlayerAttackDriver.AttackSpeed *= _attackSpeedIncrease;
                     }
                     _hasHitMaximumFlow = true;
                 }

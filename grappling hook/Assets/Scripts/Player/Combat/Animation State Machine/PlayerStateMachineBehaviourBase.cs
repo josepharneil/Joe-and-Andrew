@@ -3,20 +3,20 @@ using Player;
 
 public class PlayerStateMachineBehaviourBase : StateMachineBehaviour
 {
-    private PlayerInputs _playerInputs; // TODO this should probably just be a more general "PlayerController"
+    private PlayerController _playerController; // TODO this should probably just be a more general "PlayerController"
     
-    protected PlayerInputs GetPlayerController(Animator animator)
+    protected PlayerController GetPlayerController(Animator animator)
     {
-        if (_playerInputs == null)
+        if (_playerController == null)
         {
-            _playerInputs = animator.GetComponent<PlayerInputs>();
+            _playerController = animator.GetComponent<PlayerController>();
         }
-        return _playerInputs;
+        return _playerController;
     }
 
     protected void SetSpeedBasedOnPrototypeCustomisation(Animator animator)
     {
-        PlayerInputs playerInputs = GetPlayerController(animator);
+        PlayerController playerInputs = GetPlayerController(animator);
         if (playerInputs.PlayerAttacks.PlayerCombatPrototyping.data.attackSpeed == 0f)
         {
             playerInputs.PlayerAttacks.PlayerCombatPrototyping.data.attackSpeed = 1f;

@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using Entity;
 using JetBrains.Annotations;
@@ -14,11 +14,10 @@ namespace Player
         Right
     }
 
-    public class PlayerCombat : MonoBehaviour
+    [Serializable] public class PlayerCombat
     {
         [Header("Setup")]
         [SerializeField] private LayerMask whatIsDamageable;
-        [SerializeField] private PlayerInputs _playerInputs;
 
         [Header("Shake")] 
         [SerializeField] private CameraShakeData _cameraShakeData; 
@@ -38,9 +37,12 @@ namespace Player
         [SerializeField] private EntityKnockback _playerKnockback;
         
         [Header("Weapon")]
-        public PlayerEquipment CurrentPlayerEquipment;
+        public PlayerEquipment CurrentPlayerEquipment; // TODO Remove this? also knockback above.. clean up!
         [SerializeField] private LineRenderer _lineRenderer;
         [SerializeField] private float _lineRenderDuration = 0.2f;
+        private float _lineRendererStartTime = 0f;
+        private bool _isShowingLineRenderer = false;
+        private AttackDirection _lineRendererAttackDirection;
 
         [Header("Debug")]
         [SerializeField] private bool _showGizmos = false;
@@ -49,12 +51,48 @@ namespace Player
         [Header("Components")]
         [SerializeField] private PlayerFlow flow;
 
+        [NonSerialized] public Transform PlayerTransform;
+        [NonSerialized] private PlayerAttacks _playerAttacks;
+
+        public void Initialise(Transform playerTransform, PlayerAttacks playerAttacks)
+        {
+            PlayerTransform = playerTransform;
+            _playerAttacks = playerAttacks;
+        }
+
+        public void Update()
+        {
+            if (_slowTimeScaleTimer > 0f)
+            {
+                _slowTimeScaleTimer -= Time.unscaledDeltaTime;
+                if (_slowTimeScaleTimer < 0f)
+                {
+                    Time.timeScale = 1f;
+                }
+            }
+
+            UpdateLineRenderer();
+        }
+
+        private void UpdateLineRenderer()
+        {
+            if(_isShowingLineRenderer)
+            {
+                if (Time.time - _lineRendererStartTime > _lineRenderDuration)
+                {
+                    CurrentPlayerEquipment.CurrentMeleeWeapon.HideLineRenderer(_lineRenderer);
+                    _isShowingLineRenderer = false;
+                }
+
+            }
+        }
+
         /// <summary>
         /// Called by Animation Events.
         /// </summary>
         [UsedImplicitly] public void Attack(int attackIndex)//Number is unused right now.
         {
-            AttackDirection attackDirection = _playerInputs.PlayerAttacks.AttackDirection;
+            AttackDirection attackDirection = _playerAttacks.AttackDirection;
             
             CurrentPlayerEquipment.CurrentMeleeWeapon.ShowAttackParticle(attackDirection);
             
@@ -64,9 +102,9 @@ namespace Player
                 useLayerMask = true,
                 useTriggers = true
             };
-            CurrentPlayerEquipment.CurrentMeleeWeapon.DetectAttackableObjects(out List<Collider2D> detectedObjects, contactFilter2D, transform.position, attackDirection);
+            CurrentPlayerEquipment.CurrentMeleeWeapon.DetectAttackableObjects(out List<Collider2D> detectedObjects, contactFilter2D, PlayerTransform.position, attackDirection);
 
-            ShowLineRendererForSeconds(_lineRenderDuration, attackDirection);
+            StartShowLineRendererForSeconds(attackDirection);
 
             bool objectHit = TryHitDetectedObjects(detectedObjects, out Vector2? firstEnemyHitPosition);
             if (objectHit)
@@ -77,7 +115,7 @@ namespace Player
                 // Knockback player
                 if (attackDirection == AttackDirection.Down)
                 {
-                    _playerInputs.PlayerAttacks.DownwardsAttackJump();
+                    _playerAttacks.DownwardsAttackJump();
                 }
                 else
                 {
@@ -91,26 +129,19 @@ namespace Player
             }
 
             // At the end, we're now post damage.
-            _playerInputs.PlayerAttacks.IsInPreDamageAttackPhase = false;
+            _playerAttacks.IsInPreDamageAttackPhase = false;
         }
 
-        private void ShowLineRendererForSeconds(float seconds, AttackDirection attackDirection)
+        private void StartShowLineRendererForSeconds(AttackDirection attackDirection)
         {
             if (!_showLineRenderer) return;
             if (!_lineRenderer) return;
             if (!CurrentPlayerEquipment) return;
             if (!CurrentPlayerEquipment.CurrentMeleeWeapon) return;
 
-            IEnumerator CoShowLineRendererForSeconds()
-            {
-                CurrentPlayerEquipment.CurrentMeleeWeapon.DrawLineRenderer(_lineRenderer, attackDirection);
-                
-                yield return new WaitForSeconds(seconds);
-
-                CurrentPlayerEquipment.CurrentMeleeWeapon.HideLineRenderer(_lineRenderer);
-            }
-
-            StartCoroutine(CoShowLineRendererForSeconds());
+            _isShowingLineRenderer = true;
+            _lineRendererAttackDirection = attackDirection;
+            CurrentPlayerEquipment.CurrentMeleeWeapon.DrawLineRenderer(_lineRenderer, _lineRendererAttackDirection);
         }
         
         private bool TryHitDetectedObjects(List<Collider2D> detectedObjects, out Vector2? enemyKnockbackPosition)
@@ -149,7 +180,7 @@ namespace Player
                 DamageToHealth = damageDealt,
 
                 DealsKnockback = CurrentPlayerEquipment.CurrentMeleeWeapon.KnockbackAmountToTarget != 0f,
-                KnockbackOrigin = transform.position,
+                KnockbackOrigin = PlayerTransform.position,
                 KnockbackStrength = CurrentPlayerEquipment.CurrentMeleeWeapon.KnockbackAmountToTarget,
 
                 DealsDaze = playerCombatPrototyping.data.doesPlayerDealDaze,
@@ -177,31 +208,19 @@ namespace Player
             Time.timeScale = _slowTimeScaleAmount;
             _slowTimeScaleTimer = _slowTimeScaleDuration;
         }
-        
-        private void Update()
-        {
-            if (_slowTimeScaleTimer > 0f)
-            {
-                _slowTimeScaleTimer -= Time.unscaledDeltaTime;
-                if (_slowTimeScaleTimer < 0f)
-                {
-                    Time.timeScale = 1f;
-                }
-            }
-        }
- 
+
         public void ForceHideAttackParticles()
         {
             CurrentPlayerEquipment.CurrentMeleeWeapon.ForceHideAttackParticles();
         }
 
 #if UNITY_EDITOR
-        private void OnDrawGizmosSelected()
+        public void DrawGizmosSelected()
         {
             if (!_showGizmos) return;
             if (!CurrentPlayerEquipment) return;
             if (!CurrentPlayerEquipment.CurrentMeleeWeapon) return;
-            CurrentPlayerEquipment.CurrentMeleeWeapon.DrawGizmos(transform.position, _playerInputs.PlayerAttacks.AttackDirection);
+            CurrentPlayerEquipment.CurrentMeleeWeapon.DrawGizmos(PlayerTransform.position, _playerAttacks.AttackDirection);
         }
 #endif
     }

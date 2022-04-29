@@ -12,7 +12,7 @@ namespace Player
         [Header("Debug")]
         [SerializeField] private bool _debugUseSounds = false;
         
-        public void Initialise()
+        public void Start()
         {
             Debug.Assert(AudioManager.Instance != null, "No audio manager", this);
         }

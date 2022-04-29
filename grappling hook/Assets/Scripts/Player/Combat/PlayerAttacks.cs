@@ -23,24 +23,34 @@ namespace Player
         [NonSerialized] public bool IsInPreDamageAttackPhase = true;
         [NonSerialized] public AttackDirection AttackDirection;
 
-        public void Initialise(PlayerMovement playerMovement)
+        private PlayerAnimator _playerAnimator;
+
+        public void Initialise(Transform playerTransform, PlayerMovement playerMovement, PlayerAnimator playerAnimator)
         {
-            _playerMovement = playerMovement;
+            _playerCombat.Initialise(playerTransform, this);
             PlayerAttackDriver.Initialise(_playerCombat);
+            _playerMovement = playerMovement;
+            _playerAnimator = playerAnimator;
         }
 
         public void ShowGUI()
         {
             PlayerAttackDriver.ShowDebugGUI();
         }
+
+        public void DrawGizmosSelected()
+        {
+            _playerCombat.DrawGizmosSelected();
+        }
         
-        public void Update(DashState dashState, PlayerAnimator playerAnimator, bool isMoveInput, bool isJumpInput)
+        public void Update(DashState dashState, bool isMoveInput, bool isJumpInput)
         {
             UpdateAttackDriver();
-            CheckIfAttackIsCancellable(dashState, playerAnimator, isMoveInput, isJumpInput);
+            CheckIfAttackIsCancellable(dashState, isMoveInput, isJumpInput);
+            _playerCombat.Update();
         }
 
-        public void StartAttack(PlayerAnimator playerAnimator, bool isGrounded, Vector2 moveInput, ref FacingDirection facingDirection)
+        public void StartAttack(bool isGrounded, Vector2 moveInput, ref FacingDirection facingDirection)
         {
             const float verticalInputThreshold = 0.5f;
 
@@ -59,12 +69,12 @@ namespace Player
                     if (moveInput.x < 0)
                     {
                         facingDirection = FacingDirection.Left;
-                        playerAnimator.SetSpriteFlipX(true);
+                        _playerAnimator.SetSpriteFlipX(true);
                     }
                     else if ( moveInput.x > 0 )
                     {
                         facingDirection = FacingDirection.Right;
-                        playerAnimator.SetSpriteFlipX(false);
+                        _playerAnimator.SetSpriteFlipX(false);
                     }
                 }
                 AttackDirection = (facingDirection == FacingDirection.Left) ? AttackDirection.Left : AttackDirection.Right;
@@ -72,7 +82,7 @@ namespace Player
             
             if (_attacksDrivenByAnimations)
             {
-                playerAnimator.SetTriggerAttack();
+                _playerAnimator.SetTriggerAttack();
             }
             else
             {
@@ -88,7 +98,7 @@ namespace Player
             }
         }
 
-        private void CheckIfAttackIsCancellable(DashState dashState, PlayerAnimator playerAnimator, bool isMoveInput, bool isJumpInput)
+        private void CheckIfAttackIsCancellable(DashState dashState, bool isMoveInput, bool isJumpInput)
         {
             // Cancellable attack phases
             if (!IsAttacking) return;
@@ -119,7 +129,7 @@ namespace Player
                 if (dashState == DashState.StartDash)
                 {
                     IsAttacking = false;
-                    playerAnimator.PlayState("Player_Idle");
+                    _playerAnimator.PlayState("Player_Idle");
                     // todo getting playercombat here is bad.
                     _playerCombat.ForceHideAttackParticles();
                 }
@@ -130,7 +140,7 @@ namespace Player
                 if (isJumpInput)
                 {
                     IsAttacking = false;
-                    playerAnimator.PlayState("Player_Jump");
+                    _playerAnimator.PlayState("Player_Jump");
                     _playerCombat.ForceHideAttackParticles();
                 }
             }
@@ -140,7 +150,7 @@ namespace Player
                 if (isMoveInput)
                 {
                     IsAttacking = false;
-                    playerAnimator.PlayState("Player_Idle");
+                    _playerAnimator.PlayState("Player_Idle");
                     _playerCombat.ForceHideAttackParticles();
                 }
             }

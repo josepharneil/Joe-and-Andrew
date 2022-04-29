@@ -16,12 +16,12 @@ namespace Level
             GameObject otherGameObject = other.gameObject;
             if (otherGameObject.CompareTag("Player"))
             {
-                otherGameObject.TryGetComponent(out PlayerInputs playerInputs);
-                if (playerInputs)
+                otherGameObject.TryGetComponent(out PlayerController playerController);
+                if (playerController)
                 {
                     Vector2 forceVector = _forceDirection * _forceAmount;
 
-                    ref Vector2 playerVelocity = ref playerInputs.PlayerMovement.Velocity;
+                    ref Vector2 playerVelocity = ref playerController.PlayerMovement.Velocity;
 
                     // Rightwards force
                     if (forceVector.x > 0f)
@@ -73,14 +73,14 @@ namespace Level
             GameObject otherGameObject = other.gameObject;
             if (otherGameObject.CompareTag("Player"))
             {
-                otherGameObject.TryGetComponent(out PlayerInputs playerInputs);
-                if (playerInputs)
+                otherGameObject.TryGetComponent(out PlayerController playerController);
+                if (playerController)
                 {
                     Vector2 forceVector = _forceDirection * _forceAmount;
                     // Sideways force
                     if (forceVector.x != 0f)
                     {
-                        playerInputs.PlayerMovement.Velocity.x = 0;
+                        playerController.PlayerMovement.Velocity.x = 0;
                     }
                 }
             }

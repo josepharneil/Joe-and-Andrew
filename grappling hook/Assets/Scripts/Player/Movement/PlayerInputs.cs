@@ -1,97 +1,64 @@
 using System;
-using Audio;
 using Entity;
 using JetBrains.Annotations;
-using Physics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-//thieved shamelessly from https://www.youtube.com/watch?v=MbWK8bCAU2w&list=PLFt_AvWsXl0f0hqURlhyIoAabKPgRsqjz&index=1
+// thieved shamelessly from https://www.youtube.com/watch?v=MbWK8bCAU2w&list=PLFt_AvWsXl0f0hqURlhyIoAabKPgRsqjz&index=1
 // more shameless thieving https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/blob/main/Scripts/PlayerController.cs
 
 namespace Player
 {
-    [RequireComponent(typeof(MovementController))]
-    [RequireComponent(typeof(BoxRayCollider2D))]
     public class PlayerInputs : MonoBehaviour
     {
-        [Header("Movement")] public PlayerMovement PlayerMovement;
-        [Header("Attacking")] public PlayerAttacks PlayerAttacks;
-        
-        private bool _isMoveInput;
-        private Vector2 _moveInput;
-        private bool _isJumpInput;
-        private float _jumpInputTime;
-        private bool _isJumpEndedEarly;
-        private bool _isBufferedJumpInput;
+        [NonSerialized] public bool IsMoveInput;
+        [NonSerialized] public Vector2 MoveInput;
+        [NonSerialized] public bool IsJumpInput;
+        [NonSerialized] public float JumpInputTime;
+        [NonSerialized] public bool IsJumpEndedEarly;
+        [NonSerialized] public bool IsBufferedJumpInput;
 
-        [Header("Entity Components")] 
-        [SerializeField] private EntityParry entityParry;
-        [SerializeField] private EntityBlock entityBlock;
-        [SerializeField] private EntityKnockback entityKnockback;
-        [SerializeField] private EntityDaze entityDaze;
+        [NonSerialized] private PlayerController _playerController;
+        [NonSerialized] private PlayerAnimator _playerAnimator;
         
-        private void Awake()
+        [NonSerialized] private EntityParry _entityParry;
+        [NonSerialized] private EntityBlock _entityBlock;
+        [NonSerialized] private EntityKnockback _entityKnockback;
+        [NonSerialized] private EntityDaze _entityDaze;
+
+        public void Initialise(PlayerController playerController, PlayerAnimator playerAnimator, EntityParry entityParry, EntityBlock entityBlock, EntityKnockback entityKnockback, EntityDaze entityDaze)
         {
-            PlayerMovement.Initialise(entityBlock);
-            PlayerAttacks.Initialise(PlayerMovement);
+            _playerController = playerController;
+            _playerAnimator = playerAnimator;
+            _entityParry = entityParry;
+            _entityBlock = entityBlock;
+            _entityKnockback = entityKnockback;
+            _entityDaze = entityDaze;
         }
 
-        // Start is called before the first frame update
-        private void Start()
+        public void Update()
         {
-            PlayerMovement.Start();
-        }
-        
-        private void OnGUI()
-        {
-            PlayerAttacks.ShowGUI();
-        }
-
-        // Update is called once per frame
-        private void Update()
-        {
-            // Input (could put this in an input function???)
             CheckBufferedJumpInput();
-            
-            // Movement
-            PlayerMovement.Update(ref _isMoveInput, ref _moveInput, ref _isJumpInput, 
-                ref _isBufferedJumpInput, ref _isJumpEndedEarly, _jumpInputTime, PlayerAttacks.IsAttacking);
-
-            // Attacks
-            PlayerAttacks.Update(PlayerMovement.PlayerDash.DashState, PlayerMovement.PlayerAnimator, _isMoveInput, _isJumpInput);
         }
 
-        public void ResetMoveSpeed()
-        {
-            // TODO Need to change in Flow script...
-            PlayerMovement.PlayerHorizontalMovement.ResetMoveSpeed();
-        }
-        
-        public void MultiplyMoveSpeed(float multiple)
-        {
-            // TODO Need to change in Flow script...
-            PlayerMovement.PlayerHorizontalMovement.MultiplyMoveSpeed(multiple);
-        }
-        
         /// <summary>
         /// Called by PlayerInput Unity Event.
         /// </summary>
         [UsedImplicitly] public void ReadJumpInput(InputAction.CallbackContext context)
         {
-            if (entityDaze && entityDaze.isDazed) return;
+            if (_entityDaze && _entityDaze.isDazed) return;
             if (context.started)
             {
-                _isJumpInput = true;
-                _isJumpEndedEarly = false;
+                IsJumpInput = true;
+                IsJumpEndedEarly = false;
                 // Note for the future, because this is setting an exact value... it should be fine?? Hopefully...
                 // This is a little bit of a "magic number" fix though.
-                _jumpInputTime = Time.time;
+                JumpInputTime = Time.time;
             }
 
-            if (context.canceled && (Time.time - _jumpInputTime < PlayerMovement.PlayerJump.GetEarlyCancelTime()))
+            if (context.canceled && (Time.time - JumpInputTime < _playerController.PlayerMovement.PlayerJump.GetEarlyCancelTime()))
             {
-                _isJumpEndedEarly = true;
+                IsJumpEndedEarly = true;
             }
         }
 
@@ -99,15 +66,16 @@ namespace Player
         {
             // "When the character is already in the air pressing jump moments before the ground will trigger jump as soon as they land"
             // http://www.davetech.co.uk/gamedevplatformer
-            if (_isJumpInput && !PlayerMovement.IsGrounded())
+            if (IsJumpInput && !_playerController.PlayerMovement.IsGrounded())
             {
-                _isBufferedJumpInput = true;
+                IsBufferedJumpInput = true;
             }
             
             // Remove buffered jump if it has been too long.
-            if (_isBufferedJumpInput && (Time.time - _jumpInputTime) >PlayerMovement.PlayerJump.GetJumpBufferTime())
+            if (IsBufferedJumpInput && (Time.time - JumpInputTime) >
+                _playerController.PlayerMovement.PlayerJump.GetJumpBufferTime())
             {
-                _isBufferedJumpInput = false;
+                IsBufferedJumpInput = false;
             }
         }
 
@@ -117,39 +85,39 @@ namespace Player
         /// <param name="context"></param>
         [UsedImplicitly] public void ReadMoveInput(InputAction.CallbackContext context)
         {
-            _moveInput = context.ReadValue<Vector2>();
-            if (entityDaze && entityDaze.isDazed)
+            MoveInput = context.ReadValue<Vector2>();
+            if (_entityDaze && _entityDaze.isDazed)
             {
-                _moveInput = Vector2.zero;
+                MoveInput = Vector2.zero;
             }
-            if (PlayerMovement.PlayerWallJumpSlide.HasWallJumped())
+            if (_playerController.PlayerMovement.PlayerWallJumpSlide.HasWallJumped())
             {
                 //used to stop the player moving for a short period after they have wall jumped
                 //once it works it should let wall jumps be chained together
-                _moveInput = Vector2.zero;
+                MoveInput = Vector2.zero;
             }
-            if (_moveInput.x != 0)
+            if (MoveInput.x != 0)
             {
-                _isMoveInput = true;
-                if (entityKnockback.IsBeingKnockedBack() ||
-                    (PlayerAttacks.IsAttacking && !PlayerAttacks.PlayerCombatPrototyping.data.canChangeDirectionsDuringAttack))
+                IsMoveInput = true;
+                if (_entityKnockback.IsBeingKnockedBack() ||
+                    (_playerController.PlayerAttacks.IsAttacking && !_playerController.PlayerAttacks.PlayerCombatPrototyping.data.canChangeDirectionsDuringAttack))
                 {
                     return;
                 }
-                if (_moveInput.x < 0)
+                if (MoveInput.x < 0)
                 {
-                    PlayerMovement.FacingDirection = FacingDirection.Left;
-                    PlayerMovement.PlayerAnimator.SetSpriteFlipX(true);
+                    _playerController.PlayerMovement.FacingDirection = FacingDirection.Left;
+                    _playerAnimator.SetSpriteFlipX(true);
                 }
-                else if (_moveInput.x > 0)
+                else if (MoveInput.x > 0)
                 {                    
-                    PlayerMovement.FacingDirection = FacingDirection.Right;
-                    PlayerMovement.PlayerAnimator.SetSpriteFlipX(false);
+                    _playerController.PlayerMovement.FacingDirection = FacingDirection.Right;
+                    _playerAnimator.SetSpriteFlipX(false);
                 }
             }
             else
             {
-                _isMoveInput = false;
+                IsMoveInput = false;
             }
         }
 
@@ -158,9 +126,9 @@ namespace Player
         /// </summary>
         [UsedImplicitly] public void ReadDashInput(InputAction.CallbackContext context)
         {
-            if (context.started && !PlayerMovement.PlayerDash.IsDashOnCooldown() && !(entityDaze && entityDaze.isDazed))
+            if (context.started && !_playerController.PlayerMovement.PlayerDash.IsDashOnCooldown() && !(_entityDaze && _entityDaze.isDazed))
             {
-                PlayerMovement.PlayerDash.DashState = DashState.StartDash;
+                _playerController.PlayerMovement.PlayerDash.DashState = DashState.StartDash;
             }
         }
 
@@ -172,7 +140,7 @@ namespace Player
         /// <param name="context"></param>
         [UsedImplicitly] public void ReadAttackInput(InputAction.CallbackContext context)
         {
-            if ((!entityBlock || entityBlock.IsBlocking()) && entityBlock)
+            if ((!_entityBlock || _entityBlock.IsBlocking()) && _entityBlock)
             {
                 return;
             }
@@ -182,7 +150,7 @@ namespace Player
                 return;
             }
             
-            PlayerAttacks.StartAttack(PlayerMovement.PlayerAnimator, PlayerMovement.IsGrounded(), _moveInput, ref PlayerMovement.FacingDirection);
+            _playerController.PlayerAttacks.StartAttack(_playerController.PlayerMovement.IsGrounded(), MoveInput, ref _playerController.PlayerMovement.FacingDirection);
         }
 
         /// <summary>
@@ -191,7 +159,7 @@ namespace Player
         /// <param name="context"></param>
         [UsedImplicitly] public void ReadParryInput(InputAction.CallbackContext context)
         {
-            if (!entityParry || PlayerAttacks.IsAttacking)
+            if (!_entityParry || _playerController.PlayerAttacks.IsAttacking)
             {
                 return;
             }
@@ -202,7 +170,7 @@ namespace Player
                 return;
             }
             
-            entityParry.CheckParry();
+            _entityParry.CheckParry();
         }
 
         /// <summary>
@@ -211,20 +179,20 @@ namespace Player
         /// <param name="context"></param>
         [UsedImplicitly] public void ReadBlockInput(InputAction.CallbackContext context)
         {
-            if (!entityBlock)
+            if (!_entityBlock)
             {
                 return;
             }
 
-            if (context.performed && !PlayerAttacks.IsAttacking)
+            if (context.performed && !_playerController.PlayerAttacks.IsAttacking)
             {
                 // For now, don't need to worry about whether you're mid parry /attack
-                entityBlock.SetBlocking(true);
+                _entityBlock.SetBlocking(true);
             }
 
             if (context.canceled)
             {
-                entityBlock.SetBlocking(false);
+                _entityBlock.SetBlocking(false);
             }
         }
 

@@ -60,7 +60,7 @@ namespace Player
                     Recovery();
                     break;
                 default:
-                    Debug.LogError("Unknown attack state in PlayerAttackDriver", _combat);
+                    Debug.LogError("Unknown attack state in PlayerAttackDriver");
                     return;
             }
         }
@@ -107,7 +107,7 @@ namespace Player
             
             GUI.skin.box.fontSize = 24;
             
-            Vector2 targetPos = CameraManager.GetActiveCamera().WorldToScreenPoint(_combat.transform.position);
+            Vector2 targetPos = CameraManager.GetActiveCamera().WorldToScreenPoint(_combat.PlayerTransform.position);
             targetPos.y += 50;
 
             StringBuilder guiTextBuilder = new StringBuilder(26);//"Recovery: 0.00/0.00 (100%)".Length

@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: PlayerSoundsBasic
   m_EditorClassIdentifier: 
   _jumpSound: {fileID: 8300000, guid: ae3decc4f0bdb483eadf46c263d2ea51, type: 3}
+  _debugUseSounds: 0
