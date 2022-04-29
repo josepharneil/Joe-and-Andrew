@@ -39781,7 +39781,7 @@ PrefabInstance:
     - target: {fileID: 7615376617131826963, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: PlayerInputs
       value: 
-      objectReference: {fileID: 2115476064}
+      objectReference: {fileID: 2115476012}
     - target: {fileID: 9147847883452652258, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: m_Name
       value: Player
@@ -39845,11 +39845,10 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9147847883452652287, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
   m_PrefabInstance: {fileID: 2115476010}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2115476064
+--- !u!114 &2115476012 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 4934823085706457524, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+  m_PrefabInstance: {fileID: 2115476010}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 408722809}
   m_Enabled: 1
