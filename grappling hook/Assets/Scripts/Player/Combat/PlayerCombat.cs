@@ -37,7 +37,6 @@ namespace Player
         [SerializeField] private EntityKnockback _playerKnockback;
         
         [Header("Weapon")]
-        public PlayerEquipment CurrentPlayerEquipment; // TODO Remove this? also knockback above.. clean up!
         [SerializeField] private LineRenderer _lineRenderer;
         [SerializeField] private float _lineRenderDuration = 0.2f;
         private float _lineRendererStartTime = 0f;
@@ -53,11 +52,13 @@ namespace Player
 
         [NonSerialized] public Transform PlayerTransform;
         [NonSerialized] private PlayerAttacks _playerAttacks;
+        [NonSerialized] private PlayerEquipment _currentPlayerEquipment;
 
-        public void Initialise(Transform playerTransform, PlayerAttacks playerAttacks)
+        public void Initialise(Transform playerTransform, PlayerAttacks playerAttacks, PlayerEquipment currentPlayerEquipment)
         {
             PlayerTransform = playerTransform;
             _playerAttacks = playerAttacks;
+            _currentPlayerEquipment = currentPlayerEquipment;
         }
 
         public void Update()
@@ -80,7 +81,7 @@ namespace Player
             {
                 if (Time.time - _lineRendererStartTime > _lineRenderDuration)
                 {
-                    CurrentPlayerEquipment.CurrentMeleeWeapon.HideLineRenderer(_lineRenderer);
+                    _currentPlayerEquipment.CurrentMeleeWeapon.HideLineRenderer(_lineRenderer);
                     _isShowingLineRenderer = false;
                 }
 
@@ -94,7 +95,7 @@ namespace Player
         {
             AttackDirection attackDirection = _playerAttacks.AttackDirection;
             
-            CurrentPlayerEquipment.CurrentMeleeWeapon.ShowAttackParticle(attackDirection);
+            _currentPlayerEquipment.CurrentMeleeWeapon.ShowAttackParticle(attackDirection);
             
             ContactFilter2D contactFilter2D = new ContactFilter2D
             {
@@ -102,7 +103,7 @@ namespace Player
                 useLayerMask = true,
                 useTriggers = true
             };
-            CurrentPlayerEquipment.CurrentMeleeWeapon.DetectAttackableObjects(out List<Collider2D> detectedObjects, contactFilter2D, PlayerTransform.position, attackDirection);
+            _currentPlayerEquipment.CurrentMeleeWeapon.DetectAttackableObjects(out List<Collider2D> detectedObjects, contactFilter2D, PlayerTransform.position, attackDirection);
 
             StartShowLineRendererForSeconds(attackDirection);
 
@@ -119,9 +120,9 @@ namespace Player
                 }
                 else
                 {
-                    if (_playerKnockback && playerCombatPrototyping.data.doesPlayerGetKnockedBackByOwnAttack && firstEnemyHitPosition.HasValue && CurrentPlayerEquipment.CurrentMeleeWeapon.KnockbackAmountToPlayer != 0f)
+                    if (_playerKnockback && playerCombatPrototyping.data.doesPlayerGetKnockedBackByOwnAttack && firstEnemyHitPosition.HasValue && _currentPlayerEquipment.CurrentMeleeWeapon.KnockbackAmountToPlayer != 0f)
                     {
-                        _playerKnockback.StartKnockBack(firstEnemyHitPosition.Value, CurrentPlayerEquipment.CurrentMeleeWeapon.KnockbackAmountToPlayer);
+                        _playerKnockback.StartKnockBack(firstEnemyHitPosition.Value, _currentPlayerEquipment.CurrentMeleeWeapon.KnockbackAmountToPlayer);
                     }
                 }
 
@@ -136,12 +137,12 @@ namespace Player
         {
             if (!_showLineRenderer) return;
             if (!_lineRenderer) return;
-            if (!CurrentPlayerEquipment) return;
-            if (!CurrentPlayerEquipment.CurrentMeleeWeapon) return;
+            if (!_currentPlayerEquipment) return;
+            if (!_currentPlayerEquipment.CurrentMeleeWeapon) return;
 
             _isShowingLineRenderer = true;
             _lineRendererAttackDirection = attackDirection;
-            CurrentPlayerEquipment.CurrentMeleeWeapon.DrawLineRenderer(_lineRenderer, _lineRendererAttackDirection);
+            _currentPlayerEquipment.CurrentMeleeWeapon.DrawLineRenderer(_lineRenderer, _lineRendererAttackDirection);
         }
         
         private bool TryHitDetectedObjects(List<Collider2D> detectedObjects, out Vector2? enemyKnockbackPosition)
@@ -164,7 +165,7 @@ namespace Player
                     enemyKnockbackPosition ??= hitboxTransform.position;
 
                     // Instantiate a hit particle here if we want particles for EACH hit enemy
-                    CurrentPlayerEquipment.CurrentMeleeWeapon.ShowAttackHitParticle(hitboxTransform);
+                    _currentPlayerEquipment.CurrentMeleeWeapon.ShowAttackHitParticle(hitboxTransform);
                 }
             }
 
@@ -179,9 +180,9 @@ namespace Player
                 DealsDamage = true,
                 DamageToHealth = damageDealt,
 
-                DealsKnockback = CurrentPlayerEquipment.CurrentMeleeWeapon.KnockbackAmountToTarget != 0f,
+                DealsKnockback = _currentPlayerEquipment.CurrentMeleeWeapon.KnockbackAmountToTarget != 0f,
                 KnockbackOrigin = PlayerTransform.position,
-                KnockbackStrength = CurrentPlayerEquipment.CurrentMeleeWeapon.KnockbackAmountToTarget,
+                KnockbackStrength = _currentPlayerEquipment.CurrentMeleeWeapon.KnockbackAmountToTarget,
 
                 DealsDaze = playerCombatPrototyping.data.doesPlayerDealDaze,
             };
@@ -190,7 +191,7 @@ namespace Player
 
         private int CalculateDamageDealt()
         {
-            int damageDealt = CurrentPlayerEquipment.CurrentMeleeWeapon.WeaponDamage;
+            int damageDealt = _currentPlayerEquipment.CurrentMeleeWeapon.WeaponDamage;
             
             // This could also factor in some base player attack value?
             
@@ -211,16 +212,16 @@ namespace Player
 
         public void ForceHideAttackParticles()
         {
-            CurrentPlayerEquipment.CurrentMeleeWeapon.ForceHideAttackParticles();
+            _currentPlayerEquipment.CurrentMeleeWeapon.ForceHideAttackParticles();
         }
 
 #if UNITY_EDITOR
         public void DrawGizmosSelected()
         {
             if (!_showGizmos) return;
-            if (!CurrentPlayerEquipment) return;
-            if (!CurrentPlayerEquipment.CurrentMeleeWeapon) return;
-            CurrentPlayerEquipment.CurrentMeleeWeapon.DrawGizmos(PlayerTransform.position, _playerAttacks.AttackDirection);
+            if (!_currentPlayerEquipment) return;
+            if (!_currentPlayerEquipment.CurrentMeleeWeapon) return;
+            _currentPlayerEquipment.CurrentMeleeWeapon.DrawGizmos(PlayerTransform.position, _playerAttacks.AttackDirection);
         }
 #endif
     }

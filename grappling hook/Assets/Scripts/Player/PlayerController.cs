@@ -58,7 +58,8 @@ namespace Player
                 ref PlayerInputs.IsBufferedJumpInput, 
                 ref PlayerInputs.IsJumpEndedEarly, 
                 PlayerInputs.JumpInputTime, 
-                PlayerAttacks.IsAttacking);
+                PlayerAttacks.IsAttacking,
+                PlayerAttacks.PlayerCombatPrototyping);
 
             // Attacks
             PlayerAttacks.Update(PlayerMovement.PlayerDash.DashState, PlayerInputs.IsMoveInput, PlayerInputs.IsJumpInput);

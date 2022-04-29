@@ -580,9 +580,9 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4934823085706457524}
+      - m_Target: {fileID: 9147847883452652258}
         m_TargetAssemblyTypeName: Player.PlayerInputs, Assembly-CSharp
-        m_MethodName: ReadJumpInput
+        m_MethodName: 
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -821,7 +821,6 @@ MonoBehaviour:
       _debugDisableWallSlide: 0
     PlayerGravity:
       _fallClamp: -35
-    playerCombatPrototyping: {fileID: 9147847883452652286}
   PlayerAttacks:
     CurrentPlayerEquipment: {fileID: 11400000, guid: 4042d4a8e76c840fc8b043436b9ebe73, type: 2}
     PlayerCombatPrototyping: {fileID: 9147847883452652286}
@@ -838,7 +837,6 @@ MonoBehaviour:
       _slowTimeScaleAmount: 0.01
       playerCombatPrototyping: {fileID: 9147847883452652286}
       _playerKnockback: {fileID: 9147847883452652283}
-      CurrentPlayerEquipment: {fileID: 11400000, guid: 4042d4a8e76c840fc8b043436b9ebe73, type: 2}
       _lineRenderer: {fileID: 4008834346478642906}
       _lineRenderDuration: 0.1
       _showGizmos: 1

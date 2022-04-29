@@ -27,7 +27,7 @@ namespace Player
 
         public void Initialise(Transform playerTransform, PlayerMovement playerMovement, PlayerAnimator playerAnimator)
         {
-            _playerCombat.Initialise(playerTransform, this);
+            _playerCombat.Initialise(playerTransform, this, CurrentPlayerEquipment);
             PlayerAttackDriver.Initialise(_playerCombat);
             _playerMovement = playerMovement;
             _playerAnimator = playerAnimator;

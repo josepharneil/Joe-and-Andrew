@@ -20,8 +20,6 @@ namespace Player
         private PlayerAnimator _playerAnimator;
         private PlayerSounds _playerSounds;
         
-        [Header("Prototyping")] public PlayerCombatPrototyping playerCombatPrototyping;
-
         [NonSerialized] public FacingDirection FacingDirection;
         [NonSerialized] public Vector2 Velocity;
 
@@ -50,7 +48,7 @@ namespace Player
 
         public void Update(ref bool isMoveInput, ref Vector2 moveInput, ref bool isJumpInput, 
             ref bool isBufferedJumpInput, ref bool isJumpEndedEarly, float jumpInputTime,
-            bool isAttacking)
+            bool isAttacking, PlayerCombatPrototyping playerCombatPrototyping)
         {
             UpdateMovement(isMoveInput, moveInput);
             UpdateWallSlide(isMoveInput);
@@ -59,8 +57,8 @@ namespace Player
             UpdateFallThroughPlatform(ref isJumpInput);
             UpdateWallJump(ref isMoveInput, ref moveInput, ref isJumpInput, ref isBufferedJumpInput, jumpInputTime);
             UpdateJump(ref isJumpInput, ref isBufferedJumpInput, jumpInputTime);
-            Move(ref isMoveInput, ref moveInput, isJumpEndedEarly, isAttacking);
-            UpdateFacingDirection(moveInput, isAttacking);
+            Move(ref isMoveInput, ref moveInput, isJumpEndedEarly, isAttacking, playerCombatPrototyping);
+            UpdateFacingDirection(moveInput, isAttacking, playerCombatPrototyping);
             SetAnimatorSpeedFloats();
         }
         
@@ -139,7 +137,7 @@ namespace Player
                 timeBetweenJumpInputAndLastGrounded, ref Velocity, movementController.customCollider2D.CollisionBelow, _playerAnimator, _playerSounds);
         }
         
-        private void Move(ref bool isMoveInput, ref Vector2 moveInput, bool isJumpEndedEarly, bool isAttacking)
+        private void Move(ref bool isMoveInput, ref Vector2 moveInput, bool isJumpEndedEarly, bool isAttacking, PlayerCombatPrototyping playerCombatPrototyping)
         {
             if (isAttacking && playerCombatPrototyping.data.movementDisabledByAttacks)
             {
@@ -160,7 +158,7 @@ namespace Player
             }
         }
         
-        private void UpdateFacingDirection(Vector2 moveInput, bool isAttacking)
+        private void UpdateFacingDirection(Vector2 moveInput, bool isAttacking, PlayerCombatPrototyping playerCombatPrototyping)
         {
             if (!isAttacking || (isAttacking && playerCombatPrototyping.data.canChangeDirectionsDuringAttack))
             {

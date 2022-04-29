@@ -95,8 +95,7 @@ namespace Player
                     }
                     if (_increaseAttackSpeed)
                     {
-                        PlayerAttackDriver attackDriver = _playerController.PlayerAttacks.PlayerAttackDriver;
-                        attackDriver.AttackSpeed *= _attackSpeedIncrease;
+                        _playerController.PlayerAttacks.PlayerAttackDriver.AttackSpeed *= _attackSpeedIncrease;
                     }
                 }
             }
