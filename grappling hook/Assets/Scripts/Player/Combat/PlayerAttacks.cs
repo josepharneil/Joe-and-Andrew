@@ -13,7 +13,7 @@ namespace Player
         PlayerMovement _playerMovement;
 
         [Header("Attack Driver")]
-        [SerializeField] private bool _attacksDrivenByAnimations = true;
+        [SerializeField] private bool _attacksDrivenByAnimations = false;
         public PlayerAttackDriver PlayerAttackDriver;
 
         [Header("Downwards Attack Jump")] 

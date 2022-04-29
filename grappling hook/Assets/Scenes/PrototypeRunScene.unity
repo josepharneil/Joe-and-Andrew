@@ -39876,6 +39876,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2115476012}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerAttacks._attacksDrivenByAnimations
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: _playerMovement.PlayerAnimator._animator
       value: 
       objectReference: {fileID: 2115476036}
@@ -39896,9 +39900,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1555754390}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerAttacks.PlayerAttackDriver._windUpDuration
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: PlayerMovement.PlayerAnimator.defaultSquareSprite
       value: 
       objectReference: {fileID: 7482667652216324306, guid: 5205f3571171146c886d386aeaa65929, type: 3}
+    - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: PlayerAttacks.PlayerAttackDriver._recoveryDuration
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 9147847883452652259, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: _playerMovement.PlayerAnimator.defaultSquareSprite
       value: 
@@ -40223,6 +40235,10 @@ PrefabInstance:
       propertyPath: flow
       value: 
       objectReference: {fileID: 2115476013}
+    - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
+      propertyPath: _playerInputs
+      value: 
+      objectReference: {fileID: 2115476027}
     - target: {fileID: 9147847883452652281, guid: 37a25f6539b4d4f56806598e86d1f27c, type: 3}
       propertyPath: cinemachineShake
       value: 

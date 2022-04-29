@@ -18,7 +18,7 @@ namespace Player
     {
         [Header("Setup")]
         [SerializeField] private LayerMask whatIsDamageable;
-        [SerializeField] private PlayerAttacks _playerAttacks;
+        [SerializeField] private PlayerInputs _playerInputs;
 
         [Header("Shake")] 
         [SerializeField] private CameraShakeData _cameraShakeData; 
@@ -54,7 +54,7 @@ namespace Player
         /// </summary>
         [UsedImplicitly] public void Attack(int attackIndex)//Number is unused right now.
         {
-            AttackDirection attackDirection = _playerAttacks.AttackDirection;
+            AttackDirection attackDirection = _playerInputs.PlayerAttacks.AttackDirection;
             
             CurrentPlayerEquipment.CurrentMeleeWeapon.ShowAttackParticle(attackDirection);
             
@@ -77,7 +77,7 @@ namespace Player
                 // Knockback player
                 if (attackDirection == AttackDirection.Down)
                 {
-                    _playerAttacks.DownwardsAttackJump();
+                    _playerInputs.PlayerAttacks.DownwardsAttackJump();
                 }
                 else
                 {
@@ -91,7 +91,7 @@ namespace Player
             }
 
             // At the end, we're now post damage.
-            _playerAttacks.IsInPreDamageAttackPhase = false;
+            _playerInputs.PlayerAttacks.IsInPreDamageAttackPhase = false;
         }
 
         private void ShowLineRendererForSeconds(float seconds, AttackDirection attackDirection)
@@ -201,7 +201,7 @@ namespace Player
             if (!_showGizmos) return;
             if (!CurrentPlayerEquipment) return;
             if (!CurrentPlayerEquipment.CurrentMeleeWeapon) return;
-            CurrentPlayerEquipment.CurrentMeleeWeapon.DrawGizmos(transform.position, _playerAttacks.AttackDirection);
+            CurrentPlayerEquipment.CurrentMeleeWeapon.DrawGizmos(transform.position, _playerInputs.PlayerAttacks.AttackDirection);
         }
 #endif
     }
