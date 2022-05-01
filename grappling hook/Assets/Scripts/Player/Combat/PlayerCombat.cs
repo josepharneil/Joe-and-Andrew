@@ -77,14 +77,13 @@ namespace Player
 
         private void UpdateLineRenderer()
         {
-            if(_isShowingLineRenderer)
-            {
-                if (Time.time - _lineRendererStartTime > _lineRenderDuration)
-                {
-                    _currentPlayerEquipment.CurrentMeleeWeapon.HideLineRenderer(_lineRenderer);
-                    _isShowingLineRenderer = false;
-                }
+            if (!_isShowingLineRenderer) return;
 
+            float timeSinceLineRendererStart = Time.time - _lineRendererStartTime;
+            if (timeSinceLineRendererStart > _lineRenderDuration)
+            {
+                _currentPlayerEquipment.CurrentMeleeWeapon.HideLineRenderer(_lineRenderer);
+                _isShowingLineRenderer = false;
             }
         }
 
@@ -143,6 +142,7 @@ namespace Player
             _isShowingLineRenderer = true;
             _lineRendererAttackDirection = attackDirection;
             _currentPlayerEquipment.CurrentMeleeWeapon.DrawLineRenderer(_lineRenderer, _lineRendererAttackDirection);
+            _lineRendererStartTime = Time.time;
         }
         
         private bool TryHitDetectedObjects(List<Collider2D> detectedObjects, out Vector2? enemyKnockbackPosition)
