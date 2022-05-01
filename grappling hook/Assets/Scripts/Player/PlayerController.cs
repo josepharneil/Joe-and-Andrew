@@ -40,10 +40,12 @@ namespace Player
             PlayerAttacks.ShowGUI();
         }
 
+#if UNITY_EDITOR
         private void OnDrawGizmosSelected()
         {
             PlayerAttacks.DrawGizmosSelected();
         }
+#endif
 
         private void Update()
         {

@@ -13,8 +13,10 @@ namespace Entity
         [SerializeField] private float timeBetweenParries = 0.8f;
         private bool _canParry = true;
 
+#if UNITY_EDITOR
         [Header("Debug")]
         [SerializeField] private bool _showGizmos = false; 
+#endif
         
         private float _parryTimer = 0f;
 

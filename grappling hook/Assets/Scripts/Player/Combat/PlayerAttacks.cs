@@ -38,10 +38,12 @@ namespace Player
             PlayerAttackDriver.ShowDebugGUI();
         }
 
+#if UNITY_EDITOR
         public void DrawGizmosSelected()
         {
             _playerCombat.DrawGizmosSelected();
         }
+#endif
         
         public void Update(DashState dashState, bool isMoveInput, bool isJumpInput)
         {
